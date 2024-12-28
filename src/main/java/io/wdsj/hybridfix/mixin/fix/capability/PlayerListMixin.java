@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// Common injection logic for most hybrid server implementations, except Mohist
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
     @Inject(

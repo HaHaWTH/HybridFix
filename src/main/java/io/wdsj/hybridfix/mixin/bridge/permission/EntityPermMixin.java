@@ -5,5 +5,5 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Entity.class)
-public abstract class EntityPermMixin implements IEntityPermissionGetter {
+public abstract class EntityPermMixin implements IEntityPermissionGetter { // Method impl is provided by hybrids
 }

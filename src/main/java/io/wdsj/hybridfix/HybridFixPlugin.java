@@ -23,6 +23,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset);
             put("mixins.fix.capability.mohist.json" , () -> Settings.fixCapabilityReset && Utils.isClassLoaded("com.mohistmc.MohistMC"));
             put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
+            put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling && Utils.isClassLoaded("com.mohistmc.MohistMC"));
             put("mixins.bridge.permission.json", () -> Settings.bridgeForgePermissionsToBukkit);
         }
     });
