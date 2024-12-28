@@ -1,4 +1,4 @@
-# HybridFixes
+# HybridFix
 
 Provide bugfixes for Forge+Bukkit server environments.
 
