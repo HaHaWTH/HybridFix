@@ -2,6 +2,7 @@ package io.wdsj.hybridfix;
 
 import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.config.Settings;
+import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
@@ -20,6 +21,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     {
         {
             put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset);
+            put("mixins.fix.capability.mohist.json" , () -> Settings.fixCapabilityReset && Utils.isClassLoaded("com.mohistmc.MohistMC"));
             put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
         }
     });
