@@ -1,9 +1,6 @@
 package io.wdsj.hybridfix;
 
-import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.handler.ExplosionHandler;
 import io.wdsj.hybridfix.util.Utils;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
@@ -25,8 +22,6 @@ public class HybridFix {
             LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to work properly, disabling.");
             return;
         }
-        if (Settings.passExplosionEventToBukkit) {
-            MinecraftForge.EVENT_BUS.register(new ExplosionHandler());
-        }
+        HybridFixServer.preInit();
     }
 }

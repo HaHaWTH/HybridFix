@@ -15,6 +15,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean passExplosionEventToBukkit = !Utils.isClassLoaded("com.mohistmc.MohistMC"); // Default enable if not Mohist (Honestly Mohist's explosion handling is shit)
 
+    @Config.Comment("Bridge Forge permissions to Bukkit.")
+    @Config.RequiresMcRestart
+    public static boolean bridgeForgePermissionsToBukkit = !Utils.isClassLoaded("com.mohistmc.MohistMC");
+
     static {
         ConfigAnytime.register(Settings.class);
     }
