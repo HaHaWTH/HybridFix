@@ -13,15 +13,31 @@ public class Settings {
 
     @Config.Comment("Pass explosion event to Bukkit.")
     @Config.RequiresMcRestart
-    public static boolean passExplosionEventToBukkit = !Utils.isClassLoaded("com.mohistmc.MohistMC"); // Default enable if not Mohist (Honestly Mohist's explosion handling is shit)
+    public static boolean passExplosionEventToBukkit = !Utils.isMohist;
+
+    @Config.Comment("Remove entity damage & velocity on explosion being cancelled.")
+    @Config.RequiresMcRestart
+    public static boolean removeEntityDamageAndVelocityOnCancel = true;
 
     @Config.Comment("Override Mohist's crappy explosion handling with HybridFix's.")
     @Config.RequiresMcRestart
-    public static boolean overrideMohistExplosionHandling = Utils.isClassLoaded("com.mohistmc.MohistMC");
+    public static boolean overrideMohistExplosionHandling = Utils.isMohist;
 
     @Config.Comment("Bridge Forge permissions to Bukkit.")
     @Config.RequiresMcRestart
-    public static boolean bridgeForgePermissionsToBukkit = !Utils.isClassLoaded("com.mohistmc.MohistMC");
+    public static boolean bridgeForgePermissionsToBukkit = !Utils.isMohist;
+
+    @Config.Comment("Skip firing event if no listeners registered.")
+    @Config.RequiresMcRestart
+    public static boolean skipEventIfNoListeners = true;
+
+    @Config.Comment("Disable Spigot's built-in Timings to save performance.(Only support Timings v1)")
+    @Config.RequiresMcRestart
+    public static boolean disableTimings = false;
+
+    @Config.Comment("Register HybridFix commands.")
+    @Config.RequiresMcRestart
+    public static boolean registerHybridFixCommands = true;
 
     static {
         ConfigAnytime.register(Settings.class);

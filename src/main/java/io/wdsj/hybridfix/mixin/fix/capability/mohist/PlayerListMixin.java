@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /*
- * Mohist inlines method body into recreatePlayerEntity from CraftBukkit moveToWorld, causes common mixin won't work
+ * Mohist inlines method body into recreatePlayerEntity from CraftBukkit moveToWorld, causes common mixin don't work
  * now we need to handle this manually.
  */
 @Mixin(PlayerList.class)

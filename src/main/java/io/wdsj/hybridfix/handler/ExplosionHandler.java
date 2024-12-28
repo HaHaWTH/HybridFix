@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.handler;
 
 import com.google.common.collect.Lists;
+import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.duck.bridge.explosion.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.explosion.IWorldGetter;
 import net.minecraft.entity.Entity;
@@ -57,7 +58,7 @@ public class ExplosionHandler {
             explosion.getAffectedBlockPositions().clear();
 
             if (cancelled) {
-                event.getAffectedEntities().clear();
+                if (Settings.removeEntityDamageAndVelocityOnCancel) event.getAffectedEntities().clear();
             } else {
                 for (Block bblock : bukkitBlocks) {
                     BlockPos coords = new BlockPos(bblock.getX(), bblock.getY(), bblock.getZ());

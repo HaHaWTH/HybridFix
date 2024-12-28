@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
+import static io.wdsj.hybridfix.HybridFix.HAS_CLEANROOM;
 import static io.wdsj.hybridfix.HybridFix.IS_HYBRID_ENV;
 
 @IFMLLoadingPlugin.Name("HybridFixPlugin")
@@ -21,24 +22,33 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     {
         {
             put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset);
-            put("mixins.fix.capability.mohist.json" , () -> Settings.fixCapabilityReset && Utils.isClassLoaded("com.mohistmc.MohistMC"));
+            if (Utils.isMohist) {
+                put("mixins.fix.capability.mohist.json", () -> Settings.fixCapabilityReset);
+            }
             put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
-            put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling && Utils.isClassLoaded("com.mohistmc.MohistMC"));
+            if (Utils.isMohist) {
+                put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
+            }
             put("mixins.bridge.permission.json", () -> Settings.bridgeForgePermissionsToBukkit);
+            put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);
+            if (!Utils.isMohist) {
+                put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);
+            }
+            put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
         }
     });
 
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
-        if (!IS_HYBRID_ENV) return configs;
+        if (!IS_HYBRID_ENV || HAS_CLEANROOM) return configs;
         if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
         return configs;
     }
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if (!IS_HYBRID_ENV) return false;
+        if (!IS_HYBRID_ENV || HAS_CLEANROOM) return false;
         Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {
             return sidedSupplier.get();

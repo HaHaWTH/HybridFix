@@ -1,6 +1,8 @@
 package io.wdsj.hybridfix.util;
 
 public class Utils {
+    public static final String OBC_PACKAGE = "org.bukkit.craftbukkit.v1_12_R1";
+    public static final boolean isMohist = isClassLoaded("com.mohistmc.MohistMC");
 
     public static boolean isClassLoaded(String className) {
         try {

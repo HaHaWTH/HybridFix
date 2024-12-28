@@ -1,6 +1,6 @@
-# HybridFix
+# HybridFix (混合修复)
 
-Provide bugfixes for Forge+Bukkit server environments.
+Provide bugfixes, optimizations and utilities for Forge+Bukkit server environments.
 
 ## Fixed issues
 
@@ -16,3 +16,18 @@ Provide bugfixes for Forge+Bukkit server environments.
 
 - Auto override Mohist's crappy built-in explosion handling with our own method.
 - Bridge Forge permission processing to Bukkit.
+- Skip firing event if no listeners registered.
+- Disable Timings for less performance overhead.
+
+Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
+
+## Commands
+
+- `/hybridfix dumpitem` - Show details of the item in hand.
+- `/hybridfix version` - Show version info.
+
+## Permissions
+
+- `hybridfix.command.use` - Allow to access `/hybridfix` command.
+
+**Note**: Commands and permissions are registered on Bukkit side, that means you can manage permissions with Bukkit permission plugins like LuckPerms.

@@ -1,0 +1,11 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.perf.eventbus",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "SimplePluginManagerMixin"
+  ]
+}
