@@ -68,8 +68,10 @@ public class CommandHybridFix extends Command {
             case "version":
                 sender.sendMessage("This server is running HybridFix version " + HybridFix.VERSION);
                 break;
+            default:
+                sender.sendMessage(ChatColor.RED + "Usage: " + usageMessage);
+                return false;
         }
-
         return true;
     }
 

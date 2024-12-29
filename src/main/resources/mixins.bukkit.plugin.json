@@ -1,0 +1,12 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.bukkit.plugin",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "DedicatedServerMixin",
+    "CraftServerMixin"
+  ]
+}

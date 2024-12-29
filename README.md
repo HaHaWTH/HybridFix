@@ -19,6 +19,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Skip firing event if no listeners registered.
 - Disable Timings for less performance overhead.
 - Compatibility first, shouldn't break any mods/plugins.
+- Built Bukkit plugin in the mod, offers utilities to server owners.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 

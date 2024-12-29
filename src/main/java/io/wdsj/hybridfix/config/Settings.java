@@ -39,6 +39,24 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean registerHybridFixCommands = true;
 
+    @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
+    @Config.RequiresMcRestart
+    public static BukkitPluginSettings bukkitPluginConfig = new BukkitPluginSettings();
+
+    public static class BukkitPluginSettings {
+        @Config.Comment("Enable HybridFix built-in bukkit plugin.(All bukkit plugin features in this section won't work if you disabled this!)")
+        @Config.RequiresMcRestart
+        public boolean enable = false;
+
+        @Config.Comment("Enable HybridFix built-in AntiExplode.")
+        @Config.RequiresMcRestart
+        public boolean antiExplode = false;
+
+        @Config.Comment("Worlds that AntiExplode should protect.")
+        @Config.RequiresMcRestart
+        public String[] antiExplodeWorlds = new String[]{"world"};
+    }
+
     static {
         ConfigAnytime.register(Settings.class);
     }
