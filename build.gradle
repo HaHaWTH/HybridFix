@@ -137,7 +137,7 @@ dependencies {
             transitive = false // We only care about the 1 annotation class
         }
     }
-    implementation 'com.cleanroommc:configanytime:2.0'
+    implementation 'com.cleanroommc:configanytime:3.0'
     if (propertyBool('use_asset_mover')) {
         implementation "com.cleanroommc:assetmover:${propertyString('asset_mover_version')}"
     }

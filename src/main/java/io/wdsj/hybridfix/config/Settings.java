@@ -58,7 +58,7 @@ public class Settings {
 
         @Config.Comment("Worlds that AntiExplode should protect.")
         @Config.RequiresMcRestart
-        public String[] antiExplodeWorlds = new String[]{"world"};
+        public String[] antiExplodeWorlds = new String[]{"world", "DIM-1", "DIM1"};
     }
 
     static {

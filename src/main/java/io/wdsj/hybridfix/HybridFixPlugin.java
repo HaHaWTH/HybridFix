@@ -44,14 +44,14 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
-        if (!IS_HYBRID_ENV || HAS_CLEANROOM) return configs;
+        if (!IS_HYBRID_ENV) return configs;
         if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
         return configs;
     }
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if (!IS_HYBRID_ENV || HAS_CLEANROOM) return false;
+        if (!IS_HYBRID_ENV) return false;
         Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {
             return sidedSupplier.get();
