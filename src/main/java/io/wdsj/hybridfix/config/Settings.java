@@ -7,6 +7,10 @@ import net.minecraftforge.common.config.Config;
 
 @Config(modid = HybridFix.MOD_ID)
 public class Settings {
+    @Config.Comment("Check for updates on startup.")
+    @Config.RequiresMcRestart
+    public static boolean checkForUpdates = true;
+
     @Config.Comment("Fix Simple Difficulty(And other similar mods) thirst not getting reset on respawn.")
     @Config.RequiresMcRestart
     public static boolean fixCapabilityReset = true;
