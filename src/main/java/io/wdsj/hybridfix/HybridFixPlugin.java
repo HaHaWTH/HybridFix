@@ -21,18 +21,20 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new HashMap<String, Supplier<Boolean>>()
     {
         {
-            put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset);
-            if (Utils.isMohist) {
-                put("mixins.fix.capability.mohist.json", () -> Settings.fixCapabilityReset);
-            }
-            put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
-            if (Utils.isMohist) {
-                put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
-            }
-            put("mixins.bridge.permission.json", () -> Settings.bridgeForgePermissionsToBukkit);
-            put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);
-            if (!Utils.isMohist) {
-                put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);
+            if (!HAS_CLEANROOM) {
+                put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset);
+                if (Utils.isMohist) {
+                    put("mixins.fix.capability.mohist.json", () -> Settings.fixCapabilityReset);
+                }
+                put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
+                if (Utils.isMohist) {
+                    put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
+                }
+                put("mixins.bridge.permission.json", () -> Settings.bridgeForgePermissionsToBukkit);
+                put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);
+                if (!Utils.isMohist) {
+                    put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);
+                }
             }
             put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
             put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);

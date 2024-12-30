@@ -2,16 +2,15 @@ package io.wdsj.hybridfix.command;
 
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.util.ItemStackUtils;
+import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.item.ItemStack;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Method;
 import java.util.Locale;
 
 public class CommandHybridFix extends Command {
@@ -20,18 +19,6 @@ public class CommandHybridFix extends Command {
         this.description = "HybridFix commands";
         this.usageMessage = "/hybridfix dumpitem|version";
         setPermission("hybridfix.command.use");
-    }
-
-    public static class Reflection {
-        public static final Method CraftItemStack$asNMSCopy;
-        static {
-            try {
-                CraftItemStack$asNMSCopy = CraftItemStack.class.getDeclaredMethod("asNMSCopy", org.bukkit.inventory.ItemStack.class);
-                CraftItemStack$asNMSCopy.setAccessible(true);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @Override
@@ -49,12 +36,7 @@ public class CommandHybridFix extends Command {
                     return true;
                 }
                 Player player = (Player) sender;
-                ItemStack itemInHand;
-                try {
-                    itemInHand = (ItemStack) Reflection.CraftItemStack$asNMSCopy.invoke(null, player.getInventory().getItemInMainHand());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+                ItemStack itemInHand = SpigotReflectionUtils.CraftItemStack_asNMSCopy(player.getInventory().getItemInMainHand());
                 if (itemInHand.isEmpty()) {
                     sender.sendMessage(ChatColor.RED + "You are not holding any item.");
                     return true;
