@@ -20,6 +20,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Disable Timings for less performance overhead.
 - Compatibility first, shouldn't break any mods/plugins.
 - Built Bukkit plugin into the mod, offers utilities to server owners.
+- General CraftBukkit performance improvements.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
