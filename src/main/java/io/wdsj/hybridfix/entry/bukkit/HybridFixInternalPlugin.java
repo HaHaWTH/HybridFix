@@ -25,11 +25,13 @@ public class HybridFixInternalPlugin extends PluginBase {
         return INSTANCE;
     }
     private final String pluginName;
+    private final File dataFolder;
     private PluginDescriptionFile pdf;
 
     public HybridFixInternalPlugin() {
         this.pluginName = "HybridFix";
         pdf = new PluginDescriptionFile(pluginName, HybridFix.VERSION, "hybridfix");
+        dataFolder = new File("plugins", pluginName);
     }
 
     public void setEnabled(boolean enabled) {
@@ -38,7 +40,7 @@ public class HybridFixInternalPlugin extends PluginBase {
 
     @Override
     public File getDataFolder() {
-        throw new UnsupportedOperationException("Not supported.");
+        return dataFolder;
     }
 
     @Override

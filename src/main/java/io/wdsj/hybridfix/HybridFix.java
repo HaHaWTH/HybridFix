@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix;
 
-import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -36,19 +34,6 @@ public class HybridFix {
 
     @Mod.EventHandler
     public void onServerStartComplete(FMLServerStartedEvent event) {
-        if (Settings.checkForUpdates) {
-            Utils.ioWorker().submit(() -> {
-                LOGGER.info("Checking for updates...");
-                if (Updater.isUpdateAvailable()) {
-                    LOGGER.warn("There is a new version available: {}, you're on: {}", Updater.getLatestVersion(), Updater.getCurrentVersion());
-                } else {
-                    if (!Updater.isErred()) {
-                        LOGGER.info("You are running the latest version.");
-                    } else {
-                        LOGGER.info("Unable to fetch version info.");
-                    }
-                }
-            });
-        }
+        HybridFixServer.onStartComplete();
     }
 }

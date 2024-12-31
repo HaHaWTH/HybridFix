@@ -35,6 +35,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean skipEventIfNoListeners = true;
 
+    @Config.Comment("Enable HybridFix's CraftServer optimizations.")
+    @Config.RequiresMcRestart
+    public static boolean enableCraftServerOptimizations = true;
+
     @Config.Comment("Disable Spigot's built-in Timings to save performance.(Only support Timings v1)")
     @Config.RequiresMcRestart
     public static boolean disableTimings = false;
@@ -42,6 +46,10 @@ public class Settings {
     @Config.Comment("Register HybridFix commands.")
     @Config.RequiresMcRestart
     public static boolean registerHybridFixCommands = true;
+
+    @Config.Comment("Enable HybridFix's bStats metrics.")
+    @Config.RequiresMcRestart
+    public static boolean enableMetrics = true;
 
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

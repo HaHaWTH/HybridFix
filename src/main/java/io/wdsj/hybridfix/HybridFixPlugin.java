@@ -35,6 +35,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                 if (!Utils.isMohist) {
                     put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);
                 }
+                put("mixins.perf.server.json", () -> Settings.enableCraftServerOptimizations);
             }
             put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
             put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);
