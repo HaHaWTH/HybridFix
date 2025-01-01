@@ -9,7 +9,7 @@ public class ItemStackUtils {
     public static String itemStackToGiveCommand(ItemStack nmsItemStack) {
         ResourceLocation itemRl = Item.REGISTRY.getNameForObject(nmsItemStack.getItem());
         String itemNamespacedId = itemRl != null ? itemRl.toString() : "unknown:unknown";
-        if (itemNamespacedId.isEmpty()) return "";
+        if (itemNamespacedId.isEmpty()) return "Failed to parse item to command";
 
         int count = nmsItemStack.getCount();
 
