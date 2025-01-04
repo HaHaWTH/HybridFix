@@ -1,6 +1,6 @@
 package io.wdsj.hybridfix.mixin.fix.capability.mohist;
 
-import io.wdsj.hybridfix.mixin.fix.capability.CBRespawnFixLogic;
+import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;

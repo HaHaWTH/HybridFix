@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.mixin.fix.capability;
 
+import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
 import org.bukkit.Location;

@@ -1,5 +1,6 @@
-package io.wdsj.hybridfix.mixin.fix.capability;
+package io.wdsj.hybridfix.logic.respawn;
 
+import io.wdsj.hybridfix.mixin.fix.capability.EntityCapabilityAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 
