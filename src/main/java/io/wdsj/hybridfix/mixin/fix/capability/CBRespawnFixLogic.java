@@ -16,6 +16,7 @@ public class CBRespawnFixLogic {
             playerIn.getDataManager().lock.writeLock().unlock();
         }
         playerIn.getDataManager().empty = true;
+        playerIn.getDataManager().setClean();
         // Entity data params
         playerIn.getDataManager().register(FLAGS, Byte.valueOf((byte)0));
         playerIn.getDataManager().register(AIR, Integer.valueOf(300));
