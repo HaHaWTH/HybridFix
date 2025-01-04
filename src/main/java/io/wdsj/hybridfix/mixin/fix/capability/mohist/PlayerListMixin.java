@@ -1,12 +1,9 @@
 package io.wdsj.hybridfix.mixin.fix.capability.mohist;
 
-import io.wdsj.hybridfix.mixin.fix.capability.EntityCapabilityAccessor;
-import net.minecraft.entity.Entity;
+import io.wdsj.hybridfix.mixin.fix.capability.CBRespawnFixLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.world.storage.IPlayerFileData;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -17,9 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
-
-    @Shadow private IPlayerFileData playerDataManager;
-
     @Inject(
             method = "func_72368_a(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;",
             at = @At(
@@ -29,8 +23,6 @@ public abstract class PlayerListMixin {
             remap = false
     )
     public void func(EntityPlayerMP playerIn, int i, boolean b, CallbackInfoReturnable<EntityPlayerMP> cir) {
-        playerIn.getDataManager().entries.clear();
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.EntityEvent.EntityConstructing(playerIn));
-        ((EntityCapabilityAccessor) (Entity) playerIn).setCapabilities(net.minecraftforge.event.ForgeEventFactory.gatherCapabilities(playerIn));
+        CBRespawnFixLogic.fixRespawn(playerIn);
     }
 }

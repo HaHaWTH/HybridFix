@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.mixin.fix.capability;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
 import org.bukkit.Location;
@@ -21,8 +20,6 @@ public abstract class PlayerListMixin {
             remap = false
     )
     public void onMoveToWorld(EntityPlayerMP playerIn, int i, boolean b, Location loc, boolean b1, CallbackInfoReturnable<EntityPlayerMP> cir) {
-        playerIn.getDataManager().entries.clear();
-        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.EntityEvent.EntityConstructing(playerIn));
-        ((EntityCapabilityAccessor) (Entity) playerIn).setCapabilities(net.minecraftforge.event.ForgeEventFactory.gatherCapabilities(playerIn));
+        CBRespawnFixLogic.fixRespawn(playerIn);
     }
 }
