@@ -11,9 +11,13 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean checkForUpdates = true;
 
-    @Config.Comment("Fix Simple Difficulty(And other similar mods) thirst not getting reset on respawn.")
+    @Config.Comment("Re-gather capabilities on respawn, will fix Simple Difficulty(And other similar mods) thirst not getting reset on respawn.")
     @Config.RequiresMcRestart
     public static boolean fixCapabilityReset = true;
+
+    @Config.Comment("Simulate vanilla respawn logic.")
+    @Config.RequiresMcRestart
+    public static boolean simulateVanillaRespawn = true;
 
     @Config.Comment("Pass explosion event to Bukkit.")
     @Config.RequiresMcRestart

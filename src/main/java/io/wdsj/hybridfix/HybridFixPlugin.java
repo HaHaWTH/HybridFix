@@ -22,9 +22,9 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     {
         {
             if (!HAS_CLEANROOM) {
-                put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset);
+                put("mixins.fix.capability.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
                 if (Utils.isMohist) {
-                    put("mixins.fix.capability.mohist.json", () -> Settings.fixCapabilityReset);
+                    put("mixins.fix.capability.mohist.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
                 }
                 put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
                 if (Utils.isMohist) {

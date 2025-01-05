@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.mixin.fix.capability.mohist;
 
+import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
@@ -23,6 +24,7 @@ public abstract class PlayerListMixin {
             remap = false
     )
     public void func(EntityPlayerMP playerIn, int i, boolean b, CallbackInfoReturnable<EntityPlayerMP> cir) {
-        CBRespawnFixLogic.fixRespawn(playerIn);
+        if (Settings.simulateVanillaRespawn) CBRespawnFixLogic.simulateVanillaRespawn(playerIn);
+        if (Settings.fixCapabilityReset) CBRespawnFixLogic.regatherCapabilities(playerIn);
     }
 }
