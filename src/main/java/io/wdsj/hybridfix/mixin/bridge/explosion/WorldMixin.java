@@ -5,5 +5,5 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(World.class)
-public abstract class WorldMixin implements IWorldGetter {
+public abstract class WorldMixin implements IWorldGetter { // Method impl is provided by hybrids
 }

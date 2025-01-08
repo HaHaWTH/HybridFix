@@ -86,6 +86,7 @@ public class HybridFixInternalPlugin extends PluginBase {
     @Override
     public PluginLoader getPluginLoader() {
         if (loader == null) {
+            //noinspection deprecation
             loader = new JavaPluginLoader(Bukkit.getServer());
         }
         return loader;

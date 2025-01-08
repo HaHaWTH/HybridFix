@@ -7,7 +7,8 @@ import java.util.concurrent.Executors;
 
 public class Utils {
     public static final String OBC_PACKAGE = "org.bukkit.craftbukkit.v1_12_R1";
-    public static final boolean isMohist = isClassLoaded("com.mohistmc.MohistMC");
+    public static final boolean isMohist = isClassExists("com.mohistmc.MohistMC");
+    private static final boolean hasBukkit = isClassExists("org.bukkit.Bukkit");
     private static final ExecutorService ioWorker = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
                     .setNameFormat("HybridFix I/O worker-%d")
@@ -28,6 +29,15 @@ public class Utils {
         }
     }
 
+    public static boolean isClassExists(String className) {
+        String classPath = className.replace('.', '/') + ".class";
+        try {
+            return Thread.currentThread().getContextClassLoader().getResource(classPath) != null;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
     public static boolean isAnyClassLoaded(String... classNames) {
         for (String className : classNames) {
             if (isClassLoaded(className)) {
@@ -38,6 +48,6 @@ public class Utils {
     }
 
     public static boolean hasBukkit() {
-        return isClassLoaded("org.bukkit.Bukkit");
+        return hasBukkit;
     }
 }

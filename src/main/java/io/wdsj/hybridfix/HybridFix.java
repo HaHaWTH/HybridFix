@@ -16,7 +16,7 @@ public class HybridFix {
     public static final String DEPENDENCY = "required-after:mixinbooter@[7.1,);required-after:configanytime;";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final boolean IS_HYBRID_ENV = Utils.hasBukkit();
-    public static final boolean HAS_CLEANROOM = Utils.isClassLoaded("com.cleanroommc.common.CleanroomContainer");
+    public static final boolean HAS_CLEANROOM = Utils.isClassExists("com.cleanroommc.common.CleanroomContainer");
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
@@ -34,6 +34,9 @@ public class HybridFix {
 
     @Mod.EventHandler
     public void onServerStartComplete(FMLServerStartedEvent event) {
+        if (!IS_HYBRID_ENV) {
+            return;
+        }
         HybridFixServer.onStartComplete();
     }
 }

@@ -1,5 +1,5 @@
 {
-  "package": "io.wdsj.hybridfix.mixin.fix.capability",
+  "package": "io.wdsj.hybridfix.mixin.fix.respawn",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",

@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.fix.capability;
+package io.wdsj.hybridfix.mixin.fix.respawn;
 
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;

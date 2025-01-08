@@ -1,5 +1,5 @@
 {
-  "package": "io.wdsj.hybridfix.mixin.fix.capability.mohist",
+  "package": "io.wdsj.hybridfix.mixin.fix.respawn.mohist",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",

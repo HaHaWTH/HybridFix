@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.fix.capability;
+package io.wdsj.hybridfix.mixin.fix.respawn;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
