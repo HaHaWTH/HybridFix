@@ -294,6 +294,7 @@ tasks.register('generateMixinJson') {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.failOnError = false
+    options.deprecation = false
     if (propertyBool('use_modern_java_syntax')) {
         if (it.name in ['compileMcLauncherJava', 'compilePatchedMcJava']) {
             return
