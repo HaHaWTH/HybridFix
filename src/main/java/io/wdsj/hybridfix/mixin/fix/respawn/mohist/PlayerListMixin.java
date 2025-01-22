@@ -4,6 +4,7 @@ import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
+    @Dynamic("mohist")
     @Inject(
             method = "func_72368_a(Lnet/minecraft/entity/player/EntityPlayerMP;IZ)Lnet/minecraft/entity/player/EntityPlayerMP;",
             at = @At(

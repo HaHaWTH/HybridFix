@@ -26,6 +26,7 @@ public class CommandHybridFix extends Command {
             .expireAfterWrite(1L, TimeUnit.HOURS)
             .maximumSize(1L)
             .build();
+
     public CommandHybridFix(String name) {
         super(name);
         this.description = "HybridFix commands";

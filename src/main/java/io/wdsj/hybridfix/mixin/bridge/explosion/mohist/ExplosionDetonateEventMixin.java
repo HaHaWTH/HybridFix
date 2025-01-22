@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.world.ExplosionEvent;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,7 +16,7 @@ public abstract class ExplosionDetonateEventMixin extends ExplosionEvent {
         super(world, explosion);
     }
 
-
+    @Dynamic(value = "mohist")
     @Redirect(
             method = "<init>",
             at = @At(
