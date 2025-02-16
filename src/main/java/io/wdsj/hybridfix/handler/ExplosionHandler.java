@@ -2,8 +2,8 @@ package io.wdsj.hybridfix.handler;
 
 import com.google.common.collect.Lists;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.duck.bridge.explosion.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.explosion.IWorldGetter;
+import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
+import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;

@@ -11,6 +11,7 @@ import io.wdsj.hybridfix.util.Utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

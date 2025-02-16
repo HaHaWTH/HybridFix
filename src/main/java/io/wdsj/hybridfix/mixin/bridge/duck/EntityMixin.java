@@ -1,6 +1,6 @@
-package io.wdsj.hybridfix.mixin.bridge.explosion;
+package io.wdsj.hybridfix.mixin.bridge.duck;
 
-import io.wdsj.hybridfix.duck.bridge.explosion.IEntityGetter;
+import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 

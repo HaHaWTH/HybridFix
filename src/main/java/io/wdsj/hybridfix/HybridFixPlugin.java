@@ -18,19 +18,18 @@ import static io.wdsj.hybridfix.HybridFix.IS_HYBRID_ENV;
 public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public static final boolean isClient = FMLLaunchHandler.side().isClient();
 
-    private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new HashMap<String, Supplier<Boolean>>()
+    private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
     {
         {
+            put("mixins.bridge.duck.json", () -> true);
             if (!HAS_CLEANROOM) {
                 put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
                 if (Utils.isMohist) {
                     put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
                 }
-                put("mixins.bridge.explosion.json", () -> Settings.passExplosionEventToBukkit);
                 if (Utils.isMohist) {
                     put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
                 }
-                put("mixins.bridge.permission.json", () -> Settings.bridgeForgePermissionsToBukkit);
                 put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);
                 if (!Utils.isMohist) {
                     put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);

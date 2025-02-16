@@ -1,6 +1,6 @@
-package io.wdsj.hybridfix.mixin.bridge.explosion;
+package io.wdsj.hybridfix.mixin.bridge.duck;
 
-import io.wdsj.hybridfix.duck.bridge.explosion.IWorldGetter;
+import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 

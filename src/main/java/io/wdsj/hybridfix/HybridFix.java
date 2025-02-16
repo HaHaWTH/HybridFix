@@ -25,7 +25,6 @@ public class HybridFix {
             return;
         }
         if (HAS_CLEANROOM) {
-            LOGGER.warn("CatRoom detected, it has most of HybridFix's patches, you may not benefit from this mod.");
             return;
         }
         HybridFixServer.preInit();

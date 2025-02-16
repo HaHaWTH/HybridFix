@@ -53,8 +53,17 @@ public class Settings {
 
     @Config.Comment("Enable HybridFix's bStats metrics.")
     @Config.RequiresMcRestart
-    public static boolean enableMetrics = true;
+    public static boolean enableMetrics = false;
 
+    @Config.Comment("Configuration for HybridFix mod patches.")
+    @Config.RequiresMcRestart
+    public static ModPatchSettings modPatchSettings = new ModPatchSettings();
+
+    public static class ModPatchSettings {
+        @Config.Comment("Patch saplings in twilight forest bypass Bukkit grief protections exploit.")
+        @Config.RequiresMcRestart
+        public boolean patchTwilightForestSapling = true;
+    }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
     public static BukkitPluginSettings bukkitPluginConfig = new BukkitPluginSettings();

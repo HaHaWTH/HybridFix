@@ -13,6 +13,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Simple Difficulty, ToughAsNails(And any other similar mods) thirst is not getting reset on player respawn[(Luohuayu/CatServer#536)](https://github.com/Luohuayu/CatServer/issues/536)[(MohistMC/Mohist#2905)](https://github.com/MohistMC/Mohist/issues/2905)
 - Ring dupe bug in The Betweenlands mod[(Luohuayu/CatServer#204)](https://github.com/Luohuayu/CatServer/issues/204)
 - Simulate vanilla player respawn, most dupe bugs on player death should be fixed
+- Fix Twilight Forest saplings can bypass anti-grief plugin protection bug
 
 ## Features
 

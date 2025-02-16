@@ -1,11 +1,12 @@
 {
-  "package": "io.wdsj.hybridfix.mixin.bridge.permission",
+  "package": "io.wdsj.hybridfix.mixin.bridge.duck",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "EntityPermMixin"
+    "EntityMixin",
+    "WorldMixin"
   ]
 }
