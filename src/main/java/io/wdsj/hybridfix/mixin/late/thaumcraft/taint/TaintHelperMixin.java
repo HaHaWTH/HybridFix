@@ -43,6 +43,7 @@ public abstract class TaintHelperMixin {
             remap = false
     )
     private static void spreadFibres(World world, BlockPos pos, boolean ignore, CallbackInfo ci) {
+        ci.cancel();
         if (ignore || !ModConfig.CONFIG_MISC.wussMode) {
             float mod = 0.001F + AuraHandler.getFluxSaturation(world, pos) * 2.0F;
             if (ignore || !(world.rand.nextFloat() > ModConfig.CONFIG_WORLD.taintSpreadRate / 100.0F * mod)) {
@@ -81,7 +82,7 @@ public abstract class TaintHelperMixin {
                         EnumFacing face = null;
                         if ((double)world.rand.nextFloat() < 0.6 && (face = BlockUtils.getFaceBlockTouching(world, t, BlocksTC.taintLog)) != null) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFibre));
+                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFeature));
                             blockState.setRawData((byte)BlocksTC.taintFeature.getMetaFromState(BlocksTC.taintFeature.getDefaultState().withProperty(IBlockFacing.FACING, face.getOpposite())));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
@@ -174,7 +175,6 @@ public abstract class TaintHelperMixin {
 
             }
         }
-        ci.cancel();
     }
 
 }
