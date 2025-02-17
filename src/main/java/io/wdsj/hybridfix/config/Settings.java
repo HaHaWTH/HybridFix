@@ -77,6 +77,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean enable = false;
 
+        @Config.Comment("Enable HybridFix Residence hook.")
+        @Config.RequiresMcRestart
+        public boolean residenceHook = false;
+
         @Config.Comment("Enable HybridFix built-in AntiExplode.")
         @Config.RequiresMcRestart
         public boolean antiExplode = false;
