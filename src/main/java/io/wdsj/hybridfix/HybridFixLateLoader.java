@@ -22,6 +22,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
     {
         {
             put("mixins.twilight_forest.sapling.json", () -> isModLoaded("twilightforest") && Settings.modPatchSettings.patchTwilightForestSapling);
+            put("mixins.thaumcraft.taint.json", () -> isModLoaded("thaumcraft") && Settings.modPatchSettings.patchThaumcraftTaintSpread);
         }
     });
 

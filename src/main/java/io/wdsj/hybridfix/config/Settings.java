@@ -63,6 +63,10 @@ public class Settings {
         @Config.Comment("Patch saplings in twilight forest bypass Bukkit grief protections exploit.")
         @Config.RequiresMcRestart
         public boolean patchTwilightForestSapling = true;
+
+        @Config.Comment("Patch taint in thaumcraft spread event.")
+        @Config.RequiresMcRestart
+        public boolean patchThaumcraftTaintSpread = true;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

@@ -1,8 +1,11 @@
 package io.wdsj.hybridfix.util;
 
 import io.wdsj.hybridfix.HybridFix;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 
 import java.lang.reflect.Method;
 
@@ -13,9 +16,13 @@ import java.lang.reflect.Method;
 public class SpigotReflectionUtils {
     private SpigotReflectionUtils() {}
     private static final Method METHOD_CRAFT_ITEM_STACK_AS_NMS_COPY = getMethod(CraftItemStack.class, "asNMSCopy", org.bukkit.inventory.ItemStack.class);
-
+    private static final Method METHOD_CRAFT_MAGIC_NUMBERS_GET_MATERIAL = getMethod(CraftMagicNumbers.class, "getMaterial", Block.class);
     public static ItemStack CraftItemStack_asNMSCopy(org.bukkit.inventory.ItemStack bukkitItemStack) {
         return (ItemStack) invokeStaticMethod(METHOD_CRAFT_ITEM_STACK_AS_NMS_COPY, bukkitItemStack);
+    }
+
+    public static Material CraftMagicNumbers_getMaterial(Block block) {
+        return (Material) invokeStaticMethod(METHOD_CRAFT_MAGIC_NUMBERS_GET_MATERIAL, block);
     }
 
     private static Method getMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
