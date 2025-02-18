@@ -13,6 +13,7 @@ import org.bukkit.TreeType;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,6 +24,19 @@ import java.util.Random;
 
 @Mixin(value = BlockTFSapling.class, remap = false)
 public abstract class BlockTFSaplingMixin {
+    @Unique private boolean hybridFix$isBoneMeal = true;
+    @Inject(
+            method = "updateTick",
+            at = @At(
+                value = "INVOKE",
+                target = "Ltwilightforest/block/BlockTFSapling;grow(Lnet/minecraft/world/World;Ljava/util/Random;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V"
+            ),
+            remap = true
+    )
+    public void beforeTickGrow(World worldIn, BlockPos pos, IBlockState state, Random rand, CallbackInfo ci) {
+        hybridFix$isBoneMeal = false;
+    }
+
     @Inject(
             method = "grow",
             at = @At(
@@ -51,7 +65,13 @@ public abstract class BlockTFSaplingMixin {
                 blockstates.add(HybridReflectionUtils.newBlockStateFromBlockSnapshot(snapshot));
             }
             worldIn.capturedBlockSnapshots.clear();
-            StructureGrowEvent event = new StructureGrowEvent(location, TreeType.TREE, false, null, blockstates);
+            StructureGrowEvent event;
+            if (!hybridFix$isBoneMeal) {
+                event = new StructureGrowEvent(location, TreeType.TREE, false, null, blockstates);
+                hybridFix$isBoneMeal = true;
+            } else {
+                event = new StructureGrowEvent(location, TreeType.TREE, true, null, blockstates);
+            }
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 for (BlockState blockstate : blockstates) {

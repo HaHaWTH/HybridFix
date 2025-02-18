@@ -13,7 +13,6 @@ public class ResHookBlockFormListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true) // Priority matters here, always higher than Residence
     public void onForm(BlockFormEvent event) {
         if (!(event instanceof EntityBlockFormEvent)) return;
-
         if (!Flags.spread.isGlobalyEnabled()) return;
         Residence plugin = Residence.getInstance();
         if (plugin == null) return;
