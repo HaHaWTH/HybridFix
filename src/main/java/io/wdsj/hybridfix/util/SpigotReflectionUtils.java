@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 
 /**
  * Bridge for converting CraftBukkit method that returns {@link net.minecraft.server.v1_12_R1} objects to {@link net.minecraft} object without package relocation.
- * Since we don't want to include hybrid server as a dependency.
+ * As we don't want to include hybrid server as a dependency.
  */
 public class SpigotReflectionUtils {
     private SpigotReflectionUtils() {}

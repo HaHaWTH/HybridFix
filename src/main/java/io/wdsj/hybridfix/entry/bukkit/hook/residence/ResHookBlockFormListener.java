@@ -10,15 +10,14 @@ import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 
 public class ResHookBlockFormListener implements Listener {
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true) // Priority matters here, always higher than Residence
     public void onForm(BlockFormEvent event) {
         if (!(event instanceof EntityBlockFormEvent)) return;
-        EntityBlockFormEvent eEvent = (EntityBlockFormEvent) event;
 
         if (!Flags.spread.isGlobalyEnabled()) return;
         Residence plugin = Residence.getInstance();
         if (plugin == null) return;
-        if (plugin.isDisabledWorldListener(eEvent.getBlock().getWorld())) return;
+        if (plugin.isDisabledWorldListener(event.getBlock().getWorld())) return;
         FlagPermissions perms = plugin.getPermsByLoc(event.getBlock().getLocation());
         if (!perms.has(Flags.spread, true)) {
             event.setCancelled(true);
