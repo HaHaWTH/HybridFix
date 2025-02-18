@@ -64,6 +64,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchTwilightForestSapling = true;
 
+        @Config.Comment("Patch entities in twilight forest (e.g. Naga) bypass Bukkit grief protections exploit.")
+        @Config.RequiresMcRestart
+        public boolean patchTwilightForestEntityEvent = true;
+
         @Config.Comment("Patch taint in thaumcraft spread event.")
         @Config.RequiresMcRestart
         public boolean patchThaumcraftTaintSpread = true;
@@ -76,10 +80,6 @@ public class Settings {
         @Config.Comment("Enable HybridFix built-in bukkit plugin.(All bukkit plugin features in this section won't work if you disabled this!)")
         @Config.RequiresMcRestart
         public boolean enable = false;
-
-        @Config.Comment("Enable HybridFix Residence hook.")
-        @Config.RequiresMcRestart
-        public boolean residenceHook = false;
 
         @Config.Comment("Enable HybridFix built-in AntiExplode.")
         @Config.RequiresMcRestart
