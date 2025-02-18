@@ -25,11 +25,11 @@ public abstract class DedicatedServerMixin {
             )
     )
     public void onInit(CallbackInfoReturnable<Boolean> cir) {
-        hybridFix$register();
+        hybridFix$onEnable();
     }
 
     @Unique
-    private void hybridFix$register() {
+    private void hybridFix$onEnable() {
         HybridFix.LOGGER.info("[HybridFix] Enabling HybridFix internal plugin v{}", HybridFix.VERSION);
         Plugin internalPlugin = HybridFixInternalPlugin.getInstance();
         if (Settings.bukkitPluginConfig.antiExplode) {
