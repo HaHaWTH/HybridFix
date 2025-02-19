@@ -14,6 +14,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Ring dupe bug in The Betweenlands mod[(Luohuayu/CatServer#204)](https://github.com/Luohuayu/CatServer/issues/204)
 - Simulate vanilla player respawn, most dupe bugs on player death should be fixed
 - Fix Twilight Forest saplings can bypass anti-grief plugin protection bug
+- Fix Twilight Forest entities(e.g. Naga) can break blocks in protected areas
 - Fix Thaumcraft 6 taint can spread into protected areas
 
 ## Features
