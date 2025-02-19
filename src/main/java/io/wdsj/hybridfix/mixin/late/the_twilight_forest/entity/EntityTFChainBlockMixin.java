@@ -35,8 +35,6 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
 
     @Unique
     private boolean hybridFix$isPlayerHarvestCalled = false;
-    @Unique
-    private boolean hybridFix$isPlayer = false;
     @WrapOperation(
             method = "affectBlocksInAABB",
             at = @At(
@@ -47,17 +45,14 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             remap = false
     )
     public boolean wrapDestroyBlock(World instance, BlockPos pos, boolean dropBlock, Operation<Boolean> original) {
-        if (!hybridFix$isPlayer || hybridFix$isPlayerHarvestCalled) {
-            @Nullable
-            EntityLivingBase thrower = this.getThrower();
-            if (thrower == null || hybridFix$isPlayer || EntityUtil.canDestroyBlock(instance, pos, thrower)) {
-                hybridFix$isPlayerHarvestCalled = false;
-                hybridFix$isPlayer = false;
-                return original.call(instance, pos, dropBlock);
-            }
+        @Nullable
+        EntityLivingBase thrower = this.getThrower();
+        final boolean isPlayer = thrower instanceof EntityPlayerMP;
+        if (hybridFix$isPlayerHarvestCalled || (!isPlayer && EntityUtil.canDestroyBlock(instance, pos, thrower != null ? thrower : this))) {
+            hybridFix$isPlayerHarvestCalled = false;
+            return original.call(instance, pos, dropBlock);
         }
         hybridFix$isPlayerHarvestCalled = false;
-        hybridFix$isPlayer = false;
         return false;
     }
 
@@ -71,7 +66,6 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             remap = false
     )
     public void wrapHarvest(Block instance, World world, EntityPlayer player, BlockPos pos, IBlockState iBlockState, TileEntity te, ItemStack item, Operation<Void> original) {
-        hybridFix$isPlayer = true;
         if (!(player instanceof EntityPlayerMP)) {
             original.call(instance, world, player, pos, iBlockState, te, item);
             hybridFix$isPlayerHarvestCalled = true;
