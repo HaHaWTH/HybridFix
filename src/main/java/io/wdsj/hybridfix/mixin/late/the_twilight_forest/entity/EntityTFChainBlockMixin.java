@@ -2,6 +2,8 @@ package io.wdsj.hybridfix.mixin.late.the_twilight_forest.entity;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.Block;
@@ -19,7 +21,6 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import twilightforest.entity.EntityTFChainBlock;
 import twilightforest.util.EntityUtil;
@@ -33,8 +34,6 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
         super(worldIn);
     }
 
-    @Unique
-    private boolean hybridFix$isPlayerHarvestCalled = false;
     @WrapOperation(
             method = "affectBlocksInAABB",
             at = @At(
@@ -44,15 +43,13 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             ),
             remap = false
     )
-    public boolean wrapDestroyBlock(World instance, BlockPos pos, boolean dropBlock, Operation<Boolean> original) {
+    public boolean wrapDestroyBlock(World instance, BlockPos pos, boolean dropBlock, Operation<Boolean> original, @Share("harvestCalled") LocalBooleanRef isHarvestCalled) {
         @Nullable
         EntityLivingBase thrower = this.getThrower();
         final boolean isPlayer = thrower instanceof EntityPlayerMP;
-        if (hybridFix$isPlayerHarvestCalled || (!isPlayer && EntityUtil.canDestroyBlock(instance, pos, thrower != null ? thrower : this))) {
-            hybridFix$isPlayerHarvestCalled = false;
+        if (isHarvestCalled.get() || (!isPlayer && EntityUtil.canDestroyBlock(instance, pos, thrower != null ? thrower : this))) {
             return original.call(instance, pos, dropBlock);
         }
-        hybridFix$isPlayerHarvestCalled = false;
         return false;
     }
 
@@ -65,10 +62,10 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             ),
             remap = false
     )
-    public void wrapHarvest(Block instance, World world, EntityPlayer player, BlockPos pos, IBlockState iBlockState, TileEntity te, ItemStack item, Operation<Void> original) {
+    public void wrapHarvest(Block instance, World world, EntityPlayer player, BlockPos pos, IBlockState iBlockState, TileEntity te, ItemStack item, Operation<Void> original, @Share("harvestCalled") LocalBooleanRef isHarvestCalled) {
         if (!(player instanceof EntityPlayerMP)) {
             original.call(instance, world, player, pos, iBlockState, te, item);
-            hybridFix$isPlayerHarvestCalled = true;
+            isHarvestCalled.set(true);
             return;
         }
         org.bukkit.block.Block bukkitBlock = ((IWorldGetter)(world)).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
@@ -76,15 +73,15 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
         BlockBreakEvent event = new BlockBreakEvent(bukkitBlock, bukkitPlayer);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            hybridFix$isPlayerHarvestCalled = false;
+            isHarvestCalled.set(false);
             return;
         }
         if (event.isDropItems()) {
             original.call(instance, world, player, pos, iBlockState, te, item);
-            hybridFix$isPlayerHarvestCalled = true;
+            isHarvestCalled.set(true);
         } else {
             world.destroyBlock(pos, false);
-            hybridFix$isPlayerHarvestCalled = false;
+            isHarvestCalled.set(false);
         }
     }
 }

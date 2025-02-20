@@ -7,6 +7,9 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "EntityUtilMixin",
-    "EntityTFChainBlockMixin"
+    "EntityTFChainBlockMixin",
+    "EntityTFIceExploderMixin",
+    "EntityTFCubeOfAnnihilationMixin",
+    "EntityTFTrollMixin"
   ]
 }
