@@ -24,49 +24,6 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
         super(worldIn);
     }
 
-    /*
-    @Inject(
-            method = "transformBlock",
-            at = @At("HEAD"),
-            cancellable = true,
-            remap = false
-    )
-    public void transformLogicRewrite(BlockPos pos, CallbackInfo ci) {
-        ci.cancel();
-        IBlockState state = this.world.getBlockState(pos);
-        Block block = state.getBlock();
-        if (block.getExplosionResistance(this) < 8.0F && state.getBlockHardness(this.world, pos) >= 0.0F) {
-            int blockColor = state.getMapColor(this.world, pos).colorValue;
-            org.bukkit.World bWorld = ((IWorldGetter) this.world).getWorld();
-            org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-            BlockState blockState = bBlock.getState();
-            if (this.shouldTransformGlass(state, pos)) {
-                blockState.setType(Material.STAINED_GLASS);
-                final IBlockState newBs = Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, this.getClosestDyeColor(blockColor));
-                byte data = (byte) Blocks.STAINED_GLASS.getMetaFromState(newBs);
-                blockState.setRawData(data);
-                EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter)this).getBukkitEntity(), bBlock, Material.STAINED_GLASS, data);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    blockState.update(true);
-                }
-                // this.world.setBlockState(pos, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, this.getClosestDyeColor(blockColor)));
-            } else if (this.shouldTransformClay(state, pos)) {
-                blockState.setType(Material.STAINED_CLAY);
-                final IBlockState newBs = Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, this.getClosestDyeColor(blockColor));
-                byte data = (byte) Blocks.STAINED_HARDENED_CLAY.getMetaFromState(newBs);
-                blockState.setRawData(data);
-                EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter)this).getBukkitEntity(), bBlock, Material.STAINED_CLAY, data);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    blockState.update(true);
-                }
-                // his.world.setBlockState(pos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, this.getClosestDyeColor(blockColor)));
-            }
-        }
-    }
-     */
-
     @Redirect(
             method = "transformBlock",
             at = @At(

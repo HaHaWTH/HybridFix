@@ -89,6 +89,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean antiExplode = false;
 
+        @Config.Comment("Enable HybridFix Residence hook.")
+        @Config.RequiresMcRestart
+        public boolean hookResidence = false;
+
         @Config.Comment("Worlds that AntiExplode should protect.")
         @Config.RequiresMcRestart
         public String[] antiExplodeWorlds = new String[]{"world", "DIM-1", "DIM1"};
