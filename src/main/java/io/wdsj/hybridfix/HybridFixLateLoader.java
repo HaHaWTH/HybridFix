@@ -21,8 +21,11 @@ public class HybridFixLateLoader implements ILateMixinLoader {
     private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
     {
         {
+            // Twilight Forest patches
             put("mixins.twilight_forest.sapling.json", () -> isModLoaded("twilightforest") && Settings.modPatchSettings.patchTwilightForestSapling);
+            put("mixins.twilight_forest.item.json", () -> isModLoaded("twilightforest") && Settings.modPatchSettings.patchTwilightForestItem);
             put("mixins.twilight_forest.entity.json", () -> isModLoaded("twilightforest") && Settings.modPatchSettings.patchTwilightForestEntityEvent);
+            // Thaumcraft patches
             put("mixins.thaumcraft.taint.json", () -> isModLoaded("thaumcraft") && Settings.modPatchSettings.patchThaumcraftTaintSpread);
         }
     });

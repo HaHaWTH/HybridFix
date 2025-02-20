@@ -68,6 +68,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchTwilightForestEntityEvent = true;
 
+        @Config.Comment("Patch items in twilight forest (e.g. MagicBeans) bypass Bukkit grief protections exploit.")
+        @Config.RequiresMcRestart
+        public boolean patchTwilightForestItem = true;
+
         @Config.Comment("Patch taint in thaumcraft spread event.")
         @Config.RequiresMcRestart
         public boolean patchThaumcraftTaintSpread = true;
@@ -84,6 +88,10 @@ public class Settings {
         @Config.Comment("Enable HybridFix built-in AntiExplode.")
         @Config.RequiresMcRestart
         public boolean antiExplode = false;
+
+        @Config.Comment("Enable HybridFix Residence hook.")
+        @Config.RequiresMcRestart
+        public boolean hookResidence = false;
 
         @Config.Comment("Worlds that AntiExplode should protect.")
         @Config.RequiresMcRestart

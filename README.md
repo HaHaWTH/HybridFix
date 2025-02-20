@@ -39,14 +39,4 @@ Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
 - `hybridfix.command.use` - Allow to access `/hybridfix` command.
 
-## Extra information
-
-**As hybrid servers have ClassLoader isolation, HybridFix cannot directly access to plugin classes without hacky methods.**
-
-For plugin patches, please refer to [HybridFix-Patches](https://github.com/HaHaWTH/HybridFix-Patches).
-
-Currently patched plugins:
-
-- Residence
-
 **Note**: Commands and permissions are registered on Bukkit side, that means you can manage permissions with Bukkit permission plugins like LuckPerms.
