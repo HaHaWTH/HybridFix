@@ -30,7 +30,6 @@ public class ListenerUtils {
                 buffer.write(temp, 0, bytesRead);
             }
             byte[] classBytes = buffer.toByteArray();
-            inputStream.read(classBytes);
             Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
             assert plugin != null;
             // Inherit flow: PluginClassLoader -> URLClassLoader -> SecureClassLoader -> ClassLoader
