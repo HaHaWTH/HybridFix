@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.spigotmc.SneakyThrow;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
@@ -22,7 +23,13 @@ public class ListenerUtils {
         try (InputStream inputStream = clazz.getClassLoader().getResourceAsStream(
                 clazz.getName().replace('.', '/') + ".class")) {
             assert inputStream != null;
-            byte[] classBytes = new byte[inputStream.available()];
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] temp = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(temp, 0, temp.length)) != -1) {
+                buffer.write(temp, 0, bytesRead);
+            }
+            byte[] classBytes = buffer.toByteArray();
             inputStream.read(classBytes);
             Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
             assert plugin != null;
