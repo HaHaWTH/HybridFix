@@ -1,8 +1,10 @@
 package io.wdsj.hybridfix.util.hybrid;
 
 import io.wdsj.hybridfix.HybridFix;
+import net.minecraft.block.BlockSapling;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
+import org.bukkit.TreeType;
 import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlockState;
 
 import java.lang.invoke.MethodHandle;
@@ -12,11 +14,21 @@ import java.lang.reflect.Field;
 
 public class HybridReflectionUtils {
     private static final Field FIELD_WORLD_CAPTURE_TREE_GENERATION = getField(World.class, "captureTreeGeneration");
+    private static final Field FIELD_BLOCK_SAPLING_TREE_TYPE = getField(BlockSapling.class, "treeType");
     private static final MethodHandle CONSTRUCTOR_CRAFT_BLOCK_STATE = getConstructorHandle(CraftBlockState.class, BlockSnapshot.class);
 
     public static void setCaptureTreeGeneration(World world, boolean value) {
         setBooleanField(FIELD_WORLD_CAPTURE_TREE_GENERATION, world, value);
     }
+
+    public static TreeType getTreeType() { // Currently unused
+        return (TreeType) getFieldValue(FIELD_BLOCK_SAPLING_TREE_TYPE, null);
+    }
+
+    public static void setTreeType(TreeType treeType) {
+        setField(FIELD_BLOCK_SAPLING_TREE_TYPE, null, treeType);
+    }
+
     public static CraftBlockState newBlockStateFromBlockSnapshot(BlockSnapshot snapshot) {
         assert CONSTRUCTOR_CRAFT_BLOCK_STATE != null;
         try {
@@ -44,7 +56,17 @@ public class HybridReflectionUtils {
             return null;
         }
     }
-    private static void setField(Field field, Object instance, Object... value) {
+
+    private static Object getFieldValue(Field field, Object instance) {
+        try {
+            return field.get(instance);
+        } catch (Exception e) {
+            HybridFix.LOGGER.warn("Error occurred while getting field {}", field.getName(), e);
+            return null;
+        }
+    }
+
+    private static void setField(Field field, Object instance, Object value) {
         try {
             field.set(instance, value);
         } catch (Exception e) {
