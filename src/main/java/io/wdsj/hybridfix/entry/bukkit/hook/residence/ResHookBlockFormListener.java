@@ -3,6 +3,9 @@ package io.wdsj.hybridfix.entry.bukkit.hook.residence;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,6 +20,13 @@ public class ResHookBlockFormListener implements Listener {
         Residence plugin = Residence.getInstance();
         if (plugin == null) return;
         if (plugin.isDisabledWorldListener(event.getBlock().getWorld())) return;
+        // Skip checks that have already been done by Residence
+        if (((EntityBlockFormEvent) event).getEntity() instanceof Snowman) return;
+        final BlockState newState = event.getNewState();
+        Material newType = newState.getType();
+        if (newType == Material.SNOW || newType == Material.ICE || newType == Material.FROSTED_ICE) return;
+        // End
+
         FlagPermissions perms = plugin.getPermsByLoc(event.getBlock().getLocation());
         if (!perms.has(Flags.spread, true)) {
             event.setCancelled(true);

@@ -24,9 +24,6 @@ public class HybridFix {
             LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to work properly, disabling.");
             return;
         }
-        if (HAS_CLEANROOM) {
-            return;
-        }
         HybridFixServer.preInit();
     }
 

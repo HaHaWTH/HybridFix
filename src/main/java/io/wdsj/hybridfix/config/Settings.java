@@ -75,13 +75,17 @@ public class Settings {
         @Config.Comment("Patch taint in thaumcraft spread event.")
         @Config.RequiresMcRestart
         public boolean patchThaumcraftTaintSpread = true;
+
+        @Config.Comment("Patch Tinkers Construct tool damage,\nUseful for some traits that adds extra effects and disarming, etc.\nYou can use property -Dhybridfix.tconstruct.supersedeVanillaEvent=true to prevent calling original damage event.")
+        @Config.RequiresMcRestart
+        public boolean patchTconstructToolDamage = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
     public static BukkitPluginSettings bukkitPluginConfig = new BukkitPluginSettings();
 
     public static class BukkitPluginSettings {
-        @Config.Comment("Enable HybridFix built-in bukkit plugin.(All bukkit plugin features in this section won't work if you disabled this!)")
+        @Config.Comment("Enable HybridFix built-in bukkit plugin.\n***All bukkit plugin features in this section won't work if you disabled this!***")
         @Config.RequiresMcRestart
         public boolean enable = false;
 
@@ -92,6 +96,10 @@ public class Settings {
         @Config.Comment("Enable HybridFix Residence hook.")
         @Config.RequiresMcRestart
         public boolean hookResidence = false;
+
+        @Config.Comment("Enable HybridFix WorldGuard hook.")
+        @Config.RequiresMcRestart
+        public boolean hookWorldGuard = false;
 
         @Config.Comment("Worlds that AntiExplode should protect.")
         @Config.RequiresMcRestart

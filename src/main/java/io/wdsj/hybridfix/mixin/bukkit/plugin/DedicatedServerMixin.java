@@ -4,6 +4,7 @@ import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
+import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.listener.ExplodeListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.util.ListenerUtils;
@@ -45,6 +46,15 @@ public abstract class DedicatedServerMixin {
                 HybridFix.LOGGER.info("{}[HybridFix] Hooked into Residence.", ChatColor.AQUA);
             } else {
                 HybridFix.LOGGER.warn("[HybridFix] Residence not found, check your installation.");
+            }
+        }
+        if (Settings.bukkitPluginConfig.hookWorldGuard) {
+            final String wg = "WorldGuard";
+            if (Bukkit.getPluginManager().isPluginEnabled(wg)) {
+                ListenerUtils.registerListenerToTargetPlugin(WGHookEntityChangeBlockListener.class, wg);
+                HybridFix.LOGGER.info("{}[HybridFix] Hooked into WorldGuard.", ChatColor.LIGHT_PURPLE);
+            } else {
+                HybridFix.LOGGER.warn("[HybridFix] WorldGuard not found, check your installation.");
             }
         }
     }
