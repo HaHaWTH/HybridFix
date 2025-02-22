@@ -1,6 +1,8 @@
 package io.wdsj.hybridfix.util.hybrid;
 
+import com.google.common.base.Preconditions;
 import io.wdsj.hybridfix.HybridFix;
+import io.wdsj.hybridfix.HybridFixServer;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
@@ -18,19 +20,22 @@ public class HybridReflectionUtils {
     private static final MethodHandle CONSTRUCTOR_CRAFT_BLOCK_STATE = getConstructorHandle(CraftBlockState.class, BlockSnapshot.class);
 
     public static void setCaptureTreeGeneration(World world, boolean value) {
+        Preconditions.checkNotNull(FIELD_WORLD_CAPTURE_TREE_GENERATION);
         setBooleanField(FIELD_WORLD_CAPTURE_TREE_GENERATION, world, value);
     }
 
     public static TreeType getTreeType() { // Currently unused
+        Preconditions.checkNotNull(FIELD_BLOCK_SAPLING_TREE_TYPE);
         return (TreeType) getFieldValue(FIELD_BLOCK_SAPLING_TREE_TYPE, null);
     }
 
     public static void setTreeType(TreeType treeType) {
+        Preconditions.checkNotNull(FIELD_BLOCK_SAPLING_TREE_TYPE);
         setField(FIELD_BLOCK_SAPLING_TREE_TYPE, null, treeType);
     }
 
     public static CraftBlockState newBlockStateFromBlockSnapshot(BlockSnapshot snapshot) {
-        assert CONSTRUCTOR_CRAFT_BLOCK_STATE != null;
+        Preconditions.checkNotNull(CONSTRUCTOR_CRAFT_BLOCK_STATE);
         try {
             return (CraftBlockState) CONSTRUCTOR_CRAFT_BLOCK_STATE.invokeExact(snapshot);
         } catch (Throwable e) {
@@ -44,6 +49,8 @@ public class HybridReflectionUtils {
             c.setAccessible(true);
             return MethodHandles.lookup().unreflectConstructor(c);
         } catch (Exception e) {
+            HybridFix.LOGGER.warn("Error occurred while getting constructor {}", clazz.getName());
+            HybridFixServer.createServerDump(e);
             return null;
         }
     }
@@ -53,6 +60,8 @@ public class HybridReflectionUtils {
             f.setAccessible(true);
             return f;
         } catch (Exception e) {
+            HybridFix.LOGGER.warn("Error occurred while getting field {}", fieldName);
+            HybridFixServer.createServerDump(e);
             return null;
         }
     }
@@ -61,7 +70,7 @@ public class HybridReflectionUtils {
         try {
             return field.get(instance);
         } catch (Exception e) {
-            HybridFix.LOGGER.warn("Error occurred while getting field {}", field.getName(), e);
+            HybridFix.LOGGER.warn("Error occurred while getting value of field {}", field.getName(), e);
             return null;
         }
     }
@@ -70,7 +79,7 @@ public class HybridReflectionUtils {
         try {
             field.set(instance, value);
         } catch (Exception e) {
-            HybridFix.LOGGER.warn("Error occurred while setting field {}", field.getName(), e);
+            HybridFix.LOGGER.warn("Error occurred while setting value of field {}", field.getName(), e);
         }
     }
 
@@ -78,7 +87,7 @@ public class HybridReflectionUtils {
         try {
             field.setBoolean(instance, value);
         } catch (Exception e) {
-            HybridFix.LOGGER.warn("Error occurred while setting field {}", field.getName(), e);
+            HybridFix.LOGGER.warn("Error occurred while setting boolean value of field {}", field.getName(), e);
         }
     }
 }

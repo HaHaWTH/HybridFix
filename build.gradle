@@ -125,6 +125,7 @@ dependencies {
     compileOnly 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
 
     compileOnly files("libs/Residence5.1.6.4.jar")
+    compileOnly files("libs/worldguard-bukkit-6.2.2.jar")
 
     // The twilight forest
     compileOnly rfg.deobf("curse.maven:the-twilight-forest-227639:3051450")
@@ -132,6 +133,10 @@ dependencies {
     // Thaumcraft 6
     compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
     compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+
+    // Tinkers Construct
+    compileOnly rfg.deobf("curse.maven:tinkers-construct-74072:2902483")
+    compileOnly rfg.deobf("curse.maven:mantle-74924:2713386")
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174

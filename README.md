@@ -17,6 +17,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix Twilight Forest entities(e.g. Naga) can break blocks in protected areas
 - Fix Twilight Forest Chain with Block can break blocks in protected areas
 - Fix Thaumcraft 6 taint can spread into protected areas
+- Fix trait effects in Tinkers' Construct can bypass damage protection
 
 ## Features
 
@@ -29,6 +30,13 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - General CraftBukkit performance improvements.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
+
+## Plugin Hooks
+Thanks to HybridFix internal plugin, we can hook into plugins from Forge side to provide more fixes.
+
+Currently patched plugins:
+- Residence[(SpigotMC)](https://www.spigotmc.org/resources/residence-1-7-10-up-to-1-21.11480/)[(GitHub)](https://github.com/Zrips/Residence)
+- WorldGuard[(BukkitDev)](https://dev.bukkit.org/projects/worldguard)[(GitHub)](https://github.com/EngineHub/WorldGuard)
 
 ## Commands
 

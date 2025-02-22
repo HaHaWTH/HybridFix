@@ -9,14 +9,22 @@ import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.permission.PermissionAPI;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_12_R1.CraftCrashReport;
+
+import java.util.logging.Level;
+
+import static io.wdsj.hybridfix.HybridFix.HAS_CLEANROOM;
 
 public class HybridFixServer {
     public static void preInit() {
-        if (Settings.passExplosionEventToBukkit) {
-            MinecraftForge.EVENT_BUS.register(new ExplosionHandler());
-        }
-        if (Settings.bridgeForgePermissionsToBukkit) {
-            PermissionAPI.setPermissionHandler(new BukkitForgePermissionHandler());
+        if (!HAS_CLEANROOM) {
+            if (Settings.passExplosionEventToBukkit) {
+                MinecraftForge.EVENT_BUS.register(new ExplosionHandler());
+            }
+            if (Settings.bridgeForgePermissionsToBukkit) {
+                PermissionAPI.setPermissionHandler(new BukkitForgePermissionHandler());
+            }
         }
     }
 
@@ -38,5 +46,10 @@ public class HybridFixServer {
                 }
             });
         }
+    }
+
+    public static void createServerDump(Throwable t) {
+        HybridFix.LOGGER.error("--- REPORT THIS TO YOUR SERVER SOFTWARE - If you think this is a HybridFix bug, please report it at https://github.com/HaHaWTH/HybridFix/issues - THIS IS NOT A CRASH - {} ---", Bukkit.getServer().getVersion());
+        HybridFix.LOGGER.error(t);
     }
 }
