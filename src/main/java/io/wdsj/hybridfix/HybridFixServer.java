@@ -10,9 +10,6 @@ import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_12_R1.CraftCrashReport;
-
-import java.util.logging.Level;
 
 import static io.wdsj.hybridfix.HybridFix.HAS_CLEANROOM;
 

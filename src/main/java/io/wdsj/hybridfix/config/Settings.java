@@ -79,6 +79,10 @@ public class Settings {
         @Config.Comment("Patch Tinkers Construct tool damage,\nUseful for some traits that adds extra effects and disarming, etc.\nYou can use property -Dhybridfix.tconstruct.supersedeVanillaEvent=true to prevent calling original damage event.")
         @Config.RequiresMcRestart
         public boolean patchTconstructToolDamage = false;
+
+        @Config.Comment("Patch Disarm enchantment in SME(1.0.0 and higher), prevent bypassing the bukkit protection.")
+        @Config.RequiresMcRestart
+        public boolean patchSoManyEnchantmentsDisarm = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

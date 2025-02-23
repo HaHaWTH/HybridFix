@@ -29,6 +29,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.thaumcraft.taint.json", () -> isModLoaded("thaumcraft") && Settings.modPatchSettings.patchThaumcraftTaintSpread);
             // Tconstruct patches
             put("mixins.tconstruct.tools.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTconstructToolDamage);
+            // So Many Enchantments patches
+            put("mixins.so_many_enchantments.disarm.json", () -> isModLoaded("somanyenchantments") && Settings.modPatchSettings.patchSoManyEnchantmentsDisarm);
         }
     });
 

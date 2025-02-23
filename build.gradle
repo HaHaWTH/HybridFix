@@ -137,6 +137,9 @@ dependencies {
     // Tinkers Construct
     compileOnly rfg.deobf("curse.maven:tinkers-construct-74072:2902483")
     compileOnly rfg.deobf("curse.maven:mantle-74924:2713386")
+
+    // So many enchantments
+    compileOnly rfg.deobf("curse.maven:so-many-enchantments-267035:6172363")
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174
