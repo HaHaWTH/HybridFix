@@ -18,6 +18,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix Twilight Forest Chain with Block can break blocks in protected areas
 - Fix Thaumcraft 6 taint can spread into protected areas
 - Fix trait effects in Tinkers' Construct can bypass damage protection
+- Fix So Many Enchantments can disarm players in protected areas
 
 ## Features
 
