@@ -26,7 +26,7 @@ public abstract class EntityTFTrollMixin extends EntityMob implements IRangedAtt
             ),
             remap = false
     )
-    public boolean checkCondition(World instance, BlockPos pos, IBlockState state) {
+    public boolean checkCanDestroyBlock(World instance, BlockPos pos, IBlockState state) {
         return EntityUtil.canDestroyBlock(instance, pos, state, this);
     }
 }

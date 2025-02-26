@@ -15,7 +15,7 @@ public abstract class SimplePluginManagerMixin {
             cancellable = true,
             remap = false
     )
-    public void skipEventIfNoListeners(Event event, CallbackInfo ci) {
+    public void canYouHearMe(Event event, CallbackInfo ci) {
         if (event.getHandlers().getRegisteredListeners().length == 0) {
             ci.cancel();
         }
