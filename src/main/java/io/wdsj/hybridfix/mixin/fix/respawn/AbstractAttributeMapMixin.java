@@ -1,8 +1,6 @@
 package io.wdsj.hybridfix.mixin.fix.respawn;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -10,6 +8,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 
@@ -19,14 +19,17 @@ public abstract class AbstractAttributeMapMixin {
 
     @Shadow public abstract IAttributeInstance getAttributeInstance(IAttribute attribute);
 
-    @WrapMethod(
-            method = "registerAttribute"
+    @Inject(
+            method = "registerAttribute",
+            at = @At(
+                    value = "HEAD"
+            ),
+            cancellable = true
     )
-    public IAttributeInstance wrapRegisterAttribute(IAttribute attribute, Operation<IAttributeInstance> original) {
+    public void wrapRegisterAttribute(IAttribute attribute, CallbackInfoReturnable<IAttributeInstance> cir) {
         if (attributesByName.containsKey(attribute.getName())) {
-            return getAttributeInstance(attribute);
+            cir.setReturnValue(getAttributeInstance(attribute));
         }
-        return original.call(attribute);
     }
 
     @ModifyExpressionValue(

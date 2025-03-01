@@ -10,6 +10,7 @@
     "EntityTFChainBlockMixin",
     "EntityTFIceExploderMixin",
     "EntityTFCubeOfAnnihilationMixin",
-    "EntityTFTrollMixin"
+    "EntityTFTrollMixin",
+    "EntityTFIceBombMixin"
   ]
 }
