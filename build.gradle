@@ -117,6 +117,10 @@ repositories {
         name 'md-5'
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven {
+        name 'blamejared'
+        url 'https://maven.blamejared.com/'
+    }
 }
 
 dependencies {
@@ -132,7 +136,6 @@ dependencies {
 
     // Thaumcraft 6
     compileOnly rfg.deobf('curse.maven:thaumcraft-223628:2629023')
-    compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
 
     // Tinkers Construct
     compileOnly rfg.deobf("curse.maven:tinkers-construct-74072:2902483")
@@ -140,6 +143,12 @@ dependencies {
 
     // So many enchantments
     compileOnly rfg.deobf("curse.maven:so-many-enchantments-267035:6172363")
+
+    // Botania
+    compileOnly rfg.deobf("vazkii.botania:Botania:r1.10-364.4")
+
+    // Baubles, the dependency of Botania and Thaumcraft
+    compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174

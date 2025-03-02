@@ -31,6 +31,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.tconstruct.tools.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTconstructToolDamage);
             // So Many Enchantments patches
             put("mixins.so_many_enchantments.disarm.json", () -> isModLoaded("somanyenchantments") && Settings.modPatchSettings.patchSoManyEnchantmentsDisarm);
+            // Botania patches
+            put("mixins.botania.item.json", () -> isModLoaded("botania") && Settings.modPatchSettings.patchBotaniaLens);
         }
     });
 

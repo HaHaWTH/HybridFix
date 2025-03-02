@@ -28,7 +28,7 @@ public class ItemStackUtils {
         return command.toString();
     }
 
-    // Took from CraftTweaker
+    // Took from CraftTweaker, licensed under MIT
     public static String formatItemStackToPrettyString(ItemStack itemStack) {
         StringBuilder fullBuilder = new StringBuilder();
         ResourceLocation rl = Item.REGISTRY.getNameForObject(itemStack.getItem());
