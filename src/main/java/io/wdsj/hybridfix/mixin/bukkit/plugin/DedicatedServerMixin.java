@@ -45,6 +45,9 @@ public abstract class DedicatedServerMixin {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookEntityChangeBlockListener.class, res);
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
                 if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
+                    if (Bukkit.getPluginManager().isPluginEnabled("ResProtection")) {
+                        HybridFix.LOGGER.warn("HybridFix contains all of ResProtection's features and even better, ResProtection is no longer needed.");
+                    }
                     ResidenceCustomBlockAdder adder = new ResidenceCustomBlockAdder();
                     adder.addCustomBothClicks();
                     adder.addCustomRightClicks();
