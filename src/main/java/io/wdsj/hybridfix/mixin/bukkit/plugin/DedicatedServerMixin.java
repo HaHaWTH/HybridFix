@@ -4,6 +4,7 @@ import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
+import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.listener.ExplodeListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookEntityChangeBlockListener;
@@ -43,6 +44,13 @@ public abstract class DedicatedServerMixin {
             if (Bukkit.getPluginManager().isPluginEnabled(res)) {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookEntityChangeBlockListener.class, res);
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
+                if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
+                    ResidenceCustomBlockAdder adder = new ResidenceCustomBlockAdder();
+                    adder.addCustomBothClicks();
+                    adder.addCustomRightClicks();
+                    adder.save();
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "residence reload config");
+                }
                 HybridFix.LOGGER.info("{}[HybridFix] Hooked into Residence.", ChatColor.AQUA);
             } else {
                 HybridFix.LOGGER.warn("[HybridFix] Residence not found, check your installation.");

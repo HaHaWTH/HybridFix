@@ -83,6 +83,10 @@ public class Settings {
         @Config.Comment("Patch Disarm enchantment in SME(1.0.0 and higher), prevent bypassing the bukkit protection.")
         @Config.RequiresMcRestart
         public boolean patchSoManyEnchantmentsDisarm = false;
+
+        @Config.Comment("Patch lens of Botania can bypass bukkit grief protection.")
+        @Config.RequiresMcRestart
+        public boolean patchBotaniaLens = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
@@ -100,6 +104,10 @@ public class Settings {
         @Config.Comment("Enable HybridFix Residence hook.")
         @Config.RequiresMcRestart
         public boolean hookResidence = false;
+
+        @Config.Comment("Automatically add mod blocks to Residence config.")
+        @Config.RequiresMcRestart
+        public boolean autoAddModBlocksToResidenceConfig = false;
 
         @Config.Comment("Enable HybridFix WorldGuard hook.")
         @Config.RequiresMcRestart
