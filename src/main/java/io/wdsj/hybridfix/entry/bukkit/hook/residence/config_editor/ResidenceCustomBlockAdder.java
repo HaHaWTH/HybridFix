@@ -24,6 +24,7 @@ public class ResidenceCustomBlockAdder {
 
     private static final String customRightClickKey = System.getProperty("hybridfix.hook.residence.customRightClickKey", "Global.CustomRightClick");
     private static final String customBothClickKey = System.getProperty("hybridfix.hook.residence.customBothClickKey", "Global.CustomBothClick");
+    private static final boolean purgeUnavailableMaterials = Boolean.getBoolean("hybridfix.hook.residence.purgeUnavailableMaterials");
 
     public ResidenceCustomBlockAdder() {
         this.plugin = Bukkit.getPluginManager().getPlugin("Residence");
@@ -35,6 +36,9 @@ public class ResidenceCustomBlockAdder {
     public void addCustomRightClicks() {
         final long start = System.currentTimeMillis();
         List<String> oldRightClicks = plugin.getConfig().getStringList(customRightClickKey);
+        if (purgeUnavailableMaterials) {
+            oldRightClicks.removeIf(m -> Material.getMaterial(m) == null);
+        }
         List<String> newRightClicks = new ArrayList<>();
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
             ResourceLocation key = entry.getKey();
@@ -62,6 +66,9 @@ public class ResidenceCustomBlockAdder {
     public void addCustomBothClicks() {
         final long start = System.currentTimeMillis();
         List<String> oldBothClicks = plugin.getConfig().getStringList(customBothClickKey);
+        if (purgeUnavailableMaterials) {
+            oldBothClicks.removeIf(m -> Material.getMaterial(m) == null);
+        }
         List<String> newBothClicks = new ArrayList<>();
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
             ResourceLocation key = entry.getKey();
