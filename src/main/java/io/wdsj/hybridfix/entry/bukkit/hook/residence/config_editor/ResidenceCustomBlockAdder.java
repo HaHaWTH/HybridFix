@@ -17,6 +17,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ResidenceCustomBlockAdder {
     private final Set<String> addedMaterials = new HashSet<>();
@@ -37,7 +38,15 @@ public class ResidenceCustomBlockAdder {
         final long start = System.currentTimeMillis();
         List<String> oldRightClicks = plugin.getConfig().getStringList(customRightClickKey);
         if (purgeUnavailableMaterials) {
-            oldRightClicks.removeIf(m -> Material.getMaterial(m) == null);
+            List<String> purgedList = oldRightClicks.stream()
+                    .distinct()
+                    .filter(m -> Material.getMaterial(m) != null)
+                    .collect(Collectors.toList());
+            int purged = oldRightClicks.size() - purgedList.size();
+            if (purged > 0) {
+                HybridFix.LOGGER.info("Purged {} unavailable materials from Residence custom right clicks", purged);
+            }
+            oldRightClicks = purgedList;
         }
         List<String> newRightClicks = new ArrayList<>();
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
@@ -67,7 +76,15 @@ public class ResidenceCustomBlockAdder {
         final long start = System.currentTimeMillis();
         List<String> oldBothClicks = plugin.getConfig().getStringList(customBothClickKey);
         if (purgeUnavailableMaterials) {
-            oldBothClicks.removeIf(m -> Material.getMaterial(m) == null);
+            List<String> purgedList = oldBothClicks.stream()
+                    .distinct()
+                    .filter(m -> Material.getMaterial(m) != null)
+                    .collect(Collectors.toList());
+            int purged = oldBothClicks.size() - purgedList.size();
+            if (purged > 0) {
+                HybridFix.LOGGER.info("Purged {} unavailable materials from Residence custom both clicks", purged);
+            }
+            oldBothClicks = purgedList;
         }
         List<String> newBothClicks = new ArrayList<>();
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
