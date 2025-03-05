@@ -30,7 +30,7 @@ public class BukkitForgePermissionHandler implements IPermissionHandler {
                 break;
             default:
                 permissionDefault = PermissionDefault.FALSE;
-        };
+        }
         Permission permission = new Permission(name, desc, permissionDefault);
         DefaultPermissions.registerPermission(permission);
     }

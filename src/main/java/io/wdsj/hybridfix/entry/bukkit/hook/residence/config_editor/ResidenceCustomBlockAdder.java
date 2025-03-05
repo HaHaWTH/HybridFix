@@ -52,18 +52,17 @@ public class ResidenceCustomBlockAdder {
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
             ResourceLocation key = entry.getKey();
             Block block = entry.getValue();
-            if (!key.getNamespace().equals("minecraft")) {
-                String materialName = key.toString().toUpperCase().replaceAll("(:|\\s)", "_").replaceAll("\\W", "");
-                try {
-                    Material material = Material.getMaterial(materialName);
-                    Method m = block.getClass().getMethod(ObfHelper.getName("onBlockActivated", "func_180639_a"), World.class, BlockPos.class, IBlockState.class, EntityPlayer.class, EnumHand.class, EnumFacing.class, float.class, float.class, float.class);
-                    if (material != null && isMethodDeclaredInModBlock(m) && !addedMaterials.contains(materialName)) {
-                        newRightClicks.add(materialName);
-                        addedMaterials.add(materialName);
-                    }
-                } catch (Exception e)  {
-                    HybridFix.LOGGER.warn("Failed to add custom right click for block {}", materialName, e);
+            if (key.getNamespace().equals("minecraft")) continue;
+            String materialName = key.toString().toUpperCase().replaceAll("(:|\\s)", "_").replaceAll("\\W", "");
+            try {
+                Material material = Material.getMaterial(materialName);
+                Method m = block.getClass().getMethod(ObfHelper.getName("onBlockActivated", "func_180639_a"), World.class, BlockPos.class, IBlockState.class, EntityPlayer.class, EnumHand.class, EnumFacing.class, float.class, float.class, float.class);
+                if (material != null && isMethodDeclaredInModBlock(m) && !addedMaterials.contains(materialName)) {
+                    newRightClicks.add(materialName);
+                    addedMaterials.add(materialName);
                 }
+            } catch (Exception e)  {
+                HybridFix.LOGGER.warn("Failed to add custom right click for block {}", materialName, e);
             }
         }
         newRightClicks.addAll(oldRightClicks);
@@ -90,19 +89,18 @@ public class ResidenceCustomBlockAdder {
         for (Map.Entry<ResourceLocation, Block> entry : ForgeRegistries.BLOCKS.getEntries()) {
             ResourceLocation key = entry.getKey();
             Block block = entry.getValue();
-            if (!key.getNamespace().equals("minecraft")) {
-                String materialName = key.toString().toUpperCase().replaceAll("(:|\\s)", "_").replaceAll("\\W", "");
-                try {
-                    Material material = Material.getMaterial(materialName);
-                    Method m = block.getClass().getMethod(ObfHelper.getName("onBlockActivated", "func_180639_a"), World.class, BlockPos.class, IBlockState.class, EntityPlayer.class, EnumHand.class, EnumFacing.class, float.class, float.class, float.class);
-                    Method m2 = block.getClass().getMethod(ObfHelper.getName("onBlockClicked", "func_180649_a"), World.class, BlockPos.class, EntityPlayer.class);
-                    if (material != null && isMethodDeclaredInModBlock(m) && isMethodDeclaredInModBlock(m2) && !addedMaterials.contains(materialName)) {
-                        newBothClicks.add(materialName);
-                        addedMaterials.add(materialName);
-                    }
-                } catch (Exception e)  {
-                    HybridFix.LOGGER.warn("Failed to add custom both click for block {}", materialName, e);
+            if (key.getNamespace().equals("minecraft")) continue;
+            String materialName = key.toString().toUpperCase().replaceAll("(:|\\s)", "_").replaceAll("\\W", "");
+            try {
+                Material material = Material.getMaterial(materialName);
+                Method m = block.getClass().getMethod(ObfHelper.getName("onBlockActivated", "func_180639_a"), World.class, BlockPos.class, IBlockState.class, EntityPlayer.class, EnumHand.class, EnumFacing.class, float.class, float.class, float.class);
+                Method m2 = block.getClass().getMethod(ObfHelper.getName("onBlockClicked", "func_180649_a"), World.class, BlockPos.class, EntityPlayer.class);
+                if (material != null && isMethodDeclaredInModBlock(m) && isMethodDeclaredInModBlock(m2) && !addedMaterials.contains(materialName)) {
+                    newBothClicks.add(materialName);
+                    addedMaterials.add(materialName);
                 }
+            } catch (Exception e)  {
+                HybridFix.LOGGER.warn("Failed to add custom both click for block {}", materialName, e);
             }
         }
         newBothClicks.addAll(oldBothClicks);

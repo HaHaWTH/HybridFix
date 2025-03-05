@@ -128,8 +128,9 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
     compileOnly 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
 
-    compileOnly files("libs/Residence5.1.6.4.jar")
-    compileOnly files("libs/worldguard-bukkit-6.2.2.jar")
+    // Plugins
+    compileOnly files("libs/plugin/Residence5.1.6.4.jar")
+    compileOnly files("libs/plugin/worldguard-bukkit-6.2.2.jar")
 
     // The twilight forest
     compileOnly rfg.deobf("curse.maven:the-twilight-forest-227639:3051450")
@@ -149,6 +150,9 @@ dependencies {
 
     // Baubles, the dependency of Botania and Thaumcraft
     compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+
+    // Industrial Craft 2
+    compileOnly files("libs/mod/industrialcraft-2-2.8.222-ex112-dev.jar")
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174
