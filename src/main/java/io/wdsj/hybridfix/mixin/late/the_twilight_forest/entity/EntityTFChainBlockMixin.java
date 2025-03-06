@@ -68,8 +68,8 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             isHarvestCalled.set(true);
             return;
         }
-        org.bukkit.block.Block bukkitBlock = ((IWorldGetter)(world)).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        Player bukkitPlayer = (CraftPlayer) ((IEntityGetter)player).getBukkitEntity();
+        org.bukkit.block.Block bukkitBlock = ((IWorldGetter) (world)).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        Player bukkitPlayer = (CraftPlayer) ((IEntityGetter) player).getBukkitEntity();
         BlockBreakEvent event = new BlockBreakEvent(bukkitBlock, bukkitPlayer);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {

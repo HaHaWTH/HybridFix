@@ -40,8 +40,8 @@ public abstract class EntityTFCubeOfAnnihilationMixin extends EntityThrowable {
 
         if (thrower instanceof EntityPlayerMP) {
             EntityPlayerMP serverPlayer = (EntityPlayerMP) thrower;
-            org.bukkit.block.Block bukkitBlock = ((IWorldGetter)(this.world)).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-            Player bukkitPlayer = (CraftPlayer) ((IEntityGetter)serverPlayer).getBukkitEntity();
+            org.bukkit.block.Block bukkitBlock = ((IWorldGetter) this.world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+            Player bukkitPlayer = (CraftPlayer) ((IEntityGetter) serverPlayer).getBukkitEntity();
             BlockBreakEvent event = new BlockBreakEvent(bukkitBlock, bukkitPlayer);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {

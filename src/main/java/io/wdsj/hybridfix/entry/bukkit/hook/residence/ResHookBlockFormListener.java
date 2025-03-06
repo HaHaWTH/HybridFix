@@ -15,13 +15,12 @@ import org.bukkit.event.block.EntityBlockFormEvent;
 public class ResHookBlockFormListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true) // Priority matters here, always higher than Residence
     public void onForm(BlockFormEvent event) {
-        if (!(event instanceof EntityBlockFormEvent)) return;
         if (!Flags.spread.isGlobalyEnabled()) return;
         Residence plugin = Residence.getInstance();
         if (plugin == null) return;
         if (plugin.isDisabledWorldListener(event.getBlock().getWorld())) return;
         // Skip checks that have already been done by Residence
-        if (((EntityBlockFormEvent) event).getEntity() instanceof Snowman) return;
+        if (event instanceof EntityBlockFormEvent && ((EntityBlockFormEvent) event).getEntity() instanceof Snowman) return;
         final BlockState newState = event.getNewState();
         Material newType = newState.getType();
         if (newType == Material.SNOW || newType == Material.ICE || newType == Material.FROSTED_ICE) return;
