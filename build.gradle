@@ -150,6 +150,9 @@ dependencies {
 
     // Baubles, the dependency of Botania and Thaumcraft
     compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
+
+    // Industrial Craft 2
+    compileOnly files("libs/mod/industrialcraft-2-2.8.222-ex112-dev.jar")
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174

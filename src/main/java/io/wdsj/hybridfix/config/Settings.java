@@ -87,6 +87,10 @@ public class Settings {
         @Config.Comment("Patch lens of Botania can bypass bukkit grief protection.")
         @Config.RequiresMcRestart
         public boolean patchBotaniaLens = false;
+
+        @Config.Comment("Patch miner machines of Industrial Craft 2 can mine blocks in protected areas.")
+        @Config.RequiresMcRestart
+        public boolean patchIC2Machine = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

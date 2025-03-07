@@ -34,6 +34,7 @@ public class WGHookEntityChangeBlockListener implements Listener {
         }
 
         if (wcfg.useRegions) {
+            // noinspection deprecation
             if (!plugin.getGlobalRegionManager().allows(DefaultFlag.MOB_DAMAGE, location)) {
                 event.setCancelled(true);
             }

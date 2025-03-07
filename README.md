@@ -21,6 +21,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix So Many Enchantments can disarm players in protected areas
 - Fix Botania Ring of Loki can bypass grief protection
 - Fix Botania MineLens can bypass grief protection
+- Fix Industrial Craft 2 miners can break blocks in protected areas
 
 ## Features
 

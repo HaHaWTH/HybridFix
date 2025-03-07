@@ -5,6 +5,7 @@ import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
+import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.listener.ExplodeListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookEntityChangeBlockListener;
@@ -63,6 +64,7 @@ public abstract class DedicatedServerMixin {
             final String wg = "WorldGuard";
             if (Bukkit.getPluginManager().isPluginEnabled(wg)) {
                 ListenerHackery.registerListenerToTargetPlugin(WGHookEntityChangeBlockListener.class, wg);
+                ListenerHackery.registerListenerToTargetPlugin(WGHookBlockFormListener.class, wg);
                 HybridFix.LOGGER.info("{}[HybridFix] Hooked into WorldGuard.", ChatColor.LIGHT_PURPLE);
             } else {
                 HybridFix.LOGGER.warn("[HybridFix] WorldGuard not found, check your installation.");
