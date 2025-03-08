@@ -33,7 +33,7 @@ public abstract class RegisteredListenerMixin {
             cancellable = true
     )
     public void ignoreFakePlayer(Event event, CallbackInfo ci) {
-        if (Settings.fakePlayerPluginBlacklist.length == 0) return;
+        if (Settings.fakePlayerPluginBlacklist.length == 0 && !Settings.invertFakePlayerBlacklist) return;
         if (event instanceof BlockBreakEvent) {
             EntityPlayerMP player = SpigotReflectionUtils.CraftPlayer_getHandle((CraftPlayer) ((BlockBreakEvent) event).getPlayer());
             if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
