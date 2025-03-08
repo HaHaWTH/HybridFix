@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.bridge.duck;
+package io.wdsj.hybridfix.mixin.base.duck;
 
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.world.World;

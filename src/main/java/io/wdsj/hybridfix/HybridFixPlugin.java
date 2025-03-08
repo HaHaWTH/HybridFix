@@ -21,7 +21,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
     {
         {
-            put("mixins.bridge.duck.json", () -> true);
+            put("mixins.hybridfix.base.json", () -> true);
             if (!HAS_CLEANROOM) {
                 put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
                 if (Utils.isMohist) {

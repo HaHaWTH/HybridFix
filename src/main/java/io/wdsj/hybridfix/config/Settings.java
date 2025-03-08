@@ -55,6 +55,14 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean enableMetrics = false;
 
+    @Config.Comment("FakePlayer event blacklist, plugins in this list will NOT receive events fired by fake players.")
+    @Config.RequiresMcRestart
+    public static String[] fakePlayerPluginBlacklist = new String[]{};
+
+    @Config.Comment("Whether to invert fake player blacklist to whitelist")
+    @Config.RequiresMcRestart
+    public static boolean invertFakePlayerBlacklist = false;
+
     @Config.Comment("Configuration for HybridFix mod patches.")
     @Config.RequiresMcRestart
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
@@ -88,9 +96,13 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchBotaniaLens = false;
 
-        @Config.Comment("Patch miner machines of Industrial Craft 2 can mine blocks in protected areas.")
+        @Config.Comment("Patch miner machines of Industrial Craft 2 can mine blocks in protected areas.\nNOTE: This fix uses FakePlayer!")
         @Config.RequiresMcRestart
         public boolean patchIC2Machine = false;
+
+        @Config.Comment("Patch explosion of Chaos Crystal in DraconicEvolution can bypass grief protection.")
+        @Config.RequiresMcRestart
+        public boolean patchDraconicEvolutionEntity = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
