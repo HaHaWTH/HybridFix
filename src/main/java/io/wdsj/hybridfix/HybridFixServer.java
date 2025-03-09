@@ -30,6 +30,7 @@ public class HybridFixServer {
         if (Settings.fixCapabilityReset && Loader.isModLoaded("baubles")) {
             MinecraftForge.EVENT_BUS.register(new BaublesCapabilityHandler());
         }
+        // Band-aid fix for Thaumcraft
         if (Settings.fixCapabilityReset && Loader.isModLoaded("thaumcraft")) {
             MinecraftForge.EVENT_BUS.register(new TCCapabilityHandler());
         }

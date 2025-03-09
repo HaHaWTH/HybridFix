@@ -27,7 +27,7 @@ public abstract class EntityUtilMixin {
             cancellable = true
     )
     private static void callEvent(World world, BlockPos pos, IBlockState state, Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        org.bukkit.entity.Entity bEntity = ((IEntityGetter)entity).getBukkitEntity();
+        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
         Block block = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
         Bukkit.getPluginManager().callEvent(event);

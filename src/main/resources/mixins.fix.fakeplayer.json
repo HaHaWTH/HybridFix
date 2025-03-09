@@ -1,13 +1,11 @@
 {
-  "package": "io.wdsj.hybridfix.mixin.base",
+  "package": "io.wdsj.hybridfix.mixin.fix.fakeplayer",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "duck.EntityMixin",
-    "duck.WorldMixin",
-    "patch.forge.FakePlayerMixin"
+    "RegisteredListenerMixin"
   ]
 }

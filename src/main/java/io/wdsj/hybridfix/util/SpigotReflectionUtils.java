@@ -32,7 +32,7 @@ public class SpigotReflectionUtils {
 
     public static EntityPlayerMP CraftPlayer_getHandle(CraftPlayer craftPlayer) {
         try {
-            return (EntityPlayerMP) MH_CRAFT_PLAYER_GET_HANDLE.invoke(craftPlayer);
+            return (EntityPlayerMP) MH_CRAFT_PLAYER_GET_HANDLE.invokeExact(craftPlayer);
         } catch (Throwable e) {
             HybridFix.LOGGER.error("Error occurred while invoking method CraftPlayer.getHandle through reflection, things may not work well.");
             throw new RuntimeException(e);

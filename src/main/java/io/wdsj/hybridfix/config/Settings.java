@@ -13,7 +13,7 @@ public class Settings {
 
     @Config.Comment("Re-gather capabilities on respawn, will fix Simple Difficulty(And other similar mods) thirst not getting reset on respawn.\nAnd fix dupe bug in The Betweenlands.")
     @Config.RequiresMcRestart
-    public static boolean fixCapabilityReset = true;
+    public static boolean fixCapabilityReset = false;
 
     @Config.Comment("Simulate vanilla respawn logic.")
     @Config.RequiresMcRestart
