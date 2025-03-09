@@ -6,6 +6,7 @@ import io.wdsj.hybridfix.entry.bukkit.metric.Metrics;
 import io.wdsj.hybridfix.handler.BukkitForgePermissionHandler;
 import io.wdsj.hybridfix.handler.ExplosionHandler;
 import io.wdsj.hybridfix.handler.fix.respawn.baubles.BaublesCapabilityHandler;
+import io.wdsj.hybridfix.handler.fix.respawn.thaumcraft.TCCapabilityHandler;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,6 +29,9 @@ public class HybridFixServer {
         // Band-aid fix for Baubles
         if (Settings.fixCapabilityReset && Loader.isModLoaded("baubles")) {
             MinecraftForge.EVENT_BUS.register(new BaublesCapabilityHandler());
+        }
+        if (Settings.fixCapabilityReset && Loader.isModLoaded("thaumcraft")) {
+            MinecraftForge.EVENT_BUS.register(new TCCapabilityHandler());
         }
     }
 
