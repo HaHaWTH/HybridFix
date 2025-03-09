@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+@Deprecated
 public class TCCapabilityHandler {
     private final HashMap<UUID, List<NBTTagCompound>> nbtMap = new HashMap<>();
     @SubscribeEvent(priority = EventPriority.LOW)

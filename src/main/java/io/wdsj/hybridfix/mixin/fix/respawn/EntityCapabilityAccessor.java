@@ -9,4 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface EntityCapabilityAccessor {
     @Accessor(value = "capabilities", remap = false)
     void setCapabilities(CapabilityDispatcher capabilities);
+
+    @Accessor(value = "capabilities", remap = false)
+    CapabilityDispatcher getCapabilities();
 }

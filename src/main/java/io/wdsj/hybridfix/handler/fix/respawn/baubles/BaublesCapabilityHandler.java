@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.HashMap;
 import java.util.UUID;
 
+@Deprecated
 public class BaublesCapabilityHandler {
     private final HashMap<UUID, NBTTagCompound> nbtMap = new HashMap<>();
     @SubscribeEvent(priority = EventPriority.LOW)

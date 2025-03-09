@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.logic.respawn;
 
-import io.wdsj.hybridfix.mixin.fix.respawn.EntityCapabilityAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityEvent;
 
 public class CBRespawnFixLogic {
@@ -70,8 +68,5 @@ public class CBRespawnFixLogic {
         dataManager.register(EntityPlayer.RIGHT_SHOULDER_ENTITY, capturedRightShoulder);
 
         MinecraftForge.EVENT_BUS.post(new EntityEvent.EntityConstructing(playerIn));
-    }
-    public static void regatherCapabilities(EntityPlayerMP playerIn) {
-        ((EntityCapabilityAccessor) (Entity) playerIn).setCapabilities(ForgeEventFactory.gatherCapabilities(playerIn));
     }
 }
