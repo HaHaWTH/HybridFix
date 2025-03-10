@@ -100,6 +100,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchIC2Machine = false;
 
+        @Config.Comment("Patch explosions of Industrial Craft 2 can break blocks in protected areas.")
+        @Config.RequiresMcRestart
+        public boolean patchIC2Explosion = false;
+
         @Config.Comment("Patch explosion of Chaos Crystal in DraconicEvolution can bypass grief protection.")
         @Config.RequiresMcRestart
         public boolean patchDraconicEvolutionEntity = false;

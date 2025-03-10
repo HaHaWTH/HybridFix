@@ -35,6 +35,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.botania.item.json", () -> isModLoaded("botania") && Settings.modPatchSettings.patchBotaniaLens);
             // Industrial Craft patches
             put("mixins.ic2.machine.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2Machine);
+            put("mixins.ic2.explosion.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2Explosion);
             // Draconic Evolution patches
             put("mixins.draconic_evolution.entity.json", () -> isModLoaded("draconicevolution") && Settings.modPatchSettings.patchDraconicEvolutionEntity);
         }

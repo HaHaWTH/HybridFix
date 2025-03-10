@@ -32,7 +32,7 @@ public abstract class TileEntityAdvMinerMixin extends TileEntityElectricMachine 
             remap = false
     )
     private void canMine(BlockPos target, net.minecraft.block.Block block, IBlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (block.hasTileEntity(state)) {
+        if (block.hasTileEntity(state)) { // DO NOT MINE TEs
             cir.setReturnValue(false);
             return;
         }

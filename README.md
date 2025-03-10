@@ -22,6 +22,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix Botania Ring of Loki can bypass grief protection
 - Fix Botania MineLens can bypass grief protection
 - Fix Industrial Craft 2 miners can break blocks in protected areas
+- Fix Industrial Craft 2 explosives can break blocks in protected areas
 - Fix Draconic Evolution ChaosCrystal can break blocks in protected areas
 
 ## Features
