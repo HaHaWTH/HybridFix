@@ -24,6 +24,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix Industrial Craft 2 miners can break blocks in protected areas
 - Fix Industrial Craft 2 explosives can break blocks in protected areas
 - Fix Draconic Evolution ChaosCrystal can break blocks in protected areas
+- Fix TechReborn(RebornCore) explosions can break blocks in protected areas
 
 ## Features
 
