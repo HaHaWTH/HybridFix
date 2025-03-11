@@ -27,10 +27,10 @@ import java.util.List;
  */
 @Mixin(RebornExplosion.class)
 public abstract class RebornExplosionMixin extends Explosion {
-    @Shadow
+    @Shadow(remap = false)
     BlockPos center;
 
-    @Shadow
+    @Shadow(remap = false)
     int radius;
 
     public RebornExplosionMixin(World worldIn, Entity entityIn, double x, double y, double z, float size, List<BlockPos> affectedPositions) {
