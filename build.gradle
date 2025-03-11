@@ -110,12 +110,16 @@ repositories {
         url 'https://repo.codemc.io/repository/nms/'
     }
     maven {
-        name 'md-5'
+        name 'sonatype'
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
     maven {
         name 'blamejared'
         url 'https://maven.blamejared.com/'
+    }
+    maven {
+        name 'ModMaven'
+        url 'https://modmaven.dev/'
     }
 }
 
@@ -152,6 +156,9 @@ dependencies {
 
     // Draconic Evolution
     compileOnly rfg.deobf("curse.maven:draconic-evolution-223565:3431261")
+
+    // Reborn Core, the dependency of TechReborn
+    compileOnly "RebornCore:RebornCore-1.12.2:+:dev"
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
         // Workaround for https://github.com/bsideup/jabel/issues/174

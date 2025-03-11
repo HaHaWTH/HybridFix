@@ -24,7 +24,6 @@ import java.util.Objects;
  * Mohist inlines method body into recreatePlayerEntity from CraftBukkit moveToWorld, causes common mixins no longer work
  * now we need to handle this manually.
  */
-@SuppressWarnings("all")
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
     @Dynamic("mohist")

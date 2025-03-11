@@ -38,6 +38,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.ic2.explosion.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2Explosion);
             // Draconic Evolution patches
             put("mixins.draconic_evolution.entity.json", () -> isModLoaded("draconicevolution") && Settings.modPatchSettings.patchDraconicEvolutionEntity);
+            // Reborn Core patches
+            put("mixins.reborncore.explosion.json", () -> isModLoaded("reborncore") && Settings.modPatchSettings.patchRebornCoreExplosion);
         }
     });
 

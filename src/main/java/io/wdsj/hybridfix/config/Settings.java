@@ -107,6 +107,10 @@ public class Settings {
         @Config.Comment("Patch explosion of Chaos Crystal in DraconicEvolution can bypass grief protection.")
         @Config.RequiresMcRestart
         public boolean patchDraconicEvolutionEntity = false;
+
+        @Config.Comment("Patch explosion of RebornCore can bypass grief protection.")
+        @Config.RequiresMcRestart
+        public boolean patchRebornCoreExplosion = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
