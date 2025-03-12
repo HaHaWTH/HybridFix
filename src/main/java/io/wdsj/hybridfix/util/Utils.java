@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Utils {
-    public static final String OBC_PACKAGE = "org.bukkit.craftbukkit.v1_12_R1";
     public static final boolean isMohist = isClassExists("com.mohistmc.MohistMC");
     private static final boolean hasBukkit = isClassExists("org.bukkit.Bukkit");
     private static final ExecutorService ioWorker = Executors.newCachedThreadPool(
