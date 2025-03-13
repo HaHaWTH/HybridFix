@@ -14,7 +14,7 @@ import org.bukkit.event.HandlerList;
 @ModEvent("appliedenergistics2")
 public class SpatialPylonTransferEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private boolean cancel;
+    private boolean cancel = false;
     private final World world;
     private final Location min;
     private final Location max;
