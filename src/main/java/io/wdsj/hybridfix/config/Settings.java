@@ -111,6 +111,10 @@ public class Settings {
         @Config.Comment("Patch explosion of RebornCore can bypass grief protection.")
         @Config.RequiresMcRestart
         public boolean patchRebornCoreExplosion = false;
+
+        @Config.Comment("Patch Spatial Pylon of Applied Energistics 2 with an bukkit event.")
+        @Config.RequiresMcRestart
+        public boolean patchAppliedEnergistics2SpatialPylon = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
