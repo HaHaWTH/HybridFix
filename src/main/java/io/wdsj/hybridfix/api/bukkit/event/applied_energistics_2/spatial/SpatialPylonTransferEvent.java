@@ -8,7 +8,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * This event is fired when a Spatial Pylon attempts to transfer.
+ * This event is fired when a Spatial Pylon attempts to swap a region.
  */
 @SuppressWarnings("unused")
 @ModEvent("appliedenergistics2")
@@ -26,29 +26,29 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the world in which the activation area is located.
+     * Gets which world the Spatial Pylon is in.
      *
-     * @return the world in which the activation area is located
+     * @return the world
      */
     public World getWorld() {
         return world;
     }
 
     /**
-     * Gets the minimum point of the activation area.
-     * The location returned should <b>NOT</b> be modified!
+     * Gets the minimum point of the region to transfer.
+     * The location returned is <b>NOT</b> intended to be modified!
      *
-     * @return the minimum point of the activation area
+     * @return the minimum point of the region
      */
     public Location getMin() {
         return min;
     }
 
     /**
-     * Gets the maximum point of the activation area.
-     * The location returned should <b>NOT</b> be modified!
+     * Gets the maximum point of the region to transfer.
+     * The location returned is <b>NOT</b> intended to be modified!
      *
-     * @return the maximum point of the activation area
+     * @return the maximum point of the region
      */
     public Location getMax() {
         return max;
