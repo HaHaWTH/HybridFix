@@ -3,6 +3,7 @@ package io.wdsj.hybridfix.mixin.bukkit.plugin;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
+import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookBlockFormListener;
@@ -11,6 +12,7 @@ import io.wdsj.hybridfix.entry.bukkit.listener.ExplodeListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.util.ListenerHackery;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraftforge.fml.common.Loader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -54,6 +56,10 @@ public abstract class DedicatedServerMixin {
                     adder.addCustomRightClicks();
                     adder.save();
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "residence reload config");
+                }
+                if (Settings.modPatchSettings.patchAppliedEnergistics2SpatialPylon && Loader.isModLoaded("appliedenergistics2")) {
+                    ListenerHackery.registerListenerToTargetPlugin(ResHookAE2SpatialPylonListener.class, res);
+                    HybridFix.LOGGER.info("{}[HybridFix] Residence <-> Applied Energistics 2 communication established.", ChatColor.GREEN);
                 }
                 HybridFix.LOGGER.info("{}[HybridFix] Hooked into Residence.", ChatColor.AQUA);
             } else {
