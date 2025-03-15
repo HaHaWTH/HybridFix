@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.handler;
 
 import com.google.common.collect.Lists;
+import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
@@ -25,7 +26,7 @@ public class ExplosionHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onExplosionDetonate(ExplosionEvent.Detonate event) {
         Explosion explosion = event.getExplosion();
-        if (explosion.getClass() != Explosion.class) {
+        if (explosion.getClass() != Explosion.class || !HybridFixForgeApi.getApi().isVanillaExplosionDetonateEvent(event)) {
             Entity exploder = explosion.exploder;
             World bworld = ((IWorldGetter) event.getWorld()).getWorld();
             Vec3d explosionPos = explosion.getPosition();

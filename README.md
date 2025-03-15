@@ -26,6 +26,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix Draconic Evolution ChaosCrystal can break blocks in protected areas
 - Fix TechReborn(RebornCore) explosions can break blocks in protected areas
 - Offer events to Applied Energistics 2 Spatial Pylon to prevent some unpermitted griefing
+- Fix TechGuns explosion can break blocks in protected areas
 
 ## Features
 
@@ -37,6 +38,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Built Bukkit plugin into the mod, offers utilities to server owners.
 - Enhance compatibility with mod FakePlayers.
 - Offer more useful apis for plugin developers to interact with Forge mods easily.
+- Extensive APIs for mod developers to maintain compatibility with hybrid servers easily.
 - General CraftBukkit performance improvements.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`

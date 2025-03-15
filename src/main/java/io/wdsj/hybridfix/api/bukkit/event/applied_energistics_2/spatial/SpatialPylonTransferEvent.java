@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
 
 /**
  * This event is fired when a Spatial Pylon attempts to swap a region.
+ * Listeners can cancel this event to stop the transition.
  */
 @SuppressWarnings("unused")
 @ModEvent("appliedenergistics2")

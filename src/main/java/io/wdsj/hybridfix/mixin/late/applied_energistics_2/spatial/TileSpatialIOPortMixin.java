@@ -27,7 +27,7 @@ public abstract class TileSpatialIOPortMixin {
             ),
             remap = false
     )
-    public TransitionResult wrapSpatialTransition(ISpatialStorageCell instance, ItemStack itemStack, World world, WorldCoord minCoord, WorldCoord maxCoord, int i, Operation<TransitionResult> original, @Cancellable CallbackInfoReturnable<Void> cir) {
+    public TransitionResult wrapSpatialTransition(ISpatialStorageCell instance, ItemStack itemStack, World world, WorldCoord minCoord, WorldCoord maxCoord, int id, Operation<TransitionResult> original, @Cancellable CallbackInfoReturnable<Void> cir) {
         org.bukkit.World bWorld = ((IWorldGetter) world).getWorld();
         Location min = new Location(bWorld, minCoord.x, minCoord.y, minCoord.z);
         Location max = new Location(bWorld, maxCoord.x, maxCoord.y, maxCoord.z);
@@ -37,6 +37,6 @@ public abstract class TileSpatialIOPortMixin {
             cir.setReturnValue(null);
             return new TransitionResult(false, 0.0D);
         }
-        return original.call(instance, itemStack, world, minCoord, maxCoord, i);
+        return original.call(instance, itemStack, world, minCoord, maxCoord, id);
     }
 }

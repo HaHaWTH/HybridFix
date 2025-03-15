@@ -115,6 +115,10 @@ public class Settings {
         @Config.Comment("Patch Spatial Pylon of Applied Energistics 2 with an bukkit event.")
         @Config.RequiresMcRestart
         public boolean patchAppliedEnergistics2SpatialPylon = false;
+
+        @Config.Comment("Patch TechGuns explosion can bypass protection.")
+        @Config.RequiresMcRestart
+        public boolean patchTechGunsExplosion = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

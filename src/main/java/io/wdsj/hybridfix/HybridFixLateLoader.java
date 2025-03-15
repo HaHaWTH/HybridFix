@@ -2,7 +2,9 @@ package io.wdsj.hybridfix;
 
 import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.config.Settings;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
@@ -35,13 +37,29 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.botania.item.json", () -> isModLoaded("botania") && Settings.modPatchSettings.patchBotaniaLens);
             // Industrial Craft patches
             put("mixins.ic2.machine.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2Machine);
-            put("mixins.ic2.explosion.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2Explosion);
+            put("mixins.ic2.explosion.json", () -> {
+                if (isModLoaded("ic2") && Settings.modPatchSettings.patchIC2Explosion) {
+                    ModContainer container = FMLCommonHandler.instance().findContainerFor("ic2");
+                    if (container != null) {
+                        String currentVersion = container.getVersion();
+                        String expectedVersion = "2.8.222-ex112";
+                        if (!currentVersion.equals(expectedVersion)) {
+                            HybridFix.LOGGER.warn("IC2 version mismatch! Things may not work well. (Expected: {}, you got: {})", expectedVersion, currentVersion);
+                        }
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            });
             // Draconic Evolution patches
             put("mixins.draconic_evolution.entity.json", () -> isModLoaded("draconicevolution") && Settings.modPatchSettings.patchDraconicEvolutionEntity);
             // Reborn Core patches
             put("mixins.reborncore.explosion.json", () -> isModLoaded("reborncore") && Settings.modPatchSettings.patchRebornCoreExplosion);
             // Applied Energistics 2 patches
             put("mixins.applied_energistics_2.spatial.json", () -> isModLoaded("appliedenergistics2") && Settings.modPatchSettings.patchAppliedEnergistics2SpatialPylon);
+            // TechGuns patches
+            put("mixins.techguns.explosion.json", () -> isModLoaded("techguns") && Settings.modPatchSettings.patchTechGunsExplosion);
         }
     });
 
