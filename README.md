@@ -43,6 +43,42 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
+## How To (Server Admins)
+
+Download HybridFix and its dependencies(MixinBooter and ConfigAnyTime) from CurseForge, drop HybridFix into `${minecraftDir}/mods` folder.
+
+HybridFix is not required to be installed on client side.
+
+## How To (Developers)
+
+If you are developing mods, you can import HybridFix from curse maven(Groovy DSL):
+
+```groovy
+implementation fg.deobf("curse.maven:hybridfix-1166614:{latest_artifact_id}")
+```
+
+If you are developing plugins, you can import HybridFix jar directly:
+
+Maven:
+
+```xml
+<dependency>
+    <groupId>io.wdsj</groupId>
+    <artifactId>hybridfix</artifactId>
+    <version>{latest_version}</version>
+    <scope>system</scope>
+    <systemPath>PATH-TO-JAR</systemPath>
+</dependency>
+```
+
+Gradle(Groovy DSL):
+
+```groovy
+compileOnly files("PATH-TO-JAR")
+```
+
+APIs are located in `io.wdsj.hybridfix.api` package.
+
 ## Plugin Hooks
 Thanks to HybridFix internal plugin, we can hook into plugins from Forge side to provide more fixes.
 
