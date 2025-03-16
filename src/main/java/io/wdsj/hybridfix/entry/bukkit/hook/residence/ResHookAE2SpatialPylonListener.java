@@ -19,8 +19,8 @@ public class ResHookAE2SpatialPylonListener implements Listener {
         if (plugin.isDisabledWorldListener(world)) return;
         Location minLocation = event.getMin();
         Location maxLocation = event.getMax();
-        int minX = minLocation.getBlockX(), minY = minLocation.getBlockY(), minZ = minLocation.getBlockZ();
-        int maxX = maxLocation.getBlockX(), maxY = maxLocation.getBlockY(), maxZ = maxLocation.getBlockZ();
+        final int minX = minLocation.getBlockX() + 1, minY = minLocation.getBlockY() + 1, minZ = minLocation.getBlockZ() + 1;
+        final int maxX = maxLocation.getBlockX() - 1, maxY = maxLocation.getBlockY() - 1, maxZ = maxLocation.getBlockZ() - 1;
         final Location temp = new Location(world, minX, minY, minZ);
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {

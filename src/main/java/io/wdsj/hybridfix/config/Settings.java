@@ -112,9 +112,17 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchRebornCoreExplosion = false;
 
-        @Config.Comment("Patch Spatial Pylon of Applied Energistics 2 with an bukkit event.")
+        @Config.Comment("Patch Spatial Pylon of Applied Energistics 2 with more config.")
         @Config.RequiresMcRestart
         public boolean patchAppliedEnergistics2SpatialPylon = false;
+
+        @Config.Comment("Blacklisted Spatial Pylon entity registry names")
+        @Config.RequiresMcRestart
+        public String[] spatialPylonEntityBlacklist = new String[]{"minecraft:ender_dragon"};
+
+        @Config.Comment("Whether to invert spatial pylon entity blacklist to whitelist")
+        @Config.RequiresMcRestart
+        public boolean invertSpatialPylonEntityBlacklist = false;
 
         @Config.Comment("Patch TechGuns explosion can bypass protection.")
         @Config.RequiresMcRestart
