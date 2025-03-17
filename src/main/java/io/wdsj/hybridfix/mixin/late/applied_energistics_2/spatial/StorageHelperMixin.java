@@ -23,7 +23,9 @@ import java.util.stream.Collectors;
 @Mixin(StorageHelper.class)
 public abstract class StorageHelperMixin {
     @Unique
-    private static final Set<String> hybridFix$blacklist = new ObjectOpenHashSet<>(Arrays.stream(Settings.modPatchSettings.spatialPylonEntityBlacklist).map(String::toLowerCase).collect(Collectors.toSet()));
+    private static final Set<String> hybridFix$blacklist = Arrays.stream(Settings.modPatchSettings.spatialPylonEntityBlacklist)
+            .map(String::toLowerCase)
+            .collect(Collectors.toCollection(ObjectOpenHashSet::new));
 
     @WrapOperation(
             method = "swapRegions",
