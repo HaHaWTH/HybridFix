@@ -127,6 +127,10 @@ public class Settings {
         @Config.Comment("Patch TechGuns explosion can bypass protection.")
         @Config.RequiresMcRestart
         public boolean patchTechGunsExplosion = false;
+
+        @Config.Comment("Patch modifiers of InfernalMobs can bypass grief protection.")
+        @Config.RequiresMcRestart
+        public boolean patchInfernalMobsModifier = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

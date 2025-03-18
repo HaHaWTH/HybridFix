@@ -28,6 +28,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Offer events to Applied Energistics 2 Spatial Pylon to prevent some unpermitted griefing
 - Fix TechGuns explosion can break blocks in protected areas
 - Add entity blacklist/whitelist to Applied Energistics 2 Spatial Pylon
+- Fix webs of InfernalMobs can spawn in protected areas
 
 ## Features
 

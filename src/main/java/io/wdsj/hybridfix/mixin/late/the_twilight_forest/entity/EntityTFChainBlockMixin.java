@@ -20,12 +20,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import twilightforest.entity.EntityTFChainBlock;
 import twilightforest.util.EntityUtil;
-
-import javax.annotation.Nullable;
 
 @Mixin(EntityTFChainBlock.class)
 public abstract class EntityTFChainBlockMixin extends EntityThrowable {

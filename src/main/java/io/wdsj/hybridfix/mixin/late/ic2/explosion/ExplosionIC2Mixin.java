@@ -66,7 +66,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
         return 0;
     }
 
-    @Shadow @Final private List<Object> entitiesInRange;
+    @Shadow @Final private List<Object /* ExplosionsIC2.EntityDamage */> entitiesInRange;
 
     @Shadow @Final private double explosionY;
 
@@ -176,7 +176,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
             IC2.network.get(true).initiateExplosionEffect(this.worldObj, this.getPosition(), this.type);
             Random rng = this.worldObj.rand;
             boolean doDrops = this.worldObj.getGameRules().getBoolean("doTileDrops");
-            Map<Object /* ExplosionIC2.XZPosition */, Map<ItemComparableItemStack, Object /* ExplosionIC2.DropData */>> blocksToDrop = new HashMap<>();
+            Map<Object /* ExplosionIC2.XZposition */, Map<ItemComparableItemStack, Object /* ExplosionIC2.DropData */>> blocksToDrop = new HashMap<>();
 
             Map<BlockPos, Boolean> affectedBlockMap = new HashMap<>();
             for (int y = 0; y < this.destroyedBlockPositions.length; ++y) {
@@ -232,7 +232,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
                     throw new RuntimeException(e);
                 }
             });
-            for (Object entry : this.entitiesInRange) {
+            for (Object /* ExplosionIC2.EntityDamage */ entry : this.entitiesInRange) {
                 Entity entity = (Entity) EntityDamage_field_entity.get(entry);
                 entity.attackEntityFrom(this.damageSource, (float) EntityDamage_field_damage.getDouble(entry));
                 if (entity instanceof EntityPlayer) {
@@ -274,7 +274,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
                 if (entry.getValue()) {
                     for (ItemStack stack : StackUtil.getDrops(this.worldObj, tmpPos, state, block, 0)) {
                         if (!(rng.nextFloat() > this.explosionDropRate)) {
-                            Object xZposition = XZposition_constructor.newInstance((int) x / 2, (int) z / 2);
+                            Object /* ExplosionIC2.XZposition */ xZposition = XZposition_constructor.newInstance((int) x / 2, (int) z / 2);
                             Map<ItemComparableItemStack, Object /* ExplosionIC2.DropData */> map = blocksToDrop.computeIfAbsent(xZposition, k -> new HashMap<>());
 
                             ItemComparableItemStack isw = new ItemComparableItemStack(stack, false);
