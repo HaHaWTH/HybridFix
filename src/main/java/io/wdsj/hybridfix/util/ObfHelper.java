@@ -2,6 +2,9 @@ package io.wdsj.hybridfix.util;
 
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
+/**
+ * Obfuscation helper, used to get corresponding names based on environment.
+ */
 public class ObfHelper {
     private ObfHelper() {
     }
