@@ -29,6 +29,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix TechGuns explosion can break blocks in protected areas
 - Add entity blacklist/whitelist to Applied Energistics 2 Spatial Pylon
 - Fix webs of InfernalMobs can spawn in protected areas
+- Fix EpicSiegeMod mob AIs can grief in protected areas
 
 ## Features
 
@@ -53,7 +54,9 @@ HybridFix is not required to be installed on client side.
 
 ## How To (Developers)
 
-If you are developing mods, you can import HybridFix from curse maven(Groovy DSL):
+If you are developing mods, you can import HybridFix from curse maven:
+
+Gradle(Groovy DSL):
 
 ```groovy
 implementation fg.deobf("curse.maven:hybridfix-1166614:{latest_artifact_id}")

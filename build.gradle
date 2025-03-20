@@ -169,6 +169,9 @@ dependencies {
     // Infernal Mobs
     compileOnly rfg.deobf("curse.maven:atomicstrykers-infernal-mobs-227875:3431758")
 
+    // Epic Siege Mod
+    compileOnly rfg.deobf("curse.maven:epic-siege-mod-229449:3356157")
+
     compileOnly "org.jetbrains:annotations:26.0.2"
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'

@@ -1,0 +1,14 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.late.epic_siege_mod",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "entities.SpiderHandlerMixin",
+    "ai.ESM_EntityAIDiggingMixin",
+    "ai.ESM_EntityAIGriefMixin",
+    "ai.ESM_EntityAIPillarUpMixin"
+  ]
+}

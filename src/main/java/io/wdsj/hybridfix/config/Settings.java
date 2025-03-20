@@ -131,6 +131,10 @@ public class Settings {
         @Config.Comment("Patch modifiers of InfernalMobs can bypass grief protection.")
         @Config.RequiresMcRestart
         public boolean patchInfernalMobsModifier = false;
+
+        @Config.Comment("Patch mob ais of Epic Siege Mod can bypass grief protection.")
+        @Config.RequiresMcRestart
+        public boolean patchEpicSiegeModAi = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

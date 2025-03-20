@@ -62,6 +62,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.techguns.explosion.json", () -> isModLoaded("techguns") && Settings.modPatchSettings.patchTechGunsExplosion);
             // Infernal Mobs patches
             put("mixins.infernal_mobs.modifiers.json", () -> isModLoaded("infernalmobs") && Settings.modPatchSettings.patchInfernalMobsModifier);
+            // Epic Siege Mod patches
+            put("mixins.epic_siege_mod.grief.json", () -> isModLoaded("epicsiegemod") && Settings.modPatchSettings.patchEpicSiegeModAi);
         }
     });
 
