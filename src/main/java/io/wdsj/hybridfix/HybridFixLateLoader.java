@@ -29,6 +29,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.twilight_forest.entity.json", () -> isModLoaded("twilightforest") && Settings.modPatchSettings.patchTwilightForestEntityEvent);
             // Thaumcraft patches
             put("mixins.thaumcraft.taint.json", () -> isModLoaded("thaumcraft") && Settings.modPatchSettings.patchThaumcraftTaintSpread);
+            put("mixins.thaumcraft.flux.json", () -> isModLoaded("thaumcraft") && Settings.modPatchSettings.patchThaumcraftFlux);
             // Tconstruct patches
             put("mixins.tconstruct.tools.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTconstructToolDamage);
             // So Many Enchantments patches

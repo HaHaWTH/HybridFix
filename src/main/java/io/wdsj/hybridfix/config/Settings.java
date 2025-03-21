@@ -84,6 +84,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchThaumcraftTaintSpread = true;
 
+        @Config.Comment("Patch flux rift in thaumcraft.")
+        @Config.RequiresMcRestart
+        public boolean patchThaumcraftFlux = true;
+
         @Config.Comment("Patch Tinkers Construct tool damage,\nUseful for some traits that adds extra effects and disarming, etc.\nYou can use property -Dhybridfix.tconstruct.supersedeVanillaEvent=true to prevent calling original damage event.")
         @Config.RequiresMcRestart
         public boolean patchTconstructToolDamage = false;
