@@ -1,10 +1,10 @@
 package io.wdsj.hybridfix.handler;
 
-import com.google.common.collect.Lists;
 import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -33,8 +33,8 @@ public class ExplosionHandler {
             Location location = new Location(bworld, explosionPos.x, explosionPos.y, explosionPos.z);
             List<Block> bukkitBlocks;
             boolean cancelled;
-            final List<Block> blockList = Lists.newArrayList();
             List<BlockPos> affectedBlockPositions = event.getAffectedBlocks();
+            final List<Block> blockList = new ObjectArrayList<>(affectedBlockPositions.size());
             for (int i1 = affectedBlockPositions.size() - 1; i1 >= 0; i1--) {
                 BlockPos cpos = affectedBlockPositions.get(i1);
                 Block bblock = bworld.getBlockAt(cpos.getX(), cpos.getY(), cpos.getZ());
