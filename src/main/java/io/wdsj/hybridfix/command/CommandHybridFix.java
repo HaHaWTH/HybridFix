@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CommandHybridFix extends Command {
     private static final Cache<String, String> versionCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(1L, TimeUnit.HOURS)
+            .expireAfterWrite(10L, TimeUnit.MINUTES)
             .maximumSize(1L)
             .build();
 

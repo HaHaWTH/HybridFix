@@ -79,11 +79,11 @@ public abstract class TaintHelperMixin {
                     }
 
                     if (bs.getBlock().isLeaves(bs, world, t)) {
-                        EnumFacing face = null;
-                        if ((double)world.rand.nextFloat() < 0.6 && (face = BlockUtils.getFaceBlockTouching(world, t, BlocksTC.taintLog)) != null) {
+                        EnumFacing face;
+                        if ((double) world.rand.nextFloat() < 0.6 && (face = BlockUtils.getFaceBlockTouching(world, t, BlocksTC.taintLog)) != null) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
                             blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFeature));
-                            blockState.setRawData((byte)BlocksTC.taintFeature.getMetaFromState(BlocksTC.taintFeature.getDefaultState().withProperty(IBlockFacing.FACING, face.getOpposite())));
+                            blockState.setRawData((byte) BlocksTC.taintFeature.getMetaFromState(BlocksTC.taintFeature.getDefaultState().withProperty(IBlockFacing.FACING, face.getOpposite())));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
@@ -110,7 +110,8 @@ public abstract class TaintHelperMixin {
                         if (Utils.isWoodLog(world, t) && bs.getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
                             blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintLog));
-                            blockState.setRawData((byte)BlocksTC.taintLog.getMetaFromState(BlocksTC.taintLog.getDefaultState().withProperty(BlockTaintLog.AXIS, BlockUtils.getBlockAxis(world, t))));
+                            // noinspection unchecked, deprecation
+                            blockState.setRawData((byte) BlocksTC.taintLog.getMetaFromState(BlocksTC.taintLog.getDefaultState().withProperty(BlockTaintLog.AXIS, BlockUtils.getBlockAxis(world, t))));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
@@ -163,9 +164,9 @@ public abstract class TaintHelperMixin {
                         }
                     }
 
-                    if ((bs.getBlock() == BlocksTC.taintSoil || bs.getBlock() == BlocksTC.taintRock) && world.isAirBlock(t.up()) && AuraHelper.getFlux(world, t) >= 5.0F && (double)world.rand.nextFloat() < (double)(ModConfig.CONFIG_WORLD.taintSpreadRate / 100.0F) * 0.33 && isAtTaintSeedEdge(world, t)) {
+                    if ((bs.getBlock() == BlocksTC.taintSoil || bs.getBlock() == BlocksTC.taintRock) && world.isAirBlock(t.up()) && AuraHelper.getFlux(world, t) >= 5.0F && (double) world.rand.nextFloat() < (double) (ModConfig.CONFIG_WORLD.taintSpreadRate / 100.0F) * 0.33 && isAtTaintSeedEdge(world, t)) {
                         EntityTaintSeed e = new EntityTaintSeed(world);
-                        e.setLocationAndAngles((double)((float)t.getX() + 0.5F), (double)t.up().getY(), (double)((float)t.getZ() + 0.5F), (float)world.rand.nextInt(360), 0.0F);
+                        e.setLocationAndAngles((double) ((float) t.getX() + 0.5F), (double) t.up().getY(), (double) ((float) t.getZ() + 0.5F), (float) world.rand.nextInt(360), 0.0F);
                         if (e.getCanSpawnHere()) {
                             AuraHelper.drainFlux(world, t, 5.0F, false);
                             world.spawnEntity(e);

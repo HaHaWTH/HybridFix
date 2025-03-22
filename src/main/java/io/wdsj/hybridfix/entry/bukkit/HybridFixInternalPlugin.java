@@ -30,8 +30,8 @@ public class HybridFixInternalPlugin extends PluginBase {
 
     public HybridFixInternalPlugin() {
         this.pluginName = "HybridFix";
-        pdf = new PluginDescriptionFile(pluginName, HybridFix.VERSION, "hybridfix");
-        dataFolder = new File("plugins", pluginName);
+        this.pdf = new PluginDescriptionFile(pluginName, HybridFix.VERSION, "hybridfix");
+        this.dataFolder = new File("plugins", pluginName);
     }
 
     public void setEnabled(boolean enabled) {
