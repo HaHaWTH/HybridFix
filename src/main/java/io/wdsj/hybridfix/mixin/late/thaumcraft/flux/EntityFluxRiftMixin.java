@@ -35,6 +35,6 @@ public abstract class EntityFluxRiftMixin extends Entity {
             return false;
         }
         boolean originalVal = original.call(instance, state, hitIfLiquid);
-        return EntityUtils.canDestroyBlock(this.world, pos, state, this) && originalVal;
+        return originalVal && EntityUtils.canDestroyBlock(this.world, pos, state, this);
     }
 }
