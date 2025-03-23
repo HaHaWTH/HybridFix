@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.mixin.command;
 
+import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.command.CommandHybridFix;
 import net.minecraft.server.dedicated.DedicatedServer;
 import org.bukkit.permissions.Permission;
@@ -19,7 +20,11 @@ public class DedicatedServerMixin {
             )
     )
     public void onInit(CallbackInfoReturnable<Boolean> cir) {
-        Permission permission = new Permission(CommandHybridFix.ERASE_ENTITY_PERMISSION, null, PermissionDefault.OP);
-        DefaultPermissions.registerPermission(permission);
+        try {
+            Permission permission = new Permission(CommandHybridFix.ERASE_ENTITY_PERMISSION, null, PermissionDefault.OP);
+            DefaultPermissions.registerPermission(permission);
+        } catch (Exception e) {
+            HybridFix.LOGGER.error("Failed to register command permission, please report to HybridFix", e);
+        }
     }
 }
