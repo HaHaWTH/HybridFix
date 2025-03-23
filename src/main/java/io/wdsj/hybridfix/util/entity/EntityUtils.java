@@ -5,13 +5,20 @@ import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class EntityUtils {
     private EntityUtils() {
@@ -33,4 +40,46 @@ public class EntityUtils {
         float hardness = state.getBlockHardness(world, pos);
         return hardness >= 0.0F && !state.getBlock().isAir(state, world, pos) && state.getBlock().canEntityDestroy(state, world, pos, entity) && (!(entity instanceof EntityLivingBase) || ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) entity, pos, state));
     }
+
+    @Nullable
+    public static EntityLivingBase raytraceEntity(@NotNull Entity originEntity, double reach) {
+        World world = originEntity.world;
+        Vec3d start = originEntity.getPositionEyes(1.0F);
+
+        Vec3d lookVec = originEntity.getLook(1.0F);
+
+        Vec3d end = start.add(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
+
+        RayTraceResult blockHit = world.rayTraceBlocks(start, end, false, true, true);
+        double blockDistance = (blockHit != null && blockHit.typeOfHit == RayTraceResult.Type.BLOCK)
+                ? start.distanceTo(blockHit.hitVec)
+                : reach;
+
+        AxisAlignedBB aabb = originEntity.getEntityBoundingBox()
+                .expand(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach)
+                .grow(1.0D, 1.0D, 1.0D);
+
+        List<Entity> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, entity -> entity != originEntity);
+
+        EntityLivingBase closestEntity = null;
+        double closestDistance = blockDistance;
+
+        for (Entity entity : entities) {
+            float borderSize = entity.getCollisionBorderSize();
+            AxisAlignedBB entityBB = entity.getEntityBoundingBox()
+                    .grow(borderSize, borderSize, borderSize);
+
+            RayTraceResult intercept = entityBB.calculateIntercept(start, end);
+            if (intercept != null) {
+                double distance = start.distanceTo(intercept.hitVec);
+                if (distance < closestDistance) {
+                    closestEntity = (EntityLivingBase) entity;
+                    closestDistance = distance;
+                }
+            }
+        }
+
+        return closestEntity;
+    }
+
 }

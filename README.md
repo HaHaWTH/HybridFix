@@ -96,9 +96,11 @@ Currently patched plugins:
 
 - `/hybridfix dumpitem` - Show details of the item in hand.
 - `/hybridfix version` - Show version info.
+- `/hybridfix eraseentity` - Forcibly remove targeted entity.
 
 ## Permissions
 
 - `hybridfix.command.use` - Allow to access `/hybridfix` command.
+- `hybridfix.command.eraseentity.use` - Allow to access `/hybridfix eraseentity` command.
 
 **Note**: Commands and permissions are registered on Bukkit side, that means you can manage permissions with Bukkit permission plugins like LuckPerms.
