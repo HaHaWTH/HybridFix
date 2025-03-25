@@ -23,7 +23,9 @@ import java.util.Set;
 
 @Mixin(value = RegisteredListener.class, remap = false)
 public abstract class RegisteredListenerMixin {
-    @Shadow @Final private Plugin plugin;
+    @Shadow
+    @Final
+    private Plugin plugin;
     @Unique
     private static final Set<String> hybridFix$blacklist = new ObjectOpenHashSet<>(Arrays.asList(Settings.fakePlayerPluginBlacklist));
 
