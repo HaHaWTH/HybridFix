@@ -152,7 +152,7 @@ dependencies {
     compileOnly rfg.deobf('curse.maven:baubles-227083:2518667')
 
     // Industrial Craft 2
-    compileOnly files("libs/mod/industrialcraft-2-2.8.222-ex112-dev.jar")
+    compileOnly rfg.deobf("curse.maven:industrial-craft-242638:3838713")
 
     // Draconic Evolution
     compileOnly rfg.deobf("curse.maven:draconic-evolution-223565:3431261")
