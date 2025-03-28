@@ -8,15 +8,15 @@ import java.util.concurrent.Executors;
 public class Utils {
     public static final boolean isMohist = isClassExists("com.mohistmc.MohistMC");
     private static final boolean hasBukkit = isClassExists("org.bukkit.Bukkit");
-    private static final ExecutorService ioWorker = Executors.newCachedThreadPool(
+    private static final ExecutorService commonWorker = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
-                    .setNameFormat("HybridFix I/O worker-%d")
+                    .setNameFormat("HybridFix common worker-%d")
                     .setPriority(Thread.NORM_PRIORITY - 2)
                     .build()
     );
 
-    public static ExecutorService ioWorker() {
-        return ioWorker;
+    public static ExecutorService commonWorker() {
+        return commonWorker;
     }
 
     public static boolean isClassLoaded(String className) {

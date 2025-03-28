@@ -80,7 +80,7 @@ public class CommandHybridFix extends Command {
                             sender.sendMessage(ChatColor.GREEN + "* You are running the latest version.");
                         }
                     } else {
-                        CompletableFuture.supplyAsync(Updater::isUpdateAvailable, Utils.ioWorker())
+                        CompletableFuture.supplyAsync(Updater::isUpdateAvailable, Utils.commonWorker())
                                 .thenAccept(
                                         isUpdateAvailable -> {
                                             if (isUpdateAvailable) {

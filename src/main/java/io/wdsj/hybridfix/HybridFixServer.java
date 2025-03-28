@@ -30,7 +30,7 @@ public class HybridFixServer {
             Metrics metrics = new Metrics(HybridFixInternalPlugin.getInstance(), 24273);
         }
         if (Settings.checkForUpdates) {
-            Utils.ioWorker().submit(() -> {
+            Utils.commonWorker().submit(() -> {
                 HybridFix.LOGGER.info("Checking for updates...");
                 if (Updater.isUpdateAvailable()) {
                     HybridFix.LOGGER.warn("There is a new version of HybridFix available: {}, you're on: {}", Updater.getLatestVersion(), Updater.getCurrentVersion());
