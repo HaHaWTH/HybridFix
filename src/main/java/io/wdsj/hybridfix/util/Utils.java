@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 public class Utils {
     public static final boolean isMohist = isClassExists("com.mohistmc.MohistMC");
+    public static final boolean isCatServer = isClassExists("catserver.server.CatServer");
     private static final boolean hasBukkit = isClassExists("org.bukkit.Bukkit");
     private static final ExecutorService commonWorker = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
