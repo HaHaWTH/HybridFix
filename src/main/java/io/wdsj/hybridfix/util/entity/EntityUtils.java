@@ -42,21 +42,21 @@ public class EntityUtils {
     }
 
     @Nullable
-    public static EntityLivingBase raytraceEntity(@NotNull Entity originEntity, double reach) {
+    public static EntityLivingBase rayTraceEntity(@NotNull Entity originEntity, double maxDistance) {
         World world = originEntity.world;
         Vec3d start = originEntity.getPositionEyes(1.0F);
 
         Vec3d lookVec = originEntity.getLook(1.0F);
 
-        Vec3d end = start.add(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach);
+        Vec3d end = start.add(lookVec.x * maxDistance, lookVec.y * maxDistance, lookVec.z * maxDistance);
 
         RayTraceResult blockHit = world.rayTraceBlocks(start, end, false, true, true);
         double blockDistance = (blockHit != null && blockHit.typeOfHit == RayTraceResult.Type.BLOCK)
                 ? start.distanceTo(blockHit.hitVec)
-                : reach;
+                : maxDistance;
 
         AxisAlignedBB aabb = originEntity.getEntityBoundingBox()
-                .expand(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach)
+                .expand(lookVec.x * maxDistance, lookVec.y * maxDistance, lookVec.z * maxDistance)
                 .grow(1.0D, 1.0D, 1.0D);
 
         List<Entity> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, entity -> entity != originEntity);
@@ -81,5 +81,4 @@ public class EntityUtils {
 
         return closestEntity;
     }
-
 }

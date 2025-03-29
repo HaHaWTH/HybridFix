@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -108,7 +109,7 @@ public class CommandHybridFix extends Command {
                     return true;
                 }
                 EntityPlayer nmsPlayer = SpigotReflectionUtils.CraftPlayer_getHandle((CraftPlayer) sender);
-                EntityLivingBase target = EntityUtils.raytraceEntity(nmsPlayer, 32D);
+                EntityLivingBase target = EntityUtils.rayTraceEntity(nmsPlayer, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getEntityViewDistance());
                 if (target == null) {
                     sender.sendMessage(ChatColor.RED + "No entity found.");
                     return true;
