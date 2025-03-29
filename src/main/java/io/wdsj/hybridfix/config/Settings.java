@@ -53,7 +53,7 @@ public class Settings {
 
     @Config.Comment("Enable HybridFix's bStats metrics.")
     @Config.RequiresMcRestart
-    public static boolean enableMetrics = false;
+    public static boolean enableMetrics = true;
 
     @Config.Comment("FakePlayer event blacklist, plugins in this list will NOT receive events fired by fake players.")
     @Config.RequiresMcRestart

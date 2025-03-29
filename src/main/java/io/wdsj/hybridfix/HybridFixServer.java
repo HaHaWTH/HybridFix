@@ -5,6 +5,7 @@ import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.metric.Metrics;
 import io.wdsj.hybridfix.handler.BukkitForgePermissionHandler;
 import io.wdsj.hybridfix.handler.ExplosionHandler;
+import io.wdsj.hybridfix.handler.LivingAttackHandler;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,6 +24,7 @@ public class HybridFixServer {
                 PermissionAPI.setPermissionHandler(new BukkitForgePermissionHandler());
             }
         }
+        MinecraftForge.EVENT_BUS.register(new LivingAttackHandler());
     }
 
     public static void onStartComplete() {

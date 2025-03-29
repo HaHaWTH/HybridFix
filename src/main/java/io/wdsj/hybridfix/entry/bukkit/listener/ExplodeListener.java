@@ -8,7 +8,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class ExplodeListener implements Listener {
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityExplode(EntityExplodeEvent event) {
         String worldName = event.getEntity().getWorld().getName();
         for (String s : Settings.bukkitPluginConfig.antiExplodeWorlds) {
@@ -19,7 +19,7 @@ public class ExplodeListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockExplode(BlockExplodeEvent event) {
         String worldName = event.getBlock().getWorld().getName();
         for (String s : Settings.bukkitPluginConfig.antiExplodeWorlds) {

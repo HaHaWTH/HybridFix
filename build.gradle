@@ -140,6 +140,8 @@ dependencies {
 
     // Tinkers Construct
     compileOnly rfg.deobf("curse.maven:tinkers-construct-74072:2902483")
+
+    // Mantle
     compileOnly rfg.deobf("curse.maven:mantle-74924:2713386")
 
     // So many enchantments

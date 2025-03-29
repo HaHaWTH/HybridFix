@@ -7,6 +7,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 ### Forge-Bukkit
 
 - Some mod explosions cannot be handled by Bukkit plugins(e.g. Tinkers' Construct EFLN)
+- Bridge some Forge events to Bukkit
 
 ### Mods
 
@@ -83,7 +84,7 @@ Gradle(Groovy DSL):
 compileOnly files("PATH-TO-JAR")
 ```
 
-APIs are located in `io.wdsj.hybridfix.api` package.
+APIs are located at `io.wdsj.hybridfix.api` package.
 
 ## Plugin Hooks
 Thanks to HybridFix internal plugin, we can hook into plugins from Forge side to provide more fixes.

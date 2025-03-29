@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class ResHookAE2SpatialPylonListener implements Listener {
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onSpatialPylonTransfer(SpatialPylonTransferEvent event) {
         Residence plugin = Residence.getInstance();
         if (plugin == null) return;
