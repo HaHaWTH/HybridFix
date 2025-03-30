@@ -124,9 +124,9 @@ repositories {
 }
 
 dependencies {
-    // CB things and nms
+    // CB things
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
-    compileOnly 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
+    compileOnly files('libs/craftbukkit-mcp-mapped-1.12.2.jar')
 
     // Plugins
     compileOnly files("libs/plugin/Residence5.1.6.4.jar")

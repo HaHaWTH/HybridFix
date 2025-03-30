@@ -2,13 +2,13 @@ package io.wdsj.hybridfix.mixin.late.thaumcraft.taint;
 
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
-import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -49,7 +49,7 @@ public abstract class EntityTaintSeedMixin extends EntityMob implements ITainted
             if (this.world.getBiome(entity.getPosition()) == BiomeHandler.ELDRITCH && this.world.isAirBlock(entity.getPosition()) && BlockUtils.isAdjacentToSolidBlock(this.world, entity.getPosition())) {
                 final BlockPos pos = entity.getPosition();
                 BlockState blockState = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
-                blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFibre));
+                blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));
                 BlockFormEvent event = new EntityBlockFormEvent(((IEntityGetter)this).getBukkitEntity(), blockState.getBlock(), blockState);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {

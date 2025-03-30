@@ -3,13 +3,13 @@ package io.wdsj.hybridfix.mixin.late.epic_siege_mod.ai;
 import funwayguy.epicsiegemod.ai.ESM_EntityAIPillarUp;
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
-import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,7 +43,7 @@ public abstract class ESM_EntityAIPillarUpMixin {
         BlockPos pos = this.blockPos;
         org.bukkit.entity.Entity bEntity = ((IEntityGetter) this.builder).getBukkitEntity();
         Block block = ((IWorldGetter) this.builder.world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        Material material = SpigotReflectionUtils.CraftMagicNumbers_getMaterial(pillarBlock.getBlock());
+        Material material = CraftMagicNumbers.getMaterial(pillarBlock.getBlock());
         byte meta = blockMeta < 0 ? (byte) 0 : (byte) blockMeta;
         // noinspection deprecation
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, material, meta);

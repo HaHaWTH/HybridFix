@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.mixin.fix.fakeplayer;
 
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.util.FakePlayer;
@@ -36,7 +35,7 @@ public abstract class RegisteredListenerMixin {
     )
     public void ignoreFakePlayer(Event event, CallbackInfo ci) {
         if (event instanceof BlockBreakEvent) {
-            EntityPlayerMP player = SpigotReflectionUtils.CraftPlayer_getHandle((CraftPlayer) ((BlockBreakEvent) event).getPlayer());
+            EntityPlayerMP player = ((CraftPlayer) ((BlockBreakEvent) event).getPlayer()).getHandle();
             if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
                 ci.cancel();
             }

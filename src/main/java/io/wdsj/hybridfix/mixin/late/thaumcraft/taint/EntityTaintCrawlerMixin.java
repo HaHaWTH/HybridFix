@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.mixin.late.thaumcraft.taint;
 
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
-import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,7 +49,7 @@ public abstract class EntityTaintCrawlerMixin extends EntityMob implements ITain
                 org.bukkit.World bWorld = ((IWorldGetter) this.world).getWorld();
                 final BlockPos pos = this.getPosition();
                 BlockState blockState = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
-                blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFibre));
+                blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));
                 BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {

@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.ItemStackUtils;
-import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.entity.EntityUtils;
@@ -22,6 +21,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
@@ -58,7 +58,7 @@ public class CommandHybridFix extends Command {
                     return true;
                 }
                 Player player = (Player) sender;
-                ItemStack itemInHand = SpigotReflectionUtils.CraftItemStack_asNMSCopy(player.getInventory().getItemInMainHand());
+                ItemStack itemInHand = CraftItemStack.asNMSCopy(player.getInventory().getItemInMainHand());
                 if (itemInHand.isEmpty()) {
                     sender.sendMessage(ChatColor.RED + "You are not holding any item.");
                     return true;
@@ -108,7 +108,7 @@ public class CommandHybridFix extends Command {
                     sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
                     return true;
                 }
-                EntityPlayer nmsPlayer = SpigotReflectionUtils.CraftPlayer_getHandle((CraftPlayer) sender);
+                EntityPlayer nmsPlayer = ((CraftPlayer) sender).getHandle();
                 EntityLivingBase target = EntityUtils.rayTraceEntity(nmsPlayer, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getEntityViewDistance());
                 if (target == null) {
                     sender.sendMessage(ChatColor.RED + "No entity found.");

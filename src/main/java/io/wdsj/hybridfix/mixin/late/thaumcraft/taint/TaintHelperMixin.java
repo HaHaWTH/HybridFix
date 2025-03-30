@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.mixin.late.thaumcraft.taint;
 
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
-import io.wdsj.hybridfix.util.SpigotReflectionUtils;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -66,7 +66,7 @@ public abstract class TaintHelperMixin {
                     org.bukkit.World bWorld = ((IWorldGetter) world).getWorld();
                     if (!bs.getBlock().isLeaves(bs, world, t) && !bm.isLiquid() && (world.isAirBlock(t) || bs.getBlock().isReplaceable(world, t) || bs.getBlock() instanceof BlockFlower || bs.getBlock() instanceof IPlantable) && BlockUtils.isAdjacentToSolidBlock(world, t) && !BlockTaintFibre.isOnlyAdjacentToTaint(world, t)) {
                         BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                        blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFibre));
+                        blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));
                         BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
@@ -82,7 +82,7 @@ public abstract class TaintHelperMixin {
                         EnumFacing face;
                         if ((double) world.rand.nextFloat() < 0.6 && (face = BlockUtils.getFaceBlockTouching(world, t, BlocksTC.taintLog)) != null) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFeature));
+                            blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFeature));
                             blockState.setRawData((byte) BlocksTC.taintFeature.getMetaFromState(BlocksTC.taintFeature.getDefaultState().withProperty(IBlockFacing.FACING, face.getOpposite())));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
@@ -93,7 +93,7 @@ public abstract class TaintHelperMixin {
                         } else {
                             // world.setBlockState(t, BlocksTC.taintFibre.getDefaultState());
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintFibre));
+                            blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
@@ -109,7 +109,7 @@ public abstract class TaintHelperMixin {
                     if (BlockTaintFibre.isHemmedByTaint(world, t) && bs.getBlockHardness(world, t) < 5.0F) {
                         if (Utils.isWoodLog(world, t) && bs.getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintLog));
+                            blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintLog));
                             // noinspection unchecked, deprecation
                             blockState.setRawData((byte) BlocksTC.taintLog.getMetaFromState(BlocksTC.taintLog.getDefaultState().withProperty(BlockTaintLog.AXIS, BlockUtils.getBlockAxis(world, t))));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
@@ -123,7 +123,7 @@ public abstract class TaintHelperMixin {
 
                         if (bs.getBlock() == Blocks.RED_MUSHROOM_BLOCK || bs.getBlock() == Blocks.BROWN_MUSHROOM_BLOCK || bm == Material.GOURD || bm == Material.CACTUS || bm == Material.CORAL || bm == Material.SPONGE || bm == Material.WOOD) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintCrust));
+                            blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintCrust));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
@@ -137,7 +137,7 @@ public abstract class TaintHelperMixin {
 
                         if (bm == Material.SAND || bm == Material.GROUND || bm == Material.GRASS || bm == Material.CLAY) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintSoil));
+                            blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintSoil));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
@@ -151,7 +151,7 @@ public abstract class TaintHelperMixin {
 
                         if (bm == Material.ROCK) {
                             BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
-                            blockState.setType(SpigotReflectionUtils.CraftMagicNumbers_getMaterial(BlocksTC.taintRock));
+                            blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintRock));
                             BlockSpreadEvent event = new BlockSpreadEvent(blockState.getBlock(), bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()), blockState);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {

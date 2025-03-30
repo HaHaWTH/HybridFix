@@ -2,6 +2,7 @@ package io.wdsj.hybridfix.mixin.base.patch.forge;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerInteractionManager;
@@ -16,9 +17,26 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
         super(server, worldIn, profile, interactionManagerIn);
     }
 
+    /**
+     * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#addPotionEffect(org.bukkit.potion.PotionEffect)
+     */
     @Unique(silent = true)
     @Override
     public boolean isPotionApplicable(PotionEffect potion) {
         return false;
     }
+
+    /**
+     * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#setResourcePack(String, byte[])
+     */
+    @Unique(silent = true)
+    @Override
+    public void loadResourcePack(String url, String hash) {}
+
+    /**
+     * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#updateInventory() 
+     */
+    @Unique(silent = true)
+    @Override
+    public void sendContainerToPlayer(Container containerIn) {}
 }
