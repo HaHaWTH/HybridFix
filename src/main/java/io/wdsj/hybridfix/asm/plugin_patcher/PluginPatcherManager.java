@@ -4,6 +4,7 @@ import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.asm.IBytecodePatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyTo;
 import io.wdsj.hybridfix.asm.plugin_patcher.impl.CitizensPatcher;
+import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public enum PluginPatcherManager {
 
     PluginPatcherManager() {
         IBytecodePatcher.clearDebugDumpDirectory();
-        registerPluginPatcher("Citizens", new CitizensPatcher());
+        if (Settings.pluginPatcherSettings.patchCitizens) registerPluginPatcher("Citizens", new CitizensPatcher());
     }
 
     public IBytecodePatcher getPluginPatcher(String pluginName) {

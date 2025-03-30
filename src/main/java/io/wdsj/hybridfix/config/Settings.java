@@ -170,6 +170,19 @@ public class Settings {
         public String[] antiExplodeWorlds = new String[]{"world", "DIM-1", "DIM1"};
     }
 
+    @Config.Comment("Configuration for HybridFix ASM plugin patcher.")
+    @Config.RequiresMcRestart
+    public static PluginPatcherSettings pluginPatcherSettings = new PluginPatcherSettings();
+
+    public static class PluginPatcherSettings {
+        @Config.Comment("Enable HybridFix ASM plugin patcher.")
+        @Config.RequiresMcRestart
+        public boolean enable = false;
+
+        @Config.Comment("Enable HybridFix ASM plugin patcher for Citizens.")
+        @Config.RequiresMcRestart
+        public boolean patchCitizens = false;
+    }
     static {
         ConfigAnytime.register(Settings.class);
     }
