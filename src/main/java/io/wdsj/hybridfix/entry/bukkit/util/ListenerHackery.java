@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.entry.bukkit.util;
 
+import io.wdsj.hybridfix.duck.bukkit.plugin.IPluginClassDefiner;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -8,7 +9,6 @@ import org.spigotmc.SneakyThrow;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 
 public class ListenerHackery {
     private ListenerHackery() {
@@ -24,9 +24,9 @@ public class ListenerHackery {
     }
      */
     /**
-     * Hack to register a listener to target plugin ClassLoader that bypasses the isolation.
-     * @param clazz listener class
-     * @param pluginName target plugin
+     * New approach to register listeners to target plugin ClassLoader that bypasses the isolation.
+     * @see IPluginClassDefiner
+     * @see io.wdsj.hybridfix.mixin.bukkit.plugin.PluginClassLoaderMixin
      */
     public static void registerListenerToTargetPlugin(Class<? extends Listener> clazz, String pluginName) {
         try (InputStream inputStream = clazz.getClassLoader().getResourceAsStream(
@@ -42,9 +42,12 @@ public class ListenerHackery {
             Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
             assert plugin != null;
             // Inherit flow: PluginClassLoader -> URLClassLoader -> SecureClassLoader -> ClassLoader
+            /*
             Method method = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
             method.setAccessible(true);
             Class<?> newClazz = (Class<?>) method.invoke(plugin.getClass().getClassLoader(), clazz.getName(), classBytes, 0, classBytes.length);
+             */
+            Class<?> newClazz = ((IPluginClassDefiner) plugin.getClass().getClassLoader()).defineClassExposed(clazz.getName(), classBytes);
             Listener listener = (Listener) newClazz.newInstance();
             Bukkit.getPluginManager().registerEvents(listener, HybridFixInternalPlugin.getInstance());
         } catch (Throwable e) {
