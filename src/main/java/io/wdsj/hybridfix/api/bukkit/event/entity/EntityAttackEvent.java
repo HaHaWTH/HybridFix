@@ -37,6 +37,7 @@ public class EntityAttackEvent extends EntityEvent implements Cancellable {
 
     /**
      * Get the damage type of the attack.
+     * @see net.minecraft.util.DamageSource
      *
      * @return the damage type
      */
