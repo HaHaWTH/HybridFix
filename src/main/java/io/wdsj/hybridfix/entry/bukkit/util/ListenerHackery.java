@@ -5,6 +5,7 @@ import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.spigotmc.SneakyThrow;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +30,23 @@ public class ListenerHackery {
      * @see io.wdsj.hybridfix.mixin.bukkit.plugin.PluginClassLoaderMixin
      */
     public static void registerListenerToTargetPlugin(Class<? extends Listener> clazz, String pluginName) {
+        // Inherit flow: PluginClassLoader -> URLClassLoader -> SecureClassLoader -> ClassLoader
+        /*
+        Method method = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
+        method.setAccessible(true);
+        Class<?> newClazz = (Class<?>) method.invoke(plugin.getClass().getClassLoader(), clazz.getName(), classBytes, 0, classBytes.length);
+         */
+        try {
+            Class<? extends Listener> newClazz = injectClassToTargetPlugin(clazz, pluginName);
+            Listener listener = newClazz.newInstance();
+            Bukkit.getPluginManager().registerEvents(listener, HybridFixInternalPlugin.getInstance());
+        } catch (Throwable e) {
+            SneakyThrow.sneaky(e);
+        }
+    }
+
+    @NotNull
+    private static <T> Class<? extends T> injectClassToTargetPlugin(Class<? extends T> clazz, String pluginName) {
         try (InputStream inputStream = clazz.getClassLoader().getResourceAsStream(
                 clazz.getName().replace('.', '/') + ".class")) {
             assert inputStream != null;
@@ -41,17 +59,11 @@ public class ListenerHackery {
             byte[] classBytes = buffer.toByteArray();
             Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
             assert plugin != null;
-            // Inherit flow: PluginClassLoader -> URLClassLoader -> SecureClassLoader -> ClassLoader
-            /*
-            Method method = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
-            method.setAccessible(true);
-            Class<?> newClazz = (Class<?>) method.invoke(plugin.getClass().getClassLoader(), clazz.getName(), classBytes, 0, classBytes.length);
-             */
-            Class<?> newClazz = ((IPluginClassDefiner) plugin.getClass().getClassLoader()).defineClassExposed(clazz.getName(), classBytes);
-            Listener listener = (Listener) newClazz.newInstance();
-            Bukkit.getPluginManager().registerEvents(listener, HybridFixInternalPlugin.getInstance());
-        } catch (Throwable e) {
+            // noinspection unchecked
+            return (Class<? extends T>) ((IPluginClassDefiner) plugin.getClass().getClassLoader()).defineClassExposed(clazz.getName(), classBytes);
+       } catch (Throwable e) {
             SneakyThrow.sneaky(e);
+            return null; // never reached
         }
     }
 
