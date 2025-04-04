@@ -100,6 +100,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchBotaniaLens = false;
 
+        @Config.Comment("Patch Rannuncarpus can bypass bukkit grief protection.\nNOTE: This fix uses FakePlayer!")
+        @Config.RequiresMcRestart
+        public boolean patchBotaniaBlock = false;
+
         @Config.Comment("Patch miner machines of Industrial Craft 2 can mine blocks in protected areas.\nNOTE: This fix uses FakePlayer!")
         @Config.RequiresMcRestart
         public boolean patchIC2Machine = false;

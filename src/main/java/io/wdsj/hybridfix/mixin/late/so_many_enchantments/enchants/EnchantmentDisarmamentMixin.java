@@ -58,13 +58,15 @@ public abstract class EnchantmentDisarmamentMixin extends EnchantmentBase {
         if (level > 0) {
             if (attacker.getRNG().nextFloat() < 0.02F * (float) level) {
                 if (!victim.getHeldItemMainhand().isEmpty()) {
-                    if (victim instanceof EntityLiving && attacker.getRNG().nextFloat() >= ((IEntityLivingMixin) victim).getInventoryHandsDropChances()[0])
+                    if (victim instanceof EntityLiving && attacker.getRNG().nextFloat() >= ((IEntityLivingMixin) victim).getInventoryHandsDropChances()[0]) {
                         return;
+                    }
                     victim.entityDropItem(victim.getHeldItemMainhand(), 0.5F);
                     victim.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
                 } else if (!victim.getHeldItemOffhand().isEmpty()) {
-                    if (victim instanceof EntityLiving && attacker.getRNG().nextFloat() >= ((IEntityLivingMixin) victim).getInventoryHandsDropChances()[1])
+                    if (victim instanceof EntityLiving && attacker.getRNG().nextFloat() >= ((IEntityLivingMixin) victim).getInventoryHandsDropChances()[1]) {
                         return;
+                    }
                     victim.entityDropItem(victim.getHeldItemOffhand(), 0.5F);
                     victim.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
                 }

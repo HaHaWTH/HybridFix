@@ -5,8 +5,11 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.util.FakePlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.spongepowered.asm.mixin.Final;
@@ -35,10 +38,29 @@ public abstract class RegisteredListenerMixin {
     )
     public void ignoreFakePlayer(Event event, CallbackInfo ci) {
         if (event instanceof BlockBreakEvent) {
-            EntityPlayerMP player = ((CraftPlayer) ((BlockBreakEvent) event).getPlayer()).getHandle();
-            if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
-                ci.cancel();
-            }
+            hybridFix$handleBlockBreakEvent((BlockBreakEvent) event, plugin, ci);
+            return;
+        }
+        if (event instanceof EntityChangeBlockEvent) {
+            hybridFix$handleEntityChangeBlockEvent((EntityChangeBlockEvent) event, plugin, ci);
+        }
+    }
+
+    @Unique
+    private static void hybridFix$handleBlockBreakEvent(BlockBreakEvent event, Plugin plugin, CallbackInfo ci) {
+        EntityPlayerMP player = ((CraftPlayer) event.getPlayer()).getHandle();
+        if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
+            ci.cancel();
+        }
+    }
+
+    @Unique
+    private static void hybridFix$handleEntityChangeBlockEvent(EntityChangeBlockEvent event, Plugin plugin, CallbackInfo ci) {
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player)) return;
+        EntityPlayerMP player = ((CraftPlayer) entity).getHandle();
+        if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
+            ci.cancel();
         }
     }
 

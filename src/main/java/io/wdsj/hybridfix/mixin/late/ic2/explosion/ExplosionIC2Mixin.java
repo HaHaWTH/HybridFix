@@ -37,6 +37,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.wdsj.hybridfix.util.BaseReflectionUtils.*;
+
 /*
  * IC2 is too stupid. D:
  */
@@ -168,7 +170,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
                 for (int theta_n = 0; theta_n < steps; ++theta_n) {
                     double phi = (Math.PI * 2D) / (double) steps * (double) phi_n;
                     double theta = Math.PI / (double) steps * (double) theta_n;
-                    this.shootRay(this.explosionX, this.explosionY, this.explosionZ, phi, theta, (double) this.power, entitiesAreInRange && phi_n % 8 == 0 && theta_n % 8 == 0, tmpPos);
+                    this.shootRay(this.explosionX, this.explosionY, this.explosionZ, phi, theta, this.power, entitiesAreInRange && phi_n % 8 == 0 && theta_n % 8 == 0, tmpPos);
                 }
             }
 
@@ -309,42 +311,6 @@ public abstract class ExplosionIC2Mixin extends Explosion {
             }
         } catch (Throwable th) {
             HybridFix.LOGGER.error("Error in ExplosionIC2: ", th);
-        }
-    }
-
-    @Unique
-    private static Method getMethod(String className, String methodName, Class<?>... paramTypes) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            Method m = clazz.getDeclaredMethod(methodName, paramTypes);
-            m.setAccessible(true);
-            return m;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Unique
-    private static Constructor<?> getConstructor(String className, Class<?>... paramTypes) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            Constructor<?> c = clazz.getDeclaredConstructor(paramTypes);
-            c.setAccessible(true);
-            return c;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Unique
-    private static Field getField(String className, String fieldName) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            Field f = clazz.getDeclaredField(fieldName);
-            f.setAccessible(true);
-            return f;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }
