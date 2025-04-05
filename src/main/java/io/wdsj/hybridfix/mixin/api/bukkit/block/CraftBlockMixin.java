@@ -31,7 +31,28 @@ public abstract class CraftBlockMixin {
     }
 
     @Unique
+    public boolean isBuildable() {
+        return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().isSolid();
+    }
+
+    @Unique
+    public boolean isBurnable() {
+        return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().getCanBurn();
+    }
+
+    @Unique
+    public boolean isReplaceable() {
+        return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().isReplaceable();
+    }
+
+    @Unique
     public boolean isSolid() {
         return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().blocksMovement();
+    }
+
+    @Unique
+    public boolean isCollidable() {
+        net.minecraft.world.World world = ((CraftWorld) this.getWorld()).getHandle();
+        return world.getBlockState(hybridFix$pos).getCollisionBoundingBox(world, hybridFix$pos) != null;
     }
 }
