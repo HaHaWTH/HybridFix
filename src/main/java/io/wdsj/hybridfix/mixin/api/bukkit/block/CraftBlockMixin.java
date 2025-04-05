@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.mixin.api.bukkit.block;
 
+import io.wdsj.hybridfix.duck.api.bukkit.block.IBlockInvoker;
 import net.minecraft.util.math.BlockPos;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Works along with {@link BlockMixin}
  */
 @Mixin(value = CraftBlock.class, remap = false)
-public abstract class CraftBlockMixin {
+public abstract class CraftBlockMixin implements IBlockInvoker {
     // @formatter:off
     @Shadow public abstract World getWorld();
     @Unique private BlockPos hybridFix$pos;
@@ -31,26 +32,31 @@ public abstract class CraftBlockMixin {
     }
 
     @Unique
+    @Override
     public boolean isBuildable() {
         return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().isSolid();
     }
 
     @Unique
+    @Override
     public boolean isBurnable() {
         return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().getCanBurn();
     }
 
     @Unique
+    @Override
     public boolean isReplaceable() {
         return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().isReplaceable();
     }
 
     @Unique
+    @Override
     public boolean isSolid() {
         return ((CraftWorld) this.getWorld()).getHandle().getBlockState(hybridFix$pos).getMaterial().blocksMovement();
     }
 
     @Unique
+    @Override
     public boolean isCollidable() {
         net.minecraft.world.World world = ((CraftWorld) this.getWorld()).getHandle();
         return world.getBlockState(hybridFix$pos).getCollisionBoundingBox(world, hybridFix$pos) != null;
