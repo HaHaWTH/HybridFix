@@ -4,6 +4,10 @@ import org.bukkit.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
+/**
+ * Implemented by {@link CraftBlockMixin}.
+ * All methods here behave same as <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/block/Block.html">PaperMC Javadoc</a>
+ */
 @Mixin(value = Block.class, remap = false)
 public interface BlockMixin {
     @Unique
