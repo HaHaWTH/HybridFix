@@ -3,7 +3,8 @@ package io.wdsj.hybridfix.duck.api.bukkit.block;
 import io.wdsj.hybridfix.HybridFixServer;
 
 /**
- * Duck interface for {@link org.bukkit.block.Block}
+ * Duck interface for {@link org.bukkit.block.Block}.
+ * All methods here behave same as <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/block/Block.html">PaperMC Javadoc</a>.
  */
 @SuppressWarnings("unused")
 public interface IBlockInvoker {
