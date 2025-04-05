@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.mixin.late.the_twilight_forest.item;
 
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
-import io.wdsj.hybridfix.util.hybrid.HybridReflectionUtils;
+import io.wdsj.hybridfix.util.reflection.HybridReflectionUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

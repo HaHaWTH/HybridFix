@@ -10,6 +10,7 @@ import ic2.core.util.StackUtil;
 import ic2.core.util.Util;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
+import io.wdsj.hybridfix.util.reflection.ReflectionChain;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -36,8 +37,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static io.wdsj.hybridfix.util.BaseReflectionUtils.*;
 
 /*
  * IC2 is too stupid. D:
@@ -106,22 +105,65 @@ public abstract class ExplosionIC2Mixin extends Explosion {
 
     @Unique private static final String EXPLOSION_IC2_NAME = ExplosionIC2.class.getName();
     // EntityDamage
-    @Unique private static final Constructor<?> EntityDamage_constructor = getConstructor(EXPLOSION_IC2_NAME + "$EntityDamage", Entity.class, int.class, double.class);
-    @Unique private static final Field EntityDamage_field_distance = getField(EXPLOSION_IC2_NAME + "$EntityDamage", "distance");
-    @Unique private static final Field EntityDamage_field_entity = getField(EXPLOSION_IC2_NAME + "$EntityDamage", "entity");
-    @Unique private static final Field EntityDamage_field_damage = getField(EXPLOSION_IC2_NAME + "$EntityDamage", "damage");
-    @Unique private static final Field EntityDamage_field_motionX = getField(EXPLOSION_IC2_NAME + "$EntityDamage", "motionX");
-    @Unique private static final Field EntityDamage_field_motionY = getField(EXPLOSION_IC2_NAME + "$EntityDamage", "motionY");
-    @Unique private static final Field EntityDamage_field_motionZ = getField(EXPLOSION_IC2_NAME + "$EntityDamage", "motionZ");
+    @Unique private static final Constructor<?> EntityDamage_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .params(Entity.class, int.class, double.class)
+            .accessible(true)
+            .constructor();
+    @Unique private static final Field EntityDamage_field_distance = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .name("distance")
+            .accessible(true)
+            .field();
+    @Unique private static final Field EntityDamage_field_entity = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .name("entity")
+            .accessible(true)
+            .field();
+    @Unique private static final Field EntityDamage_field_damage = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .name("damage")
+            .accessible(true)
+            .field();
+    @Unique private static final Field EntityDamage_field_motionX = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .name("motionX")
+            .accessible(true)
+            .field();
+    @Unique private static final Field EntityDamage_field_motionY = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .name("motionY")
+            .accessible(true)
+            .field();
+    @Unique private static final Field EntityDamage_field_motionZ = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+            .name("motionZ")
+            .accessible(true)
+            .field();
     // XZPosition
-    @Unique private static final Constructor<?> XZposition_constructor = getConstructor(EXPLOSION_IC2_NAME + "$XZposition", int.class, int.class);
-    @Unique private static final Field XZposition_field_x = getField(EXPLOSION_IC2_NAME + "$XZposition", "x");
-    @Unique private static final Field XZposition_field_z = getField(EXPLOSION_IC2_NAME + "$XZposition", "z");
+    @Unique private static final Constructor<?> XZposition_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
+            .params(int.class, int.class)
+            .accessible(true)
+            .constructor();
+    @Unique private static final Field XZposition_field_x = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
+            .name("x")
+            .accessible(true)
+            .field();
+    @Unique private static final Field XZposition_field_z = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
+            .name("z")
+            .accessible(true)
+            .field();
     // DropData
-    @Unique private static final Constructor<?> DropData_constructor = getConstructor(EXPLOSION_IC2_NAME + "$DropData", int.class, int.class);
-    @Unique private static final Method DropData_method_add = getMethod(EXPLOSION_IC2_NAME + "$DropData", "add", int.class, int.class);
-    @Unique private static final Field DropData_field_n = getField(EXPLOSION_IC2_NAME + "$DropData", "n");
-    @Unique private static final Field DropData_field_maxY = getField(EXPLOSION_IC2_NAME + "$DropData", "maxY");
+    @Unique private static final Constructor<?> DropData_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+            .params(int.class, int.class)
+            .accessible(true)
+            .constructor();
+    @Unique private static final Method DropData_method_add = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+            .name("add")
+            .params(int.class, int.class)
+            .accessible(true)
+            .methodDeclared();
+    @Unique private static final Field DropData_field_n = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+            .name("n")
+            .accessible(true)
+            .field();
+    @Unique private static final Field DropData_field_maxY = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+            .name("maxY")
+            .accessible(true)
+            .field();
     // @formatter:on
 
     /**

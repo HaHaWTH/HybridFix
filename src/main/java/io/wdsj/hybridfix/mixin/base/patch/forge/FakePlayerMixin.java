@@ -18,6 +18,8 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
     }
 
     /**
+     * Adding potion effects will cause packet send through {@link EntityPlayerMP#connection}, this won't work for fame players
+     * as all connections are null for fake players.
      * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#addPotionEffect(org.bukkit.potion.PotionEffect)
      */
     @Unique(silent = true)
@@ -27,6 +29,7 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
     }
 
     /**
+     * CB's setResourcePack doesn't check nullability of the connection, this will cause NPE.
      * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#setResourcePack(String, byte[])
      */
     @Unique(silent = true)
@@ -34,6 +37,7 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
     public void loadResourcePack(String url, String hash) {}
 
     /**
+     * CB's updateInventory doesn't check nullability of the connection, this will cause NPE.
      * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#updateInventory() 
      */
     @Unique(silent = true)
