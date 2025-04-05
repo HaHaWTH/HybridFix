@@ -1,0 +1,13 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.api.bukkit",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "block.CraftBlockMixin",
+    "block.BlockMixin",
+    "entity.CraftPlayerMixin"
+  ]
+}
