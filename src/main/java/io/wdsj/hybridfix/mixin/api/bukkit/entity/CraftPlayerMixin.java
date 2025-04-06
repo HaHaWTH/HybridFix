@@ -26,8 +26,6 @@ import java.util.Set;
 public abstract class CraftPlayerMixin {
     // @formatter:off
     @Shadow public abstract EntityPlayerMP getHandle();
-    // @formatter:on
-
     @Unique
     private final Player.Spigot hybridFix$fakePlayerSpigot = new Player.Spigot() {
         public InetSocketAddress getRawAddress() {
@@ -67,6 +65,7 @@ public abstract class CraftPlayerMixin {
         public void sendMessage(ChatMessageType position, BaseComponent... components) {
         }
     };
+    // @formatter:on
 
     @Inject(
             method = "spigot()Lorg/bukkit/entity/Player$Spigot;",
