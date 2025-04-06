@@ -3,7 +3,8 @@ package io.wdsj.hybridfix.duck.api.bukkit.event.block;
 import io.wdsj.hybridfix.HybridFixServer;
 
 /**
- * Duck interface for {@link org.bukkit.event.block.Action}
+ * Duck interface for {@link org.bukkit.event.block.Action}.
+ * You can cast to this from an {@link org.bukkit.event.block.Action} instance.
  */
 @SuppressWarnings("unused")
 public interface IActionInvoker {
