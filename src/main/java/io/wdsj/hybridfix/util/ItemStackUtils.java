@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.util;
 
+import io.wdsj.hybridfix.HybridFix;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,7 +10,10 @@ public class ItemStackUtils {
     public static String itemStackToGiveCommand(ItemStack nmsItemStack) {
         ResourceLocation itemRl = Item.REGISTRY.getNameForObject(nmsItemStack.getItem());
         String itemNamespacedId = itemRl != null ? itemRl.toString() : "";
-        if (itemNamespacedId.isEmpty()) return "Failed to parse item to command";
+        if (itemNamespacedId.isEmpty()) {
+            HybridFix.LOGGER.warn("Failed to parse item {} to command", nmsItemStack.toString());
+            return "Failed to parse item to command";
+        }
 
         int count = nmsItemStack.getCount();
 
