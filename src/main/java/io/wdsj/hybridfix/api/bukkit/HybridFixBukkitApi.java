@@ -4,7 +4,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-@SuppressWarnings("unused")
 public class HybridFixBukkitApi {
     protected HybridFixBukkitApi() {
     }

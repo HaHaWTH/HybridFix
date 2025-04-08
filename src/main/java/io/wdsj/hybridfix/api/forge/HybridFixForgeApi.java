@@ -3,7 +3,6 @@ package io.wdsj.hybridfix.api.forge;
 import io.wdsj.hybridfix.duck.patch.forge.IExplosionDetonateEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 
-@SuppressWarnings("unused")
 public class HybridFixForgeApi {
     protected HybridFixForgeApi() {
     }
