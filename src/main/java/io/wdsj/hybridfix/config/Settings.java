@@ -65,7 +65,7 @@ public class Settings {
 
     @Config.Comment("[EXPERIMENTAL] More Bukkit API implementation.")
     @Config.RequiresMcRestart
-    public static boolean experimentalBukkitApi = false;
+    public static boolean extraBukkitApi = false;
 
     @Config.Comment("Configuration for HybridFix mod patches.")
     @Config.RequiresMcRestart
