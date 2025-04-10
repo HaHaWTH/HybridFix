@@ -85,7 +85,7 @@ Gradle(Groovy DSL):
 compileOnly files("PATH-TO-JAR")
 ```
 
-APIs are located at `io.wdsj.hybridfix.api` package.
+APIs are located at `io.wdsj.hybridfix.api` and `io.wdsj.hybridfix.duck.api` package.
 
 ## Plugin Hooks
 Thanks to HybridFix internal plugin, we can hook into plugins from Forge side to provide more fixes.
@@ -106,3 +106,9 @@ Currently patched plugins:
 - `hybridfix.command.eraseentity.use` - Allow to access `/hybridfix eraseentity` command.
 
 **Note**: Commands and permissions are registered on Bukkit side, that means you can manage permissions with Bukkit permission plugins like LuckPerms.
+
+## License
+
+This mod is licensed under LGPL-2.1.
+
+It does not redistribute CraftBukkit or Minecraft code. The stripped MCP remapped CraftBukkit JAR in the repository is for development use only and not included in releases.

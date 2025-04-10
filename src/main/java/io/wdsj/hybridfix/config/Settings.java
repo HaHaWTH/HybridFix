@@ -63,6 +63,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean invertFakePlayerBlacklist = false;
 
+    @Config.Comment("[EXPERIMENTAL] More Bukkit API implementation.")
+    @Config.RequiresMcRestart
+    public static boolean extraBukkitApi = false;
+
     @Config.Comment("Configuration for HybridFix mod patches.")
     @Config.RequiresMcRestart
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
