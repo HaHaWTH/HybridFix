@@ -155,7 +155,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
             .name("add")
             .params(int.class, int.class)
             .accessible(true)
-            .methodDeclared();
+            .declaredMethod();
     @Unique private static final Field DropData_field_n = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .name("n")
             .accessible(true)
