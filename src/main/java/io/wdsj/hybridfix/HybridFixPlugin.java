@@ -23,6 +23,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
         {
             put("mixins.hybridfix.base.json", () -> true);
             put("mixins.api.bukkit.json", () -> Settings.extraBukkitApi);
+            put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
             put("mixins.fix.fakeplayer.json", () -> Settings.invertFakePlayerBlacklist || Settings.fakePlayerPluginBlacklist.length > 0);
             put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
             if (!HAS_CLEANROOM) {

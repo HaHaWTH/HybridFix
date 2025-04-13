@@ -121,6 +121,10 @@ repositories {
         name 'ModMaven'
         url 'https://modmaven.dev/'
     }
+    maven {
+        name 'Imanity'
+        url 'https://maven.imanity.dev/repository/imanity-libraries/'
+    }
 }
 
 dependencies {
@@ -131,6 +135,9 @@ dependencies {
     // Plugins
     compileOnly files("libs/plugin/Residence5.1.6.4.jar")
     compileOnly files("libs/plugin/worldguard-bukkit-6.2.2.jar")
+
+    // AntiXray SDK
+    shadow 'dev.imanity.antixray:antixray-sdk:1.0.3'
 
     // The twilight forest
     compileOnly rfg.deobf("curse.maven:the-twilight-forest-227639:3051450")

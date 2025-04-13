@@ -67,6 +67,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean extraBukkitApi = false;
 
+    @Config.Comment("SDK integration for RaytraceAntiXray.")
+    @Config.RequiresMcRestart
+    public static boolean rayTraceAntiXraySDK = false;
+
     @Config.Comment("Configuration for HybridFix mod patches.")
     @Config.RequiresMcRestart
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
