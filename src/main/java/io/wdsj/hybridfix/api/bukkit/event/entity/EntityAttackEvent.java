@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when an entity is attacked, even the entity damaged is in invulnerable time.
  * This event is a bukkit-side equivalent of Forge's {@link net.minecraftforge.event.entity.living.LivingAttackEvent}.
- * Fired earlier than the {@link org.bukkit.event.entity.EntityDamageEvent}, thus at this point the damage modifiers has not been applied yet.
+ * Fired earlier than the {@link org.bukkit.event.entity.EntityDamageEvent}, thus at this point the damage modifiers have not been applied yet.
  */
 @SuppressWarnings("unused")
 public class EntityAttackEvent extends EntityEvent implements Cancellable {
