@@ -54,7 +54,7 @@ public class ReflectionChain<T> {
      * Creates a new reflection chain for the class specified by its name.
      *
      * @param <T>       the type of the target class
-     * @param className the fully qualified name of the target class, must not be null
+     * @param className the full-qualified name of the target class, must not be null
      * @return a new reflection chain for the specified class
      */
     public static <T> IReflectionChain<T> fromClass(@NotNull String className) {
