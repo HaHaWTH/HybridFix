@@ -23,10 +23,11 @@ public abstract class WorldMixin {
             )
     )
     public IBlockState onSetBlockState(Chunk instance, BlockPos pos, IBlockState state, Operation<IBlockState> original) {
+        IBlockState val = original.call(instance, pos, state);
         AntiXrayAdapter adapter = AntiXraySDK.getAdapter();
         if (adapter != null) {
             adapter.callBlockChange(((IWorldGetter) this).getWorld(), pos.getX(), pos.getY(), pos.getZ(), CraftMagicNumbers.getMaterial(state.getBlock()));
         }
-        return original.call(instance, pos, state);
+        return val;
     }
 }
