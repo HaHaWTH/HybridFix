@@ -29,7 +29,7 @@ public class HybridFixServer {
 
     public static void onStartComplete() {
         if (Settings.enableMetrics) {
-            Metrics metrics = new Metrics(HybridFixInternalPlugin.getInstance(), 24273);
+            new Metrics(HybridFixInternalPlugin.getInstance(), 24273);
         }
         if (Settings.checkForUpdates) {
             Utils.commonWorker().submit(() -> {
