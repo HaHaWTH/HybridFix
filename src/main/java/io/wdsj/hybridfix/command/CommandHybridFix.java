@@ -114,12 +114,13 @@ public class CommandHybridFix extends Command {
                     sender.sendMessage(ChatColor.RED + "No entity found.");
                     return true;
                 }
+                final int dist = (int) Math.ceil(nmsPlayer.getDistance(target));
                 ResourceLocation rl = EntityList.getKey(target);
                 String name = rl != null ? rl.toString() : "unknown:unknown";
                 try {
                     if (forceEraseEntity) target.isDead = true;
                     else target.getDataManager().set(EntityLivingBase.HEALTH, 0.0F);
-                    sender.sendMessage(ChatColor.GREEN + "Erased entity with name " + name + ".");
+                    sender.sendMessage(ChatColor.GREEN + "Erased entity with name " + name + ". (" + dist + " blocks away)");
                 } catch (Exception e) {
                     sender.sendMessage(ChatColor.RED + "Failed to erase entity with name " + name + ".");
                     HybridFix.LOGGER.error("Failed to erase entity with name {}", name, e);
