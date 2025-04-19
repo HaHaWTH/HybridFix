@@ -42,7 +42,7 @@ public class ReflectionChain<T> {
      * Creates a new reflection chain for the specified class.
      *
      * @param <T>   the type of the target class
-     * @param clazz the target class, must not be null
+     * @param clazz the target class, which must not be null
      * @return a new reflection chain for the specified class
      */
     public static <T> IReflectionChain<T> fromClass(@NotNull Class<T> clazz) {
@@ -54,7 +54,7 @@ public class ReflectionChain<T> {
      * Creates a new reflection chain for the class specified by its name.
      *
      * @param <T>       the type of the target class
-     * @param className the full-qualified name of the target class, must not be null
+     * @param className the full-qualified name of the target class, which must not be null
      * @return a new reflection chain for the specified class
      */
     public static <T> IReflectionChain<T> fromClass(@NotNull String className) {
@@ -74,7 +74,7 @@ public class ReflectionChain<T> {
          * <p>
          * This is an intermediate operation.
          *
-         * @param name the name of the method or field, must not be null
+         * @param name the name of the method or field, which must not be null
          * @return this chain for further configuration
          * @throws NullPointerException if {@code name} is null
          */
@@ -225,7 +225,7 @@ public class ReflectionChain<T> {
          * <p>
          * This is an intermediate operation.
          *
-         * @param name the name of the method, must not be null
+         * @param name the name of the method, which must not be null
          * @return this chain for further configuration
          * @throws NullPointerException if {@code name} is null
          */
