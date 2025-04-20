@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-public class ItemStackUtils {
+public class FormatUtils {
     public static String itemStackToGiveCommand(ItemStack nmsItemStack) {
         ResourceLocation itemRl = Item.REGISTRY.getNameForObject(nmsItemStack.getItem());
         String itemNamespacedId = itemRl != null ? itemRl.toString() : "";
@@ -39,9 +39,27 @@ public class ItemStackUtils {
         fullBuilder.append("\u00A7e").append(rl != null ? rl.toString() : "unknown:unknown").append("\u00A7r, ");
         fullBuilder.append("\u00A7ddamage\u00A7r:\u00A7b ").append(itemStack.getItemDamage()).append("\u00A7r, ");
         NBTTagCompound tagCompound = itemStack.getTagCompound();
+
+        return fullBuilder.append(formatNBT(tagCompound)).toString();
+    }
+
+    private static void addNewLine(StringBuilder s, int indent) {
+        s.append("\n\u00A7e\u251c");
+        for(int j = 0; j < indent; j++) {
+            s.append("\u00A7e    ");
+        }
+    }
+
+    private static void addNewLineNoColor(StringBuilder s, int indent) {
+        s.append("\n\u251c");
+        for(int j = 0; j < indent; j++) {
+            s.append("    ");
+        }
+    }
+
+    public static String formatNBT(NBTTagCompound tagCompound) {
         if (tagCompound == null || tagCompound.isEmpty()) {
-            fullBuilder.append("\u00A7eNo NBT data");
-            return fullBuilder.toString();
+            return "\u00A7eNo NBT data";
         }
 
         String nbtString = tagCompound.toString();
@@ -142,23 +160,7 @@ public class ItemStackUtils {
                         stringBuilderNonColor.append(c);
                     }
             }
-
         }
-
-        return fullBuilder.append(stringBuilder).toString();
-    }
-
-    private static void addNewLine(StringBuilder s, int indent) {
-        s.append("\n\u00A7e\u251c");
-        for(int j = 0; j < indent; j++) {
-            s.append("\u00A7e    ");
-        }
-    }
-
-    private static void addNewLineNoColor(StringBuilder s, int indent) {
-        s.append("\n\u251c");
-        for(int j = 0; j < indent; j++) {
-            s.append("    ");
-        }
+        return stringBuilder.toString();
     }
 }

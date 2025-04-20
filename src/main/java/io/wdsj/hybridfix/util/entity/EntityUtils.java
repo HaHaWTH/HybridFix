@@ -11,6 +11,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,8 +42,12 @@ public class EntityUtils {
         return hardness >= 0.0F && !state.getBlock().isAir(state, world, pos) && state.getBlock().canEntityDestroy(state, world, pos, entity) && (!(entity instanceof EntityLivingBase) || ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) entity, pos, state));
     }
 
+    public static EntityLivingBase rayTraceLivingEntity(@NotNull Entity originEntity) {
+        return rayTraceLivingEntity(originEntity, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getEntityViewDistance());
+    }
+
     @Nullable
-    public static EntityLivingBase rayTraceEntity(@NotNull Entity originEntity, double maxDistance) {
+    public static EntityLivingBase rayTraceLivingEntity(@NotNull Entity originEntity, double maxDistance) {
         World world = originEntity.world;
         Vec3d start = originEntity.getPositionEyes(1.0F);
 
@@ -80,5 +85,21 @@ public class EntityUtils {
         }
 
         return closestEntity;
+    }
+
+    @Nullable
+    public static BlockPos rayTraceBlock(@NotNull Entity originEntity, double maxDistance, boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox) {
+        World world = originEntity.world;
+        Vec3d start = originEntity.getPositionEyes(1.0F);
+
+        Vec3d lookVec = originEntity.getLook(1.0F);
+
+        Vec3d end = start.add(lookVec.x * maxDistance, lookVec.y * maxDistance, lookVec.z * maxDistance);
+
+        RayTraceResult blockHit = world.rayTraceBlocks(start, end, stopOnLiquid, ignoreBlockWithoutBoundingBox, true);
+        if (blockHit != null && blockHit.typeOfHit == RayTraceResult.Type.BLOCK) {
+            return blockHit.getBlockPos();
+        }
+        return null;
     }
 }

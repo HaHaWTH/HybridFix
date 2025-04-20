@@ -28,6 +28,42 @@ public class Utils {
         }
     }
 
+    public static String classHierarchyToString(Class<?> startClass) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Class Hierarchy:\n");
+
+        Class<?> currentClass = startClass;
+        int level = 0;
+
+        while (currentClass != null) {
+            for (int i = 0; i < level; i++) {
+                sb.append("  ");
+            }
+            sb.append("-> ").append(currentClass.getName());
+
+            if (level == 0) {
+                Class<?>[] interfaces = currentClass.getInterfaces();
+                if (interfaces.length > 0) {
+                    sb.append(" (Implements: ");
+                    for (int i = 0; i < interfaces.length; i++) {
+                        sb.append(interfaces[i].getName());
+                        if (i < interfaces.length - 1) {
+                            sb.append(", ");
+                        }
+                    }
+                    sb.append(")");
+                }
+            }
+
+            sb.append("\n");
+
+            currentClass = currentClass.getSuperclass();
+            level++;
+        }
+
+        return sb.toString();
+    }
+
     public static boolean isClassExists(String className) {
         String classPath = className.replace('.', '/') + ".class";
         try {
