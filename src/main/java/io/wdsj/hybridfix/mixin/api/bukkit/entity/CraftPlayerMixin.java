@@ -4,6 +4,7 @@ import io.wdsj.hybridfix.api.bukkit.HybridFixBukkitApi;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.Packet;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -103,5 +104,13 @@ public abstract class CraftPlayerMixin {
     )
     public void spawnParticle(CallbackInfo ci) {
         if (this.getHandle().connection == null) ci.cancel();
+    }
+
+    // SkinsRestorer fix (Why did SR invoke this?)
+    @Unique
+    public void sendPacket(Packet<?> packet) {
+        if (this.getHandle().connection != null) {
+            this.getHandle().connection.sendPacket(packet);
+        }
     }
 }
