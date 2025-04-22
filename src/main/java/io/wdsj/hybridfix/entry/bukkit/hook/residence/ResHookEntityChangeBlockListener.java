@@ -17,7 +17,7 @@ public class ResHookEntityChangeBlockListener implements Listener {
         if (plugin == null) return;
         // disabling event on world
         if (plugin.isDisabledWorldListener(event.getBlock().getWorld())) return;
-        // Skip checks that have already been done by Residence
+        // Skip checks that Residence has already done
         Entity entity = event.getEntity();
         EntityType type = entity.getType();
         if (type == EntityType.ENDERMAN || type == EntityType.WITHER) return;
