@@ -99,7 +99,7 @@ public class ReflectionChain<T> {
          * @return a parameter chain for further configuration
          * @throws IllegalArgumentException if {@code paramType} is neither a {@link Class} nor a {@link String}
          */
-        IParameterChain<T> param(Object paramType);
+        IParameterChain<T> param(@NotNull Object paramType);
 
         /**
          * Adds multiple parameter types to the method or constructor signature.
@@ -110,7 +110,7 @@ public class ReflectionChain<T> {
          * @return a parameter chain for further configuration
          * @throws IllegalArgumentException if any element in {@code paramTypes} is neither a {@link Class} nor a {@link String}
          */
-        IParameterChain<T> params(Object... paramTypes);
+        IParameterChain<T> params(@NotNull Object... paramTypes);
 
         /**
          * Adds multiple parameter types to the method or constructor signature.
@@ -120,7 +120,7 @@ public class ReflectionChain<T> {
          * @param paramTypes the parameter types as {@link Class} objects
          * @return a parameter chain for further configuration
          */
-        IParameterChain<T> params(Class<?>... paramTypes);
+        IParameterChain<T> params(@NotNull Class<?>... paramTypes);
 
         /**
          * Adds multiple parameter types to the method or constructor signature.
@@ -130,7 +130,7 @@ public class ReflectionChain<T> {
          * @param paramTypes the parameter types as fully qualified class names
          * @return a parameter chain for further configuration
          */
-        IParameterChain<T> params(String... paramTypes);
+        IParameterChain<T> params(@NotNull String... paramTypes);
 
         /**
          * Retrieves a public method with the specified name and no parameters.
@@ -250,7 +250,7 @@ public class ReflectionChain<T> {
          * @return this chain for further configuration
          * @throws IllegalArgumentException if {@code paramType} is neither a {@link Class} nor a {@link String}
          */
-        IParameterChain<T> param(Object paramType);
+        IParameterChain<T> param(@NotNull Object paramType);
 
         /**
          * Adds multiple parameter types to the method or constructor signature.
@@ -261,7 +261,7 @@ public class ReflectionChain<T> {
          * @return this chain for further configuration
          * @throws IllegalArgumentException if any element in {@code paramTypes} is neither a {@link Class} nor a {@link String}
          */
-        IParameterChain<T> params(Object... paramTypes);
+        IParameterChain<T> params(@NotNull Object... paramTypes);
 
         /**
          * Adds multiple parameter types to the method or constructor signature.
@@ -271,7 +271,7 @@ public class ReflectionChain<T> {
          * @param paramTypes the parameter types as {@link Class} objects
          * @return this chain for further configuration
          */
-        IParameterChain<T> params(Class<?>... paramTypes);
+        IParameterChain<T> params(@NotNull Class<?>... paramTypes);
 
         /**
          * Adds multiple parameter types to the method or constructor signature.
@@ -281,7 +281,7 @@ public class ReflectionChain<T> {
          * @param paramTypes the parameter types as fully qualified class names
          * @return this chain for further configuration
          */
-        IParameterChain<T> params(String... paramTypes);
+        IParameterChain<T> params(@NotNull String... paramTypes);
 
         /**
          * Retrieves a public method with the specified name and parameters.
@@ -368,7 +368,7 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> param(Object paramType) {
+        public IParameterChain<T> param(@NotNull Object paramType) {
             checkNotTerminated();
             ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible);
             chain.param(paramType);
@@ -578,8 +578,9 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> param(Object paramType) {
+        public IParameterChain<T> param(@NotNull Object paramType) {
             checkNotTerminated();
+            Objects.requireNonNull(paramType, "Parameter type cannot be null");
             if (paramType instanceof Class<?> || paramType instanceof String) {
                 this.parameterTypes.add(paramType);
             } else {

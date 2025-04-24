@@ -14,7 +14,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Simple Difficulty, ToughAsNails(And any other similar mods) thirst is not getting reset on player respawn[(Luohuayu/CatServer#536)](https://github.com/Luohuayu/CatServer/issues/536)[(MohistMC/Mohist#2905)](https://github.com/MohistMC/Mohist/issues/2905)
 - Ring dupe bug in The Betweenlands mod[(Luohuayu/CatServer#204)](https://github.com/Luohuayu/CatServer/issues/204)
 - Simulate vanilla player respawn, most dupe bugs on player death should be fixed
-- Fix Twilight Forest saplings can bypass anti-grief plugin protection bug
+- Fix Twilight Forest saplings can bypass the anti-grief plugin protection bug
 - Fix Twilight Forest entities(e.g. Naga) can break blocks in protected areas
 - Fix Twilight Forest Chain with Block can break blocks in protected areas
 - Fix Thaumcraft 6 taint can spread into protected areas
@@ -36,7 +36,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 
 ## Features
 
-- Auto override Mohist's crappy built-in explosion handling with our own method.
+- Auto overrides Mohist's crappy built-in explosion handling with our own method.
 - Bridge Forge permission processing to Bukkit.
 - Skip firing event if no listeners registered.
 - Disable Timings for less performance overhead.
