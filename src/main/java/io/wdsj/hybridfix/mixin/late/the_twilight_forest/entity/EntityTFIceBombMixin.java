@@ -49,7 +49,7 @@ public abstract class EntityTFIceBombMixin {
         assert Blocks.ICE != null;
         final byte data = (byte) Blocks.ICE.getMetaFromState(state);
         blockState.setRawData(data);
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter)this).getBukkitEntity(), bBlock, Material.ICE, data);
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter) this).getBukkitEntity(), bBlock, Material.ICE, data);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             blockState.update(true);
@@ -124,7 +124,7 @@ public abstract class EntityTFIceBombMixin {
         assert Blocks.SNOW_LAYER != null;
         final byte data = (byte) Blocks.SNOW_LAYER.getMetaFromState(state);
         blockState.setRawData(data);
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter)this).getBukkitEntity(), bBlock, Material.SNOW, data);
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter) this).getBukkitEntity(), bBlock, Material.SNOW, data);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             blockState.update(true);

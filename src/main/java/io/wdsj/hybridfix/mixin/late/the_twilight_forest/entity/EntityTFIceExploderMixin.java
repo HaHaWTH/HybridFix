@@ -51,8 +51,10 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
         BlockState blockState = bBlock.getState();
         blockState.setType(Material.STAINED_GLASS);
         final byte data = (byte) Blocks.STAINED_GLASS.getMetaFromState(state);
+        // noinspection deprecation
         blockState.setRawData(data);
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter)this).getBukkitEntity(), bBlock, Material.STAINED_GLASS, data);
+        // noinspection deprecation
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter) this).getBukkitEntity(), bBlock, Material.STAINED_GLASS, data);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             blockState.update(true);
@@ -82,8 +84,10 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
         BlockState blockState = bBlock.getState();
         blockState.setType(Material.STAINED_CLAY);
         final byte data = (byte) Blocks.STAINED_HARDENED_CLAY.getMetaFromState(state);
+        // noinspection deprecation
         blockState.setRawData(data);
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter)this).getBukkitEntity(), bBlock, Material.STAINED_CLAY, data);
+        // noinspection deprecation
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter) this).getBukkitEntity(), bBlock, Material.STAINED_CLAY, data);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             blockState.update(true);
