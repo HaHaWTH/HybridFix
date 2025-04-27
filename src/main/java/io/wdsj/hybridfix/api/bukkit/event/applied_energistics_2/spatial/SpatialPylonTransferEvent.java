@@ -9,6 +9,9 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This event is fired when a Spatial Pylon attempts to swap a region.
  * Listeners can cancel this event to stop the transition.
@@ -27,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * min .
  * </pre>
  * In this diagram, {@code min} is one block outside the bottom-front-left corner, and {@code max} is one block outside the top-back-right corner of the cube.
- * The actual transferred region is the inner cube enclosed within these outer bounds, you may want to offset them by 1 when using these locations.
+ * The actual transferred region is the inner cube enclosed within these outer bounds; you may want to offset them by 1 when using these locations.
  */
 @SuppressWarnings("unused")
 @ModEvent("appliedenergistics2")
@@ -37,6 +40,7 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
     private final World world;
     private final Location min;
     private final Location max;
+    private List<Location> affectedLocations;
 
     @ApiStatus.Internal
     public SpatialPylonTransferEvent(World world, Location min, Location max) {
@@ -75,6 +79,43 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
     @NotNull
     public Location getMax() {
         return max;
+    }
+
+    /**
+     * Gets a list that contains all block locations that will be transferred.
+     * The result is lazily computed.
+     * Any modifications to the list will not be reflected in the final transfer,
+     * but other plugins will see the modified list.
+     *
+     * @return a list of locations of all the blocks that will be transferred.
+     */
+    public List<Location> getAffectedLocations() {
+        if (affectedLocations != null) {
+            return affectedLocations;
+        }
+        Location minLocation = this.min;
+        Location maxLocation = this.max;
+        List<Location> locations = new ArrayList<>();
+        final int minX = minLocation.getBlockX() + 1, minY = minLocation.getBlockY() + 1, minZ = minLocation.getBlockZ() + 1;
+        final int maxX = maxLocation.getBlockX() - 1, maxY = maxLocation.getBlockY() - 1, maxZ = maxLocation.getBlockZ() - 1;
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    locations.add(new Location(world, x, y, z));
+                }
+            }
+        }
+        affectedLocations = locations;
+        return affectedLocations;
+    }
+
+    /**
+     * Checks if the affected locations have been computed.
+     *
+     * @return true if the affected locations have been computed, false otherwise.
+     */
+    public boolean isLocationComputed() {
+        return affectedLocations != null;
     }
 
     public boolean isCancelled() {

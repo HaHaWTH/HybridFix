@@ -9,6 +9,8 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.List;
+
 public class ResHookAE2SpatialPylonListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onSpatialPylonTransfer(SpatialPylonTransferEvent event) {
@@ -17,23 +19,12 @@ public class ResHookAE2SpatialPylonListener implements Listener {
         World world = event.getWorld();
         // disabling event on world
         if (plugin.isDisabledWorldListener(world)) return;
-        Location minLocation = event.getMin();
-        Location maxLocation = event.getMax();
-        final int minX = minLocation.getBlockX() + 1, minY = minLocation.getBlockY() + 1, minZ = minLocation.getBlockZ() + 1;
-        final int maxX = maxLocation.getBlockX() - 1, maxY = maxLocation.getBlockY() - 1, maxZ = maxLocation.getBlockZ() - 1;
-        final Location temp = new Location(world, minX, minY, minZ);
-        for (int x = minX; x <= maxX; x++) {
-            for (int y = minY; y <= maxY; y++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    temp.setX(x);
-                    temp.setY(y);
-                    temp.setZ(z);
-                    FlagPermissions perms = plugin.getPermsByLoc(temp);
-                    if (!perms.has(Flags.build, true)) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                }
+        List<Location> locations = event.getAffectedLocations();
+        for (Location location : locations) {
+            FlagPermissions perms = plugin.getPermsByLoc(location);
+            if (!perms.has(Flags.build, true)) {
+                event.setCancelled(true);
+                return;
             }
         }
     }
