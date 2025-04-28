@@ -40,6 +40,6 @@ public abstract class AbstractAttributeMapMixin {
             )
     )
     public boolean modifyRegisterAttribute(boolean original, IAttribute attribute) {
-        return false; // We have already checked in wrap method above
+        return false; // We have already checked in the wrap method above
     }
 }
