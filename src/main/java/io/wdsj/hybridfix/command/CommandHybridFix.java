@@ -157,19 +157,31 @@ public class CommandHybridFix extends Command {
         sender.spigot().sendMessage(message);
     }
 
-    private void handleDumpEntity(CommandSender sender, String[] ignored) {
+    private void handleDumpEntity(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(net.md_5.bungee.api.ChatColor.RED + "Only players can use this command.");
             return;
         }
         EntityPlayer nmsPlayer = ((CraftPlayer) sender).getHandle();
-        EntityLivingBase target = EntityUtils.rayTraceLivingEntity(nmsPlayer);
+        EntityLivingBase target;
+        String name;
+        if (args.length > 1 && args[1].toLowerCase(Locale.ROOT).equals("self")) {
+            target = nmsPlayer;
+        } else {
+            target = EntityUtils.rayTraceLivingEntity(nmsPlayer);
+        }
         if (target == null) {
             sender.sendMessage(net.md_5.bungee.api.ChatColor.RED + "No entity found.");
             return;
         }
-        ResourceLocation rl = EntityList.getKey(target);
-        String name = rl != null ? rl.toString() : "unknown:unknown";
+
+        if (target instanceof EntityPlayer) {
+            name = target.getName();
+        } else {
+            ResourceLocation rl = EntityList.getKey(target);
+            name = rl != null ? rl.toString() : "unknown:unknown";
+        }
+
         BlockPos pos = target.getPosition();
         Class<? extends Entity> clazz = target.getClass();
 
