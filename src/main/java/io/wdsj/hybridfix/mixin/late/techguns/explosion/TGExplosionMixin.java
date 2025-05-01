@@ -36,7 +36,7 @@ public abstract class TGExplosionMixin {
         vanillaAffectedBlocks.addAll(this.affectedBlockPositions.keySet());
 
         ExplosionEvent.Detonate event = new ExplosionEvent.Detonate(world, explosion, list);
-        HybridFixForgeApi.getApi().setVanillaExplosionDetonateEvent(event, false);
+        HybridFixForgeApi.getApi().setVanillaExplosionEventDetonate(event, false);
         MinecraftForge.EVENT_BUS.post(event);
 
         Set<BlockPos> finalAffectedBlocks = new ObjectOpenHashSet<>(explosion.getAffectedBlockPositions());

@@ -262,7 +262,7 @@ public abstract class ExplosionIC2Mixin extends Explosion {
                     .collect(Collectors.toList());
 
             net.minecraftforge.event.world.ExplosionEvent.Detonate detonateEvent = new net.minecraftforge.event.world.ExplosionEvent.Detonate(world, this, affectedEntities);
-            HybridFixForgeApi.getApi().setVanillaExplosionDetonateEvent(detonateEvent, false);
+            HybridFixForgeApi.getApi().setVanillaExplosionEventDetonate(detonateEvent, false);
             MinecraftForge.EVENT_BUS.post(detonateEvent);
 
             Set<BlockPos> finalAffectedBlocks = new ObjectOpenHashSet<>(getAffectedBlockPositions());

@@ -24,7 +24,7 @@ import java.util.Objects;
  * <p>
  * Example usage:
  * <pre>
- * Constructor<String> constructor = ReflectionChain.fromClass(String.class)
+ * Constructor&lt;String&gt; constructor = ReflectionChain.fromClass(String.class)
  *     .params(byte[].class)
  *     .constructor(); // The type information will be kept
  * String str = constructor.newInstance(new byte[]{65, 66, 67});

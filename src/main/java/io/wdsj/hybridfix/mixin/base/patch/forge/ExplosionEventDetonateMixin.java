@@ -1,12 +1,12 @@
 package io.wdsj.hybridfix.mixin.base.patch.forge;
 
-import io.wdsj.hybridfix.duck.patch.forge.IExplosionDetonateEvent;
+import io.wdsj.hybridfix.duck.patch.forge.IExplosionEventDetonate;
 import net.minecraftforge.event.world.ExplosionEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ExplosionEvent.Detonate.class)
-public abstract class ExplosionDetonateEventMixin implements IExplosionDetonateEvent {
+public abstract class ExplosionEventDetonateMixin implements IExplosionEventDetonate {
     @Unique
     private boolean hybridFix$vanilla = true;
 

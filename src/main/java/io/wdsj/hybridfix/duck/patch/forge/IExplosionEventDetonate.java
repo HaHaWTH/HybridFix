@@ -1,6 +1,6 @@
 package io.wdsj.hybridfix.duck.patch.forge;
 
-public interface IExplosionDetonateEvent {
+public interface IExplosionEventDetonate {
     default boolean hybridFix$isVanilla() {
         return true;
     }

@@ -9,6 +9,6 @@
     "duck.EntityMixin",
     "duck.WorldMixin",
     "patch.forge.FakePlayerMixin",
-    "patch.forge.ExplosionDetonateEventMixin"
+    "patch.forge.ExplosionEventDetonateMixin"
   ]
 }
