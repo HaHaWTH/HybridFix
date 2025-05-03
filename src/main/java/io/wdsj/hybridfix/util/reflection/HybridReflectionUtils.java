@@ -32,12 +32,6 @@ public class HybridReflectionUtils {
         setBooleanField(FIELD_WORLD_CAPTURE_TREE_GENERATION, world, value);
     }
 
-    @SuppressWarnings("unused")
-    public static TreeType getTreeType() {
-        Preconditions.checkNotNull(FIELD_BLOCK_SAPLING_TREE_TYPE);
-        return (TreeType) getFieldValue(FIELD_BLOCK_SAPLING_TREE_TYPE, null);
-    }
-
     public static void setTreeType(TreeType treeType) {
         Preconditions.checkNotNull(FIELD_BLOCK_SAPLING_TREE_TYPE);
         setField(FIELD_BLOCK_SAPLING_TREE_TYPE, null, treeType);
