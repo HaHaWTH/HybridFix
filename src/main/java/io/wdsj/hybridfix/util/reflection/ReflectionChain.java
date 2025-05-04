@@ -57,7 +57,7 @@ public class ReflectionChain<T> {
      * @param className the full-qualified name of the target class, which must not be null
      * @return a new reflection chain for the specified class
      */
-    public static <T> IReflectionChain<T> fromClass(@NotNull String className) {
+    public static <T> IReflectionChain<?> fromClass(@NotNull String className) {
         Objects.requireNonNull(className, "The class name must not be null");
         return new ReflectionChainImpl<>(null, className);
     }
