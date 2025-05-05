@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Unique;
 /**
  * Implemented by {@link CraftBlockMixin}.
  */
+@SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(value = Block.class, remap = false)
 public interface BlockMixin {
     @Unique

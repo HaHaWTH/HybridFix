@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Works along with {@link BlockMixin}
  */
+@SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(value = CraftBlock.class, remap = false)
 public abstract class CraftBlockMixin implements IBlockInvoker {
     // @formatter:off
