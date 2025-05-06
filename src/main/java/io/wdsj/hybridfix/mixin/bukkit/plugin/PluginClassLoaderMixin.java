@@ -14,7 +14,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader implements I
     }
 
     @Unique
-    @SuppressWarnings("all")
+    @SuppressWarnings("AddedMixinMembersNamePattern")
     public Class<?> defineClassExposed(String name, byte[] bytes) {
         return defineClass(name, bytes, 0, bytes.length);
     }
