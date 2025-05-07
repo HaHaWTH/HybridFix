@@ -10,6 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,8 +85,7 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
     /**
      * Gets a list that contains all block locations that will be transferred.
      * The result is lazily computed.
-     * Any modifications to the list will not be reflected in the final transfer,
-     * but other plugins will see the modified list.
+     * Any modifications to the list will throw UnsupportedOperationException.
      *
      * @return a list of locations of all the blocks that will be transferred.
      */
@@ -105,7 +105,7 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
                 }
             }
         }
-        affectedLocations = locations;
+        affectedLocations = Collections.unmodifiableList(locations);
         return affectedLocations;
     }
 
