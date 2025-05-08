@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.api.bukkit.event.applied_energistics_2.spatial;
 
 import io.wdsj.hybridfix.api.annotation.ModEvent;
+import io.wdsj.hybridfix.util.ImmutableLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.Cancellable;
@@ -85,7 +86,7 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
     /**
      * Gets a list that contains all block locations that will be transferred.
      * The result is lazily computed.
-     * Any modifications to the list will throw UnsupportedOperationException.
+     * Any modifications to the list will throw {@link UnsupportedOperationException}.
      *
      * @return a list of locations of all the blocks that will be transferred.
      */
@@ -101,7 +102,7 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    locations.add(new Location(world, x, y, z));
+                    locations.add(ImmutableLocation.fromLocation(new Location(world, x, y, z)));
                 }
             }
         }
