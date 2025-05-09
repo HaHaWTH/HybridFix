@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class HybridFixInternalPlugin extends PluginBase {
     private boolean enabled = true;
     private PluginLoader loader;

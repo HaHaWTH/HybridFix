@@ -38,6 +38,26 @@ public class ImmutableLocation extends Location {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public Location multiply(double m) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Location zero() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Location subtract(Location vec) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Location subtract(double x, double y, double z) {
+        throw new UnsupportedOperationException();
+    }
+
     public static ImmutableLocation fromLocation(Location location) {
         return new ImmutableLocation(location.getWorld(), location.getX(), location.getY(), location.getZ());
     }
