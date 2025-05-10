@@ -33,6 +33,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Add entity blacklist/whitelist to Applied Energistics 2 Spatial Pylon
 - Fix webs of InfernalMobs can spawn in protected areas
 - Fix EpicSiegeMod mob AIs can grief in protected areas
+- Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing
 
 ## Features
 

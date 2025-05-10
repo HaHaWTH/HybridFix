@@ -151,6 +151,10 @@ public class Settings {
         @Config.Comment("Patch mob ais of Epic Siege Mod can bypass grief protection.")
         @Config.RequiresMcRestart
         public boolean patchEpicSiegeModAi = false;
+
+        @Config.Comment("Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing")
+        @Config.RequiresMcRestart
+        public boolean disableIndustrialForegoingBlackholeControllerRecipe = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart
