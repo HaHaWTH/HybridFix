@@ -35,6 +35,7 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -53,6 +54,7 @@ public class CommandHybridFix extends Command {
         this.description = "HybridFix commands";
         this.usageMessage = "/hybridfix dumpitem|dumpblock|dumpentity|eraseentity|version";
         setPermission("hybridfix.command.use");
+        setAliases(Collections.singletonList("hf"));
     }
 
     @Override
