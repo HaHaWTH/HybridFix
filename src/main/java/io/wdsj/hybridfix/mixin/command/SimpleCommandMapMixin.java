@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.mixin.command;
 
+import io.wdsj.hybridfix.command.CommandMods;
 import io.wdsj.hybridfix.command.CommandHybridFix;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
@@ -22,5 +23,7 @@ public abstract class SimpleCommandMapMixin {
     public void registerHybridFixCommand(CallbackInfo ci) {
         CommandHybridFix command = new CommandHybridFix("hybridfix");
         register("hybridfix", command);
+        CommandMods commandMods = new CommandMods("mods");
+        register("hybridfix", commandMods);
     }
 }
