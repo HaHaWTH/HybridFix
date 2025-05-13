@@ -31,6 +31,7 @@ import java.util.Random;
 public abstract class BlockTFSaplingMixin {
     @Unique
     private boolean hybridFix$isBoneMeal = true;
+
     @Inject(
             method = "updateTick",
             at = @At(
@@ -54,7 +55,7 @@ public abstract class BlockTFSaplingMixin {
         HybridReflectionUtils.setCaptureTreeGeneration(worldIn, false);
         hybridFix$isBoneMeal = true;
         if (!worldIn.capturedBlockSnapshots.isEmpty()) {
-            Location location = new Location(((IWorldGetter)worldIn).getWorld(), pos.getX(), pos.getY(), pos.getZ());
+            Location location = new Location(((IWorldGetter) worldIn).getWorld(), pos.getX(), pos.getY(), pos.getZ());
             List<BlockState> blockstates = new ObjectArrayList<>(worldIn.capturedBlockSnapshots.size());
             for (BlockSnapshot snapshot : worldIn.capturedBlockSnapshots) {
                 blockstates.add(HybridReflectionUtils.newBlockStateFromBlockSnapshot(snapshot));
