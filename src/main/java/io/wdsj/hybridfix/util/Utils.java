@@ -10,7 +10,7 @@ public class Utils {
     private static final boolean hasBukkit = isClassExists("org.bukkit.Bukkit");
     private static final ExecutorService commonWorker = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
-                    .setNameFormat("HybridFix common worker-%d")
+                    .setNameFormat("HybridFix common worker - %d")
                     .setPriority(Thread.NORM_PRIORITY - 2)
                     .build()
     );
