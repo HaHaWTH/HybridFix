@@ -1,0 +1,15 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.late.witchery",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "util.EntityUtilMixin",
+    "infusion.symbol.AttrahoSymbolEffectMixin",
+    "infusion.symbol.ExpelliarmusSymbolEffectMixin",
+    "infusion.symbol.FlipendoSymbolEffectMixin",
+    "infusion.symbol.AccioSymbolEffectMixin"
+  ]
+}

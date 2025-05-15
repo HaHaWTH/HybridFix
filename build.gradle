@@ -132,6 +132,9 @@ dependencies {
     compileOnly files("libs/plugin/Residence5.1.6.4.jar")
     compileOnly files("libs/plugin/worldguard-bukkit-6.2.2.jar")
 
+    // Witchery
+    compileOnly rfg.deobf(files("libs/mod/WitcheryResurrected-1.12.2-0.5.2.4-forge-stripped.jar"))
+
     // The twilight forest
     compileOnly rfg.deobf("curse.maven:the-twilight-forest-227639:3051450")
 

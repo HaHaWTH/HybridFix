@@ -155,6 +155,10 @@ public class Settings {
         @Config.Comment("Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing")
         @Config.RequiresMcRestart
         public boolean disableIndustrialForegoingBlackholeControllerRecipe = false;
+
+        @Config.Comment("Patch Witchery symbol effects to make them safer to use.")
+        @Config.RequiresMcRestart
+        public boolean patchWitcherySymbolEffect = false;
     }
     @Config.Comment("Configuration for HybridFix built-in bukkit plugin.")
     @Config.RequiresMcRestart

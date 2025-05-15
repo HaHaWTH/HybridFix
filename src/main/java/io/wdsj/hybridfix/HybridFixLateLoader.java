@@ -5,6 +5,10 @@ import io.wdsj.hybridfix.config.Settings;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
+import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
+import net.minecraftforge.fml.common.versioning.VersionRange;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
@@ -15,6 +19,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import static io.wdsj.hybridfix.HybridFix.IS_HYBRID_ENV;
+import static io.wdsj.hybridfix.HybridFix.LOGGER;
 
 @SuppressWarnings("unused")
 public class HybridFixLateLoader implements ILateMixinLoader {
@@ -33,7 +38,18 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             // Tconstruct patches
             put("mixins.tconstruct.tools.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTconstructToolDamage);
             // So Many Enchantments patches
-            put("mixins.so_many_enchantments.disarm.json", () -> isModLoaded("somanyenchantments") && Settings.modPatchSettings.patchSoManyEnchantmentsDisarm);
+            put("mixins.so_many_enchantments.disarm.json", () -> {
+                String modId = "somanyenchantments";
+                if (isModLoaded(modId) && Settings.modPatchSettings.patchSoManyEnchantmentsDisarm) {
+                    String range = "[1.0.0,)";
+                    if (isModVersionInRange(modId, range)) {
+                        return true;
+                    } else {
+                        LOGGER.warn("So Many Enchantments version mismatch! Disabling patch. (Expected version is {})", range);
+                    }
+                }
+                return false;
+            });
             // Botania patches
             put("mixins.botania.item.json", () -> isModLoaded("botania") && Settings.modPatchSettings.patchBotaniaLens);
             put("mixins.botania.block.json", () -> isModLoaded("botania") && Settings.modPatchSettings.patchBotaniaBlock);
@@ -68,6 +84,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.epic_siege_mod.grief.json", () -> isModLoaded("epicsiegemod") && Settings.modPatchSettings.patchEpicSiegeModAi);
             // Industrial Foregoing patches
             put("mixins.industrial_foregoing.block.json", () -> isModLoaded("industrialforegoing") && Settings.modPatchSettings.disableIndustrialForegoingBlackholeControllerRecipe);
+            // Witchery patches
+            put("mixins.witchery.symbol.json", () -> isModLoaded("witchery") && Settings.modPatchSettings.patchWitcherySymbolEffect);
         }
     });
 
@@ -91,5 +109,22 @@ public class HybridFixLateLoader implements ILateMixinLoader {
 
     private static boolean isModLoaded(String modId) {
         return Loader.isModLoaded(modId);
+    }
+
+    private static boolean isModVersionInRange(String modId, String versionRange) {
+        ModContainer modContainer = FMLCommonHandler.instance().findContainerFor(modId);
+        if (modContainer == null) {
+            return false;
+        }
+        String actualVersionString = modContainer.getVersion();
+        ArtifactVersion actualVersion = new DefaultArtifactVersion(actualVersionString);
+
+        try {
+            VersionRange requiredRange = VersionRange.createFromVersionSpec(versionRange);
+            return requiredRange.containsVersion(actualVersion);
+        } catch (InvalidVersionSpecificationException e) {
+            HybridFix.LOGGER.error("Invalid version range specification: {}", versionRange, e);
+            return false;
+        }
     }
 }
