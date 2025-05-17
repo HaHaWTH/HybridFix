@@ -121,6 +121,16 @@ repositories {
         name 'ModMaven'
         url 'https://modmaven.dev/'
     }
+    ivy {
+        url "https://witchery-api.msrandom.net/download/"
+        patternLayout {
+            artifact "[organisation]/[artifact]-[revision](-[classifier])(.[ext])"
+        }
+        content {
+            includeGroup "WitcheryResurrected0.5.2Hotfix4"
+        }
+        metadataSources { artifact() }
+    }
 }
 
 dependencies {
@@ -133,7 +143,7 @@ dependencies {
     compileOnly files("libs/plugin/worldguard-bukkit-6.2.2.jar")
 
     // Witchery
-    compileOnly rfg.deobf(files("libs/mod/WitcheryResurrected-1.12.2-0.5.2.4-forge-stripped.jar"))
+    compileOnly rfg.deobf('WitcheryResurrected0.5.2Hotfix4:WitcheryResurrected:1.12.2-0.5.2.4:forge-all')
 
     // The twilight forest
     compileOnly rfg.deobf("curse.maven:the-twilight-forest-227639:3051450")
