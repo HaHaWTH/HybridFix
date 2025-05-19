@@ -2,10 +2,19 @@ package io.wdsj.hybridfix.util;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 
+/**
+ * A location that cannot be modified.
+ */
+@SuppressWarnings("unused")
 public class ImmutableLocation extends Location {
     protected ImmutableLocation(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    protected ImmutableLocation(World world, double x, double y, double z, float yaw, float pitch) {
+        super(world, x, y, z, yaw, pitch);
     }
 
     @Override
@@ -58,7 +67,35 @@ public class ImmutableLocation extends Location {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public Location subtract(Vector vec) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Location add(Location vec) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Location add(Vector vec) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Location add(double x, double y, double z) {
+        throw new UnsupportedOperationException();
+    }
+
     public static ImmutableLocation fromLocation(Location location) {
-        return new ImmutableLocation(location.getWorld(), location.getX(), location.getY(), location.getZ());
+        return new ImmutableLocation(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+    }
+
+    public static ImmutableLocation create(World world, double x, double y, double z) {
+        return new ImmutableLocation(world, x, y, z);
+    }
+
+    public static ImmutableLocation create(World world, double x, double y, double z, float yaw, float pitch) {
+        return new ImmutableLocation(world, x, y, z, yaw, pitch);
     }
 }

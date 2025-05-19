@@ -19,7 +19,7 @@ public class ResHookBlockFormListener implements Listener {
         Residence plugin = Residence.getInstance();
         if (plugin == null) return;
         if (plugin.isDisabledWorldListener(event.getBlock().getWorld())) return;
-        // Skip checks that have already been done by Residence
+        // Skip checks that Residence has already done
         if (event instanceof EntityBlockFormEvent && ((EntityBlockFormEvent) event).getEntity() instanceof Snowman) return;
         final BlockState newState = event.getNewState();
         Material newType = newState.getType();

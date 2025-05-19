@@ -102,7 +102,7 @@ public class SpatialPylonTransferEvent extends Event implements Cancellable {
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    locations.add(ImmutableLocation.fromLocation(new Location(world, x, y, z)));
+                    locations.add(ImmutableLocation.create(world, x, y, z));
                 }
             }
         }
