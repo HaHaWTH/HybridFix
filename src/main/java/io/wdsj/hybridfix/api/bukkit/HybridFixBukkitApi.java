@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.api.bukkit;
 
 import net.minecraftforge.common.util.FakePlayer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.Player;
 
 public class HybridFixBukkitApi {
@@ -17,12 +17,12 @@ public class HybridFixBukkitApi {
     }
 
     /**
-     * Checks if the given player is a fake player.
+     * Checks if the given player is a Forge fake player.
      *
      * @param player The player to check.
      * @return {@code true} if the player is a fake player instance, {@code false} otherwise.
      */
     public boolean isFakePlayer(Player player) {
-        return ((CraftPlayer) player).getHandle() instanceof FakePlayer;
+        return ((CraftEntity) player).getHandle() instanceof FakePlayer;
     }
 }

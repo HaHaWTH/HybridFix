@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 import static org.bukkit.event.block.Action.*;
 
-@SuppressWarnings({"unused", "ConstantConditions"})
+@SuppressWarnings({"unused", "ConstantConditions", "AddedMixinMembersNamePattern"})
 @Mixin(value = Action.class, remap = false)
 public abstract class ActionMixin implements IActionInvoker {
     @Unique
