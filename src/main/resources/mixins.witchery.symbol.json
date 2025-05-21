@@ -8,8 +8,8 @@
   "mixins": [
     "util.EntityUtilMixin",
     "infusion.symbol.AttrahoSymbolEffectMixin",
-    "infusion.symbol.ExpelliarmusSymbolEffectMixin",
-    "infusion.symbol.FlipendoSymbolEffectMixin",
+    "infusion.symbol.ExpelliarmusSymbolEffect_onCollision_Inner1_Mixin",
+    "infusion.symbol.FlipendoSymbolEffect_onCollision_Inner1_Mixin",
     "infusion.symbol.AccioSymbolEffectMixin"
   ]
 }
