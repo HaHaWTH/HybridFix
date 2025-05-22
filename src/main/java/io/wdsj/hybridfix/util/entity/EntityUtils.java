@@ -15,6 +15,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,10 +36,15 @@ public class EntityUtils {
     public static boolean canDestroyBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
         Block block = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        // noinspection deprecation
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
+        Event event;
+        if (bEntity instanceof Player) {
+            event = new BlockBreakEvent(block, (Player) bEntity);
+        } else {
+            // noinspection deprecation
+            event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
+        }
         Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
+        if (((Cancellable) event).isCancelled()) {
             return false;
         }
         float hardness = state.getBlockHardness(world, pos);

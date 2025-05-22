@@ -1,38 +1,39 @@
 package io.wdsj.hybridfix;
 
+import io.wdsj.hybridfix.proxy.CommonProxy;
 import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(modid = HybridFix.MOD_ID, name = HybridFix.MOD_NAME, version = HybridFix.VERSION, dependencies = HybridFix.DEPENDENCY, serverSideOnly = true, acceptableRemoteVersions = "*")
+@Mod(modid = HybridFix.MOD_ID, name = HybridFix.MOD_NAME, version = HybridFix.VERSION, dependencies = HybridFix.DEPENDENCY, acceptableRemoteVersions = "*")
 public class HybridFix {
     public static final String MOD_ID = Tags.MOD_ID;
     public static final String MOD_NAME = Tags.MOD_NAME;
     public static final String VERSION = Tags.VERSION;
     public static final String DEPENDENCY = "required-after:mixinbooter@[10.1,);required-after:configanytime;";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
-    public static final boolean IS_HYBRID_ENV = Utils.hasBukkit();
+    public static final boolean IS_HYBRID_ENV = Utils.isClassExists("org.bukkit.Bukkit");
     public static final boolean HAS_CLEANROOM = Utils.isClassExists("com.cleanroommc.common.CleanroomContainer");
+    @SidedProxy(
+            clientSide = "io.wdsj.hybridfix.proxy.ClientProxy",
+            serverSide = "io.wdsj.hybridfix.proxy.ServerProxy",
+            modId = MOD_ID
+    )
+    public static CommonProxy proxy;
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
-        if (!IS_HYBRID_ENV) {
-            LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to work properly, disabling.");
-            return;
-        }
-        HybridFixServer.preInit();
+        proxy.preInit(event);
     }
 
 
     @Mod.EventHandler
     public void onServerStartComplete(FMLServerStartedEvent event) {
-        if (!IS_HYBRID_ENV) {
-            return;
-        }
-        HybridFixServer.onStartComplete();
+        proxy.onServerStartComplete(event);
     }
 }

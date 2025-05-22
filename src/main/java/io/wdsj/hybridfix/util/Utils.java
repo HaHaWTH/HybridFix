@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 
 public class Utils {
     public static final boolean isMohist = isClassExists("com.mohistmc.MohistMC");
-    private static final boolean hasBukkit = isClassExists("org.bukkit.Bukkit");
     private static final ExecutorService commonWorker = Executors.newCachedThreadPool(
             new ThreadFactoryBuilder()
                     .setNameFormat("HybridFix common worker - %d")
@@ -80,9 +79,5 @@ public class Utils {
             }
         }
         return false;
-    }
-
-    public static boolean hasBukkit() {
-        return hasBukkit;
     }
 }

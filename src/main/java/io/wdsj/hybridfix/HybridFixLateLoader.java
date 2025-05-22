@@ -82,27 +82,37 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.infernal_mobs.modifiers.json", () -> isModLoaded("infernalmobs") && Settings.modPatchSettings.patchInfernalMobsModifier);
             // Epic Siege Mod patches
             put("mixins.epic_siege_mod.grief.json", () -> isModLoaded("epicsiegemod") && Settings.modPatchSettings.patchEpicSiegeModAi);
-            // Industrial Foregoing patches
-            put("mixins.industrial_foregoing.block.json", () -> isModLoaded("industrialforegoing") && Settings.modPatchSettings.disableIndustrialForegoingBlackholeControllerRecipe);
             // Witchery patches
             put("mixins.witchery.symbol.json", () -> isModLoaded("witchery") && Settings.modPatchSettings.patchWitcherySymbolEffect);
+        }
+    });
+
+    private static final Map<String, Supplier<Boolean>> commonMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>() {
+        {
+            // Industrial Foregoing patches
+            put("mixins.industrial_foregoing.block.json", () -> isModLoaded("industrialforegoing") && Settings.modPatchSettings.disableIndustrialForegoingBlackholeControllerRecipe);
         }
     });
 
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
-        if (!IS_HYBRID_ENV) return configs;
+        if (!IS_HYBRID_ENV && !isClient) return configs;
+        configs.addAll(commonMixinConfigs.keySet());
         if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
         return configs;
     }
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if (!IS_HYBRID_ENV) return false;
+        if (!IS_HYBRID_ENV && !isClient) return false;
         Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
+        Supplier<Boolean> commonSupplier = commonMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {
             return sidedSupplier.get();
+        }
+        if (commonSupplier != null) {
+            return commonSupplier.get();
         }
         return true;
     }
