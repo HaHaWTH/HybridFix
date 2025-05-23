@@ -28,7 +28,7 @@ public class Updater {
             URL url = uri.toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
+            conn.setReadTimeout(8000);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/vnd.github+json");
             try (InputStreamReader reader = new InputStreamReader(conn.getInputStream())) {
