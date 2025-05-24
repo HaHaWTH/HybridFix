@@ -71,6 +71,16 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean rayTraceAntiXraySDK = false;
 
+    @Config.Comment("(Server) Configuration for packet-related stuff.")
+    @Config.RequiresMcRestart
+    public static PacketSettings packetSettings = new PacketSettings();
+
+    public static class PacketSettings {
+        @Config.Comment("(Server) How many items can be dropped per tick?\nThis modifies CraftBukkit's packet limiter. Leave the value as 20 to prevent applying this mixin.")
+        @Config.RequiresMcRestart
+        public int maxDroppedItemsPerTick = 20;
+    }
+
     @Config.Comment("(Server) Configuration for HybridFix mod patches.")
     @Config.RequiresMcRestart
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();

@@ -41,23 +41,33 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             }
             put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
             put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);
+            put("mixins.fix.packet_limiter.drop_item.json", () -> Settings.packetSettings.maxDroppedItemsPerTick != 20);
         }
+    });
+
+    private static final Map<String, Supplier<Boolean>> commonMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
+    {
     });
 
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
-        if (!IS_HYBRID_ENV) return configs;
+        if (!IS_HYBRID_ENV && !isClient) return configs;
         if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
+        configs.addAll(commonMixinConfigs.keySet());
         return configs;
     }
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if (!IS_HYBRID_ENV) return false;
+        if (!IS_HYBRID_ENV && !isClient) return false;
         Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
+        Supplier<Boolean> commonSupplier = commonMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {
             return sidedSupplier.get();
+        }
+        if (commonSupplier != null) {
+            return commonSupplier.get();
         }
         return true;
     }

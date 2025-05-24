@@ -12,7 +12,6 @@ plugins {
     id 'com.gtnewhorizons.retrofuturagradle' version '1.3.35'
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
-    id 'com.gradleup.shadow' version '8.3.6'
 }
 
 apply from: 'gradle/scripts/helpers.gradle'
@@ -61,6 +60,11 @@ java {
     if (propertyBool('generate_javadocs_jar')) {
         withJavadocJar()
     }
+}
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
 }
 
 minecraft {
@@ -239,10 +243,6 @@ if (propertyBool('use_access_transformer')) {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.shadow]
-}
-
 processResources {
 
     def filterList = ['mcmod.info', 'pack.mcmeta']
@@ -288,12 +288,13 @@ jar {
         }
         attributes(attribute_map)
     }
-    // Add all shaded dependencies into the jar
-    dependsOn shadowJar
-    from zipTree(shadowJar.archiveFile.get().asFile)
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+    // Add all embedded dependencies into the jar
+    from(provider {
+        configurations.embed.collect {
+            it.isDirectory() ? it : zipTree(it).matching { exclude '**/module-info.class' }
+        }
+    })
 }
-
 idea {
     module {
         inheritOutputDirs = true
@@ -369,6 +370,7 @@ tasks.register('generateMixinJson') {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.deprecation = false
+    options.incremental = false
     if (propertyBool('use_modern_java_syntax')) {
         if (it.name in ['compileMcLauncherJava', 'compilePatchedMcJava']) {
             return
