@@ -195,6 +195,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean hookWorldGuard = false;
 
+        @Config.Comment("(Server) Enable HybridFix Citizens hook.")
+        @Config.RequiresMcRestart
+        public boolean hookCitizens = false;
+
         @Config.Comment("(Server) Worlds that AntiExplode should protect.")
         @Config.RequiresMcRestart
         public String[] antiExplodeWorlds = new String[]{"world", "DIM-1", "DIM1"};

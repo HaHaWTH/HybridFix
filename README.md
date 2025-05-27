@@ -94,6 +94,7 @@ Thanks to HybridFix internal plugin, we can hook into plugins from Forge side to
 Currently patched plugins:
 - Residence[(SpigotMC)](https://www.spigotmc.org/resources/residence-1-7-10-up-to-1-21.11480/)[(GitHub)](https://github.com/Zrips/Residence)
 - WorldGuard[(BukkitDev)](https://dev.bukkit.org/projects/worldguard)[(GitHub)](https://github.com/EngineHub/WorldGuard)
+- Citizens[(GitHub)](https://github.com/CitizensDev/Citizens2)
 
 ## Commands
 

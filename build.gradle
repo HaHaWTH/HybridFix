@@ -145,6 +145,7 @@ dependencies {
     // Plugins
     compileOnly files("libs/plugin/Residence5.1.6.4.jar")
     compileOnly files("libs/plugin/worldguard-bukkit-6.2.2.jar")
+    compileOnly files("libs/plugin/Citizens-2.0.32-b3124.jar")
 
     // Witchery
     compileOnly rfg.deobf('WitcheryResurrected0.5.2Hotfix4:WitcheryResurrected:1.12.2-0.5.2.4:forge-all')
