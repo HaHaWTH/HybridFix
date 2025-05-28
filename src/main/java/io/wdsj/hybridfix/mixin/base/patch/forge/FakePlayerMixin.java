@@ -35,7 +35,8 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
      */
     @Unique(silent = true)
     @Override
-    public void loadResourcePack(@NotNull String url, @NotNull String hash) {}
+    public void loadResourcePack(@NotNull String url, @NotNull String hash) {
+    }
 
     /**
      * CB's updateInventory doesn't check the nullability of the connection, this will cause NPE.
@@ -43,5 +44,6 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
      */
     @Unique(silent = true)
     @Override
-    public void sendContainerToPlayer(@NotNull Container containerIn) {}
+    public void sendContainerToPlayer(@NotNull Container containerIn) {
+    }
 }
