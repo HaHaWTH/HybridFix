@@ -34,6 +34,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Fix webs of InfernalMobs can spawn in protected areas
 - Fix EpicSiegeMod mob AIs can grief in protected areas
 - Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing
+- Fix Witchery spells can bypass damage protection
 
 ## Features
 
