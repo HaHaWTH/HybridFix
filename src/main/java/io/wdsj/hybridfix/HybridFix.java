@@ -18,7 +18,7 @@ public class HybridFix {
     public static final String DEPENDENCY = "required-after:mixinbooter@[10.1,);required-after:configanytime;";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final boolean IS_HYBRID_ENV = Utils.isClassExists("org.bukkit.Bukkit");
-    public static final boolean HAS_CLEANROOM = Utils.isClassExists("com.cleanroommc.common.CleanroomContainer");
+    public static final boolean IS_CLEANROOM = Utils.isClassExists("com.cleanroommc.common.CleanroomContainer");
     @SidedProxy(
             clientSide = "io.wdsj.hybridfix.proxy.ClientProxy",
             serverSide = "io.wdsj.hybridfix.proxy.ServerProxy",

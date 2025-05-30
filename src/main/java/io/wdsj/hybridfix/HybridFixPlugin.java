@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
-import static io.wdsj.hybridfix.HybridFix.HAS_CLEANROOM;
+import static io.wdsj.hybridfix.HybridFix.IS_CLEANROOM;
 import static io.wdsj.hybridfix.HybridFix.IS_HYBRID_ENV;
 
 @IFMLLoadingPlugin.Name("HybridFixPlugin")
@@ -26,7 +26,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
             put("mixins.fix.fakeplayer.json", () -> Settings.invertFakePlayerBlacklist || Settings.fakePlayerPluginBlacklist.length > 0);
             put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
-            if (!HAS_CLEANROOM) {
+            if (!IS_CLEANROOM) {
                 if (Utils.isMohist) {
                     put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
                 }
