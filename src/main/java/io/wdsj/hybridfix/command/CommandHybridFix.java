@@ -116,7 +116,7 @@ public class CommandHybridFix extends Command {
                 String name = rl != null ? rl.toString() : "unknown:unknown";
                 try {
                     if (forceEraseEntity) target.isDead = true;
-                    else target.getDataManager().set(EntityLivingBase.HEALTH, 0.0F);
+                    else target.setHealth(0);
                     sender.sendMessage(ChatColor.GREEN + "Erased entity with name " + name + ". (" + dist + " blocks away)");
                 } catch (Exception e) {
                     sender.sendMessage(ChatColor.RED + "Failed to erase entity with name " + name + ".");
