@@ -153,6 +153,15 @@ public class CommandHybridFix extends Command {
         }
         sender.sendMessage(FormatUtils.formatItemStackToPrettyString(itemInHand));
         sender.sendMessage(ChatColor.YELLOW + "Bukkit Material: " + ChatColor.GREEN + bItemStack.getType());
+
+        Class<?> nmsItemClass = itemInHand.getItem().getClass();
+        TextComponent classComponent = new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "NMS Item Class: " + net.md_5.bungee.api.ChatColor.GREEN + nmsItemClass.getName() + "\n");
+        TextComponent classHierarchy = new TextComponent(Utils.classHierarchyToString(nmsItemClass));
+        classHierarchy.setColor(net.md_5.bungee.api.ChatColor.GRAY);
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{classHierarchy});
+        classComponent.setHoverEvent(hoverEvent);
+        sender.spigot().sendMessage(classComponent);
+
         TextComponent message = new TextComponent("[Click to insert give command]");
         message.setColor(net.md_5.bungee.api.ChatColor.GREEN);
         message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, FormatUtils.itemStackToGiveCommand(itemInHand)));
