@@ -3,6 +3,7 @@ package io.wdsj.hybridfix.mixin.bukkit.plugin;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
+import io.wdsj.hybridfix.entry.bukkit.hook.citizens.CitizensHookNPCDamageListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
@@ -76,6 +77,15 @@ public abstract class DedicatedServerMixin {
                 HybridFix.LOGGER.info("{}[HybridFix] Hooked into WorldGuard.", ChatColor.LIGHT_PURPLE);
             } else {
                 HybridFix.LOGGER.warn("[HybridFix] WorldGuard not found, check your installation.");
+            }
+        }
+        if (Settings.bukkitPluginConfig.hookCitizens) {
+            final String citizens = "Citizens";
+            if (Bukkit.getPluginManager().isPluginEnabled(citizens)) {
+                ListenerHackery.registerListenerToTargetPlugin(CitizensHookNPCDamageListener.class, citizens);
+                HybridFix.LOGGER.info("{}[HybridFix] Hooked into Citizens.", ChatColor.GOLD);
+            } else {
+                HybridFix.LOGGER.warn("[HybridFix] Citizens not found, check your installation.");
             }
         }
     }
