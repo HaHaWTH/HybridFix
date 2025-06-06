@@ -13,6 +13,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader implements I
         super(urls, parent);
     }
 
+    @Override
     @Unique
     @SuppressWarnings("AddedMixinMembersNamePattern")
     public Class<?> defineClassExposed(String name, byte[] bytes) {
