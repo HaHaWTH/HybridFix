@@ -195,6 +195,9 @@ dependencies {
     // Industrial Foregoing
     compileOnly rfg.deobf("curse.maven:industrial-foregoing-266515:2745321")
 
+    // Censored ASM
+    compileOnly rfg.deobf("curse.maven:lolasm-460609:6333774")
+
     compileOnly "org.jetbrains:annotations:26.0.2"
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'

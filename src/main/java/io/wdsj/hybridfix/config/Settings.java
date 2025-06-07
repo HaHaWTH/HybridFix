@@ -71,6 +71,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean rayTraceAntiXraySDK = false;
 
+    @Config.Comment("(Server) Deobfuscate stacktrace when Censored ASM is installed.")
+    @Config.RequiresMcRestart
+    public static boolean deobfuscateStacktrace = false;
+
     @Config.Comment("(Server) Configuration for packet-related stuff.")
     @Config.RequiresMcRestart
     public static PacketSettings packetSettings = new PacketSettings();
