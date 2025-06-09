@@ -32,6 +32,10 @@ import java.lang.invoke.MethodHandle;
 @SuppressWarnings("deprecation")
 @Mixin(AccioSymbolEffect.class)
 public abstract class AccioSymbolEffectMixin {
+    /*
+     * A helper method offered by CraftBukkit
+     * Descriptor: public int canHold (net.minecraft.item.ItemStack)
+     */
     @Unique
     private static final MethodHandle mh_InventoryPlayer_canHold;
 
