@@ -6,7 +6,7 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 
 ### Forge-Bukkit
 
-- Some mod explosions cannot be handled by Bukkit plugins(e.g. Tinkers' Construct EFLN)
+- Bukkit plugins cannot handle some mod explosions(e.g., Tinkers' Construct EFLN)
 - Bridge some Forge events to Bukkit
 
 ### Mods
@@ -41,13 +41,14 @@ Provide bugfixes, optimizations and utilities for Forge+Bukkit server environmen
 - Auto overrides Mohist's crappy built-in explosion handling with our own method.
 - Bridge Forge permission processing to Bukkit.
 - Skip firing event if no listeners registered.
-- Disable Timings for less performance overhead.
+- Disable Timings for lower performance overhead.
 - Compatibility first, shouldn't break any mods/plugins.
 - Built Bukkit plugin into the mod, offers utilities to server owners.
 - Enhance compatibility with mod FakePlayers.
-- Offer more useful apis for plugin developers to interact with Forge mods easily.
+- Offer more or less useful apis for plugin developers to interact with Forge mods easily.
 - Extensive APIs for mod developers to maintain compatibility with hybrid servers easily.
 - General CraftBukkit performance improvements.
+- Auto deobfuscate plugin stacktraces when Censored ASM is installed for easier debugging.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
@@ -55,7 +56,7 @@ Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
 Download HybridFix and its dependencies(MixinBooter and ConfigAnyTime) from CurseForge, drop HybridFix into `${minecraftDir}/mods` folder.
 
-HybridFix is not required to be installed on client side.
+HybridFix is not required to be installed on the client side.
 
 ## How To (Developers)
 
@@ -99,14 +100,18 @@ Currently patched plugins:
 
 ## Commands
 
-- `/hybridfix dumpitem` - Show details of the item in hand.
+- `/hybridfix dumpitem` - Show details of the item holding in the hand.
+- `/hybridfix dumpentity` - Show details of the entity targeted.
+- `/hybridfix dumpblock` - Show details of the block targeted.
 - `/hybridfix version` - Show version info.
 - `/hybridfix eraseentity` - Forcibly remove targeted entity.
+- `/mods` - Like `/plugins`, show all loaded mods.
 
 ## Permissions
 
 - `hybridfix.command.use` - Allow to access `/hybridfix` command.
 - `hybridfix.command.eraseentity.use` - Allow to access `/hybridfix eraseentity` command.
+- `hybridfix.command.mods.use` - Allow to access `/mods` command.
 
 **Note**: Commands and permissions are registered on Bukkit side, that means you can manage permissions with Bukkit permission plugins like LuckPerms.
 
