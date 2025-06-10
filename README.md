@@ -56,7 +56,7 @@ Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
 Download HybridFix and its dependencies(MixinBooter and ConfigAnyTime) from CurseForge, drop HybridFix into `${minecraftDir}/mods` folder.
 
-HybridFix is not required to be installed on the client side.
+HybridFix is not required to be installed on the client side, but some features may not work without them.
 
 ## How To (Developers)
 
