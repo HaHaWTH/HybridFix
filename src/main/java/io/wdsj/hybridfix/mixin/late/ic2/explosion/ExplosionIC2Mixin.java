@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /*
  * IC2 is too stupid. D:
  */
-@Mixin(value = ExplosionIC2.class, remap = false, priority = 999)
+@Mixin(value = ExplosionIC2.class, remap = false, priority = 500)
 public abstract class ExplosionIC2Mixin extends Explosion {
     // @formatter:off
     @Shadow @Final private Entity exploder;
