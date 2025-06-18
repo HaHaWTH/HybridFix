@@ -1,6 +1,6 @@
 # HybridFix (混合修复)
 
-Provide bugfixes, optimizations and utilities for Forge+Bukkit server environments.
+Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server environments.
 
 ## Fixed issues
 
