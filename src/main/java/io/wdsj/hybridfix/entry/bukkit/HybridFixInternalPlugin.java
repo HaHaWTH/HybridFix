@@ -27,12 +27,14 @@ public class HybridFixInternalPlugin extends PluginBase {
     }
     private final String pluginName;
     private final File dataFolder;
+    private final PluginLogger logger;
     private PluginDescriptionFile pdf;
 
     public HybridFixInternalPlugin() {
         this.pluginName = "HybridFix";
         this.pdf = new PluginDescriptionFile(pluginName, HybridFix.VERSION, "hybridfix");
         this.dataFolder = new File("plugins", pluginName);
+        this.logger = new PluginLogger(this);
     }
 
     public void setEnabled(boolean enabled) {
@@ -61,27 +63,23 @@ public class HybridFixInternalPlugin extends PluginBase {
 
     @Override
     public void saveConfig() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void saveDefaultConfig() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void saveResource(String resourcePath, boolean replace) {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void reloadConfig() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public PluginLogger getLogger() {
-        throw new UnsupportedOperationException("Not supported.");
+        return logger;
     }
 
     @Override
@@ -120,12 +118,11 @@ public class HybridFixInternalPlugin extends PluginBase {
 
     @Override
     public boolean isNaggable() {
-        throw new UnsupportedOperationException("Not supported.");
+        return false;
     }
 
     @Override
     public void setNaggable(boolean canNag) {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
