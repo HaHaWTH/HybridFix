@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.spigotmc.SneakyThrow;
+import io.wdsj.hybridfix.util.SneakyThrow;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -41,7 +41,7 @@ public class ListenerHackery {
             Listener listener = newClazz.newInstance();
             Bukkit.getPluginManager().registerEvents(listener, HybridFixInternalPlugin.getInstance());
         } catch (Throwable e) {
-            SneakyThrow.sneaky(e);
+            SneakyThrow.throw0(e);
         }
     }
 
@@ -62,7 +62,7 @@ public class ListenerHackery {
             // noinspection unchecked
             return (Class<? extends T>) ((IPluginClassDefiner) plugin.getClass().getClassLoader()).defineClassExposed(clazz.getName(), classBytes);
        } catch (Throwable e) {
-            SneakyThrow.sneaky(e);
+            SneakyThrow.throw0(e);
             return null; // never reached
         }
     }
