@@ -51,6 +51,7 @@ public class EntityUtils {
         return hardness >= 0.0F && !state.getBlock().isAir(state, world, pos) && state.getBlock().canEntityDestroy(state, world, pos, entity) && (!(entity instanceof EntityLivingBase) || ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) entity, pos, state));
     }
 
+    @Nullable
     public static EntityLivingBase rayTraceLivingEntity(@NotNull Entity originEntity) {
         return rayTraceLivingEntity(originEntity, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getEntityViewDistance());
     }
