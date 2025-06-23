@@ -48,7 +48,7 @@ public class HybridFixServer {
     }
 
     public static void createServerDump(Throwable t) {
-        HybridFix.LOGGER.error("--- REPORT THIS TO YOUR SERVER SOFTWARE - If you are sure this is a HybridFix bug, please report it at https://github.com/HaHaWTH/HybridFix/issues - THIS IS NOT A CRASH - {} ---", Bukkit.getServer().getVersion());
+        HybridFix.LOGGER.error("--- REPORT THIS TO YOUR SERVER SOFTWARE - If you are sure this is a HybridFix bug, please report it at https://github.com/HaHaWTH/HybridFix/issues - {} ---", Bukkit.getServer().getVersion());
         HybridFix.LOGGER.error(t);
     }
 }
