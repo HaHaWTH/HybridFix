@@ -29,7 +29,7 @@ public abstract class MinecraftServerMixin {
             if (ModCompatUtils.isCensoredASMInstalled()) {
                 ModCompatUtils.censoredASM_deobfuscateThrowable(t);
             }
-            SneakyThrow.throw0(t);
+            SneakyThrow.sneaky(t);
         }
     }
 }

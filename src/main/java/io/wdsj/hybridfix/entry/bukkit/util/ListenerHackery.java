@@ -41,7 +41,7 @@ public class ListenerHackery {
             Listener listener = newClazz.newInstance();
             Bukkit.getPluginManager().registerEvents(listener, HybridFixInternalPlugin.getInstance());
         } catch (Throwable e) {
-            SneakyThrow.throw0(e);
+            SneakyThrow.sneaky(e);
         }
     }
 
@@ -62,7 +62,7 @@ public class ListenerHackery {
             // noinspection unchecked
             return (Class<? extends T>) ((IPluginClassDefiner) plugin.getClass().getClassLoader()).defineClassExposed(clazz.getName(), classBytes);
        } catch (Throwable e) {
-            SneakyThrow.throw0(e);
+            SneakyThrow.sneaky(e);
             return null; // never reached
         }
     }

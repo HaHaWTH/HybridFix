@@ -82,7 +82,7 @@ public class HybridReflectionUtils {
                 }
             }
         } catch (Throwable th) {
-            SneakyThrow.throw0(th);
+            SneakyThrow.sneaky(th);
         }
     }
 }
