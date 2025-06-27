@@ -94,19 +94,30 @@ public class HybridFixLateLoader implements ILateMixinLoader {
         }
     });
 
+    private static final Map<String, Supplier<Boolean>> clientsideMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>() {
+        {
+            // Industrial Craft client patches
+            put("mixins.ic2.client.audio.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2AudioManager);
+        }
+    });
+
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
         if (!IS_HYBRID_ENV && !isClient) return configs;
         configs.addAll(commonMixinConfigs.keySet());
-        if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
+        if (isClient) {
+            configs.addAll(clientsideMixinConfigs.keySet());
+        } else {
+            configs.addAll(serversideMixinConfigs.keySet());
+        }
         return configs;
     }
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
         if (!IS_HYBRID_ENV && !isClient) return false;
-        Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
+        Supplier<Boolean> sidedSupplier = isClient ? clientsideMixinConfigs.get(mixinConfig) : serversideMixinConfigs.get(mixinConfig);
         Supplier<Boolean> commonSupplier = commonMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {
             return sidedSupplier.get();

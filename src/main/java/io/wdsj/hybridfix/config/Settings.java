@@ -134,6 +134,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchIC2Explosion = false;
 
+        @Config.Comment("(Client) Replace reflection operations of Industrial Craft 2 AudioManager with our faster one.")
+        @Config.RequiresMcRestart
+        public boolean patchIC2AudioManager = true;
+
         @Config.Comment("(Server) Patch explosion of Chaos Crystal in DraconicEvolution can bypass grief protection.")
         @Config.RequiresMcRestart
         public boolean patchDraconicEvolutionEntity = false;
