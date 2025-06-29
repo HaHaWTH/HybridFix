@@ -87,8 +87,12 @@ public class ImmutableLocation extends Location {
         throw new UnsupportedOperationException();
     }
 
-    public static ImmutableLocation fromLocation(Location location) {
+    public static ImmutableLocation immutable(Location location) {
         return new ImmutableLocation(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+    }
+
+    public Location mutable() {
+        return new Location(getWorld(), getX(), getY(), getZ(), getYaw(), getPitch());
     }
 
     public static ImmutableLocation create(World world, double x, double y, double z) {
