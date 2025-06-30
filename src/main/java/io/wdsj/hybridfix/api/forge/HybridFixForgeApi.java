@@ -24,26 +24,10 @@ public class HybridFixForgeApi {
     }
 
     /**
-     * @deprecated Use {@link HybridFixForgeApi#isVanillaExplosionEventDetonate(ExplosionEvent.Detonate)} instead.
-     */
-    @Deprecated
-    public boolean isVanillaExplosionDetonateEvent(ExplosionEvent.Detonate event) {
-        return isVanillaExplosionEventDetonate(event);
-    }
-
-    /**
      * Sets whether this event is vanilla or not.
      * @param vanilla Whether this event is vanilla or not.
      */
     public void setVanillaExplosionEventDetonate(ExplosionEvent.Detonate event, boolean vanilla) {
         ((IExplosionEventDetonate) event).hybridFix$setVanilla(vanilla);
-    }
-
-    /**
-     * @deprecated Use {@link HybridFixForgeApi#setVanillaExplosionEventDetonate(ExplosionEvent.Detonate, boolean)} instead.
-     */
-    @Deprecated
-    public void setVanillaExplosionDetonateEvent(ExplosionEvent.Detonate event, boolean vanilla) {
-        setVanillaExplosionEventDetonate(event, vanilla);
     }
 }
