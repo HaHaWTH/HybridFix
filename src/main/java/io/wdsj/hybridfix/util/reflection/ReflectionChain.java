@@ -38,6 +38,18 @@ public class ReflectionChain<T> {
     private ReflectionChain() {
     }
 
+    public static final MethodHandles.Lookup IMPL_LOOKUP;
+    static {
+        MethodHandles.Lookup lookup = null;
+        try {
+            Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+            implLookupField.setAccessible(true);
+            lookup = (MethodHandles.Lookup) implLookupField.get(null);
+        } catch (Throwable ignored) {
+        }
+        IMPL_LOOKUP = lookup;
+    }
+
     /**
      * Creates a new reflection chain for the specified class.
      *
