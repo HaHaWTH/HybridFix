@@ -17,7 +17,7 @@ public class BaseReflectionUtils {
         }
     }
 
-    public static void setField(Field field, Object instance, Object value) {
+    public static void setFieldValue(Field field, Object instance, Object value) {
         try {
             field.set(instance, value);
         } catch (Exception e) {
@@ -25,7 +25,7 @@ public class BaseReflectionUtils {
         }
     }
 
-    public static void setBooleanField(Field field, Object instance, boolean value) {
+    public static void setBooleanFieldValue(Field field, Object instance, boolean value) {
         try {
             field.setBoolean(instance, value);
         } catch (Exception e) {
