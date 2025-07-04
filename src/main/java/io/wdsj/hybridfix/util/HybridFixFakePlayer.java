@@ -1,23 +1,36 @@
 package io.wdsj.hybridfix.util;
 
 import com.google.common.base.Charsets;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class should <b>ONLY</b> be used for non {@link org.bukkit.event.player.PlayerEvent} events.
  * As some server software (like CatServer) will ignore PlayerEvents involved by FakePlayer.
+ *
+ * @apiNote To bypass server FakePlayer checks, use {@link io.wdsj.hybridfix.util.reflection.HybridReflectionUtils#callEventDirect(Event)}
  */
 public class HybridFixFakePlayer {
     private HybridFixFakePlayer() {
     }
+
+    private static final Cache<String, GameProfile> profileCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build();
 
     public static WeakReference<FakePlayer> get(World world) {
         return new WeakReference<>(FakePlayerFactory.get((WorldServer) world, profile));
@@ -29,6 +42,19 @@ public class HybridFixFakePlayer {
         player.posY = pos.getY();
         player.posZ = pos.getZ();
         return new WeakReference<>(player);
+    }
+
+    public static @NotNull WeakReference<@Nullable FakePlayer> get(World world, BlockPos pos, String nameSuffix) {
+        try {
+            FakePlayer player = FakePlayerFactory.get((WorldServer) world, profileCache.get(nameSuffix, () -> new GameProfile(UUID.nameUUIDFromBytes(name.getBytes(Charsets.UTF_8)), name + "-" + nameSuffix)));
+            player.posX = pos.getX();
+            player.posY = pos.getY();
+            player.posZ = pos.getZ();
+            return new WeakReference<>(player);
+        } catch (ExecutionException e) {
+            SneakyThrow.sneaky(e);
+            return null; // Never reached
+        }
     }
 
     private static final String name = "HybridFixDummy";

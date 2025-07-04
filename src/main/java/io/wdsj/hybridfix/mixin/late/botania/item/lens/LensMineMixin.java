@@ -57,6 +57,7 @@ public abstract class LensMineMixin {
         } else {
             Entity nonNullThrower = thrower != null ? thrower : entity;
             org.bukkit.entity.Entity bEntity = ((IEntityGetter) nonNullThrower).getBukkitEntity();
+            // noinspection deprecation
             EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, bukkitBlock, Material.AIR, (byte) 0);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {

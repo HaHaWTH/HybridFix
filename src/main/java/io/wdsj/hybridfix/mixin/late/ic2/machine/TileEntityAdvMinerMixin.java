@@ -39,7 +39,7 @@ public abstract class TileEntityAdvMinerMixin extends TileEntityElectricMachine 
 
         World bWorld = ((IWorldGetter) this.getWorld()).getWorld();
         Block bBlock = bWorld.getBlockAt(target.getX(), target.getY(), target.getZ());
-        CraftPlayer dummy = (CraftPlayer) ((IEntityGetter) Objects.requireNonNull(HybridFixFakePlayer.get(this.world, this.pos).get())).getBukkitEntity();
+        CraftPlayer dummy = (CraftPlayer) ((IEntityGetter) Objects.requireNonNull(HybridFixFakePlayer.get(this.world, this.pos, "ic2-TileEntityAdvMiner").get())).getBukkitEntity();
         BlockBreakEvent event = new BlockBreakEvent(bBlock, dummy);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {

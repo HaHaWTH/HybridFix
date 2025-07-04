@@ -2,7 +2,6 @@ package io.wdsj.hybridfix.mixin.late.botania.block;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Cancellable;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
@@ -19,25 +18,27 @@ import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import vazkii.botania.api.subtile.SubTileFunctional;
 import vazkii.botania.common.block.subtile.functional.SubTileRannuncarpus;
 
 import java.util.Objects;
 
 @Mixin(SubTileRannuncarpus.class)
-public abstract class SubTileRannuncarpusMixin {
+public abstract class SubTileRannuncarpusMixin extends SubTileFunctional {
     @WrapOperation(
             method = "onUpdate",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",
+                    target = "Lnet/minecraft/block/Block;canPlaceBlockAt(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z",
                     remap = true
             ),
             remap = false
     )
-    public boolean onUpdate(World instance, BlockPos pos, IBlockState newState, int flags, Operation<Boolean> original, @Cancellable CallbackInfo ci, @Local(ordinal = 0, name = "pos") BlockPos superTilePos) {
-        EntityPlayerMP serverPlayer = Objects.requireNonNull(HybridFixFakePlayer.get(instance, superTilePos).get());
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+    public boolean onUpdate(net.minecraft.block.Block block, World worldIn, BlockPos pos, Operation<Boolean> original, @Local(name = "stateToPlace") IBlockState newState) {
+        final boolean originalVal = original.call(block, worldIn, pos);
+        if (!originalVal) return false;
+        EntityPlayerMP serverPlayer = Objects.requireNonNull(HybridFixFakePlayer.get(worldIn, supertile.getPos(), "botania-SubTileRannuncarpus").get());
+        org.bukkit.World bWorld = ((IWorldGetter) worldIn).getWorld();
         Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         Material bMaterial = CraftMagicNumbers.getMaterial(newState.getBlock());
         byte data = (byte) newState.getBlock().getMetaFromState(newState);
@@ -45,10 +46,6 @@ public abstract class SubTileRannuncarpusMixin {
         // noinspection deprecation
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(player, bBlock, bMaterial, data);
         Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            ci.cancel();
-            return false;
-        }
-        return original.call(instance, pos, newState, flags);
+        return !event.isCancelled();
     }
 }
