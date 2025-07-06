@@ -5,20 +5,19 @@ import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,26 +28,61 @@ public class EntityUtils {
     private EntityUtils() {
     }
 
+    /**
+     * If target mod has no safety checks, use this.
+     */
     public static boolean canDestroyBlock(World world, BlockPos pos, Entity entity) {
         return canDestroyBlock(world, pos, world.getBlockState(pos), entity);
     }
 
+    /**
+     * If target mod has no safety checks, use this.
+     */
     public static boolean canDestroyBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
-        Block block = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        Event event;
-        if (bEntity instanceof Player) {
-            event = new BlockBreakEvent(block, (Player) bEntity);
+        if (entity instanceof EntityPlayerMP) {
+            if (callBlockBreakEventForPlayer(world, pos, state, (EntityPlayerMP) entity)) {
+                return false;
+            }
         } else {
-            // noinspection deprecation
-            event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
-        }
-        Bukkit.getPluginManager().callEvent(event);
-        if (((Cancellable) event).isCancelled()) {
-            return false;
+            if (callBlockBreakEventForEntity(world, pos, state, entity)) {
+                return false;
+            }
         }
         float hardness = state.getBlockHardness(world, pos);
-        return hardness >= 0.0F && !state.getBlock().isAir(state, world, pos) && state.getBlock().canEntityDestroy(state, world, pos, entity) && (!(entity instanceof EntityLivingBase) || ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) entity, pos, state));
+        return hardness >= 0.0F && !state.getBlock().isAir(state, world, pos) && state.getBlock().canEntityDestroy(state, world, pos, entity);
+    }
+
+    /**
+     * @return true if the event was cancelled, false otherwise
+     */
+    public static boolean callBlockBreakEventForPlayer(World world, BlockPos pos, EntityPlayerMP player) {
+        return callBlockBreakEventForPlayer(world, pos, world.getBlockState(pos), player);
+    }
+
+    /**
+     * @return true if the event was cancelled, false otherwise
+     */
+    public static boolean callBlockBreakEventForPlayer(World world, BlockPos pos, IBlockState state, EntityPlayerMP player) {
+        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, player);
+        return MinecraftForge.EVENT_BUS.post(event);
+    }
+
+    /**
+     * @return true if the event was cancelled, false otherwise
+     */
+    public static boolean callBlockBreakEventForEntity(World world, BlockPos pos, IBlockState state, Entity entity) {
+        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
+        Block block = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        if (entity instanceof EntityLivingBase && !ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) entity, pos, state)) {
+            return true;
+        }
+        if (!ForgeEventFactory.getMobGriefingEvent(world, entity)) {
+            return true;
+        }
+        // noinspection deprecation
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
+        Bukkit.getPluginManager().callEvent(event);
+        return event.isCancelled();
     }
 
     @Nullable
