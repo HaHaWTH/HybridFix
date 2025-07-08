@@ -174,6 +174,9 @@ dependencies {
     // Industrial Craft 2
     compileOnly rfg.deobf("curse.maven:industrial-craft-242638:3838713")
 
+    // Brandon's Core
+    compileOnly rfg.deobf("curse.maven:brandons-core-231382:3408276")
+
     // Draconic Evolution
     compileOnly rfg.deobf("curse.maven:draconic-evolution-223565:3431261")
 

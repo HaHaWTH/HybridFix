@@ -2,6 +2,7 @@ package io.wdsj.hybridfix.util.entity;
 
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,9 +17,11 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,6 +86,30 @@ public class EntityUtils {
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
         Bukkit.getPluginManager().callEvent(event);
         return event.isCancelled();
+    }
+
+    public static boolean callBukkitEntityExplodeEvent(World world, BlockPos start, List<BlockPos> affectedBlocks, Entity entity) {
+        org.bukkit.World bWorld = ((IWorldGetter) world).getWorld();
+        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
+        List<Block> blockList = new ObjectArrayList<>(affectedBlocks.size());
+        for (int i1 = affectedBlocks.size() - 1; i1 >= 0; i1--) {
+            BlockPos cpos = affectedBlocks.get(i1);
+            Block bblock = bWorld.getBlockAt(cpos.getX(), cpos.getY(), cpos.getZ());
+            if (bblock.getType() != Material.AIR) {
+                blockList.add(bblock);
+            }
+        }
+        EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(bEntity, new Location(bWorld, start.getX(), start.getY(), start.getZ()), blockList, 0.0F);
+        Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
+        boolean isCancelled = bukkitEvent.isCancelled();
+        if (!isCancelled) {
+            affectedBlocks.clear();
+            for (Block bblock : blockList) {
+                BlockPos coords = new BlockPos(bblock.getX(), bblock.getY(), bblock.getZ());
+                affectedBlocks.add(coords);
+            }
+        }
+        return isCancelled;
     }
 
     @Nullable
