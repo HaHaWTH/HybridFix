@@ -4,7 +4,7 @@ import io.wdsj.hybridfix.HybridFixServer;
 
 /**
  * Duck interface for {@link org.bukkit.block.Block}.
- * All methods here behave same as <a href="https://jd.papermc.io/paper/1.21.5/org/bukkit/block/Block.html">PaperMC Javadoc</a>.
+ * All methods here behave same as <a href="https://jd.papermc.io/paper/1.21.7/org/bukkit/block/Block.html">PaperMC Javadoc</a>.
  * You can cast to this interface from a {@link org.bukkit.block.Block} instance to access the methods below.
  */
 @SuppressWarnings("unused")
