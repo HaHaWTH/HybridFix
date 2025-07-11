@@ -144,7 +144,7 @@ public class Settings {
 
         @Config.Comment("(Server) Patch explosion of RebornCore can bypass grief protection.")
         @Config.RequiresMcRestart
-        public boolean patchRebornCoreExplosion = false;
+        public boolean patchRebornCoreExplosion = true;
 
         @Config.Comment("(Server) Patch Spatial Pylon of Applied Energistics 2 with more config.")
         @Config.RequiresMcRestart
