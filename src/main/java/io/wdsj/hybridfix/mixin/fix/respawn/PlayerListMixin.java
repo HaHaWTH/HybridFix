@@ -3,7 +3,6 @@ package io.wdsj.hybridfix.mixin.fix.respawn;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;
 import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,7 +33,6 @@ public abstract class PlayerListMixin {
             remap = false
     )
     public void onMoveToWorld(EntityPlayerMP playerIn, int dimensionId, boolean conqueredEnd, Location loc, boolean avoidSuffocation, CallbackInfoReturnable<EntityPlayerMP> cir, @Share("newCap") LocalRef<CapabilityDispatcher> newCap) {
-        if (Settings.simulateVanillaRespawn) CBRespawnFixLogic.simulateVanillaRespawn(playerIn);
         if (Settings.fixCapabilityReset) {
             newCap.set(ForgeEventFactory.gatherCapabilities(playerIn)); // Prepare a new capability dispatcher
         }

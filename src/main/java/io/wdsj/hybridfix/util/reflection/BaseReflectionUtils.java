@@ -8,20 +8,20 @@ public class BaseReflectionUtils {
     private BaseReflectionUtils() {
     }
 
-    public static Object getFieldValue(Field field, Object instance) {
+    public static Object getObjectFieldValue(Field field, Object instance) {
         try {
             return field.get(instance);
         } catch (Exception e) {
-            HybridFix.LOGGER.warn("Error occurred while getting value of field {}", field.getName(), e);
+            HybridFix.LOGGER.warn("Error occurred while getting object value of field {}", field.getName(), e);
             return null;
         }
     }
 
-    public static void setFieldValue(Field field, Object instance, Object value) {
+    public static void setObjectFieldValue(Field field, Object instance, Object value) {
         try {
             field.set(instance, value);
         } catch (Exception e) {
-            HybridFix.LOGGER.warn("Error occurred while setting value of field {}", field.getName(), e);
+            HybridFix.LOGGER.warn("Error occurred while setting object value of field {}", field.getName(), e);
         }
     }
 

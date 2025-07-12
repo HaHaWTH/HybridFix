@@ -15,10 +15,6 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean fixCapabilityReset = false;
 
-    @Config.Comment("(Server) Simulate vanilla respawn logic.")
-    @Config.RequiresMcRestart
-    public static boolean simulateVanillaRespawn = true;
-
     @Config.Comment("(Server) Pass explosion event to Bukkit.")
     @Config.RequiresMcRestart
     public static boolean passExplosionEventToBukkit = !Utils.isMohist;
@@ -210,6 +206,16 @@ public class Settings {
         @Config.Comment("(Server) Worlds that AntiExplode should protect.")
         @Config.RequiresMcRestart
         public String[] antiExplodeWorlds = new String[]{"world", "DIM-1", "DIM1"};
+    }
+
+    @Config.Comment("(Server) Configuration for HybridFix debugger.")
+    @Config.RequiresMcRestart
+    public static DebugSettings debugSettings = new DebugSettings();
+
+    public static class DebugSettings {
+        @Config.Comment("(Server) Enable HybridFix entity health debugger.")
+        @Config.RequiresMcRestart
+        public boolean entityHealthDebugger = false;
     }
 
     static {

@@ -20,11 +20,11 @@ import java.lang.reflect.Field;
 import static io.wdsj.hybridfix.util.reflection.BaseReflectionUtils.*;
 
 public class HybridReflectionUtils {
-    private static final Field FIELD_WORLD_CAPTURE_TREE_GENERATION = ReflectionChain.fromClass(World.class)
+    private static final Field FD_WORLD_CAPTURE_TREE_GENERATION = ReflectionChain.fromClass(World.class)
             .name("captureTreeGeneration")
             .accessible(true)
             .field();
-    private static final Field FIELD_BLOCK_SAPLING_TREE_TYPE = ReflectionChain.fromClass(BlockSapling.class)
+    private static final Field FD_BLOCK_SAPLING_TREE_TYPE = ReflectionChain.fromClass(BlockSapling.class)
             .name("treeType")
             .accessible(true)
             .field();
@@ -32,20 +32,20 @@ public class HybridReflectionUtils {
             .param(BlockSnapshot.class)
             .accessible(true)
             .constructorHandle();
-    private static final MethodHandle MD_FIRE_EVENT = ReflectionChain.fromClass(SimplePluginManager.class)
+    private static final MethodHandle MH_FIRE_EVENT = ReflectionChain.fromClass(SimplePluginManager.class)
             .name("fireEvent")
             .param(Event.class)
             .accessible(true)
             .methodHandle();
 
     public static void setCaptureTreeGeneration(World world, boolean value) {
-        Preconditions.checkNotNull(FIELD_WORLD_CAPTURE_TREE_GENERATION);
-        setBooleanFieldValue(FIELD_WORLD_CAPTURE_TREE_GENERATION, world, value);
+        Preconditions.checkNotNull(FD_WORLD_CAPTURE_TREE_GENERATION);
+        setBooleanFieldValue(FD_WORLD_CAPTURE_TREE_GENERATION, world, value);
     }
 
     public static void setTreeType(TreeType treeType) {
-        Preconditions.checkNotNull(FIELD_BLOCK_SAPLING_TREE_TYPE);
-        setFieldValue(FIELD_BLOCK_SAPLING_TREE_TYPE, null, treeType);
+        Preconditions.checkNotNull(FD_BLOCK_SAPLING_TREE_TYPE);
+        setObjectFieldValue(FD_BLOCK_SAPLING_TREE_TYPE, null, treeType);
     }
 
     public static CraftBlockState newBlockStateFromBlockSnapshot(BlockSnapshot snapshot) {
@@ -75,10 +75,10 @@ public class HybridReflectionUtils {
                 if (Bukkit.isPrimaryThread()) {
                     throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from primary server thread.");
                 }
-                MD_FIRE_EVENT.invokeExact(simplePluginManager, event);
+                MH_FIRE_EVENT.invokeExact(simplePluginManager, event);
             } else {
                 synchronized (pluginManager) {
-                    MD_FIRE_EVENT.invokeExact(simplePluginManager, event);
+                    MH_FIRE_EVENT.invokeExact(simplePluginManager, event);
                 }
             }
         } catch (Throwable th) {

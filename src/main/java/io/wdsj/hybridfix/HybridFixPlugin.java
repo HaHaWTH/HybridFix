@@ -26,10 +26,10 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.api.bukkit.json", () -> Settings.extraBukkitApi);
             put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
             put("mixins.fix.fakeplayer.json", () -> Settings.invertFakePlayerBlacklist || Settings.fakePlayerPluginBlacklist.length > 0);
-            put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
+            put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset);
             if (!IS_CLEANROOM) {
                 if (Utils.isMohist) {
-                    put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset || Settings.simulateVanillaRespawn);
+                    put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset);
                 }
                 if (Utils.isMohist) {
                     put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
@@ -43,6 +43,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
             put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);
             put("mixins.fix.packet_limiter.drop_item.json", () -> Settings.packetSettings.maxDroppedItemsPerTick != 20);
+            put("mixins.debug.health.json", () -> Settings.debugSettings.entityHealthDebugger);
         }
     });
 

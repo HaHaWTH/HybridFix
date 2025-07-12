@@ -3,7 +3,6 @@ package io.wdsj.hybridfix.mixin.fix.respawn.mohist;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.logic.respawn.CBRespawnFixLogic;
 import io.wdsj.hybridfix.mixin.fix.respawn.EntityCapabilityAccessor;
 import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import net.minecraft.entity.Entity;
@@ -36,7 +35,6 @@ public abstract class PlayerListMixin {
             remap = false
     )
     public void func(EntityPlayerMP playerIn, int i, boolean b, CallbackInfoReturnable<EntityPlayerMP> cir, @Share("newCap") LocalRef<CapabilityDispatcher> newCap) {
-        if (Settings.simulateVanillaRespawn) CBRespawnFixLogic.simulateVanillaRespawn(playerIn);
         if (Settings.fixCapabilityReset) {
             newCap.set(ForgeEventFactory.gatherCapabilities(playerIn));
         }
