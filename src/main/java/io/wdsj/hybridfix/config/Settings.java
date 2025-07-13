@@ -8,80 +8,104 @@ import net.minecraftforge.common.config.Config;
 @Config(modid = HybridFix.MOD_ID)
 public class Settings {
     @Config.Comment("(Server) Check for updates on startup.")
+    @Config.Name("Check for updates")
     @Config.RequiresMcRestart
     public static boolean checkForUpdates = true;
 
     @Config.Comment("(Server) Re-gather capabilities on respawn, will fix Simple Difficulty(And other similar mods) thirst not getting reset on respawn.\nAnd fix dupe bug in The Betweenlands.")
+    @Config.Name("Fix capability reset")
     @Config.RequiresMcRestart
     public static boolean fixCapabilityReset = false;
 
     @Config.Comment("(Server) Pass explosion event to Bukkit.")
+    @Config.Name("Pass explosion event to Bukkit")
     @Config.RequiresMcRestart
     public static boolean passExplosionEventToBukkit = !Utils.isMohist;
 
     @Config.Comment("(Server) Remove entity damage & velocity on explosion being cancelled.")
+    @Config.Name("Remove entity damage & velocity on cancel")
     @Config.RequiresMcRestart
     public static boolean removeEntityDamageAndVelocityOnCancel = true;
 
     @Config.Comment("(Server) Override Mohist's crappy explosion handling with HybridFix's.")
+    @Config.Name("Override Mohist's explosion handling")
     @Config.RequiresMcRestart
     public static boolean overrideMohistExplosionHandling = Utils.isMohist;
 
     @Config.Comment("(Server) Bridge Forge permissions to Bukkit.")
+    @Config.Name("Bridge Forge permissions to Bukkit")
     @Config.RequiresMcRestart
     public static boolean bridgeForgePermissionsToBukkit = !Utils.isMohist;
 
     @Config.Comment("(Server) Skip firing event if no listeners registered.")
+    @Config.Name("Skip firing event if no listeners")
     @Config.RequiresMcRestart
     public static boolean skipEventIfNoListeners = true;
 
     @Config.Comment("(Server) Enable HybridFix's CraftServer optimizations.")
+    @Config.Name("Enable CraftServer optimizations")
     @Config.RequiresMcRestart
     public static boolean enableCraftServerOptimizations = true;
 
-    @Config.Comment("(Server) Disable Spigot's built-in Timings to save performance.(Only support Timings v1)")
+    @Config.Comment("(Server) Disable Spigot's built-in Timings to save performance. (Only support Timings v1)")
+    @Config.Name("Disable Timings")
     @Config.RequiresMcRestart
     public static boolean disableTimings = false;
 
     @Config.Comment("(Server) Register HybridFix commands.")
+    @Config.Name("Register HybridFix commands")
     @Config.RequiresMcRestart
     public static boolean registerHybridFixCommands = true;
 
+    @Config.Comment("(Server) Inject PluginClassLoader to make Forge mods can call Bukkit plugins, requires modified version of LaunchWrapper.")
+    @Config.Name("Forge mods can call Bukkit plugins")
+    @Config.RequiresMcRestart
+    public static boolean forgeModCallBukkitPlugin = false;
+
     @Config.Comment("(Server) Enable HybridFix's bStats metrics.")
+    @Config.Name("Enable metrics")
     @Config.RequiresMcRestart
     public static boolean enableMetrics = true;
 
     @Config.Comment("(Server) FakePlayer event blacklist, plugins in this list will NOT receive events fired by fake players.")
+    @Config.Name("FakePlayer plugin blacklist")
     @Config.RequiresMcRestart
     public static String[] fakePlayerPluginBlacklist = new String[]{};
 
     @Config.Comment("(Server) Whether to invert fake player blacklist to whitelist")
+    @Config.Name("Invert fake player blacklist")
     @Config.RequiresMcRestart
     public static boolean invertFakePlayerBlacklist = false;
 
     @Config.Comment("(Server) [EXPERIMENTAL] More Bukkit API implementation.")
+    @Config.Name("Extra Bukkit API")
     @Config.RequiresMcRestart
     public static boolean extraBukkitApi = false;
 
     @Config.Comment("(Server) SDK integration for RaytraceAntiXray.")
+    @Config.Name("RaytraceAntiXray SDK")
     @Config.RequiresMcRestart
     public static boolean rayTraceAntiXraySDK = false;
 
     @Config.Comment("(Server) Deobfuscate stacktrace when Censored ASM is installed.")
+    @Config.Name("Deobfuscate stacktrace")
     @Config.RequiresMcRestart
     public static boolean deobfuscateStacktrace = false;
 
     @Config.Comment("(Server) Configuration for packet-related stuff.")
+    @Config.Name("Packet Settings")
     @Config.RequiresMcRestart
     public static PacketSettings packetSettings = new PacketSettings();
 
     public static class PacketSettings {
         @Config.Comment("(Server) How many items can be dropped per tick?\nThis modifies CraftBukkit's packet limiter. Leave the value as 20 to prevent applying this mixin.")
+        @Config.Name("Max dropped items per tick")
         @Config.RequiresMcRestart
         public int maxDroppedItemsPerTick = 20;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix mod patches.")
+    @Config.Name("Mod Patch Settings")
     @Config.RequiresMcRestart
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
 
@@ -175,45 +199,55 @@ public class Settings {
         public boolean patchWitcherySymbolEffect = false;
     }
     @Config.Comment("(Server) Configuration for HybridFix built-in bukkit plugin.")
+    @Config.Name("Bukkit Plugin Settings")
     @Config.RequiresMcRestart
     public static BukkitPluginSettings bukkitPluginConfig = new BukkitPluginSettings();
 
     public static class BukkitPluginSettings {
         @Config.Comment("(Server) Enable HybridFix built-in bukkit plugin.\n***All bukkit plugin features in this section won't work if you disabled this!***")
+        @Config.Name("Enable")
         @Config.RequiresMcRestart
         public boolean enable = false;
 
         @Config.Comment("(Server) Enable HybridFix built-in AntiExplode.")
+        @Config.Name("Anti explode")
         @Config.RequiresMcRestart
         public boolean antiExplode = false;
 
         @Config.Comment("(Server) Enable HybridFix Residence hook.")
+        @Config.Name("Hook Residence")
         @Config.RequiresMcRestart
         public boolean hookResidence = false;
 
         @Config.Comment("(Server) Automatically add mod blocks to Residence config.")
+        @Config.Name("Auto add mod blocks to Residence config")
         @Config.RequiresMcRestart
         public boolean autoAddModBlocksToResidenceConfig = false;
 
         @Config.Comment("(Server) Enable HybridFix WorldGuard hook.")
+        @Config.Name("Hook WorldGuard")
         @Config.RequiresMcRestart
         public boolean hookWorldGuard = false;
 
         @Config.Comment("(Server) Enable HybridFix Citizens hook.")
+        @Config.Name("Hook Citizens")
         @Config.RequiresMcRestart
         public boolean hookCitizens = false;
 
         @Config.Comment("(Server) Worlds that AntiExplode should protect.")
+        @Config.Name("AntiExplode worlds")
         @Config.RequiresMcRestart
         public String[] antiExplodeWorlds = new String[]{"world", "DIM-1", "DIM1"};
     }
 
     @Config.Comment("(Server) Configuration for HybridFix debugger.")
+    @Config.Name("Debug Settings")
     @Config.RequiresMcRestart
     public static DebugSettings debugSettings = new DebugSettings();
 
     public static class DebugSettings {
         @Config.Comment("(Server) Enable HybridFix entity health debugger.")
+        @Config.Name("Entity health debugger")
         @Config.RequiresMcRestart
         public boolean entityHealthDebugger = false;
     }

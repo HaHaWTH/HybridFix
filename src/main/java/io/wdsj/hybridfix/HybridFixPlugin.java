@@ -22,6 +22,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     {
         {
             put("mixins.hybridfix.base.json", () -> true);
+            put("mixins.bridge.forge_bukkit.json", () -> Settings.forgeModCallBukkitPlugin);
             put("mixins.stacktrace.deobfuscate.json", () -> Settings.deobfuscateStacktrace);
             put("mixins.api.bukkit.json", () -> Settings.extraBukkitApi);
             put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
