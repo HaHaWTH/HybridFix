@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.entry.bukkit.util;
 
+import io.wdsj.hybridfix.duck.bridge.forge_bukkit.IClassLoaderInjectGetter;
 import io.wdsj.hybridfix.duck.bukkit.plugin.IPluginClassDefiner;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import org.bukkit.Bukkit;
@@ -24,6 +25,21 @@ public class ListenerHackery {
         }
     }
      */
+
+    /**
+     * Checks if the target plugin ClassLoader is injected by {@link IClassLoaderInjectGetter}.
+     * @param pluginName target plugin name
+     * @return true if the target plugin ClassLoader is injected, false otherwise.
+     */
+    public static boolean ensureInjected(String pluginName) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (plugin == null) {
+            return false;
+        }
+        ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
+        return pluginClassLoader instanceof IClassLoaderInjectGetter && ((IClassLoaderInjectGetter) pluginClassLoader).isInjected();
+    }
+
     /**
      * New approach to register listeners to target plugin ClassLoader that bypasses the isolation.
      * @see IPluginClassDefiner
