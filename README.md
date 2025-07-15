@@ -41,6 +41,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Fix EpicSiegeMod mob AIs can grief in protected areas
 - Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing
 - Fix Witchery spells can bypass damage protection
+- Auto modify Actually Additions' config to make it fit the server environment
 
 ## Features
 
@@ -55,6 +56,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Extensive APIs for mod developers to maintain compatibility with hybrid servers easily.
 - General CraftBukkit performance improvements.
 - Auto deobfuscate plugin stacktraces when Censored ASM is installed for easier debugging.
+- **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](./FORGE_CALL_BUKKIT.md))**
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 

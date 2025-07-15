@@ -3,17 +3,35 @@ package io.wdsj.hybridfix.entry.bukkit.util;
 import io.wdsj.hybridfix.duck.bridge.forge_bukkit.IClassLoaderInjectGetter;
 import io.wdsj.hybridfix.duck.bukkit.plugin.IPluginClassDefiner;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import io.wdsj.hybridfix.util.SneakyThrow;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 
 public class ListenerHackery {
     private ListenerHackery() {
+    }
+
+    @Nullable
+    public static final Field childLoadingEnabled;
+
+    static {
+        Field childLoadingField;
+        try {
+            // noinspection JavaReflectionMemberAccess
+            childLoadingField = LaunchClassLoader.class.getDeclaredField("childLoadingEnabled");
+            childLoadingField.setAccessible(true);
+        } catch (Throwable e) {
+            childLoadingField = null;
+        }
+        childLoadingEnabled = childLoadingField;
     }
 
     /*
@@ -27,17 +45,25 @@ public class ListenerHackery {
      */
 
     /**
-     * Checks if the target plugin ClassLoader is injected by {@link IClassLoaderInjectGetter}.
+     * Checks if the target plugin ClassLoader is injected by {@link IClassLoaderInjectGetter},
+     * and can be safely accessed at this point.
      * @param pluginName target plugin name
-     * @return true if the target plugin ClassLoader is injected, false otherwise.
+     * @return true if the target plugin class can be accessed, false otherwise.
      */
-    public static boolean ensureInjected(String pluginName) {
+    public static boolean ensureSafeAccess(String pluginName) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         if (plugin == null) {
             return false;
         }
+        boolean stageFlag = false;
+        try {
+            if (childLoadingEnabled != null) {
+                stageFlag = childLoadingEnabled.getBoolean(null);
+            }
+        } catch (Throwable ignored) {
+        }
         ClassLoader pluginClassLoader = plugin.getClass().getClassLoader();
-        return pluginClassLoader instanceof IClassLoaderInjectGetter && ((IClassLoaderInjectGetter) pluginClassLoader).isInjected();
+        return stageFlag && pluginClassLoader instanceof IClassLoaderInjectGetter && ((IClassLoaderInjectGetter) pluginClassLoader).isInjected();
     }
 
     /**

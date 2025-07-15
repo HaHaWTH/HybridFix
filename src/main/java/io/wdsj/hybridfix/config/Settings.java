@@ -110,6 +110,10 @@ public class Settings {
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
 
     public static class ModPatchSettings {
+        @Config.Comment("(Server) Patch default config values of Actually Additions.")
+        @Config.RequiresMcRestart
+        public boolean patchActuallyAdditionsConfig = true;
+
         @Config.Comment("(Server) Patch saplings in twilight forest bypass Bukkit grief protections exploit.")
         @Config.RequiresMcRestart
         public boolean patchTwilightForestSapling = true;
@@ -205,7 +209,7 @@ public class Settings {
 
     public static class BukkitPluginSettings {
         @Config.Comment("(Server) Enable HybridFix built-in bukkit plugin.\n***All bukkit plugin features in this section won't work if you disabled this!***")
-        @Config.Name("Enable")
+        @Config.Name("Enable Plugin")
         @Config.RequiresMcRestart
         public boolean enable = false;
 

@@ -1,5 +1,11 @@
 package io.wdsj.hybridfix.duck.patch.forge;
 
+import org.jetbrains.annotations.ApiStatus;
+
+/**
+ * Internal API, use {@link io.wdsj.hybridfix.api.forge.HybridFixForgeApi} instead.
+ */
+@ApiStatus.Internal
 public interface IExplosionEventDetonate {
     default boolean hybridFix$isVanilla() {
         return true;

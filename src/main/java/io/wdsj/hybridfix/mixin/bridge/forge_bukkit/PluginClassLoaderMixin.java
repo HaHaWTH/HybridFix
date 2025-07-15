@@ -49,7 +49,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader implements I
         try {
             hybridFix$addChild.invoke(parent, this);
             hybridFix$isInjected = true;
-            HybridFix.LOGGER.debug("Injected {} class loader into LaunchClassLoader", description.getName());
+            HybridFix.LOGGER.debug("Injected {} classloader into LaunchClassLoader", description.getName());
         } catch (Throwable e) {
             HybridFix.LOGGER.error("Failed to add plugin class loader to LaunchClassLoader", e);
         }

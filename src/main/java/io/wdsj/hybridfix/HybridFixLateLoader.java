@@ -91,6 +91,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
         {
             // Industrial Foregoing patches
             put("mixins.industrial_foregoing.block.json", () -> isModLoaded("industrialforegoing") && Settings.modPatchSettings.disableIndustrialForegoingBlackholeControllerRecipe);
+            // Actually Additions patches
+            put("mixins.actuallyadditions.config.json", () -> isModLoaded("actuallyadditions") && Settings.modPatchSettings.patchActuallyAdditionsConfig);
         }
     });
 
