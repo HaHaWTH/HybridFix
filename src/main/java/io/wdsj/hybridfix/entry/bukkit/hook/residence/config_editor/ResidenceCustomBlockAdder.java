@@ -68,7 +68,7 @@ public class ResidenceCustomBlockAdder {
         newRightClicks.addAll(oldRightClicks);
         plugin.getConfig().set(customRightClickKey, newRightClicks);
         final long end = System.currentTimeMillis();
-        HybridFix.LOGGER.info("Add {} custom right clicks for Residence, {} in total. (took {} ms)", newRightClicks.size() - oldRightClicks.size(), newRightClicks.size(), end - start);
+        HybridFix.LOGGER.info("Add {} custom right click(s) to Residence, {} in total. (took {} ms)", newRightClicks.size() - oldRightClicks.size(), newRightClicks.size(), end - start);
     }
 
     public void addCustomBothClicks() {
@@ -106,7 +106,7 @@ public class ResidenceCustomBlockAdder {
         newBothClicks.addAll(oldBothClicks);
         plugin.getConfig().set(customBothClickKey, newBothClicks);
         final long end = System.currentTimeMillis();
-        HybridFix.LOGGER.info("Add {} custom both clicks for Residence, {} in total. (took {} ms)", newBothClicks.size() - oldBothClicks.size(), newBothClicks.size(), end - start);
+        HybridFix.LOGGER.info("Add {} custom both click(s) to Residence, {} in total. (took {} ms)", newBothClicks.size() - oldBothClicks.size(), newBothClicks.size(), end - start);
     }
 
     public void save() {
