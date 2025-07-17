@@ -52,7 +52,7 @@ public class ListenerHackery {
      */
     public static boolean ensureSafeAccess(String pluginName) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
-        if (plugin == null) {
+        if (plugin == null || !plugin.isEnabled()) {
             return false;
         }
         boolean stageFlag = false;
