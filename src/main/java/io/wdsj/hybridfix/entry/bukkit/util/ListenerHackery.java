@@ -23,13 +23,12 @@ public class ListenerHackery {
     public static final Field childLoadingEnabled;
 
     static {
-        Field childLoadingField;
+        Field childLoadingField = null;
         try {
             // noinspection JavaReflectionMemberAccess
-            childLoadingField = LaunchClassLoader.class.getDeclaredField("childLoadingEnabled");
+            childLoadingField = LaunchClassLoader.class.getField("childLoadingEnabled");
             childLoadingField.setAccessible(true);
-        } catch (Throwable e) {
-            childLoadingField = null;
+        } catch (Throwable ignored) {
         }
         childLoadingEnabled = childLoadingField;
     }
@@ -45,10 +44,10 @@ public class ListenerHackery {
      */
 
     /**
-     * Checks if the target plugin ClassLoader is injected by {@link IClassLoaderInjectGetter},
+     * Checks if the target plugin classloader is injected by {@link IClassLoaderInjectGetter},
      * and can be safely accessed at this point.
      * @param pluginName target plugin name
-     * @return true if the target plugin class can be accessed, false otherwise.
+     * @return true if the target plugin class can be safely accessed, false otherwise.
      */
     public static boolean ensureSafeAccess(String pluginName) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);

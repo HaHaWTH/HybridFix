@@ -30,7 +30,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader implements I
         Method add;
         try {
             // noinspection JavaReflectionMemberAccess
-            add = LaunchClassLoader.class.getDeclaredMethod("addChild", ClassLoader.class);
+            add = LaunchClassLoader.class.getMethod("addChild", ClassLoader.class);
         } catch (Throwable e) {
             add = null;
             HybridFix.LOGGER.error("Failed to find method LaunchClassLoader#addChild", e);
