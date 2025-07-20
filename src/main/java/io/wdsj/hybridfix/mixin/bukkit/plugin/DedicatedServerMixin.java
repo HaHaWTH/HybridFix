@@ -7,6 +7,7 @@ import io.wdsj.hybridfix.entry.bukkit.hook.citizens.CitizensHookNPCDamageListene
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
+import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookPvpListener;
@@ -50,9 +51,6 @@ public abstract class DedicatedServerMixin {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookEntityChangeBlockListener.class, res);
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
                 if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
-                    if (Bukkit.getPluginManager().isPluginEnabled("ResProtection")) {
-                        HybridFix.LOGGER.warn("[HybridFix] HybridFix contains all of ResProtection's features and even better, ResProtection is no longer needed.");
-                    }
                     ResidenceCustomBlockAdder adder = new ResidenceCustomBlockAdder();
                     adder.addCustomBothClicks();
                     adder.addCustomRightClicks();
@@ -74,6 +72,10 @@ public abstract class DedicatedServerMixin {
                 ListenerHackery.registerListenerToTargetPlugin(WGHookEntityChangeBlockListener.class, wg);
                 ListenerHackery.registerListenerToTargetPlugin(WGHookBlockFormListener.class, wg);
                 ListenerHackery.registerListenerToTargetPlugin(WGHookPvpListener.class, wg);
+                if (Settings.modPatchSettings.patchAppliedEnergistics2SpatialPylon && Loader.isModLoaded("appliedenergistics2")) {
+                    ListenerHackery.registerListenerToTargetPlugin(WGHookAE2SpatialPylonListener.class, wg);
+                    HybridFix.LOGGER.info("{}[HybridFix] WorldGuard <-> Applied Energistics 2 communication established.", ChatColor.GREEN);
+                }
                 HybridFix.LOGGER.info("{}[HybridFix] Hooked into WorldGuard.", ChatColor.LIGHT_PURPLE);
             } else {
                 HybridFix.LOGGER.warn("[HybridFix] WorldGuard not found, check your installation.");
