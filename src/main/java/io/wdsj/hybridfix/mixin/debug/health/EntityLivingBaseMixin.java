@@ -40,7 +40,7 @@ public abstract class EntityLivingBaseMixin extends Entity {
             }
             boolean isSafeAccess = hybridFix$safetyCheckFunction.apply(caller);
             if (!isSafeAccess) {
-                HybridFix.LOGGER.warn("Unsafe direct call of EntityLivingBase#setHealth for entity {} at {} {} detected, caller: {}", this.getName(), this.getEntityWorld().getWorldInfo().getWorldName(), this.getPosition().toString(), caller.getName());
+                HybridFix.LOGGER.warn("Unsafe direct call of EntityLivingBase#setHealth for entity {} with id {} at {} {} detected, caller: {}", this.getName(), this.getEntityId(), this.getEntityWorld().getWorldInfo().getWorldName(), this.getPosition().toString(), caller.getName());
                 HybridFix.LOGGER.warn("This will bypass all bukkit events, grief may happen.");
             } else {
                 HybridFix.LOGGER.debug("Caller of EntityLivingBase#setHealth: {}", caller.getName());
