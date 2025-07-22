@@ -433,5 +433,12 @@ idea.project.settings {
     }
 }
 
+tasks.register('cleanMainClasses', Delete) {
+    delete fileTree("$buildDir/classes/java/main")
+}
+
+tasks.named('compileJava').configure {
+    dependsOn 'cleanMainClasses'
+}
 apply from: 'gradle/scripts/publishing.gradle'
 apply from: 'gradle/scripts/extra.gradle'

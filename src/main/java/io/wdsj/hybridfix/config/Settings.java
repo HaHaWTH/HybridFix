@@ -77,7 +77,7 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean invertFakePlayerBlacklist = false;
 
-    @Config.Comment("(Server) [EXPERIMENTAL] More Bukkit API implementation.")
+    @Config.Comment("(Server) More Bukkit API implementation from Paper and modern versions.")
     @Config.Name("Extra Bukkit API")
     @Config.RequiresMcRestart
     public static boolean extraBukkitApi = false;
@@ -91,6 +91,11 @@ public class Settings {
     @Config.Name("Deobfuscate stacktrace")
     @Config.RequiresMcRestart
     public static boolean deobfuscateStacktrace = false;
+
+    @Config.Comment("(Server) Compatibility mode for AttackBridge.")
+    @Config.Name("Compatibility mode for AttackBridge")
+    @Config.RequiresMcRestart
+    public static boolean compatModeForAttackBridge = false;
 
     @Config.Comment("(Server) Configuration for packet-related stuff.")
     @Config.Name("Packet Settings")
