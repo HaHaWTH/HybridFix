@@ -6,8 +6,9 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "block.CraftBlockMixin",
+    "WorldMixin",
     "block.BlockMixin",
+    "block.CraftBlockMixin",
     "entity.CraftPlayerMixin",
     "event.block.ActionMixin"
   ]
