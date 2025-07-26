@@ -45,6 +45,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);
             put("mixins.fix.packet_limiter.drop_item.json", () -> Settings.packetSettings.maxDroppedItemsPerTick != 20);
             put("mixins.debug.health.json", () -> Settings.debugSettings.entityHealthDebugger);
+            put("mixins.perf.te.snapshot.json", () -> Settings.dontCreateTESnapshotForInventoryMoveItemEvent && Settings.extraBukkitApi);
         }
     });
 

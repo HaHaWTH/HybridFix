@@ -92,6 +92,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean deobfuscateStacktrace = false;
 
+    @Config.Comment("(Server) Don't create TE snapshot when firing InventoryMoveItemEvent\nRequires feature Extra Bukkit API.")
+    @Config.Name("Dont create TE snapshot for InventoryMoveItemEvent")
+    @Config.RequiresMcRestart
+    public static boolean dontCreateTESnapshotForInventoryMoveItemEvent = false;
+
     @Config.Comment("(Server) Compatibility mode for AttackBridge.")
     @Config.Name("Compatibility mode for AttackBridge")
     @Config.RequiresMcRestart

@@ -1,9 +1,11 @@
 package io.wdsj.hybridfix.mixin.api.bukkit.block;
 
 import io.wdsj.hybridfix.duck.api.bukkit.block.IBlockInvoker;
+import io.wdsj.hybridfix.state.block.BlockEntitySnapshotState;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import org.bukkit.World;
+import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.block.CraftBlock;
@@ -23,6 +25,7 @@ public abstract class CraftBlockMixin implements IBlockInvoker {
     // @formatter:off
     @Shadow public abstract World getWorld();
     @Shadow protected abstract Block getNMSBlock();
+    @Shadow public abstract BlockState getState();
     @Unique private BlockPos hybridFix$pos;
     // @formatter:on
 
@@ -64,5 +67,16 @@ public abstract class CraftBlockMixin implements IBlockInvoker {
     public boolean isCollidable() {
         net.minecraft.world.World world = ((CraftWorld) this.getWorld()).getHandle();
         return world.getBlockState(hybridFix$pos).getCollisionBoundingBox(world, hybridFix$pos) != null;
+    }
+
+    @Unique
+    @Override
+    public BlockState getState(boolean useSnapshot) {
+        try {
+            BlockEntitySnapshotState.ENABLE_SNAPSHOT = useSnapshot;
+            return this.getState();
+        } finally {
+            BlockEntitySnapshotState.ENABLE_SNAPSHOT = true;
+        }
     }
 }

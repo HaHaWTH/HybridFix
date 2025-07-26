@@ -8,6 +8,7 @@
   "mixins": [
     "WorldMixin",
     "block.BlockMixin",
+    "block.CraftBlockEntityStateMixin",
     "block.CraftBlockMixin",
     "entity.CraftPlayerMixin",
     "event.block.ActionMixin"

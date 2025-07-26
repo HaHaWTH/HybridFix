@@ -1,10 +1,12 @@
 package io.wdsj.hybridfix.duck.api.bukkit.block;
 
 import io.wdsj.hybridfix.HybridFixServer;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 
 /**
  * Duck interface for {@link org.bukkit.block.Block}.
- * All methods here behave same as <a href="https://jd.papermc.io/paper/1.21.7/org/bukkit/block/Block.html">PaperMC Javadoc</a>.
+ * All methods here behave same as <a href="https://jd.papermc.io/paper/1.21.8/org/bukkit/block/Block.html">PaperMC Javadoc</a>.
  * You can cast to this interface from a {@link org.bukkit.block.Block} instance to access the methods below.
  */
 @SuppressWarnings("unused")
@@ -40,6 +42,7 @@ public interface IBlockInvoker {
      * Check if this block is replaceable
      * <p>
      * Determined by Minecraft, representing a block that is not AIR that you can still place a new block at, such as flowers.
+     *
      * @return true if block is replaceable
      */
     default boolean isReplaceable() {
@@ -53,6 +56,7 @@ public interface IBlockInvoker {
      * <p>
      * Determined by Minecraft, typically a block a player can stand on and can't be passed through.
      * This API is faster and more accurate than accessing Material#isSolid as it avoids a material lookup and switch statement.
+     *
      * @return true if block is solid
      */
     default boolean isSolid() {
@@ -67,6 +71,17 @@ public interface IBlockInvoker {
      * @return true if collidable
      */
     default boolean isCollidable() {
+        AssertionError error = new AssertionError("Not Implemented");
+        HybridFixServer.createServerDump(error);
+        throw error;
+    }
+
+    /**
+     * @param useSnapshot if this block is a block entity, should we create a full copy of the BlockEntity
+     * @return BlockState with the current state of this block
+     * @see Block#getState() optionally disables use of snapshot, to operate on real block data
+     */
+    default BlockState getState(boolean useSnapshot) {
         AssertionError error = new AssertionError("Not Implemented");
         HybridFixServer.createServerDump(error);
         throw error;
