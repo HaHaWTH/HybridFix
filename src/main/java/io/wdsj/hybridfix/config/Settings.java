@@ -120,7 +120,7 @@ public class Settings {
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
 
     public static class ModPatchSettings {
-        @Config.Comment("(Server) Patch default config values of Actually Additions.")
+        @Config.Comment("(Server / Client) Patch default config values of Actually Additions.")
         @Config.RequiresMcRestart
         public boolean patchActuallyAdditionsConfig = true;
 
@@ -151,6 +151,10 @@ public class Settings {
         @Config.Comment("(Server) Patch Disarm enchantment in SME(1.0.0 and higher), prevent bypassing the bukkit protection.")
         @Config.RequiresMcRestart
         public boolean patchSoManyEnchantmentsDisarm = false;
+
+        @Config.Comment("(Server / Client) Optimize insertion & extraction logic of Storage Drawers.")
+        @Config.RequiresMcRestart
+        public boolean patchStorageDrawersStackLogic = true;
 
         @Config.Comment("(Server) Patch lens of Botania can bypass bukkit grief protection.")
         @Config.RequiresMcRestart

@@ -49,8 +49,10 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
         }
     });
 
-    private static final Map<String, Supplier<Boolean>> commonMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
-    {
+    private static final Map<String, Supplier<Boolean>> commonMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>() {
+        {
+            put("mixins.early_for_late.storage_drawers.json", () -> Settings.modPatchSettings.patchStorageDrawersStackLogic);
+        }
     });
 
     @Override
