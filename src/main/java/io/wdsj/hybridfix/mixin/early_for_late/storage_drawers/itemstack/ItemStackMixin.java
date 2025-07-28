@@ -18,7 +18,7 @@ public abstract class ItemStackMixin {
             )
     )
     public void forgeInit(ItemStack instance, Operation<Void> original) {
-        if (SkipCapState.SKIP_CAP_INIT) {
+        if (SkipCapState.SKIP_CAP_INIT.get()) {
             return;
         }
         original.call(instance);

@@ -25,6 +25,7 @@ public abstract class DrawerItemRepositoryMixin {
             cir.setReturnValue(stack);
         }
     }
+
     /**
      * How this optimization works: Most of the time, the ItemStack passed to this method has no capabilities.
      * (nobody wants to insert a battery into the drawer, right?)
@@ -42,11 +43,11 @@ public abstract class DrawerItemRepositoryMixin {
         try {
             // noinspection ConstantConditions
             if (((ItemStackCapabilityAccessor) (Object) instance).getCapabilities() == null) {
-                SkipCapState.SKIP_CAP_INIT = true;
+                SkipCapState.SKIP_CAP_INIT.set(true);
             }
             return original.call(instance);
         } finally {
-            SkipCapState.SKIP_CAP_INIT = false;
+            SkipCapState.SKIP_CAP_INIT.remove();
         }
     }
 }

@@ -4,5 +4,5 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class SkipCapState {
-    public static boolean SKIP_CAP_INIT = false;
+    public static ThreadLocal<Boolean> SKIP_CAP_INIT = ThreadLocal.withInitial(() -> false);
 }
