@@ -204,9 +204,6 @@ dependencies {
     // Actually Additions
     compileOnly rfg.deobf("curse.maven:actually-additions-228404:3117927")
 
-    // Storage Drawers
-    compileOnly rfg.deobf("curse.maven:storage-drawers-223852:5981297")
-
     compileOnly "org.jetbrains:annotations:26.0.2"
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'

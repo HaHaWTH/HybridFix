@@ -152,10 +152,6 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchSoManyEnchantmentsDisarm = false;
 
-        @Config.Comment("(Server / Client) Optimize insertion & extraction logic of Storage Drawers.")
-        @Config.RequiresMcRestart
-        public boolean patchStorageDrawersStackLogic = true;
-
         @Config.Comment("(Server) Patch lens of Botania can bypass bukkit grief protection.")
         @Config.RequiresMcRestart
         public boolean patchBotaniaLens = false;
