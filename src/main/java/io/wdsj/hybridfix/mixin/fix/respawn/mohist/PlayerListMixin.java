@@ -24,6 +24,7 @@ import java.util.Objects;
  * now we need to handle this manually.
  */
 @Mixin(PlayerList.class)
+@SuppressWarnings("all")
 public abstract class PlayerListMixin {
     @Dynamic("mohist")
     @Inject(
