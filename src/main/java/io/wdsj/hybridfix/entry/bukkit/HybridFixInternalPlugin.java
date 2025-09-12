@@ -28,7 +28,7 @@ public class HybridFixInternalPlugin extends PluginBase {
     private final String pluginName;
     private final File dataFolder;
     private final PluginLogger logger;
-    private PluginDescriptionFile pdf;
+    private final PluginDescriptionFile pdf;
 
     public HybridFixInternalPlugin() {
         this.pluginName = "HybridFix";
@@ -103,17 +103,14 @@ public class HybridFixInternalPlugin extends PluginBase {
 
     @Override
     public void onDisable() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void onLoad() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
     public void onEnable() {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
