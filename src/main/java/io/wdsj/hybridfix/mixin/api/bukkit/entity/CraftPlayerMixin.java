@@ -107,7 +107,7 @@ public abstract class CraftPlayerMixin {
     }
 
     // SkinsRestorer fix (Why did SR invoke this?)
-    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @SuppressWarnings({"AddedMixinMembersNamePattern", "unused"})
     @Unique(silent = true)
     public void sendPacket(Packet<?> packet) {
         if (this.getHandle().connection != null) {
