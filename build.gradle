@@ -110,6 +110,10 @@ repositories {
         url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
     maven {
+        name 'SpigotMC Public'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/public/'
+    }
+    maven {
         name 'codemc-nms'
         url 'https://repo.codemc.io/repository/nms/'
     }
