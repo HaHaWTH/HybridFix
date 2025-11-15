@@ -13,7 +13,8 @@ public class AsyncCatcherMixin {
             at = @At(
                     value = "NEW",
                     target = "java/lang/IllegalStateException"
-            )
+            ),
+            require = 0
     )
     private static IllegalStateException deobfuscate(String message) {
         IllegalStateException exception = new IllegalStateException(message);

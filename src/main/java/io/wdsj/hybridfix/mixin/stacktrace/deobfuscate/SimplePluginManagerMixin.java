@@ -15,6 +15,7 @@ public abstract class SimplePluginManagerMixin {
                     target = "Ljava/util/logging/Logger;log(Ljava/util/logging/Level;Ljava/lang/String;Ljava/lang/Throwable;)V"
             ),
             index = 2,
+            require = 0,
             remap = false
     )
     public Throwable deobfuscate(Throwable thrown) {

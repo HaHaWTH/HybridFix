@@ -23,7 +23,8 @@ public abstract class CraftAsyncTaskMixin {
                             target = "Ljava/util/logging/Logger;log(Ljava/util/logging/Level;Ljava/lang/String;Ljava/lang/Throwable;)V"
                     )
             ),
-            ordinal = 0
+            ordinal = 0,
+            require = 0
     )
     public Throwable deobfuscate(Throwable th) {
         if (th != null && ModCompatUtils.isCensoredASMInstalled()) {

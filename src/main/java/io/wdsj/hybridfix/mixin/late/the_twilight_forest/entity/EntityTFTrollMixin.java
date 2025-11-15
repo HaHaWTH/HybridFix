@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.mixin.late.the_twilight_forest.entity;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.monster.EntityMob;
@@ -17,7 +18,7 @@ public abstract class EntityTFTrollMixin extends EntityMob implements IRangedAtt
         super(worldIn);
     }
 
-    @WrapWithCondition(
+    @WrapOperation(
             method = "ripenBer",
             at = @At(
                     value = "INVOKE",
@@ -26,7 +27,11 @@ public abstract class EntityTFTrollMixin extends EntityMob implements IRangedAtt
             ),
             remap = false
     )
-    public boolean checkCanDestroyBlock(World instance, BlockPos pos, IBlockState state) {
-        return EntityUtil.canDestroyBlock(instance, pos, state, this);
+    public boolean checkCanDestroyBlock(World instance, BlockPos blockPos, IBlockState iBlockState, Operation<Boolean> original) {
+        if (EntityUtil.canDestroyBlock(instance, blockPos, iBlockState, this)) {
+            return original.call(instance, blockPos, iBlockState);
+        } else {
+            return false;
+        }
     }
 }

@@ -36,7 +36,7 @@ public abstract class SpiderHandlerMixin {
         byte data = (byte) Blocks.WEB.getMetaFromState(state);
         org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        Entity bEntity = ((IEntityGetter) Objects.requireNonNull(event.getSource().getTrueSource())).getBukkitEntity();
+        Entity bEntity = ((IEntityGetter) Objects.requireNonNull(event.getSource().getTrueSource())).getBukkitEntity(); // Nullability has been checked by the original method body
         // noinspection deprecation
         EntityChangeBlockEvent bEvent = new EntityChangeBlockEvent(bEntity, bBlock, Material.WEB, data);
         Bukkit.getPluginManager().callEvent(bEvent);
