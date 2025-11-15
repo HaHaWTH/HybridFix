@@ -102,6 +102,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean compatModeForAttackBridge = false;
 
+    @Config.Comment("(Server) Fixes for Forge and Bukkit chunk systems.")
+    @Config.Name("Fixes for Forge and Bukkit chunk systems")
+    @Config.RequiresMcRestart
+    public static boolean fixesForForgeAndBukkitChunkSystems = true;
+
     @Config.Comment("(Server) Configuration for packet-related stuff.")
     @Config.Name("Packet Settings")
     @Config.RequiresMcRestart

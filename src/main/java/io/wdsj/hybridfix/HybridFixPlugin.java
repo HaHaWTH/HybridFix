@@ -28,6 +28,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
             put("mixins.fix.fakeplayer.json", () -> Settings.invertFakePlayerBlacklist || Settings.fakePlayerPluginBlacklist.length > 0);
             put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset);
+            put("mixins.fix.chunk_system.json", () -> Settings.fixesForForgeAndBukkitChunkSystems);
             if (!IS_CLEANROOM) {
                 if (Utils.isMohist) {
                     put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset);
