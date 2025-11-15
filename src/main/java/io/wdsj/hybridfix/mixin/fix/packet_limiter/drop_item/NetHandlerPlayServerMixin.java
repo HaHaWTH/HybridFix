@@ -23,7 +23,7 @@ public abstract class NetHandlerPlayServerMixin {
                     )
             ),
             constant = @Constant(intValue = 20),
-            require = 1
+            require = 0
     )
     private int processPlayerDigging(int original) {
         return Settings.packetSettings.maxDroppedItemsPerTick;
