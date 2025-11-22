@@ -2,9 +2,8 @@ package io.wdsj.hybridfix.asm.plugin_patcher;
 
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.asm.IBytecodePatcher;
-import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyTo;
+import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.util.Utils;
 import it.unimi.dsi.fastutil.objects.ObjectArrays;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,12 +47,12 @@ public enum PluginPatcherManager {
             return false;
         }
         try {
-            ApplyTo applyTo = patcher.getClass().getAnnotation(ApplyTo.class);
-            if (applyTo == null) {
-                HybridFix.LOGGER.error("Plugin patcher {} is not annotated with @ApplyTo", patcher.getClass().getName());
+            ApplyToPlugin applyToPlugin = patcher.getClass().getAnnotation(ApplyToPlugin.class);
+            if (applyToPlugin == null) {
+                HybridFix.LOGGER.error("Plugin patcher {} is not annotated with @ApplyToPlugin", patcher.getClass().getName());
                 return false;
             }
-            String pluginName = applyTo.value();
+            String pluginName = applyToPlugin.value();
             boolean flag = patcher.isEnabled();
             if (flag) {
                 pluginPatcher.computeIfPresent(pluginName, (k, v) -> {

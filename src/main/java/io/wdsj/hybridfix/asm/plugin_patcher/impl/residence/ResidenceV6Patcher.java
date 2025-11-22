@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence;
 
 import io.wdsj.hybridfix.asm.IBytecodePatcher;
-import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyTo;
+import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.*;
 
 import java.util.ListIterator;
 
-@ApplyTo("Residence")
+@ApplyToPlugin("Residence")
 @SuppressWarnings("unused")
 public class ResidenceV6Patcher implements IBytecodePatcher {
 
@@ -26,7 +26,7 @@ public class ResidenceV6Patcher implements IBytecodePatcher {
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);
 
-            if (remapBlockListener(classNode)) {
+            if (patchBlockListener(classNode)) {
                 ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES) {
                     @Override
                     protected String getCommonSuperClass(String type1, String type2) {
@@ -82,7 +82,7 @@ public class ResidenceV6Patcher implements IBytecodePatcher {
         this.classLoader = classLoader;
     }
 
-    private boolean remapBlockListener(ClassNode classNode) {
+    private boolean patchBlockListener(ClassNode classNode) {
         boolean changed = false;
 
         for (MethodNode method : classNode.methods) {
