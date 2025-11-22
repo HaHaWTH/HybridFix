@@ -23,7 +23,7 @@ public class ExplosionStartHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onExplosionStart(ExplosionEvent.Start event) {
         Explosion explosion = event.getExplosion();
-        if (explosion.getClass() != Explosion.class || !HybridFixForgeApi.getApi().isVanillaExplosionEventStart(event)) {
+        if (!HybridFixForgeApi.getApi().isVanillaExplosionEventStart(event) || explosion.getClass() != Explosion.class) {
             Entity exploder = explosion.exploder;
             World bworld = ((IWorldGetter) event.getWorld()).getWorld();
             Vec3d explosionPos = explosion.getPosition();

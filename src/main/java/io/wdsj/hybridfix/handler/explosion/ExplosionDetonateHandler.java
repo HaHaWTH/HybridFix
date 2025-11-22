@@ -26,7 +26,7 @@ public class ExplosionDetonateHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onExplosionDetonate(ExplosionEvent.Detonate event) {
         Explosion explosion = event.getExplosion();
-        if (explosion.getClass() != Explosion.class || !HybridFixForgeApi.getApi().isVanillaExplosionEventDetonate(event)) { // This should be the best approach to identify mod events without modify mods
+        if (!HybridFixForgeApi.getApi().isVanillaExplosionEventDetonate(event) || explosion.getClass() != Explosion.class) { // This should be the best approach to identify mod events without modify mods
             Entity exploder = explosion.exploder;
             World bworld = ((IWorldGetter) event.getWorld()).getWorld();
             Vec3d explosionPos = explosion.getPosition();
