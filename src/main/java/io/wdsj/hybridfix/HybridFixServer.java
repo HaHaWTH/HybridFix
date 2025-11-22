@@ -4,8 +4,9 @@ import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.metric.Metrics;
 import io.wdsj.hybridfix.handler.BukkitForgePermissionHandler;
-import io.wdsj.hybridfix.handler.ExplosionHandler;
+import io.wdsj.hybridfix.handler.explosion.ExplosionDetonateHandler;
 import io.wdsj.hybridfix.handler.LivingAttackHandler;
+import io.wdsj.hybridfix.handler.explosion.ExplosionStartHandler;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,7 +19,10 @@ public class HybridFixServer {
     public static void preInit() {
         if (!IS_CLEANROOM) {
             if (Settings.passExplosionEventToBukkit) {
-                MinecraftForge.EVENT_BUS.register(new ExplosionHandler());
+                MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
+            }
+            if (Settings.passExplosionStartEventToBukkit) {
+                MinecraftForge.EVENT_BUS.register(new ExplosionStartHandler());
             }
             if (Settings.bridgeForgePermissionsToBukkit) {
                 PermissionAPI.setPermissionHandler(new BukkitForgePermissionHandler());

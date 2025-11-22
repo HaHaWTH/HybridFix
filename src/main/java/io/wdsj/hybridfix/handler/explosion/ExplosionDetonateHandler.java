@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.handler;
+package io.wdsj.hybridfix.handler.explosion;
 
 import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
 import io.wdsj.hybridfix.config.Settings;
@@ -22,7 +22,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.util.List;
 
-public class ExplosionHandler {
+public class ExplosionDetonateHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onExplosionDetonate(ExplosionEvent.Detonate event) {
         Explosion explosion = event.getExplosion();

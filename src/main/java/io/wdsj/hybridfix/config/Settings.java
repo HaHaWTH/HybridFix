@@ -17,10 +17,15 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean fixCapabilityReset = false;
 
-    @Config.Comment("(Server) Pass explosion event to Bukkit.")
-    @Config.Name("Pass explosion event to Bukkit")
+    @Config.Comment("(Server) Pass explosion detonate event to Bukkit. (Recommended)")
+    @Config.Name("Pass explosion detonate event to Bukkit")
     @Config.RequiresMcRestart
     public static boolean passExplosionEventToBukkit = !Utils.isMohist;
+
+    @Config.Comment("(Server) Pass explosion start event to Bukkit. (Only enable this if you are running into some compatibility issues)")
+    @Config.Name("Pass explosion start event to Bukkit")
+    @Config.RequiresMcRestart
+    public static boolean passExplosionStartEventToBukkit = false;
 
     @Config.Comment("(Server) Remove entity damage & velocity on explosion being cancelled.")
     @Config.Name("Remove entity damage & velocity on cancel")
