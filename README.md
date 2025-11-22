@@ -57,6 +57,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - General CraftBukkit performance improvements.
 - Auto deobfuscate plugin stacktraces when Censored ASM is installed for easier debugging.
 - **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](./FORGE_CALL_BUKKIT.md))**
+- Bukkit APIs backported from modern version.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
