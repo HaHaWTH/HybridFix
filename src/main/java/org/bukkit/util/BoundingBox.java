@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
  * if they get modified later. If you want to keep around a bounding box, it may
  * be wise to call {@link #clone()} in order to get a copy.
  *
- * @apiNote Backported by HybridFix from Paper 1.21.8, some methods are modified to maintain 1.12.2 compatibility.
+ * @apiNote Backported by HybridFix from Paper 1.21.8, some methods are modified/removed to maintain 1.12.2 compatibility.
  */
 @SerializableAs("BoundingBox")
 @SuppressWarnings("unused")
@@ -827,6 +827,132 @@ public class BoundingBox implements Cloneable, ConfigurationSerializable {
         return this.contains(Math.min(x1, x2), Math.min(y1, y2), Math.min(z1, z2),
                 Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2));
     }
+
+    // HybridFix start - Remove raytrace method
+    /*
+    @Nullable
+    public RayTraceResult rayTrace(@NotNull Vector start, @NotNull Vector direction, double maxDistance) {
+        Preconditions.checkArgument(start != null, "Start is null!");
+        start.checkFinite();
+        Preconditions.checkArgument(direction != null, "Direction is null!");
+        direction.checkFinite();
+        Preconditions.checkArgument(direction.lengthSquared() > 0, "Direction's magnitude is 0!");
+        if (maxDistance < 0.0D) return null;
+
+        // ray start:
+        double startX = start.getX();
+        double startY = start.getY();
+        double startZ = start.getZ();
+
+        // ray direction:
+        Vector dir = direction.clone().normalizeZeros().normalize();
+        double dirX = dir.getX();
+        double dirY = dir.getY();
+        double dirZ = dir.getZ();
+
+        // saving a few divisions below:
+        // Note: If one of the direction vector components is 0.0, these
+        // divisions result in infinity. But this is not a problem.
+        double divX = 1.0D / dirX;
+        double divY = 1.0D / dirY;
+        double divZ = 1.0D / dirZ;
+
+        double tMin;
+        double tMax;
+        BlockFace hitBlockFaceMin;
+        BlockFace hitBlockFaceMax;
+
+        // intersections with x planes:
+        if (dirX >= 0.0D) {
+            tMin = (this.minX - startX) * divX;
+            tMax = (this.maxX - startX) * divX;
+            hitBlockFaceMin = BlockFace.WEST;
+            hitBlockFaceMax = BlockFace.EAST;
+        } else {
+            tMin = (this.maxX - startX) * divX;
+            tMax = (this.minX - startX) * divX;
+            hitBlockFaceMin = BlockFace.EAST;
+            hitBlockFaceMax = BlockFace.WEST;
+        }
+
+        // intersections with y planes:
+        double tyMin;
+        double tyMax;
+        BlockFace hitBlockFaceYMin;
+        BlockFace hitBlockFaceYMax;
+        if (dirY >= 0.0D) {
+            tyMin = (this.minY - startY) * divY;
+            tyMax = (this.maxY - startY) * divY;
+            hitBlockFaceYMin = BlockFace.DOWN;
+            hitBlockFaceYMax = BlockFace.UP;
+        } else {
+            tyMin = (this.maxY - startY) * divY;
+            tyMax = (this.minY - startY) * divY;
+            hitBlockFaceYMin = BlockFace.UP;
+            hitBlockFaceYMax = BlockFace.DOWN;
+        }
+        if ((tMin > tyMax) || (tMax < tyMin)) {
+            return null;
+        }
+        if (tyMin > tMin) {
+            tMin = tyMin;
+            hitBlockFaceMin = hitBlockFaceYMin;
+        }
+        if (tyMax < tMax) {
+            tMax = tyMax;
+            hitBlockFaceMax = hitBlockFaceYMax;
+        }
+
+        // intersections with z planes:
+        double tzMin;
+        double tzMax;
+        BlockFace hitBlockFaceZMin;
+        BlockFace hitBlockFaceZMax;
+        if (dirZ >= 0.0D) {
+            tzMin = (this.minZ - startZ) * divZ;
+            tzMax = (this.maxZ - startZ) * divZ;
+            hitBlockFaceZMin = BlockFace.NORTH;
+            hitBlockFaceZMax = BlockFace.SOUTH;
+        } else {
+            tzMin = (this.maxZ - startZ) * divZ;
+            tzMax = (this.minZ - startZ) * divZ;
+            hitBlockFaceZMin = BlockFace.SOUTH;
+            hitBlockFaceZMax = BlockFace.NORTH;
+        }
+        if ((tMin > tzMax) || (tMax < tzMin)) {
+            return null;
+        }
+        if (tzMin > tMin) {
+            tMin = tzMin;
+            hitBlockFaceMin = hitBlockFaceZMin;
+        }
+        if (tzMax < tMax) {
+            tMax = tzMax;
+            hitBlockFaceMax = hitBlockFaceZMax;
+        }
+
+        // intersections are behind the start:
+        if (tMax < 0.0D) return null;
+        // intersections are to far away:
+        if (tMin > maxDistance) {
+            return null;
+        }
+
+        // find the closest intersection:
+        double t;
+        BlockFace hitBlockFace;
+        if (tMin < 0.0D) {
+            t = tMax;
+            hitBlockFace = hitBlockFaceMax;
+        } else {
+            t = tMin;
+            hitBlockFace = hitBlockFaceMin;
+        }
+        // reusing the newly created direction vector for the hit position:
+        Vector hitPosition = dir.multiply(t).add(start);
+        return new RayTraceResult(hitPosition, hitBlockFace);
+    }*/
+    // HybridFix end - Remove raytrace method
 
     @Override
     public int hashCode() {
