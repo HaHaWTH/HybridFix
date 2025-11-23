@@ -16,6 +16,7 @@ import java.util.ListIterator;
 
 /**
  * Remaps the SPAWNER material to MOB_SPAWNER.
+ * @see <a href="https://github.com/Zrips/Residence/blob/master/src/main/java/com/bekvon/bukkit/residence/listeners/ResidencePlayerListener.java#L1158">ResidncePlayerListener</a>
  */
 @ApplyToPlugin("Residence")
 public class ResidenceMaterialPatcher implements IPluginPatcher {

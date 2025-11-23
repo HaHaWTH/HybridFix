@@ -13,6 +13,7 @@ import java.util.ListIterator;
 
 /**
  * Remove 1.13+ BlockData instructions that causes NoClassDefFoundError.
+ * @see <a href="https://github.com/Zrips/Residence/blob/master/src/main/java/com/bekvon/bukkit/residence/listeners/ResidenceBlockListener.java#L124">ResidenceBlockListener</a>
  */
 @ApplyToPlugin("Residence")
 public class ResidenceBlockDataPatcher implements IPluginPatcher {
