@@ -30,7 +30,10 @@ public enum PluginPatcherManager {
         for (Class<?> clazz : classes) {
             try {
                 if (IBytecodePatcher.class.isAssignableFrom(clazz)) {
-                    registerPluginPatcher((IBytecodePatcher) clazz.newInstance());
+                    boolean result = registerPluginPatcher((IBytecodePatcher) clazz.newInstance());
+                    if (result) {
+                        HybridFix.LOGGER.info("Registered plugin patcher {}", clazz.getSimpleName());
+                    }
                 }
             } catch (Exception e) {
                 HybridFix.LOGGER.error("Failed to instantiate plugin patcher {}", clazz.getName(), e);

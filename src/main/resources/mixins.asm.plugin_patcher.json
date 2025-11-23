@@ -1,6 +1,6 @@
 {
   "package": "io.wdsj.hybridfix.mixin.plugin_patcher",
-  "required": false,
+  "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",

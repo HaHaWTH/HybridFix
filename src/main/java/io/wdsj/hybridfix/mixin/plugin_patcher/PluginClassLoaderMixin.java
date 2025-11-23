@@ -32,14 +32,14 @@ public abstract class PluginClassLoaderMixin {
         this.hybridFix$pluginPatcher = PluginPatcherManager.INSTANCE.getPluginPatchers(description.getName());
     }
 
+    @SuppressWarnings("all")
     @Dynamic("hybrid")
     @ModifyVariable(
             method = "remappedFindClass",
             at = @At(
                     value = "STORE",
                     ordinal = 0
-            ),
-            require = 0
+            )
     )
     public byte[] patch(byte[] bytecode, @Local(argsOnly = true) String name) {
         byte[] transformedBytecode = bytecode;
