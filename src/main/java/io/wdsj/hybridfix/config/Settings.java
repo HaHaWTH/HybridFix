@@ -15,7 +15,7 @@ public class Settings {
     @Config.Comment("(Server) Re-gather capabilities on respawn, will fix Simple Difficulty(And other similar mods) thirst not getting reset on respawn.\nAnd fix dupe bug in The Betweenlands.")
     @Config.Name("Fix capability reset")
     @Config.RequiresMcRestart
-    public static boolean fixCapabilityReset = false;
+    public static boolean fixCapabilityReset = true;
 
     @Config.Comment("(Server) Pass explosion detonate event to Bukkit. (Recommended)")
     @Config.Name("Pass explosion detonate event to Bukkit")
@@ -156,27 +156,27 @@ public class Settings {
 
         @Config.Comment("(Server) Patch Tinkers Construct tool damage,\nUseful for some traits that adds extra effects and disarming, etc.\nYou can use property -Dhybridfix.tconstruct.supersedeVanillaEvent=true to prevent calling original damage event.")
         @Config.RequiresMcRestart
-        public boolean patchTconstructToolDamage = false;
+        public boolean patchTconstructToolDamage = true;
 
         @Config.Comment("(Server) Patch Disarm enchantment in SME(1.0.0 and higher), prevent bypassing the bukkit protection.")
         @Config.RequiresMcRestart
-        public boolean patchSoManyEnchantmentsDisarm = false;
+        public boolean patchSoManyEnchantmentsDisarm = true;
 
         @Config.Comment("(Server) Patch lens of Botania can bypass bukkit grief protection.")
         @Config.RequiresMcRestart
-        public boolean patchBotaniaLens = false;
+        public boolean patchBotaniaLens = true;
 
         @Config.Comment("(Server) Patch Rannuncarpus can bypass bukkit grief protection.\nNOTE: This fix uses FakePlayer!")
         @Config.RequiresMcRestart
-        public boolean patchBotaniaBlock = false;
+        public boolean patchBotaniaBlock = true;
 
         @Config.Comment("(Server) Patch miner machines of Industrial Craft 2 can mine blocks in protected areas.\nNOTE: This fix uses FakePlayer!")
         @Config.RequiresMcRestart
-        public boolean patchIC2Machine = false;
+        public boolean patchIC2Machine = true;
 
         @Config.Comment("(Server) Patch explosions of Industrial Craft 2 can break blocks in protected areas.")
         @Config.RequiresMcRestart
-        public boolean patchIC2Explosion = false;
+        public boolean patchIC2Explosion = true;
 
         @Config.Comment("(Client) Replace reflection operations of Industrial Craft 2 AudioManager with our faster one.")
         @Config.RequiresMcRestart
@@ -184,7 +184,7 @@ public class Settings {
 
         @Config.Comment("(Server) Patch explosion of Chaos Crystal in DraconicEvolution can bypass grief protection.")
         @Config.RequiresMcRestart
-        public boolean patchDraconicEvolutionEntity = false;
+        public boolean patchDraconicEvolutionEntity = true;
 
         @Config.Comment("(Server) Patch explosion of RebornCore can bypass grief protection.")
         @Config.RequiresMcRestart
@@ -192,7 +192,7 @@ public class Settings {
 
         @Config.Comment("(Server) Patch Spatial Pylon of Applied Energistics 2 with more config.")
         @Config.RequiresMcRestart
-        public boolean patchAppliedEnergistics2SpatialPylon = false;
+        public boolean patchAppliedEnergistics2SpatialPylon = true;
 
         @Config.Comment("(Server) Blacklisted Spatial Pylon entity registry names")
         @Config.RequiresMcRestart
@@ -204,15 +204,15 @@ public class Settings {
 
         @Config.Comment("(Server) Patch TechGuns explosion can bypass protection.")
         @Config.RequiresMcRestart
-        public boolean patchTechGunsExplosion = false;
+        public boolean patchTechGunsExplosion = true;
 
         @Config.Comment("(Server) Patch modifiers of InfernalMobs can bypass grief protection.")
         @Config.RequiresMcRestart
-        public boolean patchInfernalMobsModifier = false;
+        public boolean patchInfernalMobsModifier = true;
 
         @Config.Comment("(Server) Patch mob ais of Epic Siege Mod can bypass grief protection.")
         @Config.RequiresMcRestart
-        public boolean patchEpicSiegeModAi = false;
+        public boolean patchEpicSiegeModAi = true;
 
         @Config.Comment("(Server & Client) Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing")
         @Config.RequiresMcRestart
@@ -220,7 +220,7 @@ public class Settings {
 
         @Config.Comment("(Server) Patch Witchery symbol effects to make them safer to use.")
         @Config.RequiresMcRestart
-        public boolean patchWitcherySymbolEffect = false;
+        public boolean patchWitcherySymbolEffect = true;
     }
 
     @Config.Comment("Configuration for HybridFix ASM plugin patcher.")
