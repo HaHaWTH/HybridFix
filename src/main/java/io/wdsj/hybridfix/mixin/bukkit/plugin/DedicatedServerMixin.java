@@ -7,6 +7,7 @@ import io.wdsj.hybridfix.entry.bukkit.hook.citizens.CitizensHookNPCDamageListene
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
+import io.wdsj.hybridfix.entry.bukkit.hook.residence.v6.ResHookBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
@@ -50,6 +51,9 @@ public abstract class DedicatedServerMixin {
             if (Bukkit.getPluginManager().isPluginEnabled(res)) {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookEntityChangeBlockListener.class, res);
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
+                if (Bukkit.getPluginManager().getPlugin(res).getDescription().getVersion().startsWith("6")) {
+                    ListenerHackery.registerListenerToTargetPlugin(ResHookBlockListener.class, res);
+                }
                 if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
                     ResidenceCustomBlockAdder adder = new ResidenceCustomBlockAdder();
                     adder.addCustomBothClicks();

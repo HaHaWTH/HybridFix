@@ -222,6 +222,21 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchWitcherySymbolEffect = false;
     }
+
+    @Config.Comment("Configuration for HybridFix ASM plugin patcher.")
+    @Config.RequiresMcRestart
+    public static PluginPatcherSettings pluginPatcherSettings = new PluginPatcherSettings();
+
+    public static class PluginPatcherSettings {
+        @Config.Comment("Enable HybridFix ASM plugin patcher.")
+        @Config.RequiresMcRestart
+        public boolean enable = false;
+
+        @Config.Comment("Enable HybridFix ASM plugin patcher for Residence 6.0+.")
+        @Config.RequiresMcRestart
+        public boolean patchResidenceV6 = false;
+    }
+
     @Config.Comment("(Server) Configuration for HybridFix built-in bukkit plugin.")
     @Config.Name("Bukkit Plugin Settings")
     @Config.RequiresMcRestart
