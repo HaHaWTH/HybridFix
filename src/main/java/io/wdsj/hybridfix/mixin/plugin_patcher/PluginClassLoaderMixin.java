@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.File;
 import java.util.List;
 
+@SuppressWarnings("ModifyVariableMayBeArgsOnly")
 @Mixin(targets = "org.bukkit.plugin.java.PluginClassLoader", remap = false)
 public abstract class PluginClassLoaderMixin {
     @Unique
@@ -32,7 +33,6 @@ public abstract class PluginClassLoaderMixin {
         this.hybridFix$pluginPatcher = PluginPatcherManager.INSTANCE.getPluginPatchers(description.getName());
     }
 
-    @SuppressWarnings("all")
     @Dynamic("hybrid")
     @ModifyVariable(
             method = "remappedFindClass",

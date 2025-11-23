@@ -76,6 +76,7 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             return;
         }
         if (event.isDropItems()) {
+            //noinspection MixinExtrasOperationParameters
             original.call(instance, world, player, pos, iBlockState, te, item);
             isHarvestCalled.set(true);
         } else {
