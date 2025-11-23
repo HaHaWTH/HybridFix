@@ -58,6 +58,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Auto deobfuscate plugin stacktraces when Censored ASM is installed for easier debugging.
 - **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](./FORGE_CALL_BUKKIT.md))**
 - Bukkit APIs backported from modern version.
+- **Builtin plugin ASM patcher, compatible with your favourite plugins.**
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
@@ -106,6 +107,13 @@ Currently patched plugins:
 - Residence[(SpigotMC)](https://www.spigotmc.org/resources/residence-1-7-10-up-to-1-21.11480/)[(GitHub)](https://github.com/Zrips/Residence)
 - WorldGuard[(BukkitDev)](https://dev.bukkit.org/projects/worldguard)[(GitHub)](https://github.com/EngineHub/WorldGuard)
 - Citizens[(GitHub)](https://github.com/CitizensDev/Citizens2)
+
+## Plugin ASM patcher
+HybridFix uses ASM to inject into plugin classes dynamically at runtime 
+to resolve plugin compatibility problems with Forge+Bukkit environment.
+
+Currently supported plugins:
+- Residence: Fixes compatibility with Residence 6.0.0.0+, for CMILib's Java version requirement, you need to use JVMDowngrader or CatRoom.
 
 ## Commands
 
