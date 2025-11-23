@@ -37,13 +37,6 @@ public interface IBytecodePatcher {
 
     boolean isEnabled();
 
-    default ClassLoader getPluginClassLoader() {
-        return null;
-    }
-
-    default void setPluginClassLoader(ClassLoader classLoader) {
-    }
-
     @SuppressWarnings("ResultOfMethodCallIgnored")
     static void clearDebugDumpDirectory() {
         if (!DEBUG_DUMP_BYTECODE) return;

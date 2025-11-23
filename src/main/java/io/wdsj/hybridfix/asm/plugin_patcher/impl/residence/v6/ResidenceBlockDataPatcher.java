@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.asm.IBytecodePatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
@@ -13,7 +13,7 @@ import java.util.ListIterator;
 
 @ApplyToPlugin("Residence")
 @SuppressWarnings("unused")
-public class ResidenceBlockDataPatcher implements IBytecodePatcher {
+public class ResidenceBlockDataPatcher implements IPluginPatcher {
 
     private static final String TARGET_CLASS = "com.bekvon.bukkit.residence.listeners.ResidenceBlockListener";
     private static final String BLOCK_DATA_PKG = "org/bukkit/block/data";

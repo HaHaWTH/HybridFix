@@ -20,7 +20,7 @@ import java.util.jar.JarFile;
 
 public enum PluginPatcherManager {
     INSTANCE;
-    private final Map<String, List<IBytecodePatcher>> pluginPatcher = new ConcurrentHashMap<>();
+    private final Map<String, List<IPluginPatcher>> pluginPatcher = new ConcurrentHashMap<>();
 
     PluginPatcherManager() {
         IBytecodePatcher.clearDebugDumpDirectory();
@@ -29,8 +29,8 @@ public enum PluginPatcherManager {
         ObjectArrays.quickSort(classes, Comparator.comparing(Class::getSimpleName));
         for (Class<?> clazz : classes) {
             try {
-                if (IBytecodePatcher.class.isAssignableFrom(clazz)) {
-                    boolean result = registerPluginPatcher((IBytecodePatcher) clazz.newInstance());
+                if (IPluginPatcher.class.isAssignableFrom(clazz)) {
+                    boolean result = registerPluginPatcher((IPluginPatcher) clazz.newInstance());
                     if (result) {
                         HybridFix.LOGGER.info("Registered plugin patcher {}", clazz.getSimpleName());
                     }
@@ -41,11 +41,11 @@ public enum PluginPatcherManager {
         }
     }
 
-    public List<IBytecodePatcher> getPluginPatchers(String pluginName) {
+    public List<IPluginPatcher> getPluginPatchers(String pluginName) {
         return pluginPatcher.get(pluginName);
     }
 
-    private boolean registerPluginPatcher(IBytecodePatcher patcher) {
+    private boolean registerPluginPatcher(IPluginPatcher patcher) {
         if (!Settings.pluginPatcherSettings.enable) {
             return false;
         }
@@ -63,7 +63,7 @@ public enum PluginPatcherManager {
                     return v;
                 });
                 pluginPatcher.computeIfAbsent(pluginName, k -> {
-                    final List<IBytecodePatcher> list = new ArrayList<>();
+                    final List<IPluginPatcher> list = new ArrayList<>();
                     list.add(patcher);
                     return list;
                 });

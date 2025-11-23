@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Specify whether to apply the patch to the specified class.
+ * Specify whether to apply the patch to the specified plugin.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

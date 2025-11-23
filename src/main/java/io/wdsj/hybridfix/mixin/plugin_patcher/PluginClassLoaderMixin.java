@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.mixin.plugin_patcher;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import io.wdsj.hybridfix.asm.IBytecodePatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginPatcherManager;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -19,7 +19,7 @@ import java.util.List;
 @Mixin(targets = "org.bukkit.plugin.java.PluginClassLoader", remap = false)
 public abstract class PluginClassLoaderMixin {
     @Unique
-    private List<IBytecodePatcher> hybridFix$pluginPatcher;
+    private List<IPluginPatcher> hybridFix$pluginPatcher;
 
     @Inject(
             method = "<init>",
@@ -44,7 +44,7 @@ public abstract class PluginClassLoaderMixin {
     public byte[] patch(byte[] bytecode, @Local(argsOnly = true) String name) {
         byte[] transformedBytecode = bytecode;
         if (this.hybridFix$pluginPatcher != null) {
-            for (IBytecodePatcher patcher : this.hybridFix$pluginPatcher) {
+            for (IPluginPatcher patcher : this.hybridFix$pluginPatcher) {
                 patcher.setPluginClassLoader((ClassLoader) (Object) this);
                 transformedBytecode = patcher.transform(name, transformedBytecode);
             }
