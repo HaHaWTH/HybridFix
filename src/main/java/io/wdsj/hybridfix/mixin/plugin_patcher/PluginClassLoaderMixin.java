@@ -46,7 +46,7 @@ public abstract class PluginClassLoaderMixin {
         if (this.hybridFix$pluginPatcher != null) {
             for (IBytecodePatcher patcher : this.hybridFix$pluginPatcher) {
                 patcher.setPluginClassLoader((ClassLoader) (Object) this);
-                transformedBytecode = patcher.transform(name, bytecode);
+                transformedBytecode = patcher.transform(name, transformedBytecode);
             }
         }
         return transformedBytecode;

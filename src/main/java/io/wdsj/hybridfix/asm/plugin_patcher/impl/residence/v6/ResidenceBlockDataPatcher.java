@@ -1,5 +1,6 @@
-package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence;
+package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
+import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.asm.IBytecodePatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
@@ -12,7 +13,7 @@ import java.util.ListIterator;
 
 @ApplyToPlugin("Residence")
 @SuppressWarnings("unused")
-public class ResidenceV6Patcher implements IBytecodePatcher {
+public class ResidenceBlockDataPatcher implements IBytecodePatcher {
 
     private static final String TARGET_CLASS = "com.bekvon.bukkit.residence.listeners.ResidenceBlockListener";
     private static final String BLOCK_DATA_PKG = "org/bukkit/block/data";
@@ -60,6 +61,7 @@ public class ResidenceV6Patcher implements IBytecodePatcher {
                 byte[] bytes = classWriter.toByteArray();
                 dump(className, bytes);
                 this.classLoader = null;
+                HybridFix.LOGGER.info("Transformed class {}", className);
                 return bytes;
             }
         }
