@@ -14,8 +14,10 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.util.ListIterator;
 
+/**
+ * Remaps the SPAWNER material to MOB_SPAWNER.
+ */
 @ApplyToPlugin("Residence")
-@SuppressWarnings("unused")
 public class ResidenceMaterialPatcher implements IPluginPatcher {
     private static final String TARGET_CLASS_PACKAGE = "com.bekvon.bukkit.residence";
 

@@ -11,8 +11,10 @@ import org.objectweb.asm.tree.*;
 
 import java.util.ListIterator;
 
+/**
+ * Remove 1.13+ BlockData instructions that causes NoClassDefFoundError.
+ */
 @ApplyToPlugin("Residence")
-@SuppressWarnings("unused")
 public class ResidenceBlockDataPatcher implements IPluginPatcher {
 
     private static final String TARGET_CLASS = "com.bekvon.bukkit.residence.listeners.ResidenceBlockListener";

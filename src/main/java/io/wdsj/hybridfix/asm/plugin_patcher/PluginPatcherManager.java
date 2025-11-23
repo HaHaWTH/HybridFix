@@ -114,9 +114,9 @@ public enum PluginPatcherManager {
             return;
         }
 
-        File[] dirfiles = dir.listFiles((file) -> file.isDirectory() || file.getName().endsWith(".class"));
-        if (dirfiles != null) {
-            for (File file : dirfiles) {
+        File[] dirFiles = dir.listFiles((file) -> file.isDirectory() || file.getName().endsWith(".class"));
+        if (dirFiles != null) {
+            for (File file : dirFiles) {
                 if (file.isDirectory()) {
                     findClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), classes);
                 } else {
