@@ -35,6 +35,9 @@ public class HybridFixServer {
         if (Settings.enableMetrics) {
             new Metrics(HybridFixInternalPlugin.getInstance(), 24273);
         }
+        if (Updater.isDev()) {
+            HybridFix.LOGGER.info("You are running a development build of HybridFix, please report any bugs to https://github.com/HaHaWTH/HybridFix/issues");
+        }
         if (Settings.checkForUpdates) {
             Utils.commonWorker().submit(() -> {
                 HybridFix.LOGGER.info("Checking for updates...");
