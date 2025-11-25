@@ -44,12 +44,9 @@ public class HybridFixFakePlayer {
         return new WeakReference<>(player);
     }
 
-    public static @NotNull WeakReference<@Nullable FakePlayer> get(World world, BlockPos pos, String nameSuffix) {
+    public static @NotNull WeakReference<@Nullable FakePlayer> get(World world, BlockPos pos, @NotNull String name) {
         try {
-            FakePlayer player = FakePlayerFactory.get((WorldServer) world, profileCache.get(nameSuffix, () -> {
-                String fullName = name + "-" + nameSuffix;
-                return new GameProfile(UUID.nameUUIDFromBytes(fullName.getBytes(Charsets.UTF_8)), fullName);
-            }));
+            FakePlayer player = FakePlayerFactory.get((WorldServer) world, profileCache.get(name, () -> new GameProfile(UUID.nameUUIDFromBytes(name.getBytes(Charsets.UTF_8)), name)));
             player.posX = pos.getX();
             player.posY = pos.getY();
             player.posZ = pos.getZ();

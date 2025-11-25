@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+@SuppressWarnings("UnnecessaryUnicodeEscape")
 public class FormatUtils {
     public static String itemStackToGiveCommand(ItemStack nmsItemStack) {
         ResourceLocation itemRl = Item.REGISTRY.getNameForObject(nmsItemStack.getItem());

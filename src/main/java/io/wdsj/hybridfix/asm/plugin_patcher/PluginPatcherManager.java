@@ -75,7 +75,7 @@ public enum PluginPatcherManager {
         return false;
     }
 
-
+    // Adapted from Winds-Studio/Leaf, licensed under MIT
     public static @NotNull Set<Class<?>> getClasses(String pack) {
         Set<Class<?>> classes = new LinkedHashSet<>();
         String packageDirName = pack.replace('.', '/');
