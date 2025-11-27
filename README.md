@@ -113,7 +113,14 @@ HybridFix uses ASM to inject into plugin classes dynamically at runtime
 to resolve plugin compatibility problems with Forge+Bukkit environment.
 
 Currently supported plugins:
-- Residence: Fixes compatibility with Residence 6.0.0.0+, for CMILib's Java version requirement, you need to use JVMDowngrader or CatRoom.
+- Residence: Fixes compatibility with Residence 6.0.0.0+.
+
+## About FakePlayers
+HybridFix utilizes Forge FakePlayer to fix some grief bugs, the naming logic is `modid-ClassName`.
+
+For example, the botania rannuncarpus patch is using the fake player with name `botania-SubTileRannuncarpus`.
+
+You can add these names into whitelist/blacklist of your plugins to customize behavior.
 
 ## Commands
 
