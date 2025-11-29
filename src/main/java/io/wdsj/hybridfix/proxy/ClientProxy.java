@@ -13,4 +13,9 @@ public class ClientProxy extends CommonProxy {
     public void onServerStartComplete(FMLServerStartedEvent event) {
         super.onServerStartComplete(event);
     }
+
+    @Override
+    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        super.onServerAboutToStart(event);
+    }
 }

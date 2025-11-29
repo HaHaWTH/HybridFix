@@ -67,6 +67,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean forgeModCallBukkitPlugin = false;
 
+    @Config.Comment("(Server) Fix Spigot EntityActivationRange for mod entities.")
+    @Config.Name("Fix EntityActivationRange")
+    @Config.RequiresMcRestart
+    public static boolean fixEntityActivationRange = true; // TODO: Whitelist & blacklist
+
     @Config.Comment("(Server) Enable HybridFix's bStats metrics.")
     @Config.Name("Enable metrics")
     @Config.RequiresMcRestart

@@ -9,11 +9,21 @@ import io.wdsj.hybridfix.handler.LivingAttackHandler;
 import io.wdsj.hybridfix.handler.explosion.ExplosionStartHandler;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.bukkit.Bukkit;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Set;
+
 public class HybridFixServer {
+    public static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ObjectOpenHashSet<>();
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {
             MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
@@ -48,6 +58,22 @@ public class HybridFixServer {
                     }
                 }
             });
+        }
+    }
+
+    public static void onServerAboutToStart() {
+        if (Settings.fixEntityActivationRange) {
+            for (Map.Entry<ResourceLocation, EntityEntry> entry : ForgeRegistries.ENTITIES.getEntries()) {
+                if (entry.getKey().getNamespace().equals("minecraft")) continue;
+                try {
+                    Class<? extends Entity> clazz = entry.getValue().getEntityClass();
+                    Method method = clazz.getMethod("inactiveTick");
+                    if (method.getDeclaringClass() != clazz) {
+                        modEntitiesWithoutInactiveTick.add(clazz);
+                    }
+                } catch (Throwable ignored) {
+                }
+            }
         }
     }
 

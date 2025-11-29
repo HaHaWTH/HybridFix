@@ -3,6 +3,7 @@ package io.wdsj.hybridfix.proxy;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.HybridFixServer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 
 import static io.wdsj.hybridfix.HybridFix.LOGGER;
@@ -26,5 +27,14 @@ public class ServerProxy extends CommonProxy {
         }
         super.onServerStartComplete(event);
         HybridFixServer.onStartComplete();
+    }
+
+    @Override
+    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        if (!HybridFix.IS_HYBRID_ENV) {
+            return;
+        }
+        super.onServerAboutToStart(event);
+        HybridFixServer.onServerAboutToStart();
     }
 }
