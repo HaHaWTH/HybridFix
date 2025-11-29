@@ -5,6 +5,7 @@ import io.wdsj.hybridfix.util.Utils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,5 +37,10 @@ public class HybridFix {
     @Mod.EventHandler
     public void onServerStartComplete(FMLServerStartedEvent event) {
         proxy.onServerStartComplete(event);
+    }
+
+    @Mod.EventHandler
+    public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        proxy.onServerAboutToStart(event);
     }
 }

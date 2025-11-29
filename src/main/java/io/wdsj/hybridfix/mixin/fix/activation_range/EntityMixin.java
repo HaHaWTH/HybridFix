@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.Unique;
 public abstract class EntityMixin {
     @Unique
     private final boolean hybridFix$shouldIgnoreEAR = HybridFixServer.modEntitiesWithoutInactiveTick.contains(this.getClass());
+
     /**
      * @author Creeam
      * @reason Redirect to Entity#onUpdate() as mod entities do not have an inactiveTick()
