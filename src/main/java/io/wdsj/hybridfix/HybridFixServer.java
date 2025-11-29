@@ -9,7 +9,7 @@ import io.wdsj.hybridfix.handler.LivingAttackHandler;
 import io.wdsj.hybridfix.handler.explosion.ExplosionStartHandler;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class HybridFixServer {
-    public static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ObjectOpenHashSet<>();
+    public static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {
             MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
