@@ -17,23 +17,41 @@ import java.util.List;
  * Updater class for checking for updates, requires semantic versioning.
  */
 public class Updater {
-    private static String currentVersion = HybridFix.VERSION;
-    private static String latestVersion;
-    private static boolean isUpdateAvailable = false;
-    private static boolean isErred = false;
     private static final String RELEASE_URL = "https://api.github.com/repos/HaHaWTH/HybridFix/releases/latest";
     private static final String VERSION_CHANNEL = Tags.VERSION_CHANNEL;
     @SuppressWarnings("ConstantConditions")
     private static final boolean isDev = "dev".equalsIgnoreCase(VERSION_CHANNEL);
 
+    public static final class UpdateResult {
+        private final boolean hasUpdate;
+        private final String latestVersion;
+        private final boolean isError;
+
+        public UpdateResult(boolean hasUpdate, String latestVersion, boolean isError) {
+            this.hasUpdate = hasUpdate;
+            this.latestVersion = latestVersion;
+            this.isError = isError;
+        }
+
+        public boolean isUpdateAvailable() {
+            return hasUpdate;
+        }
+
+        public String getLatestVersion() {
+            return latestVersion;
+        }
+
+        public boolean isError() {
+            return isError;
+        }
+    }
+
     /**
      * Check if there is an update available
      * Note: This method will perform a network request!
-     * @return true if there is an update available, false otherwise
      */
-    @SuppressWarnings("ConstantConditions")
-    public static synchronized boolean isUpdateAvailable() {
-        currentVersion = HybridFix.VERSION;
+    public static UpdateResult checkNow() {
+        String currentVersion = HybridFix.VERSION;
         try {
             URI uri = URI.create(RELEASE_URL);
             URL url = uri.toURL();
@@ -41,37 +59,34 @@ public class Updater {
 
             conn.setRequestProperty("User-Agent", "HybridFix-Updater");
             conn.setRequestProperty("Accept", "application/vnd.github+json");
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(8000);
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
             conn.setRequestMethod("GET");
 
             if (conn.getResponseCode() != 200) {
-                isErred = true;
-                return false;
+                return new UpdateResult(false, null, true);
             }
 
             try (InputStreamReader reader = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8)) {
                 JsonObject jsonObject = new JsonParser().parse(reader).getAsJsonObject();
                 String latest = jsonObject.get("tag_name").getAsString();
-                latestVersion = latest;
 
                 int[] splitLatest = parseSemanticVersion(latest);
                 int[] splitCurrent = parseSemanticVersion(currentVersion);
 
-                int comparisonResult = compareVersions(splitLatest, splitCurrent);
+                int comparison = compareVersions(splitLatest, splitCurrent);
+                boolean updateAvailable;
 
-                if (comparisonResult > 0) {
-                    isUpdateAvailable = true;
+                if (comparison > 0) {
+                    updateAvailable = true;
                 } else {
-                    isUpdateAvailable = comparisonResult == 0 && isDev;
+                    updateAvailable = (comparison == 0 && isDev);
                 }
 
-                return isUpdateAvailable;
+                return new UpdateResult(updateAvailable, latest, false);
             }
         } catch (Exception e) {
-            isErred = true;
-            isUpdateAvailable = false;
-            return false;
+            return new UpdateResult(false, null, true);
         }
     }
 
@@ -85,22 +100,6 @@ public class Updater {
             if (r < l) return -1;
         }
         return 0;
-    }
-
-    public static String getLatestVersion() {
-        return latestVersion;
-    }
-
-    public static String getCurrentVersion() {
-        return currentVersion;
-    }
-
-    public static boolean hasUpdate() {
-        return isUpdateAvailable;
-    }
-
-    public static boolean isErred() {
-        return isErred;
     }
 
     public static boolean isDev() {

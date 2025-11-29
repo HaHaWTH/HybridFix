@@ -73,24 +73,24 @@ public class CommandHybridFix extends Command {
                     String cachedLatestVersion = versionCache.getIfPresent(HybridFix.VERSION);
                     if (cachedLatestVersion != null) {
                         if (!cachedLatestVersion.equals(HybridFix.VERSION)) {
-                            sender.sendMessage(ChatColor.YELLOW + "* There is an update available: " + Updater.getLatestVersion() + ", you're on: " + HybridFix.VERSION + ".");
+                            sender.sendMessage(ChatColor.YELLOW + "* There is an update available: " + cachedLatestVersion + ", you're on: " + HybridFix.VERSION + ".");
                         } else {
                             sender.sendMessage(ChatColor.GREEN + "* You are running the latest version.");
                         }
                     } else {
-                        CompletableFuture.supplyAsync(Updater::isUpdateAvailable, Utils.commonWorker())
+                        CompletableFuture.supplyAsync(Updater::checkNow, Utils.commonWorker())
                                 .thenAccept(
-                                        isUpdateAvailable -> {
-                                            if (isUpdateAvailable) {
-                                                sender.sendMessage(ChatColor.YELLOW + "* There is an update available: " + Updater.getLatestVersion() + ", you're on: " + HybridFix.VERSION + ".");
+                                        result -> {
+                                            if (result.isUpdateAvailable()) {
+                                                sender.sendMessage(ChatColor.YELLOW + "* There is an update available: " + result.getLatestVersion() + ", you're on: " + HybridFix.VERSION + ".");
                                             } else {
-                                                if (!Updater.isErred()) {
+                                                if (!result.isError()) {
                                                     sender.sendMessage(ChatColor.GREEN + "* You are running the latest version.");
                                                 } else {
                                                     sender.sendMessage(ChatColor.RED + "* Error obtaining version information.");
                                                 }
                                             }
-                                            versionCache.put(HybridFix.VERSION, Updater.getLatestVersion());
+                                            versionCache.put(HybridFix.VERSION, result.getLatestVersion());
                                         }
                                 );
                     }

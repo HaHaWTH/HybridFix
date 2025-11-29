@@ -37,10 +37,11 @@ public class HybridFixServer {
         if (Settings.checkForUpdates) {
             Utils.commonWorker().submit(() -> {
                 HybridFix.LOGGER.info("Checking for updates...");
-                if (Updater.isUpdateAvailable()) {
-                    HybridFix.LOGGER.warn("There is a new version of HybridFix available: {}, you're on: {}", Updater.getLatestVersion(), Updater.getCurrentVersion());
+                Updater.UpdateResult updateResult = Updater.checkNow();
+                if (updateResult.isUpdateAvailable()) {
+                    HybridFix.LOGGER.warn("There is a new version of HybridFix available: {}, you're on: {}", updateResult.getLatestVersion(), HybridFix.VERSION);
                 } else {
-                    if (!Updater.isErred()) {
+                    if (!updateResult.isError()) {
                         HybridFix.LOGGER.info("You are running the latest version.");
                     } else {
                         HybridFix.LOGGER.info("Unable to fetch version info.");
