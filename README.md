@@ -143,4 +143,8 @@ You can add these names into whitelist/blacklist of your plugins to customize be
 
 This mod is licensed under LGPL-2.1.
 
-It does not redistribute CraftBukkit or Minecraft code. The stripped MCP remapped CraftBukkit JAR in the repository is for development use only and not included in releases.
+Backported Bukkit classes are licensed under GPL-3.0.
+
+Unless explicitly specified in the code, other parts are under LGPL-2.1.
+
+The stripped MCP remapped CraftBukkit JAR in the repository is for development use only and not included in releases.

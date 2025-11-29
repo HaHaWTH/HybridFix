@@ -13,8 +13,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.server.permission.PermissionAPI;
 import org.bukkit.Bukkit;
 
-import static io.wdsj.hybridfix.HybridFix.IS_CLEANROOM;
-
 public class HybridFixServer {
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {
