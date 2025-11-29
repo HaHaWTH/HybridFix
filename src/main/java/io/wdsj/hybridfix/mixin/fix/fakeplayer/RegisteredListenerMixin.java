@@ -1,10 +1,8 @@
 package io.wdsj.hybridfix.mixin.fix.fakeplayer;
 
+import io.wdsj.hybridfix.api.bukkit.HybridFixBukkitApi;
 import io.wdsj.hybridfix.config.Settings;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.util.FakePlayer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -48,8 +46,7 @@ public abstract class RegisteredListenerMixin {
 
     @Unique
     private static void hybridFix$handleBlockBreakEvent(BlockBreakEvent event, Plugin plugin, CallbackInfo ci) {
-        EntityPlayerMP player = ((CraftPlayer) event.getPlayer()).getHandle();
-        if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
+        if (HybridFixBukkitApi.getApi().isFakePlayer(event.getPlayer()) && hybridFix$isListedPlugin(plugin.getName())) {
             ci.cancel();
         }
     }
@@ -58,8 +55,7 @@ public abstract class RegisteredListenerMixin {
     private static void hybridFix$handleEntityChangeBlockEvent(EntityChangeBlockEvent event, Plugin plugin, CallbackInfo ci) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player)) return;
-        EntityPlayerMP player = ((CraftPlayer) entity).getHandle();
-        if (player instanceof FakePlayer && hybridFix$isListedPlugin(plugin.getName())) {
+        if (HybridFixBukkitApi.getApi().isFakePlayer((Player) entity) && hybridFix$isListedPlugin(plugin.getName())) {
             ci.cancel();
         }
     }

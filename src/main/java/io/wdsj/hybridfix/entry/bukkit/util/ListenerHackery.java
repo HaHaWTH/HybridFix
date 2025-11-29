@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 
+@SuppressWarnings("unused")
 public class ListenerHackery {
     private ListenerHackery() {
     }
