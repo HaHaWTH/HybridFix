@@ -19,7 +19,7 @@ public abstract class FakePlayerMixin extends EntityPlayerMP {
     }
 
     /**
-     * Adding potion effects will cause packet send through {@link EntityPlayerMP#connection}, this won't work for fame players
+     * Adding potion effects will cause packet send through {@link EntityPlayerMP#connection}, this won't work for fake players
      * as all connections are null for fake players.
      * @see org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer#addPotionEffect(org.bukkit.potion.PotionEffect)
      */

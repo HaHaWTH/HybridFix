@@ -63,12 +63,10 @@ public class ResidenceBlockDataPatcher implements IPluginPatcher {
                 classNode.accept(classWriter);
                 byte[] bytes = classWriter.toByteArray();
                 dump(className, bytes);
-                this.classLoader = null;
                 HybridFix.LOGGER.info("Transformed class {}", className);
                 return bytes;
             }
         }
-        this.classLoader = null;
         return basicClass;
     }
 
