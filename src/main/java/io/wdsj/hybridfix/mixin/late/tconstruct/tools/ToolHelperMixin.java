@@ -12,15 +12,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import slimeknights.tconstruct.library.utils.ToolHelper;
 
 @Mixin(ToolHelper.class)
 public abstract class ToolHelperMixin {
-    @Unique
-    private static final boolean hybridFix$supersedeVanillaEvent = Boolean.getBoolean("hybridfix.tconstruct.supersedeVanillaEvent");
     @WrapOperation(
             method = "attackEntity(Lnet/minecraft/item/ItemStack;Lslimeknights/tconstruct/library/tools/ToolCore;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity;Z)Z",
             at = @At(
@@ -38,7 +35,7 @@ public abstract class ToolHelperMixin {
         EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, base); // Damage doesn't matter, we just need to check if it's cancelled
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            cir.setReturnValue(hybridFix$supersedeVanillaEvent);
+            cir.setReturnValue(true);
         }
         return event.getDamage();
     }

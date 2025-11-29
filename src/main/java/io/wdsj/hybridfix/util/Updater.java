@@ -3,7 +3,6 @@ package io.wdsj.hybridfix.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.Tags;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class Updater {
     private static final String RELEASE_URL = "https://api.github.com/repos/HaHaWTH/HybridFix/releases/latest";
-    private static final String VERSION_CHANNEL = Tags.VERSION_CHANNEL;
+    private static final String VERSION_CHANNEL = HybridFix.VERSION_CHANNEL;
     @SuppressWarnings("ConstantConditions")
     private static final boolean isDev = "dev".equalsIgnoreCase(VERSION_CHANNEL);
 

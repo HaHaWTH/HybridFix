@@ -67,7 +67,7 @@ public class CommandHybridFix extends Command {
 
         switch (args[0].toLowerCase(Locale.ROOT)) {
             case "version":
-                sender.sendMessage("This server is running HybridFix version " + HybridFix.VERSION + " (" + Bukkit.getVersion() + ")");
+                sender.sendMessage("This server is running HybridFix version " + HybridFix.VERSION + "-" + HybridFix.VERSION_CHANNEL + " (" + Bukkit.getVersion() + ")");
                 if (Settings.checkForUpdates) {
                     sender.sendMessage(ChatColor.ITALIC + "Checking version, please wait...");
                     String cachedLatestVersion = versionCache.getIfPresent(HybridFix.VERSION);
