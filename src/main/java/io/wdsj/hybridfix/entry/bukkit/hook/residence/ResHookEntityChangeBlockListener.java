@@ -24,13 +24,14 @@ public class ResHookEntityChangeBlockListener implements Listener {
         // Skip checks that Residence has already done
         Entity entity = event.getEntity();
         EntityType type = entity.getType();
-        if (type == EntityType.ENDERMAN || type == EntityType.WITHER) return;
+        if (type == EntityType.ENDERMAN || type == EntityType.WITHER || type == EntityType.FALLING_BLOCK) return;
         // End
 
+        boolean isDestroy = event.getTo() == Material.AIR;
         if (entity instanceof Player) {
             Player player = (Player) entity;
             boolean shouldInform = !HybridFixBukkitApi.getApi().isFakePlayer(player);
-            if (event.getTo() == Material.AIR) {
+            if (isDestroy) {
                 if (!ResidenceBlockListener.canBreakBlock(player, event.getBlock().getLocation(), shouldInform)) {
                     event.setCancelled(true);
                 }
@@ -43,8 +44,14 @@ public class ResHookEntityChangeBlockListener implements Listener {
         }
 
         FlagPermissions perms = plugin.getPermsByLoc(event.getBlock().getLocation());
-        if (!perms.has(Flags.destroy, true)) {
-            event.setCancelled(true);
+        if (isDestroy) {
+            if (!perms.has(Flags.destroy, true)) {
+                event.setCancelled(true);
+            }
+        } else {
+            if (!perms.has(Flags.place, true)) {
+                event.setCancelled(true);
+            }
         }
     }
 }
