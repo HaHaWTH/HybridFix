@@ -4,6 +4,8 @@ import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.listeners.ResidenceBlockListener;
 import com.bekvon.bukkit.residence.protection.FlagPermissions;
+import io.wdsj.hybridfix.api.bukkit.HybridFixBukkitApi;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -27,8 +29,15 @@ public class ResHookEntityChangeBlockListener implements Listener {
 
         if (entity instanceof Player) {
             Player player = (Player) entity;
-            if (!ResidenceBlockListener.canBreakBlock(player, event.getBlock().getLocation(), false)) {
-                event.setCancelled(true);
+            boolean shouldInform = !HybridFixBukkitApi.getApi().isFakePlayer(player);
+            if (event.getTo() == Material.AIR) {
+                if (!ResidenceBlockListener.canBreakBlock(player, event.getBlock().getLocation(), shouldInform)) {
+                    event.setCancelled(true);
+                }
+            } else {
+                if (!ResidenceBlockListener.canPlaceBlock(player, event.getBlock(), shouldInform)) {
+                    event.setCancelled(true);
+                }
             }
             return;
         }

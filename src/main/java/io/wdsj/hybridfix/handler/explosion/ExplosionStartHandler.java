@@ -29,7 +29,7 @@ public class ExplosionStartHandler {
             Vec3d explosionPos = explosion.getPosition();
             Location location = new Location(bworld, explosionPos.x, explosionPos.y, explosionPos.z);
             boolean cancelled;
-            final List<Block> bukkitBlocks = new ObjectArrayList<>(0);
+            final List<Block> bukkitBlocks = new ObjectArrayList<>(0); // empty list
             if (exploder != null) {
                 EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(((IEntityGetter) exploder).getBukkitEntity(), location, bukkitBlocks, 1.0F / explosion.size);
                 Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
