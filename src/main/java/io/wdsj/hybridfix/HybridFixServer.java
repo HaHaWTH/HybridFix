@@ -17,16 +17,14 @@ import static io.wdsj.hybridfix.HybridFix.IS_CLEANROOM;
 
 public class HybridFixServer {
     public static void preInit() {
-        if (!IS_CLEANROOM) {
-            if (Settings.passExplosionEventToBukkit) {
-                MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
-            }
-            if (Settings.passExplosionStartEventToBukkit) {
-                MinecraftForge.EVENT_BUS.register(new ExplosionStartHandler());
-            }
-            if (Settings.bridgeForgePermissionsToBukkit) {
-                PermissionAPI.setPermissionHandler(new BukkitForgePermissionHandler());
-            }
+        if (Settings.passExplosionEventToBukkit) {
+            MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
+        }
+        if (Settings.bridgeForgePermissionsToBukkit) {
+            PermissionAPI.setPermissionHandler(new BukkitForgePermissionHandler());
+        }
+        if (Settings.passExplosionStartEventToBukkit) {
+            MinecraftForge.EVENT_BUS.register(new ExplosionStartHandler());
         }
         MinecraftForge.EVENT_BUS.register(new LivingAttackHandler());
     }
