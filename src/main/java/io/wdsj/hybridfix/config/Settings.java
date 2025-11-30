@@ -127,6 +127,32 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean fixesForForgeAndBukkitChunkSystems = true;
 
+    @Config.Comment("(Server) Configuration for error recovery.")
+    @Config.Name("Error Recovery Settings")
+    @Config.RequiresMcRestart
+    public static ErrorRecoverySettings errorRecoverySettings = new ErrorRecoverySettings();
+
+    public static class ErrorRecoverySettings {
+        @Config.Comment("(Server) Enable error recovery.")
+        @Config.Name("Enable error recovery")
+        public boolean enable = false;
+
+        @Config.Comment("(Server) Whether to broadcast message to players on a recovery.")
+        @Config.Name("Broadcast message")
+        @Config.RequiresMcRestart
+        public boolean broadcastMessage = true;
+
+        @Config.Comment("(Server) Permission needed for receiving the message. (Set to empty to send to all players)")
+        @Config.Name("Message permission")
+        @Config.RequiresMcRestart
+        public String messagePermission = "hybridfix.recovery.message";
+
+        @Config.Comment("(Server) Message to send.")
+        @Config.Name("Message")
+        @Config.RequiresMcRestart
+        public String message = "&cServer threw exception in %error_point%, now has recovered.";
+    }
+
     @Config.Comment("(Server) Configuration for packet-related stuff.")
     @Config.Name("Packet Settings")
     @Config.RequiresMcRestart

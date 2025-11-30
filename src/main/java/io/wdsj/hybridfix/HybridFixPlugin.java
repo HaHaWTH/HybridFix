@@ -49,6 +49,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.perf.te.snapshot.json", () -> Settings.dontCreateTESnapshotForInventoryMoveItemEvent && Settings.extraBukkitApi);
             put("mixins.asm.plugin_patcher.json", () -> Settings.pluginPatcherSettings.enable);
             put("mixins.fix.activation_range.json", () -> Settings.fixEntityActivationRange);
+            put("mixins.fix.error_recovery.json", () -> Settings.errorRecoverySettings.enable);
         }
     });
 
