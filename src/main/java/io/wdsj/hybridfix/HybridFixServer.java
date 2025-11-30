@@ -28,9 +28,6 @@ import java.util.stream.Collectors;
 
 public class HybridFixServer {
     public static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
-    private static final Set<String> earWhitelist = Arrays.stream(Settings.entityActivationRangeWhitelist)
-            .map(String::toLowerCase)
-            .collect(Collectors.toCollection(ObjectOpenHashSet::new));
 
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {
@@ -71,6 +68,9 @@ public class HybridFixServer {
 
     public static void onServerAboutToStart() {
         if (Settings.fixEntityActivationRange) {
+            final Set<String> earWhitelist = Arrays.stream(Settings.entityActivationRangeWhitelist)
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toCollection(ObjectOpenHashSet::new));
             for (Map.Entry<ResourceLocation, EntityEntry> entry : ForgeRegistries.ENTITIES.getEntries()) {
                 ResourceLocation key = entry.getKey();
                 if (key.getNamespace().equals("minecraft")) continue;
