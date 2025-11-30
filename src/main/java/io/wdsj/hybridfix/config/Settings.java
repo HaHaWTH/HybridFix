@@ -127,6 +127,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean fixesForForgeAndBukkitChunkSystems = true;
 
+    @Config.Comment("(Server) Fix 'outdated server' showing in ping before server fully boots.")
+    @Config.Name("Fix outdated server")
+    @Config.RequiresMcRestart
+    public static boolean fixOutdatedServerPingStatus = false;
+
     @Config.Comment("(Server) Configuration for error recovery.")
     @Config.Name("Error Recovery Settings")
     @Config.RequiresMcRestart
