@@ -70,7 +70,17 @@ public class Settings {
     @Config.Comment("(Server) Fix Spigot EntityActivationRange for mod entities.")
     @Config.Name("Fix EntityActivationRange")
     @Config.RequiresMcRestart
-    public static boolean fixEntityActivationRange = true; // TODO: Whitelist & blacklist
+    public static boolean fixEntityActivationRange = true;
+
+    @Config.Comment("(Server) Invert EAR whitelist to blacklist.")
+    @Config.Name("Invert EAR whitelist")
+    @Config.RequiresMcRestart
+    public static boolean invertEntityActivationRangeWhitelist = false;
+
+    @Config.Comment("(Server) Entity ActivationRange whitelist, only mod entities IN the list will be affected by EAR.")
+    @Config.Name("Entity ActivationRange whitelist")
+    @Config.RequiresMcRestart
+    public static String[] entityActivationRangeWhitelist = new String[]{};
 
     @Config.Comment("(Server) Enable HybridFix's bStats metrics.")
     @Config.Name("Enable metrics")

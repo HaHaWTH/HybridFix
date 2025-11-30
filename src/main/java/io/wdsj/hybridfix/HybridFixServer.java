@@ -9,6 +9,7 @@ import io.wdsj.hybridfix.handler.LivingAttackHandler;
 import io.wdsj.hybridfix.handler.explosion.ExplosionStartHandler;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -19,11 +20,18 @@ import net.minecraftforge.server.permission.PermissionAPI;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class HybridFixServer {
     public static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
+    private static final Set<String> earWhitelist = Arrays.stream(Settings.entityActivationRangeWhitelist)
+            .map(String::toLowerCase)
+            .collect(Collectors.toCollection(ObjectOpenHashSet::new));
+
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {
             MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
@@ -64,14 +72,18 @@ public class HybridFixServer {
     public static void onServerAboutToStart() {
         if (Settings.fixEntityActivationRange) {
             for (Map.Entry<ResourceLocation, EntityEntry> entry : ForgeRegistries.ENTITIES.getEntries()) {
-                if (entry.getKey().getNamespace().equals("minecraft")) continue;
+                ResourceLocation key = entry.getKey();
+                if (key.getNamespace().equals("minecraft")) continue;
                 try {
                     Class<? extends Entity> clazz = entry.getValue().getEntityClass();
                     Method method = clazz.getMethod("inactiveTick");
-                    if (method.getDeclaringClass() != clazz) {
+                    boolean isBlacklist = Settings.invertEntityActivationRangeWhitelist;
+                    boolean inList = earWhitelist.contains(key.toString().toLowerCase(Locale.ROOT));
+                    if (method.getDeclaringClass() != clazz && (isBlacklist == inList)) {
                         modEntitiesWithoutInactiveTick.add(clazz);
                     }
-                } catch (Throwable ignored) {
+                } catch (Throwable t) {
+                    HybridFix.LOGGER.error("Failed to check if {} has inactiveTick", key, t);
                 }
             }
         }
