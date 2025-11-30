@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class HybridFixServer {
-    public static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
+    private static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
 
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {
@@ -87,6 +87,10 @@ public class HybridFixServer {
                 }
             }
         }
+    }
+
+    public static boolean checkIfIgnoreEAR(Class<? extends Entity> clazz) {
+        return modEntitiesWithoutInactiveTick.contains(clazz);
     }
 
     public static void createServerDump(Throwable t) {

@@ -8,10 +8,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 
+@SuppressWarnings("unchecked")
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityEARAccessor {
     @Unique
-    private final boolean hybridFix$shouldIgnoreEAR = HybridFixServer.modEntitiesWithoutInactiveTick.contains(this.getClass());
+    private final boolean hybridFix$shouldIgnoreEAR = HybridFixServer.checkIfIgnoreEAR((Class<? extends Entity>) (Object) this.getClass());
 
     /**
      * @author Creeam
