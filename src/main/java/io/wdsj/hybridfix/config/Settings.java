@@ -132,6 +132,23 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean fixOutdatedServerPingStatus = false;
 
+    @Config.Comment("(Server) Startup MOTD settings. (Only works when 'Fix outdated server' is enabled)")
+    @Config.Name("Startup MOTD Settings")
+    @Config.RequiresMcRestart
+    public static StartUpMOTDSettings startUpMOTDSettings = new StartUpMOTDSettings();
+
+    public static class StartUpMOTDSettings {
+        @Config.Comment("(Server) Whether to enable startup MOTD.")
+        @Config.Name("Enable startup MOTD")
+        @Config.RequiresMcRestart
+        public boolean enable = false;
+
+        @Config.Comment("(Server) MOTD to show when server starts. (Format code supported)")
+        @Config.Name("MOTD message")
+        @Config.RequiresMcRestart
+        public String messageOfTheDay = "&cServer is still starting!\nPlease wait before reconnecting.";
+    }
+
     @Config.Comment("(Server) Configuration for error recovery.")
     @Config.Name("Error Recovery Settings")
     @Config.RequiresMcRestart
