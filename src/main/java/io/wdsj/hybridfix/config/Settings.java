@@ -70,7 +70,7 @@ public class Settings {
     @Config.Comment("(Server) Fix Spigot EntityActivationRange for mod entities.")
     @Config.Name("Fix EntityActivationRange")
     @Config.RequiresMcRestart
-    public static boolean fixEntityActivationRange = true;
+    public static boolean fixEntityActivationRange = false;
 
     @Config.Comment("(Server) Invert EAR whitelist to blacklist.")
     @Config.Name("Invert EAR whitelist")
