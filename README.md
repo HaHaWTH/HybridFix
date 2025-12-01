@@ -59,6 +59,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](./FORGE_CALL_BUKKIT.md))**
 - Bukkit APIs backported from modern version.
 - **Builtin plugin ASM patcher, compatible with your favourite plugins.**
+- Fix Forge bugs that affect server play experience.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
