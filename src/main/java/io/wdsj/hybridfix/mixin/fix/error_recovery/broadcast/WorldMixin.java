@@ -32,7 +32,7 @@ public abstract class WorldMixin {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (HybridFixBukkitApi.getApi().isFakePlayer(player)) continue;
                 if (hybridFix$noPermRequirement || player.hasPermission(Settings.errorRecoverySettings.messagePermission)) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.errorRecoverySettings.message.replace("%error_point%", "updateEntities")));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.errorRecoverySettings.message.replace("%error_point%", "Server threw exception in updateEntities")));
                 }
             }
         } catch (Throwable t) {

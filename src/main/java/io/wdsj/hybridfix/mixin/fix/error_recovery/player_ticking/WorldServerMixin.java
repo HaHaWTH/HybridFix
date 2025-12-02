@@ -49,7 +49,7 @@ public abstract class WorldServerMixin {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (HybridFixBukkitApi.getApi().isFakePlayer(player)) continue;
                         if (hybridFix$noPermRequirement || player.hasPermission(Settings.errorRecoverySettings.messagePermission)) {
-                            player.sendMessage(msg);
+                            player.sendMessage(Settings.errorRecoverySettings.message.replace("%error_point%", msg));
                         }
                     }
                 }

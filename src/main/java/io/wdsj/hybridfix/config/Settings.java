@@ -172,7 +172,7 @@ public class Settings {
         @Config.Comment("(Server) Message to send.")
         @Config.Name("Message")
         @Config.RequiresMcRestart
-        public String message = "&cServer threw exception in %error_point%, now has recovered.";
+        public String message = "&c%error_point%, now has recovered.";
     }
 
     @Config.Comment("(Server) Configuration for packet-related stuff.")
