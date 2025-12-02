@@ -8,13 +8,13 @@ import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraft.network.status.server.SPacketServerInfo;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.bukkit.ChatColor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("UnnecessaryUnicodeEscape")
 @Mixin(FMLCommonHandler.class)
 public class FMLCommonHandlerMixin {
     @Unique
@@ -48,7 +48,7 @@ public class FMLCommonHandlerMixin {
         char[] b = textToTranslate.toCharArray();
         for (int i = 0; i < b.length - 1; i++) {
             if (b[i] == altColorChar && "0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[i+1]) > -1) {
-                b[i] = ChatColor.COLOR_CHAR;
+                b[i] = '\u00A7';
                 b[i+1] = Character.toLowerCase(b[i+1]);
             }
         }
