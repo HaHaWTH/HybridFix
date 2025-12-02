@@ -141,7 +141,7 @@ public class Settings {
         @Config.Comment("(Server) Whether to enable startup MOTD.")
         @Config.Name("Enable startup MOTD")
         @Config.RequiresMcRestart
-        public boolean enable = false;
+        public boolean enable = true;
 
         @Config.Comment("(Server) MOTD to show when server starts. (Format code supported)")
         @Config.Name("MOTD message")
