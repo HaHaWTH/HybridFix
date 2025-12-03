@@ -298,6 +298,10 @@ public class Settings {
         @Config.Comment("Enable HybridFix ASM plugin patcher for Residence 6.0+.")
         @Config.RequiresMcRestart
         public boolean patchResidenceV6 = false;
+
+        @Config.Comment("Enable HybridFix ASM plugin patcher for fairy-lib-plugin.")
+        @Config.RequiresMcRestart
+        public boolean patchFairyLibPlugin = false;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix built-in bukkit plugin.")
