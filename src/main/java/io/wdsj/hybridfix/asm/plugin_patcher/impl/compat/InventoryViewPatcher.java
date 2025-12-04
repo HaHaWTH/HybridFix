@@ -29,7 +29,7 @@ public class InventoryViewPatcher implements IPluginPatcher {
 
     @Override
     public byte[] transform(String className, byte[] basicClass) {
-        if (!isCommonPackage(className)) {
+        if (!IPluginPatcher.isCommonPackage(className)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);
@@ -77,9 +77,5 @@ public class InventoryViewPatcher implements IPluginPatcher {
             }
         }
         return changed;
-    }
-
-    private static boolean isCommonPackage(String packageName) {
-        return packageName.contains("fastutil") || packageName.contains("org.apache") ||  packageName.contains("javax");
     }
 }

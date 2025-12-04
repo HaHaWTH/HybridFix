@@ -24,4 +24,8 @@ public interface IPluginPatcher extends IBytecodePatcher {
     default String[] getTargetPlugins() {
         return new String[0];
     }
+
+    static boolean isCommonPackage(String packageName) {
+        return packageName.contains("fastutil") || packageName.contains("org.apache") || packageName.contains("javax");
+    }
 }
