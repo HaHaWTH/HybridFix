@@ -299,9 +299,13 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchResidenceV6 = false;
 
-        @Config.Comment("Enable HybridFix ASM plugin patcher for fairy-lib-plugin.")
+        @Config.Comment("Enable HybridFix ASM plugin patcher for InventoryView compatibility.")
         @Config.RequiresMcRestart
-        public boolean patchFairyLibPlugin = false;
+        public boolean patchInventoryViewInsn = true;
+
+        @Config.Comment("Plugins that should be patched by InventoryView patcher.")
+        @Config.RequiresMcRestart
+        public String[] patchInventoryViewPlugins = new String[]{"fairy-lib-plugin"};
     }
 
     @Config.Comment("(Server) Configuration for HybridFix built-in bukkit plugin.")

@@ -51,28 +51,67 @@ public enum PluginPatcherManager {
         }
         try {
             ApplyToPlugin applyToPlugin = patcher.getClass().getAnnotation(ApplyToPlugin.class);
-            if (applyToPlugin == null) {
+            ApplyToPlugin.Configurable configurable = patcher.getClass().getAnnotation(ApplyToPlugin.Configurable.class);
+            boolean applyToPluginExists = applyToPlugin != null;
+            boolean configurableExists = configurable != null;
+            if (!applyToPluginExists && !configurableExists) {
                 HybridFix.LOGGER.error("Plugin patcher {} is not annotated with @ApplyToPlugin", patcher.getClass().getName());
                 return false;
             }
-            String pluginName = applyToPlugin.value();
-            boolean flag = patcher.isEnabled();
-            if (flag) {
-                pluginPatcher.computeIfPresent(pluginName, (k, v) -> {
-                    v.add(patcher);
-                    return v;
-                });
-                pluginPatcher.computeIfAbsent(pluginName, k -> {
-                    final List<IPluginPatcher> list = new ArrayList<>();
-                    list.add(patcher);
-                    return list;
-                });
-                return true;
+            if (applyToPluginExists && configurableExists) {
+                HybridFix.LOGGER.error("Found multiple annotations in plugin patcher {}, skipping.", patcher.getClass().getName());
             }
+            if (applyToPluginExists) {
+                return registerApplyTo(patcher, applyToPlugin);
+            }
+            return registerConfigurable(patcher, configurable);
         } catch (Exception e) {
             HybridFix.LOGGER.error("Failed to register plugin patcher {}", patcher.getClass().getSimpleName(), e);
         }
         return false;
+    }
+
+    private boolean registerApplyTo(IPluginPatcher patcher, ApplyToPlugin applyToPlugin) {
+        String[] pluginNames = applyToPlugin.value();
+        boolean flag = patcher.isEnabled();
+        if (flag) {
+            for (String pluginName : pluginNames) {
+                register0(patcher, pluginName);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean registerConfigurable(IPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
+        boolean flag = patcher.isEnabled();
+        try {
+            Class<?> clazz = patcher.getClass().getMethod("getTargetPlugins").getDeclaringClass();
+            if (clazz != patcher.getClass()) {
+                HybridFix.LOGGER.error("Plugin patcher {} is not implementing the getTargetPlugins method, skipping.", patcher.getClass().getName());
+            }
+        } catch (NoSuchMethodException e) {
+            HybridFix.LOGGER.error("Failed to register plugin patcher {}", patcher.getClass().getSimpleName(), e);
+        }
+        if (flag) {
+            for (String pluginName : patcher.getTargetPlugins()) {
+                register0(patcher, pluginName);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void register0(IPluginPatcher patcher, String pluginName) {
+        pluginPatcher.computeIfPresent(pluginName, (k, v) -> {
+            v.add(patcher);
+            return v;
+        });
+        pluginPatcher.computeIfAbsent(pluginName, k -> {
+            final List<IPluginPatcher> list = new ArrayList<>();
+            list.add(patcher);
+            return list;
+        });
     }
 
     // Adapted from Winds-Studio/Leaf, licensed under MIT

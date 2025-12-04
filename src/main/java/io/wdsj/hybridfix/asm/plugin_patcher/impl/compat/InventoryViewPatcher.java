@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.asm.plugin_patcher.impl.fairy_lib_plugin;
+package io.wdsj.hybridfix.asm.plugin_patcher.impl.compat;
 
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
@@ -18,10 +18,8 @@ import java.util.ListIterator;
 /**
  * Redirect InventoryView {@code INVOKEINTERFACE} calls to {@code INVOKEVIRTUAL}.
  */
-@ApplyToPlugin("fairy-lib-plugin")
-public class FairyInventoryViewPatcher implements IPluginPatcher {
-
-    private static final String TARGET_PACKAGE_PREFIX = "io.fairyproject";
+@ApplyToPlugin.Configurable
+public class InventoryViewPatcher implements IPluginPatcher {
     private static final String INVENTORY_VIEW_OWNER = "org/bukkit/inventory/InventoryView";
 
     private static final boolean isCurrentImplNeedPatch;
@@ -31,7 +29,7 @@ public class FairyInventoryViewPatcher implements IPluginPatcher {
 
     @Override
     public byte[] transform(String className, byte[] basicClass) {
-        if (className.startsWith(TARGET_PACKAGE_PREFIX)) {
+        if (!isCommonPackage(className)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);
@@ -51,7 +49,12 @@ public class FairyInventoryViewPatcher implements IPluginPatcher {
 
     @Override
     public boolean isEnabled() {
-        return isCurrentImplNeedPatch && Settings.pluginPatcherSettings.patchFairyLibPlugin;
+        return isCurrentImplNeedPatch && Settings.pluginPatcherSettings.patchInventoryViewInsn;
+    }
+
+    @Override
+    public String[] getTargetPlugins() {
+        return Settings.pluginPatcherSettings.patchInventoryViewPlugins;
     }
 
     private boolean patchInventoryViewCalls(ClassNode classNode) {
@@ -74,5 +77,9 @@ public class FairyInventoryViewPatcher implements IPluginPatcher {
             }
         }
         return changed;
+    }
+
+    private static boolean isCommonPackage(String packageName) {
+        return packageName.contains("fastutil") || packageName.contains("org.apache") ||  packageName.contains("javax");
     }
 }

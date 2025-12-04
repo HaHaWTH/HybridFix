@@ -17,4 +17,11 @@ public interface IPluginPatcher extends IBytecodePatcher {
     default PluginDescriptionFile getPluginDescriptionFile() {
         return null;
     }
+
+    /**
+     * Need to be implemented if the patcher is annotated with {@link io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin.Configurable}.
+     */
+    default String[] getTargetPlugins() {
+        return new String[0];
+    }
 }

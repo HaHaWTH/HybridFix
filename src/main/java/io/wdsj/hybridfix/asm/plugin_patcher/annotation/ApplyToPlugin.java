@@ -1,13 +1,24 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.annotation;
 
+import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
+
 import java.lang.annotation.*;
 
 /**
- * Specify whether to apply the patch to the specified plugin.
+ * Specify plugins this patch will apply to.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ApplyToPlugin {
-    String value();
+    String[] value();
+
+    /**
+     * Mark this patcher as configurable, must implement the {@link IPluginPatcher#getTargetPlugins()} method.
+     */
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @interface Configurable {
+    }
 }
