@@ -8,9 +8,7 @@ import io.wdsj.hybridfix.config.Settings;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.transformer.IMixinTransformer;
 
@@ -62,10 +60,15 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
             method = "remappedFindClass",
             at = @At(
                     value = "STORE",
-                    ordinal = 0
+                    ordinal = 2
             )
     )
-    public byte[] patch(byte[] bytecode, @Local(argsOnly = true) String name) {
+    public byte[] patchAfterRemap(byte[] bytecode, @Local(argsOnly = true) String name) {
+        return hybridFix$patch0(bytecode, name);
+    }
+
+    @Unique
+    private byte[] hybridFix$patch0(byte[] bytecode, String name) {
         byte[] transformedBytecode = bytecode;
         if (this.hybridFix$pluginPatcher != null) {
             for (IPluginPatcher patcher : this.hybridFix$pluginPatcher) {
