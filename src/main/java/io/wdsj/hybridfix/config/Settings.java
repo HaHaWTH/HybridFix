@@ -295,6 +295,13 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean enable = false;
 
+        /*
+        Dev note: must rebuild transformer cache after adding mixin config, or just define them in HybridFixLateLoader.
+         */
+        @Config.Comment("(EXPERIMENTAL) Enable HybridFix plugin Mixin support. (Requires modified bootstrapping service)")
+        @Config.RequiresMcRestart
+        public boolean enableMixin = false;
+
         @Config.Comment("Enable HybridFix ASM plugin patcher for Residence 6.0+.")
         @Config.RequiresMcRestart
         public boolean patchResidenceV6 = false;

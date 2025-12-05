@@ -1,26 +1,50 @@
 package io.wdsj.hybridfix.mixin.plugin_patcher;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginPatcherManager;
+import io.wdsj.hybridfix.config.Settings;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import org.spongepowered.asm.mixin.Dynamic;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.transformer.IMixinTransformer;
 
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.List;
 
 @SuppressWarnings("ModifyVariableMayBeArgsOnly")
 @Mixin(targets = "org.bukkit.plugin.java.PluginClassLoader", remap = false)
-public abstract class PluginClassLoaderMixin {
+public abstract class PluginClassLoaderMixin extends URLClassLoader {
     @Unique
     private List<IPluginPatcher> hybridFix$pluginPatcher;
+
+    @Unique
+    private static IMixinTransformer hybridFix$mixinTransformer;
+
+    static {
+        if (Settings.pluginPatcherSettings.enableMixin) hybridFix$setupMixinTransformer();
+    }
+
+    public PluginClassLoaderMixin(URL[] urls) {
+        super(urls);
+    }
+
+    @Unique
+    private static void hybridFix$setupMixinTransformer() {
+        Object active = MixinEnvironment.getDefaultEnvironment().getActiveTransformer();
+        if (!(active instanceof IMixinTransformer)) {
+            HybridFix.LOGGER.error("Failed to get mixin transformer");
+            return;
+        }
+        hybridFix$mixinTransformer = (IMixinTransformer) active;
+    }
 
     @Inject(
             method = "<init>",
@@ -45,9 +69,18 @@ public abstract class PluginClassLoaderMixin {
         byte[] transformedBytecode = bytecode;
         if (this.hybridFix$pluginPatcher != null) {
             for (IPluginPatcher patcher : this.hybridFix$pluginPatcher) {
-                patcher.setPluginClassLoader((ClassLoader) (Object) this);
+                patcher.setPluginClassLoader(this);
                 transformedBytecode = patcher.transform(name, transformedBytecode);
                 patcher.setPluginClassLoader(null);
+            }
+        }
+        if (Settings.pluginPatcherSettings.enableMixin) {
+            ClassLoader prevLoader = Thread.currentThread().getContextClassLoader();
+            try {
+                Thread.currentThread().setContextClassLoader(this);
+                transformedBytecode = hybridFix$mixinTransformer.transformClass(MixinEnvironment.getCurrentEnvironment(), name, transformedBytecode);
+            } finally {
+                Thread.currentThread().setContextClassLoader(prevLoader);
             }
         }
         return transformedBytecode;
