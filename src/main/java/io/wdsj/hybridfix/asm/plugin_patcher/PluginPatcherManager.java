@@ -89,9 +89,11 @@ public enum PluginPatcherManager {
             Class<?> clazz = patcher.getClass().getMethod("getTargetPlugins").getDeclaringClass();
             if (clazz != patcher.getClass()) {
                 HybridFix.LOGGER.error("Plugin patcher {} is not implementing the getTargetPlugins method, skipping.", patcher.getClass().getName());
+                return false;
             }
         } catch (NoSuchMethodException e) {
             HybridFix.LOGGER.error("Failed to register plugin patcher {}", patcher.getClass().getSimpleName(), e);
+            return false;
         }
         if (flag) {
             for (String pluginName : patcher.getTargetPlugins()) {
