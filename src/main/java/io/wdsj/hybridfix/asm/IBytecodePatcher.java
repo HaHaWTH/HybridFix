@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
@@ -43,9 +42,10 @@ public interface IBytecodePatcher {
         try {
             File dumpDir = new File(".asm.out");
             if (dumpDir.exists()) {
-                Path path = Paths.get(dumpDir.getAbsolutePath());
-                try (Stream<Path> fileStream = Files.walk(path)) {
+                Path rootPath = dumpDir.toPath();
+                try (Stream<Path> fileStream = Files.walk(rootPath)) {
                     fileStream.sorted(Comparator.reverseOrder())
+                            .filter(path -> !path.equals(rootPath))
                             .map(Path::toFile)
                             .forEach(File::delete);
                 }
