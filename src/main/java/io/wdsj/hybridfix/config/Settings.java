@@ -187,7 +187,7 @@ public class Settings {
         public int maxDroppedItemsPerTick = 20;
     }
 
-    @Config.Comment("(Server) Configuration for HybridFix mod patches.")
+    @Config.Comment("(Server & Client) Configuration for HybridFix mod patches.")
     @Config.Name("Mod Patch Settings")
     @Config.RequiresMcRestart
     public static ModPatchSettings modPatchSettings = new ModPatchSettings();
@@ -290,31 +290,31 @@ public class Settings {
         public boolean patchMekanismDigitalMiner = true;
     }
 
-    @Config.Comment("Configuration for HybridFix ASM plugin patcher.")
+    @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
     @Config.RequiresMcRestart
     public static PluginPatcherSettings pluginPatcherSettings = new PluginPatcherSettings();
 
     public static class PluginPatcherSettings {
-        @Config.Comment("Enable HybridFix ASM plugin patcher.")
+        @Config.Comment("(Server) Enable HybridFix ASM plugin patcher.")
         @Config.RequiresMcRestart
         public boolean enable = false;
 
         /*
         Dev note: must rebuild transformer cache after adding mixin config, or just define them in HybridFixLateLoader.
          */
-        @Config.Comment("(EXPERIMENTAL) Enable HybridFix plugin Mixin support. (Requires modified bootstrapping service)")
+        @Config.Comment("(Server) (EXPERIMENTAL) Enable HybridFix plugin Mixin support. (Requires modified bootstrapping service)")
         @Config.RequiresMcRestart
         public boolean enableMixin = false;
 
-        @Config.Comment("Enable HybridFix ASM plugin patcher for Residence 6.0+.")
+        @Config.Comment("(Server) Enable HybridFix ASM plugin patcher for Residence 6.0+.")
         @Config.RequiresMcRestart
         public boolean patchResidenceV6 = false;
 
-        @Config.Comment("Enable HybridFix ASM plugin patcher for InventoryView compatibility.")
+        @Config.Comment("(Server) Enable HybridFix ASM plugin patcher for InventoryView compatibility.")
         @Config.RequiresMcRestart
         public boolean patchInventoryViewInsn = true;
 
-        @Config.Comment("Plugins that should be patched by InventoryView patcher.")
+        @Config.Comment("(Server) Plugins that should be patched by InventoryView patcher.")
         @Config.RequiresMcRestart
         public String[] patchInventoryViewPlugins = new String[]{"fairy-lib-plugin"};
     }

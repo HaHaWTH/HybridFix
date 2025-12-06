@@ -42,6 +42,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Disable recipe of Blackhole Controller (Deprecated) in Industrial Foregoing
 - Fix Witchery spells can bypass damage protection
 - Auto modify Actually Additions' config to make it fit the server environment
+- Prevent Mekanism Digital Miner from mining tile entities
 
 ## Features
 
