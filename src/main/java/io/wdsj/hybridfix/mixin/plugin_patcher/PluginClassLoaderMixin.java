@@ -2,17 +2,24 @@ package io.wdsj.hybridfix.mixin.plugin_patcher;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.HybridFix;
+import io.wdsj.hybridfix.HybridFixServer;
 import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginPatcherManager;
 import io.wdsj.hybridfix.config.Settings;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.extensibility.IMixinProcessor;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.transformer.IMixinTransformer;
+import org.spongepowered.asm.mixin.transformer.Proxy;
+import org.spongepowered.asm.service.MixinService;
+import org.spongepowered.asm.service.mojang.MixinServiceLaunchWrapper;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
@@ -27,7 +34,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
     private static IMixinTransformer hybridFix$mixinTransformer;
 
     static {
-        if (Settings.pluginPatcherSettings.enableMixin) hybridFix$setupMixinTransformer();
+        if (Settings.pluginPatcherSettings.enableMixin) hybridFix$setupMixins();
     }
 
     public PluginClassLoaderMixin(URL[] urls) {
@@ -35,13 +42,30 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
     }
 
     @Unique
-    private static void hybridFix$setupMixinTransformer() {
+    private static void hybridFix$setupMixins() {
         Object active = MixinEnvironment.getDefaultEnvironment().getActiveTransformer();
         if (!(active instanceof IMixinTransformer)) {
             HybridFix.LOGGER.error("Failed to get mixin transformer");
             return;
         }
+        for (String mixinConfig : HybridFixServer.getPluginMixinConfigs()) {
+            Mixins.addConfiguration(mixinConfig);
+            HybridFix.LOGGER.info("Adding plugin mixin config: {}", mixinConfig);
+        }
+        try {
+            Field delegatedTransformersField = MixinServiceLaunchWrapper.class.getDeclaredField("delegatedTransformers");
+            delegatedTransformersField.setAccessible(true);
+            delegatedTransformersField.set(MixinService.getService(), null);
+
+            IMixinProcessor processor = Proxy.transformer.getProcessor();
+            Method selectMethod = processor.getClass().getDeclaredMethod("select", MixinEnvironment.class);
+            selectMethod.setAccessible(true);
+            selectMethod.invoke(processor, MixinEnvironment.getCurrentEnvironment());
+        } catch (Exception e) {
+            HybridFix.LOGGER.error("Failed to setup mixins", e);
+        }
         hybridFix$mixinTransformer = (IMixinTransformer) active;
+        HybridFix.LOGGER.info("Bukkit plugin Mixin setup complete");
     }
 
     @Inject(
