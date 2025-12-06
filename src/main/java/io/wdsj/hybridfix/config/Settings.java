@@ -284,6 +284,10 @@ public class Settings {
         @Config.Comment("(Server) Patch Witchery symbol effects to make them safer to use.")
         @Config.RequiresMcRestart
         public boolean patchWitcherySymbolEffect = true;
+
+        @Config.Comment("(Server) Patch Mekanism Digital Miner to prevent mining TEs.")
+        @Config.RequiresMcRestart
+        public boolean patchMekanismDigitalMiner = true;
     }
 
     @Config.Comment("Configuration for HybridFix ASM plugin patcher.")

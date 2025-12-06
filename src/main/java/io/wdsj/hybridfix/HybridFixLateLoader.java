@@ -84,6 +84,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.epic_siege_mod.grief.json", () -> isModLoaded("epicsiegemod") && Settings.modPatchSettings.patchEpicSiegeModAi);
             // Witchery patches
             put("mixins.witchery.symbol.json", () -> isModLoaded("witchery") && Settings.modPatchSettings.patchWitcherySymbolEffect);
+            // Mekanism patches
+            put("mixins.mekanism.tile.json", () -> isModLoaded("mekanism") && Settings.modPatchSettings.patchMekanismDigitalMiner);
         }
     });
 
