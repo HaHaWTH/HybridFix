@@ -1,6 +1,6 @@
 package io.wdsj.hybridfix.mixin.fix.activation_range;
 
-import io.wdsj.hybridfix.duck.fix.activation_range.EntityEARAccessor;
+import io.wdsj.hybridfix.duck.fix.activation_range.IEntityEARAccessor;
 import net.minecraft.entity.Entity;
 import org.spigotmc.ActivationRange;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +16,7 @@ public abstract class ActivationRangeMixin {
             cancellable = true
     )
     private static void checkIfActive(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (((EntityEARAccessor) (entity)).hybridFix$isIgnoringEAR()) {
+        if (((IEntityEARAccessor) (entity)).hybridFix$isIgnoringEAR()) {
             cir.setReturnValue(true);
         }
     }
