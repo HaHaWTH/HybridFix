@@ -65,7 +65,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
             HybridFix.LOGGER.error("Failed to setup mixins", e);
         }
         hybridFix$mixinTransformer = (IMixinTransformer) active;
-        HybridFix.LOGGER.info("Bukkit plugin Mixin setup complete");
+        HybridFix.LOGGER.info("Bukkit plugin mixin setup complete");
     }
 
     @Inject(

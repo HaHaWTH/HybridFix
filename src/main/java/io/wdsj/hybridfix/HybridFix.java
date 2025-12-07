@@ -43,4 +43,23 @@ public class HybridFix {
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         proxy.onServerAboutToStart(event);
     }
+
+    // for mods
+    @SuppressWarnings("unused")
+    public static SupportStatus getSupportStatus() {
+        if (!HybridFixPlugin.isClient) {
+            if (IS_HYBRID_ENV) {
+                return SupportStatus.FULL;
+            } else {
+                return SupportStatus.DISABLED;
+            }
+        }
+        return SupportStatus.CLIENT;
+    }
+
+    public enum SupportStatus {
+        FULL,
+        CLIENT,
+        DISABLED
+    }
 }
