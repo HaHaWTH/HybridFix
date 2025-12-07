@@ -42,7 +42,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class CommandHybridFix extends Command {
-    private static final Cache<String, String> versionCache = CacheBuilder.newBuilder()
+    private static final Cache<String, Updater.UpdateResult> versionCache = CacheBuilder.newBuilder()
             .expireAfterWrite(10L, TimeUnit.MINUTES)
             .maximumSize(1L)
             .build();
@@ -70,9 +70,9 @@ public class CommandHybridFix extends Command {
                 sender.sendMessage("This server is running HybridFix version " + HybridFix.VERSION + "-" + HybridFix.VERSION_CHANNEL + " (" + Bukkit.getVersion() + ")");
                 if (Settings.checkForUpdates) {
                     sender.sendMessage(ChatColor.ITALIC + "Checking version, please wait...");
-                    String cachedLatestVersion = versionCache.getIfPresent(HybridFix.VERSION);
+                    Updater.UpdateResult cachedLatestVersion = versionCache.getIfPresent(HybridFix.VERSION);
                     if (cachedLatestVersion != null) {
-                        if (!cachedLatestVersion.equals(HybridFix.VERSION)) {
+                        if (cachedLatestVersion.isUpdateAvailable()) {
                             sender.sendMessage(ChatColor.YELLOW + "* There is an update available: " + cachedLatestVersion + ", you're on: " + HybridFix.VERSION + ".");
                         } else {
                             sender.sendMessage(ChatColor.GREEN + "* You are running the latest version.");
@@ -90,7 +90,7 @@ public class CommandHybridFix extends Command {
                                                     sender.sendMessage(ChatColor.RED + "* Error obtaining version information.");
                                                 }
                                             }
-                                            versionCache.put(HybridFix.VERSION, result.getLatestVersion());
+                                            versionCache.put(HybridFix.VERSION, result);
                                         }
                                 );
                     }

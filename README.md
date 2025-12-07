@@ -61,6 +61,8 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Bukkit APIs backported from modern version.
 - **Builtin plugin ASM patcher, compatible with your favourite plugins.**
 - **Bukkit plugin mixin support, allows you to inject code into plugins via mods.**
+- Extend Forge's error recovery system (`removeErroringEntities` and `removeErroringTileEntities`), notify server operators when errors occurred.
+- Guard player ticking process, kick player instead of directly crash.
 - Fix Forge bugs that affect server play experience.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
