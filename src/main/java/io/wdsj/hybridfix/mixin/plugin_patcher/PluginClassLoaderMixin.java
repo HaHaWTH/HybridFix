@@ -106,6 +106,8 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
             try {
                 Thread.currentThread().setContextClassLoader(this);
                 transformedBytecode = hybridFix$mixinTransformer.transformClass(MixinEnvironment.getCurrentEnvironment(), name, transformedBytecode);
+            } catch (Exception e) {
+                HybridFix.LOGGER.error("Failed to apply plugin mixin", e);
             } finally {
                 Thread.currentThread().setContextClassLoader(prevLoader);
             }
