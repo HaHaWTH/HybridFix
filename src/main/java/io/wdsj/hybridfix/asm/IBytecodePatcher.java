@@ -1,17 +1,20 @@
 package io.wdsj.hybridfix.asm;
 
 import io.wdsj.hybridfix.HybridFix;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.stream.Stream;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 public interface IBytecodePatcher {
     boolean DEBUG_DUMP_BYTECODE = Boolean.getBoolean("hybridfix.asm.debug.export");
+
     byte[] transform(String className, byte[] basicClass);
 
     default void dump(String className, byte[] classBytes) {
@@ -36,19 +39,28 @@ public interface IBytecodePatcher {
 
     boolean isEnabled();
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     static void clearDebugDumpDirectory() {
         if (!DEBUG_DUMP_BYTECODE) return;
         try {
             File dumpDir = new File(".asm.out");
             if (dumpDir.exists()) {
                 Path rootPath = dumpDir.toPath();
-                try (Stream<Path> fileStream = Files.walk(rootPath)) {
-                    fileStream.sorted(Comparator.reverseOrder())
-                            .filter(path -> !path.equals(rootPath))
-                            .map(Path::toFile)
-                            .forEach(File::delete);
-                }
+                Files.walkFileTree(rootPath, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public @NotNull FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public @NotNull FileVisitResult postVisitDirectory(@NotNull Path dir, IOException exc) throws IOException {
+                        if (exc != null) throw exc;
+                        if (!dir.equals(rootPath)) {
+                            Files.delete(dir);
+                        }
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
             }
         } catch (Exception e) {
             HybridFix.LOGGER.error("Failed to clear debug dump directory", e);
