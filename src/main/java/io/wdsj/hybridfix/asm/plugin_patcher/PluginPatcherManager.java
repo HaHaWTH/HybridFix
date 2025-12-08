@@ -85,18 +85,13 @@ public enum PluginPatcherManager {
 
     private boolean registerConfigurable(IPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
         boolean flag = patcher.isEnabled();
-        try {
-            Class<?> clazz = patcher.getClass().getMethod("getTargetPlugins").getDeclaringClass();
-            if (clazz != patcher.getClass()) {
-                HybridFix.LOGGER.error("Plugin patcher {} is not implementing the getTargetPlugins method, skipping.", patcher.getClass().getName());
-                return false;
-            }
-        } catch (NoSuchMethodException e) {
-            HybridFix.LOGGER.error("Failed to register plugin patcher {}", patcher.getClass().getSimpleName(), e);
+        if (!(patcher instanceof IConfigurablePluginPatcher)) {
+            HybridFix.LOGGER.error("Plugin patcher {} is not implementing the IConfigurablePluginPatcher interface, skipping.", patcher.getClass().getName());
             return false;
         }
         if (flag) {
-            for (String pluginName : patcher.getTargetPlugins()) {
+            IConfigurablePluginPatcher configurablePatcher = (IConfigurablePluginPatcher) patcher;
+            for (String pluginName : configurablePatcher.getTargetPlugins()) {
                 register0(patcher, pluginName);
             }
             return true;
