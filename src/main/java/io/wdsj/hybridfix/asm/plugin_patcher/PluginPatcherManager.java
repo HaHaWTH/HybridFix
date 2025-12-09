@@ -20,7 +20,7 @@ import java.util.jar.JarFile;
 
 public enum PluginPatcherManager {
     INSTANCE;
-    private final Map<String, List<IPluginPatcher>> pluginPatcher = new ConcurrentHashMap<>();
+    private final Map<String, List<IPluginPatcher>> pluginPatchers = new ConcurrentHashMap<>();
 
     PluginPatcherManager() {
         IBytecodePatcher.clearDebugDumpDirectory();
@@ -42,7 +42,7 @@ public enum PluginPatcherManager {
     }
 
     public List<IPluginPatcher> getPluginPatchers(String pluginName) {
-        return pluginPatcher.get(pluginName);
+        return pluginPatchers.get(pluginName);
     }
 
     private boolean registerPluginPatcher(IPluginPatcher patcher) {
@@ -100,11 +100,11 @@ public enum PluginPatcherManager {
     }
 
     private void register0(IPluginPatcher patcher, String pluginName) {
-        pluginPatcher.computeIfPresent(pluginName, (k, v) -> {
+        pluginPatchers.computeIfPresent(pluginName, (k, v) -> {
             v.add(patcher);
             return v;
         });
-        pluginPatcher.computeIfAbsent(pluginName, k -> {
+        pluginPatchers.computeIfAbsent(pluginName, k -> {
             final List<IPluginPatcher> list = new ArrayList<>();
             list.add(patcher);
             return list;
