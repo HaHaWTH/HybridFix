@@ -41,7 +41,7 @@ public class InventoryViewPatcher implements IConfigurablePluginPatcher {
                 byte[] bytes = classWriter.toByteArray();
 
                 dump(className, bytes);
-                HybridFix.LOGGER.info("Transformed class {}", className);
+                log(className);
                 return bytes;
             }
         }

@@ -37,6 +37,10 @@ public interface IBytecodePatcher {
         }
     }
 
+    default void log(String className) {
+        HybridFix.LOGGER.info("[{}] Transformed class {}", getClass().getSimpleName(), className);
+    }
+
     boolean isEnabled();
 
     static void clearDebugDumpDirectory() {

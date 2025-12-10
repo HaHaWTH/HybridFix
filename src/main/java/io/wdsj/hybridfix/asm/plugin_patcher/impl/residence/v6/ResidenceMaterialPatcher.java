@@ -34,7 +34,7 @@ public class ResidenceMaterialPatcher implements IPluginPatcher {
                 classNode.accept(classWriter);
                 byte[] bytes = classWriter.toByteArray();
                 dump(className, bytes);
-                HybridFix.LOGGER.info("Transformed class {}", className);
+                log(className);
                 return bytes;
             }
         }
