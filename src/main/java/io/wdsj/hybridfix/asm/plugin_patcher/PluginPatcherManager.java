@@ -20,7 +20,7 @@ import java.util.jar.JarFile;
 
 public enum PluginPatcherManager {
     INSTANCE;
-    private final Map<String, List<IPluginPatcher>> pluginPatchers = new ConcurrentHashMap<>();
+    private final Map<String, List<AbstractPluginPatcher>> pluginPatchers = new ConcurrentHashMap<>();
 
     PluginPatcherManager() {
         IBytecodePatcher.clearDebugDumpDirectory();
@@ -29,8 +29,8 @@ public enum PluginPatcherManager {
         ObjectArrays.quickSort(classes, Comparator.comparing(Class::getSimpleName));
         for (Class<?> clazz : classes) {
             try {
-                if (IPluginPatcher.class.isAssignableFrom(clazz)) {
-                    boolean result = registerPluginPatcher((IPluginPatcher) clazz.newInstance());
+                if (AbstractPluginPatcher.class.isAssignableFrom(clazz)) {
+                    boolean result = registerPluginPatcher((AbstractPluginPatcher) clazz.newInstance());
                     if (result) {
                         HybridFix.LOGGER.info("Registered plugin patcher {}", clazz.getSimpleName());
                     }
@@ -41,11 +41,11 @@ public enum PluginPatcherManager {
         }
     }
 
-    public List<IPluginPatcher> getPluginPatchers(String pluginName) {
+    public List<AbstractPluginPatcher> getPluginPatchers(String pluginName) {
         return pluginPatchers.get(pluginName);
     }
 
-    private boolean registerPluginPatcher(IPluginPatcher patcher) {
+    private boolean registerPluginPatcher(AbstractPluginPatcher patcher) {
         if (!Settings.pluginPatcherSettings.enable) {
             return false;
         }
@@ -71,7 +71,7 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private boolean registerApplyTo(IPluginPatcher patcher, ApplyToPlugin applyToPlugin) {
+    private boolean registerApplyTo(AbstractPluginPatcher patcher, ApplyToPlugin applyToPlugin) {
         String[] pluginNames = applyToPlugin.value();
         boolean flag = patcher.isEnabled();
         if (flag) {
@@ -83,14 +83,14 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private boolean registerConfigurable(IPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
+    private boolean registerConfigurable(AbstractPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
         boolean flag = patcher.isEnabled();
-        if (!(patcher instanceof IConfigurablePluginPatcher)) {
+        if (!(patcher instanceof ConfigurablePluginPatcher)) {
             HybridFix.LOGGER.error("Plugin patcher {} is not implementing the IConfigurablePluginPatcher interface, skipping.", patcher.getClass().getName());
             return false;
         }
         if (flag) {
-            IConfigurablePluginPatcher configurablePatcher = (IConfigurablePluginPatcher) patcher;
+            ConfigurablePluginPatcher configurablePatcher = (ConfigurablePluginPatcher) patcher;
             for (String pluginName : configurablePatcher.getTargetPlugins()) {
                 register0(patcher, pluginName);
             }
@@ -99,13 +99,13 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private void register0(IPluginPatcher patcher, String pluginName) {
+    private void register0(AbstractPluginPatcher patcher, String pluginName) {
         pluginPatchers.computeIfPresent(pluginName, (k, v) -> {
             v.add(patcher);
             return v;
         });
         pluginPatchers.computeIfAbsent(pluginName, k -> {
-            final List<IPluginPatcher> list = new ArrayList<>();
+            final List<AbstractPluginPatcher> list = new ArrayList<>();
             list.add(patcher);
             return list;
         });

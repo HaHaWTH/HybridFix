@@ -1,8 +1,6 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.compat;
 
-import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.asm.plugin_patcher.IConfigurablePluginPatcher;
-import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.ConfigurablePluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.bukkit.inventory.InventoryView;
@@ -20,7 +18,7 @@ import java.util.ListIterator;
  * Redirect InventoryView {@code INVOKEINTERFACE} calls to {@code INVOKEVIRTUAL}.
  */
 @ApplyToPlugin.Configurable
-public class InventoryViewPatcher implements IConfigurablePluginPatcher {
+public class InventoryViewPatcher extends ConfigurablePluginPatcher {
     private static final String INVENTORY_VIEW_OWNER = "org/bukkit/inventory/InventoryView";
 
     private static final boolean isCurrentImplNeedPatch;
@@ -30,7 +28,7 @@ public class InventoryViewPatcher implements IConfigurablePluginPatcher {
 
     @Override
     public byte[] transform(String className, byte[] basicClass) {
-        if (!IPluginPatcher.isCommonPackage(className)) {
+        if (!isCommonPackage(className)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);

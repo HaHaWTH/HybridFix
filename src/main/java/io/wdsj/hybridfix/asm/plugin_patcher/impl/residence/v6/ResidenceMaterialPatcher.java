@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
-import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
@@ -19,7 +18,7 @@ import java.util.ListIterator;
  * @see <a href="https://github.com/Zrips/Residence/blob/master/src/main/java/com/bekvon/bukkit/residence/listeners/ResidencePlayerListener.java#L1158">ResidncePlayerListener</a>
  */
 @ApplyToPlugin("Residence")
-public class ResidenceMaterialPatcher implements IPluginPatcher {
+public class ResidenceMaterialPatcher extends AbstractPluginPatcher {
     private static final String TARGET_CLASS_PACKAGE = "com.bekvon.bukkit.residence";
 
     @Override

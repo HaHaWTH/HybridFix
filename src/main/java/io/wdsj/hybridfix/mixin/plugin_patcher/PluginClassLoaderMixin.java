@@ -3,7 +3,7 @@ package io.wdsj.hybridfix.mixin.plugin_patcher;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.HybridFixServer;
-import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginPatcherManager;
 import io.wdsj.hybridfix.config.Settings;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -27,11 +27,9 @@ import java.util.List;
 @SuppressWarnings("ModifyVariableMayBeArgsOnly")
 @Mixin(targets = "org.bukkit.plugin.java.PluginClassLoader", remap = false)
 public abstract class PluginClassLoaderMixin extends URLClassLoader {
-    @Unique
-    private List<IPluginPatcher> hybridFix$pluginPatcher;
-
-    @Unique
-    private static IMixinTransformer hybridFix$mixinTransformer;
+    @Shadow @Final private PluginDescriptionFile description;
+    @Unique private List<AbstractPluginPatcher> hybridFix$pluginPatchers;
+    @Unique private static IMixinTransformer hybridFix$mixinTransformer;
 
     static {
         if (Settings.pluginPatcherSettings.enableMixin) hybridFix$setupMixins();
@@ -76,7 +74,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
             )
     )
     public void preparePatcher(JavaPluginLoader loader, ClassLoader parent, PluginDescriptionFile description, File dataFolder, File file, CallbackInfo ci) {
-        this.hybridFix$pluginPatcher = PluginPatcherManager.INSTANCE.getPluginPatchers(description.getName());
+        this.hybridFix$pluginPatchers = PluginPatcherManager.INSTANCE.getPluginPatchers(description.getName());
     }
 
     @Dynamic("hybrid")
@@ -94,11 +92,13 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
     @Unique
     private byte[] hybridFix$patch0(byte[] bytecode, String name) {
         byte[] transformedBytecode = bytecode;
-        if (this.hybridFix$pluginPatcher != null) {
-            for (IPluginPatcher patcher : this.hybridFix$pluginPatcher) {
+        if (this.hybridFix$pluginPatchers != null) {
+            for (AbstractPluginPatcher patcher : this.hybridFix$pluginPatchers) {
                 patcher.setPluginClassLoader(this);
+                patcher.setPluginDescriptionFile(description);
                 transformedBytecode = patcher.transform(name, transformedBytecode);
                 patcher.setPluginClassLoader(null);
+                patcher.setPluginDescriptionFile(null);
             }
         }
         if (Settings.pluginPatcherSettings.enableMixin) {

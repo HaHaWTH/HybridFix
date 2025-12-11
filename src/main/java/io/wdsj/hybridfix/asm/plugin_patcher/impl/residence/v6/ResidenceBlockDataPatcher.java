@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
-import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.asm.plugin_patcher.IPluginPatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
@@ -16,12 +15,11 @@ import java.util.ListIterator;
  * @see <a href="https://github.com/Zrips/Residence/blob/master/src/main/java/com/bekvon/bukkit/residence/listeners/ResidenceBlockListener.java#L124">ResidenceBlockListener</a>
  */
 @ApplyToPlugin("Residence")
-public class ResidenceBlockDataPatcher implements IPluginPatcher {
+public class ResidenceBlockDataPatcher extends AbstractPluginPatcher {
 
     private static final String TARGET_CLASS = "com.bekvon.bukkit.residence.listeners.ResidenceBlockListener";
     private static final String BLOCK_DATA_PKG = "org/bukkit/block/data";
     private static final String BLOCK_CLASS = "org/bukkit/block/Block";
-    private ClassLoader classLoader;
 
     @Override
     public byte[] transform(String className, byte[] basicClass) {
@@ -73,16 +71,6 @@ public class ResidenceBlockDataPatcher implements IPluginPatcher {
     @Override
     public boolean isEnabled() {
         return Settings.pluginPatcherSettings.patchResidenceV6;
-    }
-
-    @Override
-    public ClassLoader getPluginClassLoader() {
-        return this.classLoader;
-    }
-
-    @Override
-    public void setPluginClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
     }
 
     private boolean patchBlockListener(ClassNode classNode) {
