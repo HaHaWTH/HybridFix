@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
 import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.PluginClassWriter;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
@@ -29,7 +30,7 @@ public class ResidenceMaterialPatcher extends AbstractPluginPatcher {
             classReader.accept(classNode, 0);
 
             if (remapMaterials(classNode)) {
-                ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+                ClassWriter classWriter = new PluginClassWriter(ClassWriter.COMPUTE_MAXS, getPluginClassLoader());
                 classNode.accept(classWriter);
                 byte[] bytes = classWriter.toByteArray();
                 dump(className, bytes);

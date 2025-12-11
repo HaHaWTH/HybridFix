@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
 import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
+import io.wdsj.hybridfix.asm.plugin_patcher.PluginClassWriter;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
@@ -29,35 +30,7 @@ public class ResidenceBlockDataPatcher extends AbstractPluginPatcher {
             classReader.accept(classNode, 0);
 
             if (patchBlockListener(classNode)) {
-                ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES) {
-                    @Override
-                    protected String getCommonSuperClass(String type1, String type2) {
-                        ClassLoader classLoader = getPluginClassLoader();
-
-                        Class<?> c;
-                        Class<?> d;
-                        try {
-                            c = Class.forName(type1.replace('/', '.'), false, classLoader);
-                            d = Class.forName(type2.replace('/', '.'), false, classLoader);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e.toString());
-                        }
-
-                        if (c.isAssignableFrom(d)) {
-                            return type1;
-                        } else if (d.isAssignableFrom(c)) {
-                            return type2;
-                        } else if (!c.isInterface() && !d.isInterface()) {
-                            do {
-                                c = c.getSuperclass();
-                            } while(!c.isAssignableFrom(d));
-
-                            return c.getName().replace('.', '/');
-                        } else {
-                            return "java/lang/Object";
-                        }
-                    }
-                };
+                ClassWriter classWriter = new PluginClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES, getPluginClassLoader());
                 classNode.accept(classWriter);
                 byte[] bytes = classWriter.toByteArray();
                 dump(className, bytes);
