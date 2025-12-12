@@ -209,9 +209,9 @@ public class CommandHybridFix extends Command {
         message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Boss: " + net.md_5.bungee.api.ChatColor.GREEN + !target.isNonBoss() + "\n"));
         message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Entity ID: " + net.md_5.bungee.api.ChatColor.GREEN + target.getEntityId() + "\n"));
         message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "UUID: " + net.md_5.bungee.api.ChatColor.GREEN + target.getUniqueID() + "\n"));
-        message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Bukkit EntityType: " + net.md_5.bungee.api.ChatColor.GREEN + ((IEntityGetter) target).getBukkitEntity().getType().toString() + "\n"));
+        message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Bukkit EntityType: " + net.md_5.bungee.api.ChatColor.GREEN + target.getBukkitEntity().getType().toString() + "\n"));
         // noinspection deprecation
-        message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Bukkit EntityType ID: " + net.md_5.bungee.api.ChatColor.GREEN + ((IEntityGetter) target).getBukkitEntity().getType().getTypeId() + "\n"));
+        message.addExtra(new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Bukkit EntityType ID: " + net.md_5.bungee.api.ChatColor.GREEN + target.getBukkitEntity().getType().getTypeId() + "\n"));
 
         TextComponent classComponent = new TextComponent(net.md_5.bungee.api.ChatColor.YELLOW + "Entity Class: " + net.md_5.bungee.api.ChatColor.GREEN + clazz.getName());
         TextComponent classHierarchy = new TextComponent(Utils.classHierarchyToString(clazz));
