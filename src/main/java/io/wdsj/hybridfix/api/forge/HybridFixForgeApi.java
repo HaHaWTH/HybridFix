@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix.api.forge;
 
-import io.wdsj.hybridfix.duck.patch.forge.IExplosionEventDetonate;
-import io.wdsj.hybridfix.duck.patch.forge.IExplosionEventStart;
 import net.minecraftforge.event.world.ExplosionEvent;
 
 public class HybridFixForgeApi {
@@ -21,7 +19,7 @@ public class HybridFixForgeApi {
      * <b>NOTE:</b> Mods must call {@link HybridFixForgeApi#setVanillaExplosionEventDetonate(ExplosionEvent.Detonate, boolean)} to set this value.
      */
     public boolean isVanillaExplosionEventDetonate(ExplosionEvent.Detonate event) {
-        return ((IExplosionEventDetonate) event).hybridFix$isVanilla();
+        return event.hybridFix$isVanilla();
     }
 
     /**
@@ -29,7 +27,7 @@ public class HybridFixForgeApi {
      * @param vanilla Whether this event is vanilla or not.
      */
     public void setVanillaExplosionEventDetonate(ExplosionEvent.Detonate event, boolean vanilla) {
-        ((IExplosionEventDetonate) event).hybridFix$setVanilla(vanilla);
+        event.hybridFix$setVanilla(vanilla);
     }
 
     /**
@@ -37,7 +35,7 @@ public class HybridFixForgeApi {
      * <b>NOTE:</b> Mods must call {@link HybridFixForgeApi#setVanillaExplosionEventStart(ExplosionEvent.Start, boolean)} to set this value.
      */
     public boolean isVanillaExplosionEventStart(ExplosionEvent.Start event) {
-        return ((IExplosionEventStart) event).hybridFix$isVanilla();
+        return event.hybridFix$isVanilla();
     }
 
     /**
@@ -45,6 +43,6 @@ public class HybridFixForgeApi {
      * @param vanilla Whether this event is vanilla or not.
      */
     public void setVanillaExplosionEventStart(ExplosionEvent.Start event, boolean vanilla) {
-        ((IExplosionEventStart) event).hybridFix$setVanilla(vanilla);
+        event.hybridFix$setVanilla(vanilla);
     }
 }

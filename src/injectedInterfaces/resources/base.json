@@ -1,0 +1,5 @@
+{
+  "net/minecraftforge/event/world/ExplosionEvent$Detonate": ["io/wdsj/hybridfix/duck/patch/forge/IExplosionEventDetonate"],
+  "net/minecraftforge/event/world/ExplosionEvent$Start": ["io/wdsj/hybridfix/duck/patch/forge/IExplosionEventStart"],
+  "net/minecraft/entity/Entity": ["io/wdsj/hybridfix/duck/bridge/IEntityGetter"]
+}
