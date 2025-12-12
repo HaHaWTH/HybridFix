@@ -8,7 +8,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Cancellable;
 import io.wdsj.hybridfix.api.bukkit.event.applied_energistics_2.spatial.SpatialPylonTransferEvent;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import io.wdsj.hybridfix.util.ImmutableLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -29,7 +28,7 @@ public abstract class TileSpatialIOPortMixin {
             remap = false
     )
     public TransitionResult wrapSpatialTransition(ISpatialStorageCell instance, ItemStack itemStack, World world, WorldCoord minCoord, WorldCoord maxCoord, int id, Operation<TransitionResult> original, @Cancellable CallbackInfoReturnable<Void> cir) {
-        org.bukkit.World bWorld = ((IWorldGetter) world).getWorld();
+        org.bukkit.World bWorld = world.getWorld();
         Location min = ImmutableLocation.create(bWorld, minCoord.x, minCoord.y, minCoord.z);
         Location max = ImmutableLocation.create(bWorld, maxCoord.x, maxCoord.y, maxCoord.z);
         SpatialPylonTransferEvent event = new SpatialPylonTransferEvent(bWorld, min, max);

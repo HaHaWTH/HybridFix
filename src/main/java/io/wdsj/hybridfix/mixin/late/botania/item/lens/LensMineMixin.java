@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.botania.item.lens;
 
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -44,11 +42,11 @@ public abstract class LensMineMixin {
         World world = entity.world;
         BlockPos collidePos = rtr.getBlockPos();
 
-        org.bukkit.block.Block bukkitBlock = ((IWorldGetter) (world)).getWorld().getBlockAt(collidePos.getX(), collidePos.getY(), collidePos.getZ());
+        org.bukkit.block.Block bukkitBlock = world.getWorld().getBlockAt(collidePos.getX(), collidePos.getY(), collidePos.getZ());
         EntityLivingBase thrower = entity.getThrower();
         if (thrower instanceof EntityPlayerMP) {
             EntityPlayerMP serverPlayer = (EntityPlayerMP) thrower;
-            Player bukkitPlayer = (CraftPlayer) ((IEntityGetter) serverPlayer).getBukkitEntity();
+            Player bukkitPlayer = (CraftPlayer) serverPlayer.getBukkitEntity();
             BlockBreakEvent event = new BlockBreakEvent(bukkitBlock, bukkitPlayer);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
@@ -56,7 +54,7 @@ public abstract class LensMineMixin {
             }
         } else {
             Entity nonNullThrower = thrower != null ? thrower : entity;
-            org.bukkit.entity.Entity bEntity = ((IEntityGetter) nonNullThrower).getBukkitEntity();
+            org.bukkit.entity.Entity bEntity = nonNullThrower.getBukkitEntity();
             // noinspection deprecation
             EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, bukkitBlock, Material.AIR, (byte) 0);
             Bukkit.getPluginManager().callEvent(event);

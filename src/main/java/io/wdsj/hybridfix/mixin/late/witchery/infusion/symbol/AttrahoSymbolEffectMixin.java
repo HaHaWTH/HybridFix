@@ -3,7 +3,6 @@ package io.wdsj.hybridfix.mixin.late.witchery.infusion.symbol;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
@@ -25,8 +24,8 @@ public abstract class AttrahoSymbolEffectMixin {
             remap = false
     )
     private void patchPullTowards(Entity entity, Vec3d target, double dy, double yy, Operation<Void> original, @Local(argsOnly = true) EntityLivingBase caster) {
-        org.bukkit.entity.Entity bDamagee = ((IEntityGetter) entity).getBukkitEntity();
-        org.bukkit.entity.Entity bCaster = ((IEntityGetter) caster).getBukkitEntity();
+        org.bukkit.entity.Entity bDamagee = entity.getBukkitEntity();
+        org.bukkit.entity.Entity bCaster = caster.getBukkitEntity();
         // noinspection deprecation
         EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(bCaster, bDamagee, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 0);
         Bukkit.getPluginManager().callEvent(event);

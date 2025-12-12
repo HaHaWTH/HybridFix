@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Cancellable;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -28,8 +27,8 @@ public abstract class ToolHelperMixin {
             remap = false
     )
     private static double callEvent(IAttributeInstance instance, Operation<Double> original, @Cancellable CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) EntityLivingBase attacker, @Local(argsOnly = true, ordinal = 0) Entity targetEntity) {
-        org.bukkit.entity.Entity damager = ((IEntityGetter) attacker).getBukkitEntity();
-        org.bukkit.entity.Entity victim = ((IEntityGetter) targetEntity).getBukkitEntity();
+        org.bukkit.entity.Entity damager = attacker.getBukkitEntity();
+        org.bukkit.entity.Entity victim = targetEntity.getBukkitEntity();
         float base = original.call(instance).floatValue();
         // noinspection deprecation
         EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, base); // Damage doesn't matter, we just need to check if it's cancelled

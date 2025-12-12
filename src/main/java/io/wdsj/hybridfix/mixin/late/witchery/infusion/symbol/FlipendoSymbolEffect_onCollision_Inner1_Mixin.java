@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.witchery.infusion.symbol;
 
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import net.minecraft.entity.EntityLivingBase;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -26,8 +25,8 @@ public abstract class FlipendoSymbolEffect_onCollision_Inner1_Mixin {
             cancellable = true
     )
     public void beforeMove(EntityLivingBase actor, EntityLivingBase target, CallbackInfo ci) {
-        Entity bActor = ((IEntityGetter) actor).getBukkitEntity();
-        Entity bTarget = ((IEntityGetter) target).getBukkitEntity();
+        Entity bActor = actor.getBukkitEntity();
+        Entity bTarget = target.getBukkitEntity();
         // noinspection deprecation
         EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(bActor, bTarget, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 0);
         Bukkit.getPluginManager().callEvent(event);

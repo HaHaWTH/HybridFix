@@ -4,8 +4,6 @@ import atomicstryker.infernalmobs.common.mods.MM_Webber;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -32,9 +30,9 @@ public abstract class MM_WebberMixin {
     public boolean wrapAbility(World instance, BlockPos pos, IBlockState state, Operation<Boolean> original, @Local(argsOnly = true, ordinal = 0) EntityLivingBase mob) {
         assert Blocks.WEB != null;
         byte data = (byte) Blocks.WEB.getMetaFromState(state);
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+        org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        Entity bEntity = ((IEntityGetter) mob).getBukkitEntity();
+        Entity bEntity = mob.getBukkitEntity();
         // noinspection deprecation
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, bBlock, Material.WEB, data);
         Bukkit.getPluginManager().callEvent(event);

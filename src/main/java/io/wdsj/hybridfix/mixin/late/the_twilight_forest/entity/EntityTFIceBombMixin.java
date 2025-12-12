@@ -2,7 +2,6 @@ package io.wdsj.hybridfix.mixin.late.the_twilight_forest.entity;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -42,7 +41,7 @@ public abstract class EntityTFIceBombMixin {
             remap = false
     )
     public boolean redirectSetIce(World instance, BlockPos pos, IBlockState state) {
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+        org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         BlockState blockState = bBlock.getState();
         blockState.setType(Material.ICE);
@@ -79,7 +78,7 @@ public abstract class EntityTFIceBombMixin {
             remap = false
     )
     public boolean redirectSetObsidian(World instance, BlockPos pos, IBlockState state, @Local IBlockState lavaState) {
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+        org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         BlockState blockState = bBlock.getState();
         EntityChangeBlockEvent event;
@@ -117,7 +116,7 @@ public abstract class EntityTFIceBombMixin {
             remap = false
     )
     public boolean redirectSetSnow(World instance, BlockPos pos, IBlockState state) {
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+        org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         BlockState blockState = bBlock.getState();
         blockState.setType(Material.SNOW);

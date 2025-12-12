@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.handler;
 
 import com.mojang.authlib.GameProfile;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.server.permission.DefaultPermissionLevel;
@@ -54,7 +53,7 @@ public class BukkitForgePermissionHandler implements IPermissionHandler {
         if (context != null) {
             EntityPlayer player = context.getPlayer();
             if (player != null) {
-                return ((IEntityGetter) player).getBukkitEntity().hasPermission(node);
+                return player.getBukkitEntity().hasPermission(node);
             }
 
         }

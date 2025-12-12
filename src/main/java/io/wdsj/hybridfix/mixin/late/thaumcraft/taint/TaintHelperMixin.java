@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.thaumcraft.taint;
 
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -63,7 +62,7 @@ public abstract class TaintHelperMixin {
                         return;
                     }
 
-                    org.bukkit.World bWorld = ((IWorldGetter) world).getWorld();
+                    org.bukkit.World bWorld = world.getWorld();
                     if (!bs.getBlock().isLeaves(bs, world, t) && !bm.isLiquid() && (world.isAirBlock(t) || bs.getBlock().isReplaceable(world, t) || bs.getBlock() instanceof BlockFlower || bs.getBlock() instanceof IPlantable) && BlockUtils.isAdjacentToSolidBlock(world, t) && !BlockTaintFibre.isOnlyAdjacentToTaint(world, t)) {
                         BlockState blockState = bWorld.getBlockAt(t.getX(), t.getY(), t.getZ()).getState();
                         blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));
@@ -166,7 +165,7 @@ public abstract class TaintHelperMixin {
 
                     if ((bs.getBlock() == BlocksTC.taintSoil || bs.getBlock() == BlocksTC.taintRock) && world.isAirBlock(t.up()) && AuraHelper.getFlux(world, t) >= 5.0F && (double) world.rand.nextFloat() < (double) (ModConfig.CONFIG_WORLD.taintSpreadRate / 100.0F) * 0.33 && isAtTaintSeedEdge(world, t)) {
                         EntityTaintSeed e = new EntityTaintSeed(world);
-                        e.setLocationAndAngles((double) ((float) t.getX() + 0.5F), (double) t.up().getY(), (double) ((float) t.getZ() + 0.5F), (float) world.rand.nextInt(360), 0.0F);
+                        e.setLocationAndAngles((float) t.getX() + 0.5F, t.up().getY(), (float) t.getZ() + 0.5F, (float) world.rand.nextInt(360), 0.0F);
                         if (e.getCanSpawnHere()) {
                             AuraHelper.drainFlux(world, t, 5.0F, false);
                             world.spawnEntity(e);

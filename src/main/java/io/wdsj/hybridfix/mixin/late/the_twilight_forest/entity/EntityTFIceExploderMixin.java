@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.the_twilight_forest.entity;
 
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +44,7 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
             require = 1
     )
     public boolean redirectGlass(World instance, BlockPos pos, IBlockState state) {
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+        org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         BlockState blockState = bBlock.getState();
         blockState.setType(Material.STAINED_GLASS);
@@ -54,7 +52,7 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
         // noinspection deprecation
         blockState.setRawData(data);
         // noinspection deprecation
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter) this).getBukkitEntity(), bBlock, Material.STAINED_GLASS, data);
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(this.getBukkitEntity(), bBlock, Material.STAINED_GLASS, data);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             blockState.update(true);
@@ -79,7 +77,7 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
             require = 1
     )
     public boolean redirectClay(World instance, BlockPos pos, IBlockState state) {
-        org.bukkit.World bWorld = ((IWorldGetter) instance).getWorld();
+        org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         BlockState blockState = bBlock.getState();
         blockState.setType(Material.STAINED_CLAY);
@@ -87,7 +85,7 @@ public abstract class EntityTFIceExploderMixin extends EntityTFIceMob {
         // noinspection deprecation
         blockState.setRawData(data);
         // noinspection deprecation
-        EntityChangeBlockEvent event = new EntityChangeBlockEvent(((IEntityGetter) this).getBukkitEntity(), bBlock, Material.STAINED_CLAY, data);
+        EntityChangeBlockEvent event = new EntityChangeBlockEvent(this.getBukkitEntity(), bBlock, Material.STAINED_CLAY, data);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             blockState.update(true);

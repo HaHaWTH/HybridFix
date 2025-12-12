@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.the_twilight_forest.item;
 
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import io.wdsj.hybridfix.util.reflection.HybridReflectionUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +42,7 @@ public abstract class ItemTFMagicBeansMixin {
     public void stopCaptureAndCallEvent(World world, BlockPos pos, int minY, int maxY, CallbackInfo ci) {
         HybridReflectionUtils.setCaptureTreeGeneration(world, false);
         if (!world.capturedBlockSnapshots.isEmpty()) {
-            Location location = new Location(((IWorldGetter) world).getWorld(), pos.getX(), pos.getY(), pos.getZ());
+            Location location = new Location(world.getWorld(), pos.getX(), pos.getY(), pos.getZ());
             List<BlockState> blockstates = new ObjectArrayList<>(world.capturedBlockSnapshots.size());
             for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
                 blockstates.add(HybridReflectionUtils.newBlockStateFromBlockSnapshot(snapshot));

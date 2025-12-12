@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.thaumcraft.taint;
 
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -46,7 +45,7 @@ public abstract class EntityTaintCrawlerMixin extends EntityMob implements ITain
             IBlockState bs = this.world.getBlockState(this.getPosition());
             Material bm = bs.getMaterial();
             if (!bs.getBlock().isLeaves(bs, this.world, this.getPosition()) && !bm.isLiquid() && bm != ThaumcraftMaterials.MATERIAL_TAINT && (this.world.isAirBlock(this.getPosition()) || bs.getBlock().isReplaceable(this.world, this.getPosition()) || bs.getBlock() instanceof BlockFlower || bs.getBlock() instanceof IPlantable) && BlockUtils.isAdjacentToSolidBlock(this.world, this.getPosition()) && !BlockTaintFibre.isOnlyAdjacentToTaint(this.world, this.getPosition())) {
-                org.bukkit.World bWorld = ((IWorldGetter) this.world).getWorld();
+                org.bukkit.World bWorld = this.world.getWorld();
                 final BlockPos pos = this.getPosition();
                 BlockState blockState = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
                 blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));

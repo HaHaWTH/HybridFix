@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.HybridFixServer;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.util.reflection.ReflectionChain;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -66,11 +65,11 @@ public abstract class AccioSymbolEffectMixin {
     )
     public void wrapSetPosition(EntityItem instance, double x, double y, double z, Operation<Void> original, @Local(argsOnly = true) EntityLivingBase caster) {
         try {
-            Item item = (Item) ((IEntityGetter) instance).getBukkitEntity();
+            Item item = (Item) instance.getBukkitEntity();
             if (caster instanceof EntityPlayerMP) {
                 if (mh_InventoryPlayer_canHold != null) {
                     EntityPlayerMP player = (EntityPlayerMP) caster;
-                    Player bPlayer = (Player) ((IEntityGetter) player).getBukkitEntity();
+                    Player bPlayer = (Player) player.getBukkitEntity();
                     ItemStack itemStack = instance.getItem();
                     int remaining = itemStack.getCount() - (int) mh_InventoryPlayer_canHold.invokeExact(player.inventory, itemStack);
                     PlayerPickupItemEvent old = new PlayerPickupItemEvent(bPlayer, item, remaining);
@@ -81,7 +80,7 @@ public abstract class AccioSymbolEffectMixin {
                     if (event.isCancelled()) return;
                 }
             } else {
-                Entity bEntity = ((IEntityGetter) caster).getBukkitEntity();
+                Entity bEntity = caster.getBukkitEntity();
                 if (bEntity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) bEntity;
                     EntityPickupItemEvent event = new EntityPickupItemEvent(livingEntity, item, 0);

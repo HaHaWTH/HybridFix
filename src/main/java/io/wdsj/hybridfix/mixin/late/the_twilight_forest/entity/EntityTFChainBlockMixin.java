@@ -4,8 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,8 +65,8 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             isHarvestCalled.set(true);
             return;
         }
-        org.bukkit.block.Block bukkitBlock = ((IWorldGetter) (world)).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-        Player bukkitPlayer = (CraftPlayer) ((IEntityGetter) player).getBukkitEntity();
+        org.bukkit.block.Block bukkitBlock = world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        Player bukkitPlayer = (CraftPlayer) player.getBukkitEntity();
         BlockBreakEvent event = new BlockBreakEvent(bukkitBlock, bukkitPlayer);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {

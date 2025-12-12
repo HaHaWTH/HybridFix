@@ -3,8 +3,6 @@ package io.wdsj.hybridfix.mixin.late.botania.block;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -38,11 +36,11 @@ public abstract class SubTileRannuncarpusMixin extends SubTileFunctional {
         final boolean originalVal = original.call(block, worldIn, pos);
         if (!originalVal) return false;
         EntityPlayerMP serverPlayer = Objects.requireNonNull(HybridFixFakePlayer.get(worldIn, supertile.getPos(), "botania-SubTileRannuncarpus").get());
-        org.bukkit.World bWorld = ((IWorldGetter) worldIn).getWorld();
+        org.bukkit.World bWorld = worldIn.getWorld();
         Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         Material bMaterial = CraftMagicNumbers.getMaterial(newState.getBlock());
         byte data = (byte) newState.getBlock().getMetaFromState(newState);
-        CraftPlayer player = (CraftPlayer) ((IEntityGetter) serverPlayer).getBukkitEntity();
+        CraftPlayer player = (CraftPlayer) serverPlayer.getBukkitEntity();
         // noinspection deprecation
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(player, bBlock, bMaterial, data);
         Bukkit.getPluginManager().callEvent(event);

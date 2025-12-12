@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix.util.entity;
 
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -74,8 +72,8 @@ public class EntityUtils {
      * @return true if the event was cancelled, false otherwise
      */
     public static boolean callBlockBreakEventForEntity(World world, BlockPos pos, IBlockState state, Entity entity) {
-        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
-        Block block = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        org.bukkit.entity.Entity bEntity = entity.getBukkitEntity();
+        Block block = world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         if (entity instanceof EntityLivingBase && !ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) entity, pos, state)) {
             return true;
         }
@@ -89,8 +87,8 @@ public class EntityUtils {
     }
 
     public static boolean callBukkitEntityExplodeEvent(World world, BlockPos start, List<BlockPos> affectedBlocks, Entity entity) {
-        org.bukkit.World bWorld = ((IWorldGetter) world).getWorld();
-        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
+        org.bukkit.World bWorld = world.getWorld();
+        org.bukkit.entity.Entity bEntity = entity.getBukkitEntity();
         List<Block> blockList = new ObjectArrayList<>(affectedBlocks.size());
         for (int i1 = affectedBlocks.size() - 1; i1 >= 0; i1--) {
             BlockPos cpos = affectedBlocks.get(i1);

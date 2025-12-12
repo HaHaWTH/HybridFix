@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import io.wdsj.hybridfix.util.reflection.HybridReflectionUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.state.IBlockState;
@@ -55,7 +54,7 @@ public abstract class BlockTFSaplingMixin {
         HybridReflectionUtils.setCaptureTreeGeneration(worldIn, false);
         hybridFix$isBoneMeal = true;
         if (!worldIn.capturedBlockSnapshots.isEmpty()) {
-            Location location = new Location(((IWorldGetter) worldIn).getWorld(), pos.getX(), pos.getY(), pos.getZ());
+            Location location = new Location(worldIn.getWorld(), pos.getX(), pos.getY(), pos.getZ());
             List<BlockState> blockstates = new ObjectArrayList<>(worldIn.capturedBlockSnapshots.size());
             for (BlockSnapshot snapshot : worldIn.capturedBlockSnapshots) {
                 blockstates.add(HybridReflectionUtils.newBlockStateFromBlockSnapshot(snapshot));

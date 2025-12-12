@@ -3,7 +3,6 @@ package io.wdsj.hybridfix.handler;
 import io.wdsj.hybridfix.api.bukkit.event.entity.EntityAttackByEntityEvent;
 import io.wdsj.hybridfix.api.bukkit.event.entity.EntityAttackEvent;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -18,12 +17,12 @@ public class LivingAttackHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onLivingAttack(LivingAttackEvent event) {
         EntityLivingBase victim = event.getEntityLiving();
-        Entity bVictim = ((IEntityGetter) victim).getBukkitEntity();
+        Entity bVictim = victim.getBukkitEntity();
         DamageSource source = event.getSource();
         net.minecraft.entity.Entity directDamager = source.getImmediateSource();
-        Entity bDirectDamager = directDamager == null ? null : ((IEntityGetter) directDamager).getBukkitEntity();
+        Entity bDirectDamager = directDamager == null ? null : directDamager.getBukkitEntity();
         net.minecraft.entity.Entity realDamager = source.getTrueSource();
-        Entity bRealDamager = realDamager == null ? null : ((IEntityGetter) realDamager).getBukkitEntity();
+        Entity bRealDamager = realDamager == null ? null : realDamager.getBukkitEntity();
         handleAttackEvent(event, source, bVictim, bDirectDamager, bRealDamager);
         if (Settings.compatModeForAttackBridge && !event.isCanceled()) {
             handleAttackEventCompat(event, source, bVictim, bDirectDamager, bRealDamager);

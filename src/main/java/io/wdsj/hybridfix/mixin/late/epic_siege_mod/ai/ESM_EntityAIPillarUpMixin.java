@@ -1,8 +1,6 @@
 package io.wdsj.hybridfix.mixin.late.epic_siege_mod.ai;
 
 import funwayguy.epicsiegemod.ai.ESM_EntityAIPillarUp;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
@@ -41,8 +39,8 @@ public abstract class ESM_EntityAIPillarUpMixin {
     )
     public void onUpdateTask(CallbackInfo ci) {
         BlockPos pos = this.blockPos;
-        org.bukkit.entity.Entity bEntity = ((IEntityGetter) this.builder).getBukkitEntity();
-        Block block = ((IWorldGetter) this.builder.world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        org.bukkit.entity.Entity bEntity = this.builder.getBukkitEntity();
+        Block block = this.builder.world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         Material material = CraftMagicNumbers.getMaterial(pillarBlock.getBlock());
         byte meta = blockMeta < 0 ? (byte) 0 : (byte) blockMeta;
         // noinspection deprecation

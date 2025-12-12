@@ -2,8 +2,6 @@ package io.wdsj.hybridfix.handler.explosion;
 
 import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +26,7 @@ public class ExplosionDetonateHandler {
         Explosion explosion = event.getExplosion();
         if (!HybridFixForgeApi.getApi().isVanillaExplosionEventDetonate(event) || explosion.getClass() != Explosion.class) { // This should be the best approach to identify mod events without modify mods
             Entity exploder = explosion.exploder;
-            World bworld = ((IWorldGetter) event.getWorld()).getWorld();
+            World bworld = event.getWorld().getWorld();
             Vec3d explosionPos = explosion.getPosition();
             Location location = new Location(bworld, explosionPos.x, explosionPos.y, explosionPos.z);
             List<Block> bukkitBlocks;
@@ -43,7 +41,7 @@ public class ExplosionDetonateHandler {
                 }
             }
             if (exploder != null) {
-                EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(((IEntityGetter) exploder).getBukkitEntity(), location , blockList, 1.0F / explosion.size);
+                EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(exploder.getBukkitEntity(), location , blockList, 1.0F / explosion.size);
                 Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
                 cancelled = bukkitEvent.isCancelled();
                 bukkitBlocks = bukkitEvent.blockList();

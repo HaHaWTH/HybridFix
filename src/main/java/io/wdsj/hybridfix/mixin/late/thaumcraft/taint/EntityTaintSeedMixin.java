@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.thaumcraft.taint;
 
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.util.math.BlockPos;
@@ -48,9 +46,9 @@ public abstract class EntityTaintSeedMixin extends EntityMob implements ITainted
             this.playSound(SoundsTC.tentacle, this.getSoundVolume(), this.getSoundPitch());
             if (this.world.getBiome(entity.getPosition()) == BiomeHandler.ELDRITCH && this.world.isAirBlock(entity.getPosition()) && BlockUtils.isAdjacentToSolidBlock(this.world, entity.getPosition())) {
                 final BlockPos pos = entity.getPosition();
-                BlockState blockState = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
+                BlockState blockState = world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
                 blockState.setType(CraftMagicNumbers.getMaterial(BlocksTC.taintFibre));
-                BlockFormEvent event = new EntityBlockFormEvent(((IEntityGetter)this).getBukkitEntity(), blockState.getBlock(), blockState);
+                BlockFormEvent event = new EntityBlockFormEvent(this.getBukkitEntity(), blockState.getBlock(), blockState);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
                     blockState.update(true);

@@ -1,7 +1,5 @@
 package io.wdsj.hybridfix.mixin.late.the_twilight_forest.entity;
 
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -27,8 +25,8 @@ public abstract class EntityUtilMixin {
             cancellable = true
     )
     private static void callEvent(World world, BlockPos pos, IBlockState state, Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        org.bukkit.entity.Entity bEntity = ((IEntityGetter) entity).getBukkitEntity();
-        Block block = ((IWorldGetter) world).getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        org.bukkit.entity.Entity bEntity = entity.getBukkitEntity();
+        Block block = world.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         // noinspection deprecation
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
         Bukkit.getPluginManager().callEvent(event);

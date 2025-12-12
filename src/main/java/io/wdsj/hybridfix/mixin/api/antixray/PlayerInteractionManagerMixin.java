@@ -2,8 +2,6 @@ package io.wdsj.hybridfix.mixin.api.antixray;
 
 import dev.imanity.antixray.sdk.AntiXrayAdapter;
 import dev.imanity.antixray.sdk.AntiXraySDK;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.util.EnumFacing;
@@ -29,8 +27,8 @@ public abstract class PlayerInteractionManagerMixin {
     public void onBlockLeftClicked(BlockPos pos, EnumFacing side, CallbackInfo ci) {
         AntiXrayAdapter adapter = AntiXraySDK.getAdapter();
         if (adapter != null) {
-            World bWorld = ((IWorldGetter) player.world).getWorld();
-            Player bPlayer = (Player) ((IEntityGetter) player).getBukkitEntity();
+            World bWorld = player.world.getWorld();
+            Player bPlayer = (Player) player.getBukkitEntity();
             adapter.callPlayerLeftClickBlock(bWorld, bPlayer, pos.getX(), pos.getY(), pos.getZ());
         }
     }

@@ -1,8 +1,6 @@
 package io.wdsj.hybridfix.handler.explosion;
 
 import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
-import io.wdsj.hybridfix.duck.bridge.IWorldGetter;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -25,13 +23,13 @@ public class ExplosionStartHandler {
         Explosion explosion = event.getExplosion();
         if (!HybridFixForgeApi.getApi().isVanillaExplosionEventStart(event) || explosion.getClass() != Explosion.class) {
             Entity exploder = explosion.exploder;
-            World bworld = ((IWorldGetter) event.getWorld()).getWorld();
+            World bworld = event.getWorld().getWorld();
             Vec3d explosionPos = explosion.getPosition();
             Location location = new Location(bworld, explosionPos.x, explosionPos.y, explosionPos.z);
             boolean cancelled;
             final List<Block> bukkitBlocks = new ObjectArrayList<>(0); // empty list
             if (exploder != null) {
-                EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(((IEntityGetter) exploder).getBukkitEntity(), location, bukkitBlocks, 1.0F / explosion.size);
+                EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(exploder.getBukkitEntity(), location, bukkitBlocks, 1.0F / explosion.size);
                 Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
                 cancelled = bukkitEvent.isCancelled();
             } else {
