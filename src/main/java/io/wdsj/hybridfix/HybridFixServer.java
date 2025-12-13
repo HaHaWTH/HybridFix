@@ -25,14 +25,6 @@ import java.util.stream.Collectors;
 
 public class HybridFixServer {
     private static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
-    private static final List<String> pluginMixinConfigs = new ArrayList<>();
-    public static void addPluginMixinConfig(String config) {
-        pluginMixinConfigs.add(config);
-    }
-
-    public static List<String> getPluginMixinConfigs() {
-        return pluginMixinConfigs;
-    }
 
     public static void preInit() {
         if (Settings.passExplosionEventToBukkit) {

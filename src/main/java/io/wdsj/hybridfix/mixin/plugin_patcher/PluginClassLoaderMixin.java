@@ -2,7 +2,6 @@ package io.wdsj.hybridfix.mixin.plugin_patcher;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.HybridFixServer;
 import io.wdsj.hybridfix.api.forge.event.bukkit_mixin.BukkitMixinSetupEvent;
 import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginPatcherManager;
@@ -26,6 +25,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("ModifyVariableMayBeArgsOnly")
@@ -50,7 +50,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
             HybridFix.LOGGER.error("Failed to get mixin transformer");
             return;
         }
-        BukkitMixinSetupEvent event = new BukkitMixinSetupEvent(HybridFixServer.getPluginMixinConfigs());
+        BukkitMixinSetupEvent event = new BukkitMixinSetupEvent(new ArrayList<>());
         MinecraftForge.EVENT_BUS.post(event);
         for (String mixinConfig : event.getMixinConfigs()) {
             Mixins.addConfiguration(mixinConfig);
