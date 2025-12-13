@@ -35,7 +35,7 @@ public abstract class SubTileRannuncarpusMixin extends SubTileFunctional {
     public boolean onUpdate(net.minecraft.block.Block block, World worldIn, BlockPos pos, Operation<Boolean> original, @Local(name = "stateToPlace") IBlockState newState) {
         final boolean originalVal = original.call(block, worldIn, pos);
         if (!originalVal) return false;
-        EntityPlayerMP serverPlayer = Objects.requireNonNull(HybridFixFakePlayer.get(worldIn, supertile.getPos(), "botania-SubTileRannuncarpus").get());
+        EntityPlayerMP serverPlayer = Objects.requireNonNull(HybridFixFakePlayer.get(worldIn, supertile.getPos(), "[botania-SubTileRannuncarpus]").get());
         org.bukkit.World bWorld = worldIn.getWorld();
         Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         Material bMaterial = CraftMagicNumbers.getMaterial(newState.getBlock());

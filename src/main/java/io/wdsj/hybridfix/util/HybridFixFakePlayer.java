@@ -57,6 +57,6 @@ public class HybridFixFakePlayer {
         }
     }
 
-    private static final String name = "HybridFixDummy";
+    private static final String name = "[HybridFixDummy]";
     private static final GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes(name.getBytes(Charsets.UTF_8)), name);
 }

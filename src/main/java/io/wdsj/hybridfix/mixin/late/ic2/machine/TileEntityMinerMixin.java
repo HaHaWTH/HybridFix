@@ -32,7 +32,7 @@ public abstract class TileEntityMinerMixin extends TileEntityElectricMachine {
             return;
         }
 
-        FakePlayer dummy = Objects.requireNonNull(HybridFixFakePlayer.get(this.world, this.pos, "ic2-TileEntityMiner").get());
+        FakePlayer dummy = Objects.requireNonNull(HybridFixFakePlayer.get(this.world, this.pos, "[ic2-TileEntityMiner]").get());
         if (EntityUtils.callBlockBreakEventForPlayer(this.world, target, dummy)) {
             cir.setReturnValue(false);
         }

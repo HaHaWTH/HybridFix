@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -88,7 +89,7 @@ public abstract class ChaosImplosionTraceMixin {
         Map<Entity, Float> map = entityMap.get();
         if (list != null) {
             BlockPos start = new BlockPos(this.hybridFix$startX, this.hybridFix$startY, this.hybridFix$startZ);
-            EntityPlayerMP dummy = HybridFixFakePlayer.get(this.world, start, "draconicevolution-ChaosImplosionTrace").get();
+            EntityPlayerMP dummy = Objects.requireNonNull(HybridFixFakePlayer.get(this.world, start, "[draconicevolution-ChaosImplosionTrace]").get());
             if (EntityUtils.callBukkitEntityExplodeEvent(this.world, start, list, dummy)) {
                 if (map != null && Settings.removeEntityDamageAndVelocityOnCancel) {
                     map.clear();
