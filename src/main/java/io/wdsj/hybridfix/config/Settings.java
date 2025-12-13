@@ -221,6 +221,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchTconstructToolDamage = true;
 
+        @Config.Comment("(Server) Fix TConstruct crash bug due to the network design flaw.")
+        @Config.RequiresMcRestart
+        public boolean patchTConstructNetworkCrash = false;
+
         @Config.Comment("(Server) Patch Disarm enchantment in SME(1.0.0 and higher), prevent bypassing the bukkit protection.")
         @Config.RequiresMcRestart
         public boolean patchSoManyEnchantmentsDisarm = true;
