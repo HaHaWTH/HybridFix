@@ -45,7 +45,7 @@ public abstract class AccioSymbolEffectMixin {
                     .name("canHold")
                     .param(ItemStack.class)
                     .accessible(true)
-                    .methodHandle();
+                    .virtualMethodHandle();
         } catch (Throwable t) {
             mh = null;
             HybridFix.LOGGER.error("Failed to get InventoryPlayer#canHold, server will start normally, but some features may not work.");

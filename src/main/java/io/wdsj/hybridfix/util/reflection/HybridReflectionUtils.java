@@ -37,7 +37,7 @@ public class HybridReflectionUtils {
             .name("fireEvent")
             .param(Event.class)
             .accessible(true)
-            .methodHandle();
+            .virtualMethodHandle();
 
     public static void setCaptureTreeGeneration(World world, boolean value) {
         Preconditions.checkNotNull(FD_WORLD_CAPTURE_TREE_GENERATION);

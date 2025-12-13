@@ -26,10 +26,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-
 @Mixin(DedicatedServer.class)
 public abstract class DedicatedServerMixin {
 
@@ -62,20 +58,17 @@ public abstract class DedicatedServerMixin {
                     adder.addCustomRightClicks();
                     adder.save();
                     try {
-                        MethodHandles.Lookup lookup = ReflectionChain.IMPL_LOOKUP != null ? ReflectionChain.IMPL_LOOKUP : MethodHandles.lookup();
                         ClassLoader cl = residence.getClass().getClassLoader();
-
-                        String configManagerClassName = "com.bekvon.bukkit.residence.ConfigManager";
-                        Class<?> configManagerClass = Class.forName(configManagerClassName, false, cl);
-
-                        MethodType getManagerType = MethodType.methodType(configManagerClass);
-
-                        MethodHandle mhGetManager = lookup.findVirtual(residence.getClass(), "getConfigManager", getManagerType);
-
-                        Object configManager = mhGetManager.invoke(residence);
-                        MethodType updateConfigType = MethodType.methodType(void.class);
-                        MethodHandle mhUpdate = lookup.findVirtual(configManagerClass, "UpdateConfigFile", updateConfigType);
-                        mhUpdate.invoke(configManager);
+                        Object configManager = ReflectionChain.fromClass(residence.getClass(), cl)
+                                .name("getConfigManager")
+                                .returnType("com.bekvon.bukkit.residence.ConfigManager")
+                                .virtualMethodHandle()
+                                .invoke(residence);
+                        ReflectionChain.fromClass(configManager.getClass(), cl)
+                                .name("UpdateConfigFile")
+                                .returnType(void.class)
+                                .virtualMethodHandle()
+                                .invoke(configManager);
                     } catch (Throwable t) {
                         HybridFix.LOGGER.warn("Unable to reload residence configuration, attempting to use command...", t);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "residence reload config");

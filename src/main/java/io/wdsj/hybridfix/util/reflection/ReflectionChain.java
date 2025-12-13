@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -49,6 +50,10 @@ public class ReflectionChain<T> {
         } catch (Throwable ignored) {
         }
         IMPL_LOOKUP = lookup;
+    }
+
+    private static MethodHandles.Lookup getLookup() {
+        return ReflectionChain.IMPL_LOOKUP != null ? ReflectionChain.IMPL_LOOKUP : MethodHandles.lookup();
     }
 
     /**
@@ -126,6 +131,26 @@ public class ReflectionChain<T> {
          * @return this chain for further configuration
          */
         IReflectionChain<T> accessible(boolean accessible);
+
+        /**
+         * Specifies the return type of the method or the type of the field.
+         * <p>
+         * This is an intermediate operation.
+         *
+         * @param returnType the return type or field type, which must not be null
+         * @return this chain for further configuration
+         */
+        IReflectionChain<T> returnType(@NotNull Class<?> returnType);
+
+        /**
+         * Specifies the return type of the method or the type of the field.
+         * <p>
+         * This is an intermediate operation.
+         *
+         * @param returnType the fully qualified name of the return type, which must not be null
+         * @return this chain for further configuration
+         */
+        IReflectionChain<T> returnType(@NotNull String returnType);
 
         /**
          * Adds a single parameter type to the method or constructor signature.
@@ -210,34 +235,64 @@ public class ReflectionChain<T> {
         Constructor<T> constructor();
 
         /**
-         * Retrieves a {@link MethodHandle} for a declared method with the specified name and no parameters.
+         * Retrieves a {@link MethodHandle} for a virtual method with the specified name and no parameters.
          * <p>
          * This is a terminal operation.
          *
          * @return the matching {@link MethodHandle}
          * @throws IllegalStateException if the method name or class is not specified
          */
-        MethodHandle methodHandle();
+        MethodHandle virtualMethodHandle();
 
         /**
-         * Retrieves a {@link MethodHandle} for getting the value of a declared field.
+         * Retrieves a {@link MethodHandle} for a static method with the specified name and no parameters.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link MethodHandle}
+         * @throws IllegalStateException if the method name or class is not specified
+         */
+        MethodHandle staticMethodHandle();
+
+        /**
+         * Retrieves a {@link MethodHandle} for getting the value of a virtual field.
          * <p>
          * This is a terminal operation.
          *
          * @return the matching {@link MethodHandle} for the field getter
          * @throws IllegalStateException if the field name or class is not specified
          */
-        MethodHandle fieldGetter();
+        MethodHandle virtualFieldGetter();
 
         /**
-         * Retrieves a {@link MethodHandle} for setting the value of a declared field.
+         * Retrieves a {@link MethodHandle} for getting the value of a static field.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link MethodHandle} for the field getter
+         * @throws IllegalStateException if the field name or class is not specified
+         */
+        MethodHandle staticFieldGetter();
+
+        /**
+         * Retrieves a {@link MethodHandle} for setting the value of a virtual field.
          * <p>
          * This is a terminal operation.
          *
          * @return the matching {@link MethodHandle} for the field setter
          * @throws IllegalStateException if the field name or class is not specified
          */
-        MethodHandle fieldSetter();
+        MethodHandle virtualFieldSetter();
+
+        /**
+         * Retrieves a {@link MethodHandle} for setting the value of a static field.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link MethodHandle} for the field setter
+         * @throws IllegalStateException if the field name or class is not specified
+         */
+        MethodHandle staticFieldSetter();
 
         /**
          * Retrieves a {@link MethodHandle} for a constructor with no parameters.
@@ -277,6 +332,26 @@ public class ReflectionChain<T> {
          * @return this chain for further configuration
          */
         IParameterChain<T> accessible(boolean accessible);
+
+        /**
+         * Specifies the return type of the method.
+         * <p>
+         * This is an intermediate operation.
+         *
+         * @param returnType the return type, which must not be null
+         * @return this chain for further configuration
+         */
+        IParameterChain<T> returnType(@NotNull Class<?> returnType);
+
+        /**
+         * Specifies the return type of the method.
+         * <p>
+         * This is an intermediate operation.
+         *
+         * @param returnType the fully qualified name of the return type, which must not be null
+         * @return this chain for further configuration
+         */
+        IParameterChain<T> returnType(@NotNull String returnType);
 
         /**
          * Adds a single parameter type to the method or constructor signature.
@@ -351,14 +426,24 @@ public class ReflectionChain<T> {
         Constructor<T> constructor();
 
         /**
-         * Retrieves a {@link MethodHandle} for a declared method with the specified name and parameters.
+         * Retrieves a {@link MethodHandle} for a virtual method with the specified name and parameters.
          * <p>
          * This is a terminal operation.
          *
          * @return the matching {@link MethodHandle}
          * @throws IllegalStateException if the method name or class is not specified
          */
-        MethodHandle methodHandle();
+        MethodHandle virtualMethodHandle();
+
+        /**
+         * Retrieves a {@link MethodHandle} for a static method with the specified name and parameters.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link MethodHandle}
+         * @throws IllegalStateException if the method name or class is not specified
+         */
+        MethodHandle staticMethodHandle();
 
         /**
          * Retrieves a {@link MethodHandle} for a constructor with the specified parameters.
@@ -378,6 +463,7 @@ public class ReflectionChain<T> {
         private String name;
         private boolean isAccessible = false;
         private boolean isTerminated = false;
+        private Object returnType = void.class;
 
         ReflectionChainImpl(Class<T> clazz, String className, ClassLoader classLoader) {
             this.targetClass = clazz;
@@ -388,6 +474,23 @@ public class ReflectionChain<T> {
         private void checkNotTerminated() {
             if (isTerminated) {
                 throw new IllegalStateException("Chain has been terminated by a terminal operation and cannot be modified");
+            }
+        }
+
+        private Class<?> resolveReturnType() {
+            if (returnType instanceof Class<?>) {
+                return (Class<?>) returnType;
+            } else if (returnType instanceof String) {
+                try {
+                    return classLoader != null
+                            ? Class.forName((String) returnType, false, classLoader)
+                            : Class.forName((String) returnType);
+                } catch (ClassNotFoundException e) {
+                    SneakyThrow.throw0(e);
+                    throw new RuntimeException(e); // unreachable
+                }
+            } else {
+                throw new IllegalStateException("Invalid return type: " + returnType);
             }
         }
 
@@ -407,9 +510,28 @@ public class ReflectionChain<T> {
         }
 
         @Override
+        public IReflectionChain<T> returnType(@NotNull Class<?> returnType) {
+            checkNotTerminated();
+            this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
+            return this;
+        }
+
+        @Override
+        public IReflectionChain<T> returnType(@NotNull String returnType) {
+            checkNotTerminated();
+            this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
+            return this;
+        }
+
+        @Override
         public IParameterChain<T> param(@NotNull Object paramType) {
             checkNotTerminated();
             ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            if (this.returnType instanceof Class<?>) {
+                chain.returnType((Class<?>) this.returnType);
+            } else {
+                chain.returnType((String) this.returnType);
+            }
             chain.param(paramType);
             markTerminated();
             return chain;
@@ -419,6 +541,11 @@ public class ReflectionChain<T> {
         public IParameterChain<T> params(Object... paramTypes) {
             checkNotTerminated();
             ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            if (this.returnType instanceof Class<?>) {
+                chain.returnType((Class<?>) this.returnType);
+            } else {
+                chain.returnType((String) this.returnType);
+            }
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -428,6 +555,11 @@ public class ReflectionChain<T> {
         public IParameterChain<T> params(Class<?>... paramTypes) {
             checkNotTerminated();
             ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            if (this.returnType instanceof Class<?>) {
+                chain.returnType((Class<?>) this.returnType);
+            } else {
+                chain.returnType((String) this.returnType);
+            }
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -437,6 +569,11 @@ public class ReflectionChain<T> {
         public IParameterChain<T> params(String... paramTypes) {
             checkNotTerminated();
             ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            if (this.returnType instanceof Class<?>) {
+                chain.returnType((Class<?>) this.returnType);
+            } else {
+                chain.returnType((String) this.returnType);
+            }
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -530,10 +667,13 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public MethodHandle methodHandle() {
+        public MethodHandle virtualMethodHandle() {
             checkNotTerminated();
             try {
-                MethodHandle handle = MethodHandles.lookup().unreflect(declaredMethod());
+                if (name == null) {
+                    throw new IllegalStateException("Method name must be specified");
+                }
+                MethodHandle handle = getLookup().findVirtual(resolveTargetClass(), name, MethodType.methodType(resolveReturnType()));
                 markTerminated();
                 return handle;
             } catch (Exception e) {
@@ -543,10 +683,29 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public MethodHandle fieldGetter() {
+        public MethodHandle staticMethodHandle() {
             checkNotTerminated();
             try {
-                MethodHandle getter = MethodHandles.lookup().unreflectGetter(field());
+                if (name == null) {
+                    throw new IllegalStateException("Method name must be specified");
+                }
+                MethodHandle handle = getLookup().findStatic(resolveTargetClass(), name, MethodType.methodType(resolveReturnType()));
+                markTerminated();
+                return handle;
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        @Override
+        public MethodHandle virtualFieldGetter() {
+            checkNotTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                MethodHandle getter = getLookup().findGetter(resolveTargetClass(), name, resolveReturnType());
                 markTerminated();
                 return getter;
             } catch (Exception e) {
@@ -556,10 +715,45 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public MethodHandle fieldSetter() {
+        public MethodHandle staticFieldGetter() {
             checkNotTerminated();
             try {
-                MethodHandle setter = MethodHandles.lookup().unreflectSetter(field());
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                MethodHandle getter = getLookup().findStaticGetter(resolveTargetClass(), name, resolveReturnType());
+                markTerminated();
+                return getter;
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        @Override
+        public MethodHandle virtualFieldSetter() {
+            checkNotTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                MethodHandle setter = getLookup().findSetter(resolveTargetClass(), name, resolveReturnType());
+                markTerminated();
+                return setter;
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        @Override
+        public MethodHandle staticFieldSetter() {
+            checkNotTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                MethodHandle setter = getLookup().findStaticSetter(resolveTargetClass(), name, resolveReturnType());
                 markTerminated();
                 return setter;
             } catch (Exception e) {
@@ -572,7 +766,7 @@ public class ReflectionChain<T> {
         public MethodHandle constructorHandle() {
             checkNotTerminated();
             try {
-                MethodHandle handle = MethodHandles.lookup().unreflectConstructor(constructor());
+                MethodHandle handle = getLookup().findConstructor(resolveTargetClass(), MethodType.methodType(void.class));
                 markTerminated();
                 return handle;
             } catch (Exception e) {
@@ -590,6 +784,7 @@ public class ReflectionChain<T> {
         private final List<Object> parameterTypes = new ArrayList<>();
         private boolean isAccessible;
         private boolean isTerminated = false;
+        private Object returnType = void.class;
 
         ParameterChainImpl(Class<T> targetClass, String targetClassName, String name, boolean isAccessible, ClassLoader classLoader) {
             this.targetClass = targetClass;
@@ -605,6 +800,23 @@ public class ReflectionChain<T> {
             }
         }
 
+        private Class<?> resolveReturnType() {
+            if (returnType instanceof Class<?>) {
+                return (Class<?>) returnType;
+            } else if (returnType instanceof String) {
+                try {
+                    return classLoader != null
+                            ? Class.forName((String) returnType, false, classLoader)
+                            : Class.forName((String) returnType);
+                } catch (ClassNotFoundException e) {
+                    SneakyThrow.throw0(e);
+                    throw new RuntimeException(e); // unreachable
+                }
+            } else {
+                throw new IllegalStateException("Invalid return type: " + returnType);
+            }
+        }
+
         @Override
         public IParameterChain<T> name(@NotNull String name) {
             checkNotTerminated();
@@ -617,6 +829,20 @@ public class ReflectionChain<T> {
         public IParameterChain<T> accessible(boolean accessible) {
             checkNotTerminated();
             this.isAccessible = accessible;
+            return this;
+        }
+
+        @Override
+        public IParameterChain<T> returnType(@NotNull Class<?> returnType) {
+            checkNotTerminated();
+            this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
+            return this;
+        }
+
+        @Override
+        public IParameterChain<T> returnType(@NotNull String returnType) {
+            checkNotTerminated();
+            this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
             return this;
         }
 
@@ -747,10 +973,29 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public MethodHandle methodHandle() {
+        public MethodHandle virtualMethodHandle() {
             checkNotTerminated();
             try {
-                MethodHandle handle = MethodHandles.lookup().unreflect(declaredMethod());
+                if (name == null) {
+                    throw new IllegalStateException("Method name must be specified");
+                }
+                MethodHandle handle = getLookup().findVirtual(resolveTargetClass(), name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
+                markTerminated();
+                return handle;
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        @Override
+        public MethodHandle staticMethodHandle() {
+            checkNotTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Method name must be specified");
+                }
+                MethodHandle handle = getLookup().findStatic(resolveTargetClass(), name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
                 markTerminated();
                 return handle;
             } catch (Exception e) {
@@ -763,7 +1008,7 @@ public class ReflectionChain<T> {
         public MethodHandle constructorHandle() {
             checkNotTerminated();
             try {
-                MethodHandle handle = MethodHandles.lookup().unreflectConstructor(constructor());
+                MethodHandle handle = getLookup().findConstructor(resolveTargetClass(), MethodType.methodType(void.class, resolveParameterTypes()));
                 markTerminated();
                 return handle;
             } catch (Exception e) {
