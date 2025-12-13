@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.util.reflection;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -58,8 +59,20 @@ public class ReflectionChain<T> {
      * @return a new reflection chain for the specified class
      */
     public static <T> IReflectionChain<T> fromClass(@NotNull Class<T> clazz) {
+        return fromClass(clazz, null);
+    }
+
+    /**
+     * Creates a new reflection chain for the specified class with a specific ClassLoader.
+     *
+     * @param <T>         the type of the target class
+     * @param clazz       the target class, which must not be null
+     * @param classLoader the class loader to use for resolving parameters, or null to use default
+     * @return a new reflection chain for the specified class
+     */
+    public static <T> IReflectionChain<T> fromClass(@NotNull Class<T> clazz, @Nullable ClassLoader classLoader) {
         Objects.requireNonNull(clazz, "The class must not be null");
-        return new ReflectionChainImpl<>(clazz, null);
+        return new ReflectionChainImpl<>(clazz, null, classLoader);
     }
 
     /**
@@ -70,8 +83,20 @@ public class ReflectionChain<T> {
      * @return a new reflection chain for the specified class
      */
     public static <T> IReflectionChain<?> fromClass(@NotNull String className) {
+        return fromClass(className, null);
+    }
+
+    /**
+     * Creates a new reflection chain for the class specified by its name with a specific ClassLoader.
+     *
+     * @param <T>         the type of the target class
+     * @param className   the full-qualified name of the target class, which must not be null
+     * @param classLoader the class loader to use for resolution, or null to use default
+     * @return a new reflection chain for the specified class
+     */
+    public static <T> IReflectionChain<?> fromClass(@NotNull String className, @Nullable ClassLoader classLoader) {
         Objects.requireNonNull(className, "The class name must not be null");
-        return new ReflectionChainImpl<>(null, className);
+        return new ReflectionChainImpl<>(null, className, classLoader);
     }
 
     /**
@@ -349,13 +374,15 @@ public class ReflectionChain<T> {
     private static class ReflectionChainImpl<T> implements IReflectionChain<T> {
         private final Class<T> targetClass;
         private final String targetClassName;
+        private final ClassLoader classLoader;
         private String name;
         private boolean isAccessible = false;
         private boolean isTerminated = false;
 
-        ReflectionChainImpl(Class<T> clazz, String className) {
+        ReflectionChainImpl(Class<T> clazz, String className, ClassLoader classLoader) {
             this.targetClass = clazz;
             this.targetClassName = className;
+            this.classLoader = classLoader;
         }
 
         private void checkNotTerminated() {
@@ -382,7 +409,7 @@ public class ReflectionChain<T> {
         @Override
         public IParameterChain<T> param(@NotNull Object paramType) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible);
+            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             chain.param(paramType);
             markTerminated();
             return chain;
@@ -391,7 +418,7 @@ public class ReflectionChain<T> {
         @Override
         public IParameterChain<T> params(Object... paramTypes) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible);
+            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -400,7 +427,7 @@ public class ReflectionChain<T> {
         @Override
         public IParameterChain<T> params(Class<?>... paramTypes) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible);
+            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -409,7 +436,7 @@ public class ReflectionChain<T> {
         @Override
         public IParameterChain<T> params(String... paramTypes) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible);
+            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -424,7 +451,9 @@ public class ReflectionChain<T> {
             }
             try {
                 @SuppressWarnings("unchecked")
-                Class<T> clazz = (Class<T>) Class.forName(targetClassName);
+                Class<T> clazz = (Class<T>) (classLoader != null
+                        ? Class.forName(targetClassName, false, classLoader)
+                        : Class.forName(targetClassName));
                 return clazz;
             } catch (ClassNotFoundException e) {
                 SneakyThrow.throw0(e);
@@ -556,16 +585,18 @@ public class ReflectionChain<T> {
     private static class ParameterChainImpl<T> implements IParameterChain<T> {
         private final Class<T> targetClass;
         private final String targetClassName;
+        private final ClassLoader classLoader;
         private String name;
         private final List<Object> parameterTypes = new ArrayList<>();
         private boolean isAccessible;
         private boolean isTerminated = false;
 
-        ParameterChainImpl(Class<T> targetClass, String targetClassName, String name, boolean isAccessible) {
+        ParameterChainImpl(Class<T> targetClass, String targetClassName, String name, boolean isAccessible, ClassLoader classLoader) {
             this.targetClass = targetClass;
             this.targetClassName = targetClassName;
             this.name = name;
             this.isAccessible = isAccessible;
+            this.classLoader = classLoader;
         }
 
         private void checkNotTerminated() {
@@ -633,7 +664,9 @@ public class ReflectionChain<T> {
             }
             try {
                 @SuppressWarnings("unchecked")
-                Class<T> clazz = (Class<T>) Class.forName(targetClassName);
+                Class<T> clazz = (Class<T>) (classLoader != null
+                        ? Class.forName(targetClassName, false, classLoader)
+                        : Class.forName(targetClassName));
                 return clazz;
             } catch (ClassNotFoundException e) {
                 SneakyThrow.throw0(e);
@@ -648,7 +681,9 @@ public class ReflectionChain<T> {
                     resolvedTypes.add((Class<?>) paramType);
                 } else if (paramType instanceof String) {
                     try {
-                        resolvedTypes.add(Class.forName((String) paramType));
+                        resolvedTypes.add(classLoader != null
+                                ? Class.forName((String) paramType, false, classLoader)
+                                : Class.forName((String) paramType));
                     } catch (ClassNotFoundException e) {
                         SneakyThrow.throw0(e);
                         throw new RuntimeException(e); // unreachable

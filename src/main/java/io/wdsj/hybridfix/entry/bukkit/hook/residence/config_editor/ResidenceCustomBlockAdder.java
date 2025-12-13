@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
@@ -27,8 +26,8 @@ public class ResidenceCustomBlockAdder {
     private static final String customBothClickKey = System.getProperty("hybridfix.hook.residence.customBothClickKey", "Global.CustomBothClick");
     private static final boolean purgeUnavailableMaterials = Boolean.getBoolean("hybridfix.hook.residence.purgeUnavailableMaterials");
 
-    public ResidenceCustomBlockAdder() {
-        this.plugin = Bukkit.getPluginManager().getPlugin("Residence");
+    public ResidenceCustomBlockAdder(Plugin plugin) {
+        this.plugin = plugin;
         List<String> oldRightClicks = plugin.getConfig().getStringList(customRightClickKey);
         addedMaterials.addAll(oldRightClicks);
         List<String> oldBothClicks = plugin.getConfig().getStringList(customBothClickKey);
