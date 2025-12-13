@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.util.reflection;
 
 import io.wdsj.hybridfix.HybridFix;
+import net.lenni0451.reflect.JavaBypass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,10 +56,8 @@ public class ReflectionChain<T> {
         } catch (Throwable ignored) {
         }
         try {
-            Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
-            implLookupField.setAccessible(true);
-            implLookup = (MethodHandles.Lookup) implLookupField.get(null);
-            HybridFix.LOGGER.debug("Found IMPL_LOOKUP");
+            implLookup = JavaBypass.TRUSTED_LOOKUP;
+            if (implLookup != null) HybridFix.LOGGER.debug("Found IMPL_LOOKUP");
         } catch (Exception ignored) {
         }
         PRIVATE_LOOKUP_IN = privateLookupIn;

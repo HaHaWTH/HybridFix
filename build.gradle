@@ -2,6 +2,7 @@
  * It is advised that you do not edit anything in the build.gradle; unless you are sure of what you are doing
  */
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.gradle.ext.Gradle
 
 plugins {
@@ -13,6 +14,7 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'org.jetbrains.changelog' version '2.5.0'
+    id 'com.gradleup.shadow' version '9.3.0'
 }
 
 apply from: 'gradle/scripts/helpers.gradle'
@@ -149,6 +151,9 @@ dependencies {
     compileOnly files("libs/plugin/Residence5.1.6.4.jar")
     compileOnly files("libs/plugin/worldguard-bukkit-6.2.2.jar")
     compileOnly files("libs/plugin/Citizens-2.0.32-b3124.jar")
+
+    // Reflect
+    embed "net.lenni0451:Reflect:1.6.1"
 
     // Witchery
     compileOnly rfg.deobf('WitcheryResurrected0.5.2Hotfix4:WitcheryResurrected:1.12.2-0.5.2.4:forge-all')
@@ -322,12 +327,6 @@ jar {
         }
         attributes(attribute_map)
     }
-    // Add all embedded dependencies into the jar
-    from(provider {
-        configurations.embed.collect {
-            it.isDirectory() ? it : zipTree(it).matching { exclude '**/module-info.class' }
-        }
-    })
 }
 
 idea {
@@ -463,6 +462,26 @@ tasks.register('prioritizeCoremods') {
             }
         }
     }
+}
+
+tasks.named('shadowJar', ShadowJar).configure {
+    configurations = [project.configurations.embed]
+
+    relocate 'net.lenni0451.reflect', "${propertyString('root_package')}.${propertyString('mod_id')}.libs.reflect"
+
+    mergeServiceFiles()
+
+    archiveClassifier.set('dev-shadow')
+
+    exclude '**/module-info.class'
+}
+
+tasks.build.dependsOn tasks.shadowJar
+
+tasks.named('reobfJar').configure {
+    inputJar.set(tasks.shadowJar.archiveFile)
+
+    dependsOn tasks.shadowJar
 }
 
 idea.project.settings {
