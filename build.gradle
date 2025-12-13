@@ -474,6 +474,7 @@ tasks.named('shadowJar', ShadowJar).configure {
     archiveClassifier.set('dev-shadow')
 
     exclude '**/module-info.class'
+    exclude 'META-INF/versions/**'
 }
 
 tasks.build.dependsOn tasks.shadowJar
