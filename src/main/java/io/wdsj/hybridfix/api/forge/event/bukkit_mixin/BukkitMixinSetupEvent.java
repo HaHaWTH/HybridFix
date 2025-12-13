@@ -3,6 +3,7 @@ package io.wdsj.hybridfix.api.forge.event.bukkit_mixin;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ public class BukkitMixinSetupEvent extends Event {
      * Get the immutable view of mixin configs to be added to the mixin transformer.
      * @return the mixin configs
      */
-    public List<String> getMixinConfigs() {
+    public @NotNull List<String> getMixinConfigs() {
         return Collections.unmodifiableList(mixinConfigs);
     }
 
@@ -35,7 +36,7 @@ public class BukkitMixinSetupEvent extends Event {
      * Add a mixin config to be added to the mixin transformer.
      * @param mixinConfig the mixin config
      */
-    public void addMixinConfig(String mixinConfig) {
+    public void addMixinConfig(@NotNull String mixinConfig) {
         mixinConfigs.add(mixinConfig);
     }
 }

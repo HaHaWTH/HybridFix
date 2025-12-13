@@ -14,7 +14,7 @@ public @interface ApplyToPlugin {
     String[] value();
 
     /**
-     * Mark this patcher as configurable, must implement the {@link ConfigurablePluginPatcher} interface.
+     * Mark this patcher as configurable, must extend the {@link ConfigurablePluginPatcher} class.
      */
     @Documented
     @Retention(RetentionPolicy.RUNTIME)
