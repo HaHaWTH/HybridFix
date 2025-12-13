@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.util.reflection;
 
+import io.wdsj.hybridfix.HybridFix;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,20 +41,28 @@ public class ReflectionChain<T> {
     private ReflectionChain() {
     }
 
-    public static final MethodHandles.Lookup IMPL_LOOKUP;
+    private static final Method PRIVATE_LOOKUP_IN;
+    private static final MethodHandles.Lookup IMPL_LOOKUP;
+
     static {
-        MethodHandles.Lookup lookup = null;
+        Method privateLookupIn = null;
+        MethodHandles.Lookup implLookup = null;
+
+        try {
+            // noinspection JavaReflectionMemberAccess
+            privateLookupIn = MethodHandles.class.getMethod("privateLookupIn", Class.class, MethodHandles.Lookup.class);
+            privateLookupIn.setAccessible(true);
+        } catch (Throwable ignored) {
+        }
         try {
             Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
             implLookupField.setAccessible(true);
-            lookup = (MethodHandles.Lookup) implLookupField.get(null);
-        } catch (Throwable ignored) {
+            implLookup = (MethodHandles.Lookup) implLookupField.get(null);
+            HybridFix.LOGGER.debug("Found IMPL_LOOKUP");
+        } catch (Exception ignored) {
         }
-        IMPL_LOOKUP = lookup;
-    }
-
-    private static MethodHandles.Lookup getLookup() {
-        return ReflectionChain.IMPL_LOOKUP != null ? ReflectionChain.IMPL_LOOKUP : MethodHandles.lookup();
+        PRIVATE_LOOKUP_IN = privateLookupIn;
+        IMPL_LOOKUP = implLookup;
     }
 
     /**
@@ -774,6 +783,20 @@ public class ReflectionChain<T> {
                 throw new RuntimeException(e); // unreachable
             }
         }
+
+        private MethodHandles.Lookup getLookup() {
+            if (IMPL_LOOKUP != null) {
+                return IMPL_LOOKUP;
+            }
+
+            try {
+                if (PRIVATE_LOOKUP_IN != null) {
+                    return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN.invoke(null, resolveTargetClass(), MethodHandles.lookup());
+                }
+            } catch (Exception ignored) {
+            }
+            return MethodHandles.lookup();
+        }
     }
 
     private static class ParameterChainImpl<T> implements IParameterChain<T> {
@@ -1015,6 +1038,20 @@ public class ReflectionChain<T> {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
             }
+        }
+
+        private MethodHandles.Lookup getLookup() {
+            if (IMPL_LOOKUP != null) {
+                return IMPL_LOOKUP;
+            }
+
+            try {
+                if (PRIVATE_LOOKUP_IN != null) {
+                    return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN.invoke(null, resolveTargetClass(), MethodHandles.lookup());
+                }
+            } catch (Exception ignored) {
+            }
+            return MethodHandles.lookup();
         }
     }
 
