@@ -29,6 +29,7 @@ public abstract class CraftPlayerMixin {
     @Shadow public abstract EntityPlayerMP getHandle();
     @Unique
     private final Player.Spigot hybridFix$fakePlayerSpigot = new Player.Spigot() {
+        private final Set<Player> EMPTY_SET = new HashSet<>(0);
         public InetSocketAddress getRawAddress() {
             return null;
         }
@@ -51,7 +52,7 @@ public abstract class CraftPlayerMixin {
         }
 
         public Set<Player> getHiddenPlayers() {
-            return Collections.unmodifiableSet(new HashSet<>());
+            return Collections.unmodifiableSet(EMPTY_SET);
         }
 
         public void sendMessage(BaseComponent component) {
