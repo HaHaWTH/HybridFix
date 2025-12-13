@@ -14,18 +14,17 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public enum PluginPatcherManager {
     INSTANCE;
-    private final Map<String, List<AbstractPluginPatcher>> pluginPatchers = new ConcurrentHashMap<>();
+    private final Map<String, List<AbstractPluginPatcher>> pluginPatchers = new LinkedHashMap<>();
 
     PluginPatcherManager() {
         IBytecodePatcher.clearDebugDumpDirectory();
-        String PLUGIN_PATCHER_PACKAGE = PluginPatcherManager.class.getPackage().getName() + ".impl";
-        Class<?>[] classes = getClasses(PLUGIN_PATCHER_PACKAGE).toArray(new Class[0]);
+        String patcherPackage = PluginPatcherManager.class.getPackage().getName() + ".impl";
+        Class<?>[] classes = getClasses(patcherPackage).toArray(new Class[0]);
         ObjectArrays.quickSort(classes, Comparator.comparing(Class::getSimpleName));
         for (Class<?> clazz : classes) {
             try {
@@ -86,7 +85,7 @@ public enum PluginPatcherManager {
     private boolean registerConfigurable(AbstractPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
         boolean flag = patcher.isEnabled();
         if (!(patcher instanceof ConfigurablePluginPatcher)) {
-            HybridFix.LOGGER.error("Plugin patcher {} is not implementing the IConfigurablePluginPatcher interface, skipping.", patcher.getClass().getName());
+            HybridFix.LOGGER.error("Plugin patcher {} is not extending ConfigurablePluginPatcher, skipping.", patcher.getClass().getName());
             return false;
         }
         if (flag) {
@@ -100,14 +99,12 @@ public enum PluginPatcherManager {
     }
 
     private void register0(AbstractPluginPatcher patcher, String pluginName) {
-        pluginPatchers.computeIfPresent(pluginName, (k, v) -> {
-            v.add(patcher);
-            return v;
-        });
-        pluginPatchers.computeIfAbsent(pluginName, k -> {
-            final List<AbstractPluginPatcher> list = new ArrayList<>();
-            list.add(patcher);
-            return list;
+        pluginPatchers.compute(pluginName, (k, currentList) -> {
+            if (currentList == null) {
+                currentList = new ArrayList<>();
+            }
+            currentList.add(patcher);
+            return currentList;
         });
     }
 

@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HybridFixServer {
+public final class HybridFixServer {
     private static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
 
     public static void preInit() {
