@@ -17,7 +17,8 @@ import org.jetbrains.annotations.ApiStatus;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 
-import static io.wdsj.hybridfix.util.reflection.BaseReflectionUtils.*;
+import static io.wdsj.hybridfix.util.reflection.BaseReflectionUtils.setBooleanFieldValue;
+import static io.wdsj.hybridfix.util.reflection.BaseReflectionUtils.setObjectFieldValue;
 
 public class HybridReflectionUtils {
     private static final Field FD_WORLD_CAPTURE_TREE_GENERATION = ReflectionChain.fromClass(World.class)

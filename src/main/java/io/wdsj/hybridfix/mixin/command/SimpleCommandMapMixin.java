@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.mixin.command;
 
-import io.wdsj.hybridfix.command.CommandMods;
 import io.wdsj.hybridfix.command.CommandHybridFix;
+import io.wdsj.hybridfix.command.CommandMods;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
 import org.spongepowered.asm.mixin.Mixin;

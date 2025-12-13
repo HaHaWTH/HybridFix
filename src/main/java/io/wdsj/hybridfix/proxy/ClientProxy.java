@@ -1,6 +1,8 @@
 package io.wdsj.hybridfix.proxy;
 
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {

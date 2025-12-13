@@ -3,12 +3,12 @@ package io.wdsj.hybridfix.entry.bukkit.util;
 import io.wdsj.hybridfix.duck.bridge.forge_bukkit.IClassLoaderInjectGetter;
 import io.wdsj.hybridfix.duck.bukkit.plugin.IPluginClassDefiner;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
+import io.wdsj.hybridfix.util.SneakyThrow;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import io.wdsj.hybridfix.util.SneakyThrow;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;

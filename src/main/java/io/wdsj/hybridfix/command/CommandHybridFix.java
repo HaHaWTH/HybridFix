@@ -4,7 +4,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.duck.bridge.IEntityGetter;
 import io.wdsj.hybridfix.util.FormatUtils;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
