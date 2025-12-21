@@ -613,13 +613,12 @@ public class ReflectionChain<T> {
         @Override
         public Method method() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                Method result = resolveTargetClass().getMethod(name);
-                markTerminated();
-                return result;
+                return resolveTargetClass().getMethod(name);
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -629,13 +628,13 @@ public class ReflectionChain<T> {
         @Override
         public Method declaredMethod() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
                 Method method = resolveTargetClass().getDeclaredMethod(name);
                 if (isAccessible) method.setAccessible(true);
-                markTerminated();
                 return method;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
@@ -646,13 +645,13 @@ public class ReflectionChain<T> {
         @Override
         public Field field() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Field name must be specified");
                 }
                 Field field = resolveTargetClass().getDeclaredField(name);
                 if (isAccessible) field.setAccessible(true);
-                markTerminated();
                 return field;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
@@ -663,10 +662,10 @@ public class ReflectionChain<T> {
         @Override
         public Constructor<T> constructor() {
             checkNotTerminated();
+            markTerminated();
             try {
                 Constructor<T> constructor = resolveTargetClass().getDeclaredConstructor();
                 if (isAccessible) constructor.setAccessible(true);
-                markTerminated();
                 return constructor;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
@@ -677,13 +676,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle virtualMethodHandle() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                MethodHandle handle = getLookup().findVirtual(resolveTargetClass(), name, MethodType.methodType(resolveReturnType()));
-                markTerminated();
-                return handle;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findVirtual(targetClazz, name, MethodType.methodType(resolveReturnType()));
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -693,13 +692,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle staticMethodHandle() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                MethodHandle handle = getLookup().findStatic(resolveTargetClass(), name, MethodType.methodType(resolveReturnType()));
-                markTerminated();
-                return handle;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findStatic(targetClazz, name, MethodType.methodType(resolveReturnType()));
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -709,13 +708,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle virtualFieldGetter() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Field name must be specified");
                 }
-                MethodHandle getter = getLookup().findGetter(resolveTargetClass(), name, resolveReturnType());
-                markTerminated();
-                return getter;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findGetter(targetClazz, name, resolveReturnType());
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -725,13 +724,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle staticFieldGetter() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Field name must be specified");
                 }
-                MethodHandle getter = getLookup().findStaticGetter(resolveTargetClass(), name, resolveReturnType());
-                markTerminated();
-                return getter;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findStaticGetter(targetClazz, name, resolveReturnType());
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -741,13 +740,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle virtualFieldSetter() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Field name must be specified");
                 }
-                MethodHandle setter = getLookup().findSetter(resolveTargetClass(), name, resolveReturnType());
-                markTerminated();
-                return setter;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findSetter(targetClazz, name, resolveReturnType());
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -757,13 +756,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle staticFieldSetter() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Field name must be specified");
                 }
-                MethodHandle setter = getLookup().findStaticSetter(resolveTargetClass(), name, resolveReturnType());
-                markTerminated();
-                return setter;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findStaticSetter(targetClazz, name, resolveReturnType());
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -773,24 +772,24 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle constructorHandle() {
             checkNotTerminated();
+            markTerminated();
             try {
-                MethodHandle handle = getLookup().findConstructor(resolveTargetClass(), MethodType.methodType(void.class));
-                markTerminated();
-                return handle;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findConstructor(targetClazz, MethodType.methodType(void.class));
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
             }
         }
 
-        private MethodHandles.Lookup getLookup() {
+        private MethodHandles.Lookup getLookup(Class<T> clazz) {
             if (IMPL_LOOKUP != null) {
                 return IMPL_LOOKUP;
             }
 
             try {
                 if (PRIVATE_LOOKUP_IN != null) {
-                    return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN.invoke(null, resolveTargetClass(), MethodHandles.lookup());
+                    return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN.invoke(null, clazz, MethodHandles.lookup());
                 }
             } catch (Exception ignored) {
             }
@@ -950,13 +949,12 @@ public class ReflectionChain<T> {
         @Override
         public Method method() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                Method result = resolveTargetClass().getMethod(name, resolveParameterTypes());
-                markTerminated();
-                return result;
+                return resolveTargetClass().getMethod(name, resolveParameterTypes());
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -966,13 +964,13 @@ public class ReflectionChain<T> {
         @Override
         public Method declaredMethod() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
                 Method method = resolveTargetClass().getDeclaredMethod(name, resolveParameterTypes());
                 if (isAccessible) method.setAccessible(true);
-                markTerminated();
                 return method;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
@@ -983,10 +981,10 @@ public class ReflectionChain<T> {
         @Override
         public Constructor<T> constructor() {
             checkNotTerminated();
+            markTerminated();
             try {
                 Constructor<T> constructor = resolveTargetClass().getDeclaredConstructor(resolveParameterTypes());
                 if (isAccessible) constructor.setAccessible(true);
-                markTerminated();
                 return constructor;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
@@ -997,13 +995,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle virtualMethodHandle() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                MethodHandle handle = getLookup().findVirtual(resolveTargetClass(), name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
-                markTerminated();
-                return handle;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findVirtual(targetClazz, name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -1013,13 +1011,13 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle staticMethodHandle() {
             checkNotTerminated();
+            markTerminated();
             try {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                MethodHandle handle = getLookup().findStatic(resolveTargetClass(), name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
-                markTerminated();
-                return handle;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findStatic(targetClazz, name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -1029,24 +1027,24 @@ public class ReflectionChain<T> {
         @Override
         public MethodHandle constructorHandle() {
             checkNotTerminated();
+            markTerminated();
             try {
-                MethodHandle handle = getLookup().findConstructor(resolveTargetClass(), MethodType.methodType(void.class, resolveParameterTypes()));
-                markTerminated();
-                return handle;
+                Class<T> targetClazz = resolveTargetClass();
+                return getLookup(targetClazz).findConstructor(targetClazz, MethodType.methodType(void.class, resolveParameterTypes()));
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
             }
         }
 
-        private MethodHandles.Lookup getLookup() {
+        private MethodHandles.Lookup getLookup(Class<T> clazz) {
             if (IMPL_LOOKUP != null) {
                 return IMPL_LOOKUP;
             }
 
             try {
                 if (PRIVATE_LOOKUP_IN != null) {
-                    return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN.invoke(null, resolveTargetClass(), MethodHandles.lookup());
+                    return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN.invoke(null, clazz, MethodHandles.lookup());
                 }
             } catch (Exception ignored) {
             }
