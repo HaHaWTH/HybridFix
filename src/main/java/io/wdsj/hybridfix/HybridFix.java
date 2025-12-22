@@ -2,6 +2,7 @@ package io.wdsj.hybridfix;
 
 import io.wdsj.hybridfix.proxy.CommonProxy;
 import io.wdsj.hybridfix.util.Utils;
+import net.lenni0451.reflect.JavaBypass;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -21,6 +22,12 @@ public class HybridFix {
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final boolean IS_HYBRID_ENV = Utils.isClassExists("org.bukkit.Bukkit");
     public static final boolean IS_CLEANROOM = Utils.isClassExists("com.cleanroommc.common.CleanroomContainer");
+    static {
+        try {
+            JavaBypass.clearReflectionFilter();
+        } catch (Throwable ignored) {
+        }
+    }
     @SidedProxy(
             clientSide = "io.wdsj.hybridfix.proxy.ClientProxy",
             serverSide = "io.wdsj.hybridfix.proxy.ServerProxy",
