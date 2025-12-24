@@ -21,7 +21,7 @@ public class JarDiscovererMixin {
             )
     )
     private boolean ignoreMultiReleaseClasses(Matcher instance, Operation<Boolean> original, @Local(ordinal = 0) ZipEntry ze) {
-        if (ze.getName().contains("META-INF/versions")) {
+        if (ze.getName().startsWith("META-INF/versions")) {
             return false;
         }
         return original.call(instance);
