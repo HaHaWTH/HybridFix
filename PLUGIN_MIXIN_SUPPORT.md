@@ -49,6 +49,7 @@ public class MyMixinHandler {
 }
 ```
 - Create the Mixin Config
+
 Create a standard Mixin JSON file (e.g., mixins.my_mod.plugins.json) in your resources.
 **Important Notes**:
 Remap: Ensure remap is set to false in your Mixin annotations, as Bukkit plugins are not obfuscated.
