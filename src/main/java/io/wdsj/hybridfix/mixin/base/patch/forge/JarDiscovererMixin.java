@@ -19,7 +19,8 @@ public class JarDiscovererMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/util/regex/Matcher;matches()Z"
-            )
+            ),
+            require = 0
     )
     private boolean ignoreClasses(Matcher instance, Operation<Boolean> original, @Local(ordinal = 0) ZipEntry ze) {
         return original.call(instance) && hybridFix$isValidClass(ze);

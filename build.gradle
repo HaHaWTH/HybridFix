@@ -130,6 +130,10 @@ repositories {
         name 'ModMaven'
         url 'https://modmaven.dev/'
     }
+    maven {
+        name "lenni0451"
+        url "https://maven.lenni0451.net/releases"
+    }
     ivy {
         url "https://witchery-api.msrandom.net/download/"
         patternLayout {
@@ -153,7 +157,7 @@ dependencies {
     compileOnly files("libs/plugin/Citizens-2.0.32-b3124.jar")
 
     // Reflect
-    embed "net.lenni0451:Reflect:1.6.1"
+    embed "net.lenni0451:Reflect:1.6.1+curseforge"
 
     // Witchery
     compileOnly rfg.deobf('WitcheryResurrected0.5.2Hotfix4:WitcheryResurrected:1.12.2-0.5.2.4:forge-all')
