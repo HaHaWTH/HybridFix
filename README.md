@@ -60,7 +60,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](./FORGE_CALL_BUKKIT.md))**
 - Bukkit APIs backported from modern version.
 - **Builtin plugin ASM patcher, compatible with your favourite plugins.**
-- **Bukkit plugin mixin support, allows you to inject code into plugins via mods.** *(Experimental)*
+- **Bukkit plugin mixin support, allows you to inject code into plugins via mods.** *(Experimental)* ([Docs](./PLUGIN_MIXIN_SUPPORT.md))
 - Extend Forge's error recovery system (`removeErroringEntities` and `removeErroringTileEntities`), notify server operators when errors occurred.
 - Guard player ticking process, kick player instead of directly crash.
 - Fix Forge bugs that affect server play experience.
