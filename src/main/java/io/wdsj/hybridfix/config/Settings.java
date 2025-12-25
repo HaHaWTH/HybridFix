@@ -303,9 +303,6 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean enable = false;
 
-        /*
-        Dev note: must rebuild transformer cache after adding mixin config, or just define them in HybridFixLateLoader.
-         */
         @Config.Comment("(Server) (EXPERIMENTAL) Enable HybridFix plugin Mixin support. (Requires modified bootstrapping service)")
         @Config.RequiresMcRestart
         public boolean enableMixin = false;
