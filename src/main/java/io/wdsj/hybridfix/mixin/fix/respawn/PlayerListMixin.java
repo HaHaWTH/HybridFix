@@ -28,7 +28,8 @@ public abstract class PlayerListMixin {
             method = "moveToWorld(Lnet/minecraft/entity/player/EntityPlayerMP;IZLorg/bukkit/Location;Z)Lnet/minecraft/entity/player/EntityPlayerMP;",
             at = @At(
                     value = "INVOKE",
-                    target = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftPlayer;getWorld()Lorg/bukkit/World;"
+                    target = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftPlayer;getWorld()Lorg/bukkit/World;",
+                    ordinal = 0
             ),
             remap = false
     )
@@ -51,10 +52,11 @@ public abstract class PlayerListMixin {
     )
     public void afterCopy(EntityPlayerMP player, int dimensionId, boolean conqueredEnd, Location loc, boolean avoidSuffocation, CallbackInfoReturnable<EntityPlayerMP> cir, @Share("newCap") LocalRef<CapabilityDispatcher> newCap) {
         if (Settings.fixCapabilityReset) {
-            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.get(player.getEntityWorld(), player.getPosition()).get());
+            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(player.getEntityWorld(), player.getPosition(), player).get());
             CapabilityDispatcher dispatcher = newCap.get();
             ((EntityCapabilityAccessor) (Entity) dummyPlayer).setCapabilities(dispatcher); // Set the fake player's capabilities to the new dispatcher
-            ForgeEventFactory.onPlayerClone(dummyPlayer, player, !conqueredEnd); // Fire another event for the fake player
+            dummyPlayer.copyFrom(player, conqueredEnd);
+            //ForgeEventFactory.onPlayerClone(dummyPlayer, player, !conqueredEnd); // Fire another event for the fake player
             CapabilityDispatcher newCapability = ((EntityCapabilityAccessor) (Entity) dummyPlayer).getCapabilities();
             ((EntityCapabilityAccessor) (Entity) player).setCapabilities(newCapability); // Copy the re-gathered CapabilityDispatcher to the actual player
         }

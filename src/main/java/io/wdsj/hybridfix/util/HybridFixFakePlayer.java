@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -42,6 +43,15 @@ public class HybridFixFakePlayer {
         player.posY = pos.getY();
         player.posZ = pos.getZ();
         return new WeakReference<>(player);
+    }
+
+    public static @NotNull WeakReference<@Nullable FakePlayer> getPlayerCopy(World world, BlockPos pos, EntityPlayerMP originalPlayer) {
+        GameProfile profile = originalPlayer.getGameProfile();
+        FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) world, profile);
+        fakePlayer.posX = pos.getX();
+        fakePlayer.posY = pos.getY();
+        fakePlayer.posZ = pos.getZ();
+        return new WeakReference<>(fakePlayer);
     }
 
     public static @NotNull WeakReference<@Nullable FakePlayer> get(World world, BlockPos pos, @NotNull String name) {

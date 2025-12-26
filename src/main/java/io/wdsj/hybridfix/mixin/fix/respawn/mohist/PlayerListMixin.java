@@ -54,12 +54,13 @@ public abstract class PlayerListMixin {
     )
     public void afterCopy(EntityPlayerMP player, int i, boolean b, CallbackInfoReturnable<EntityPlayerMP> cir, @Share("newCap") LocalRef<CapabilityDispatcher> newCap) {
         if (Settings.fixCapabilityReset) {
-            FakePlayer dummy = Objects.requireNonNull(HybridFixFakePlayer.get(player.getEntityWorld(), player.getPosition()).get());
+            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(player.getEntityWorld(), player.getPosition(), player).get());
             CapabilityDispatcher dispatcher = newCap.get();
-            ((EntityCapabilityAccessor) (Entity) dummy).setCapabilities(dispatcher);
-            ForgeEventFactory.onPlayerClone(dummy, player, !b);
-            CapabilityDispatcher newCapability = ((EntityCapabilityAccessor) (Entity) dummy).getCapabilities();
-            ((EntityCapabilityAccessor) (Entity) player).setCapabilities(newCapability);
+            ((EntityCapabilityAccessor) (Entity) dummyPlayer).setCapabilities(dispatcher); // Set the fake player's capabilities to the new dispatcher
+            dummyPlayer.copyFrom(player, b);
+            //ForgeEventFactory.onPlayerClone(dummyPlayer, player, !conqueredEnd); // Fire another event for the fake player
+            CapabilityDispatcher newCapability = ((EntityCapabilityAccessor) (Entity) dummyPlayer).getCapabilities();
+            ((EntityCapabilityAccessor) (Entity) player).setCapabilities(newCapability); // Copy the re-gathered CapabilityDispatcher to the actual player
         }
     }
 }
