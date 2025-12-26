@@ -12,29 +12,29 @@ import static io.wdsj.hybridfix.HybridFix.LOGGER;
 public class ServerProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
         if (!HybridFix.IS_HYBRID_ENV) {
-            LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to work properly, disabling.");
+            LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to function, most features won't work in vanilla Forge.");
             return;
         }
-        super.preInit(event);
         HybridFixServer.preInit();
     }
 
     @Override
     public void onServerStartComplete(FMLServerStartedEvent event) {
+        super.onServerStartComplete(event);
         if (!HybridFix.IS_HYBRID_ENV) {
             return;
         }
-        super.onServerStartComplete(event);
         HybridFixServer.onStartComplete();
     }
 
     @Override
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
+        super.onServerAboutToStart(event);
         if (!HybridFix.IS_HYBRID_ENV) {
             return;
         }
-        super.onServerAboutToStart(event);
         HybridFixServer.onServerAboutToStart();
     }
 }

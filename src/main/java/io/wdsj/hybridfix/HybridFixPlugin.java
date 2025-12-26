@@ -24,36 +24,38 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
     {
         {
-            put("mixins.hybridfix.base.json", () -> true);
-            put("mixins.bridge.forge_bukkit.json", () -> Settings.forgeModCallBukkitPlugin);
-            put("mixins.stacktrace.deobfuscate.json", () -> Settings.deobfuscateStacktrace);
-            put("mixins.api.bukkit.json", () -> Settings.extraBukkitApi);
-            put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
-            put("mixins.fix.fakeplayer.json", () -> Settings.invertFakePlayerBlacklist || Settings.fakePlayerPluginBlacklist.length > 0);
-            put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset);
-            put("mixins.fix.chunk_system.json", () -> Settings.fixesForForgeAndBukkitChunkSystems);
-            if (!IS_CLEANROOM) {
-                if (Utils.isMohist) {
-                    put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset);
+            if (IS_HYBRID_ENV) {
+                put("mixins.hybridfix.base.json", () -> true);
+                put("mixins.bridge.forge_bukkit.json", () -> Settings.forgeModCallBukkitPlugin);
+                put("mixins.stacktrace.deobfuscate.json", () -> Settings.deobfuscateStacktrace);
+                put("mixins.api.bukkit.json", () -> Settings.extraBukkitApi);
+                put("mixins.api.antixray.json", () -> Settings.rayTraceAntiXraySDK);
+                put("mixins.fix.fakeplayer.json", () -> Settings.invertFakePlayerBlacklist || Settings.fakePlayerPluginBlacklist.length > 0);
+                put("mixins.fix.respawn.json", () -> Settings.fixCapabilityReset);
+                put("mixins.fix.chunk_system.json", () -> Settings.fixesForForgeAndBukkitChunkSystems);
+                if (!IS_CLEANROOM) {
+                    if (Utils.isMohist) {
+                        put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset);
+                    }
+                    if (Utils.isMohist) {
+                        put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
+                    }
+                    put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);
+                    if (!Utils.isMohist) {
+                        put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);
+                    }
+                    put("mixins.perf.server.json", () -> Settings.enableCraftServerOptimizations);
                 }
-                if (Utils.isMohist) {
-                    put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
-                }
-                put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);
-                if (!Utils.isMohist) {
-                    put("mixins.perf.timings.v1.json", () -> Settings.disableTimings);
-                }
-                put("mixins.perf.server.json", () -> Settings.enableCraftServerOptimizations);
+                put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
+                put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);
+                put("mixins.fix.packet_limiter.drop_item.json", () -> Settings.packetSettings.maxDroppedItemsPerTick != 20);
+                put("mixins.debug.health.json", () -> Settings.debugSettings.entityHealthDebugger);
+                put("mixins.perf.te.snapshot.json", () -> Settings.dontCreateTESnapshotForInventoryMoveItemEvent && Settings.extraBukkitApi);
+                put("mixins.asm.plugin_patcher.json", () -> Settings.pluginPatcherSettings.enable);
+                put("mixins.fix.activation_range.json", () -> Settings.fixEntityActivationRange);
+                put("mixins.fix.error_recovery.json", () -> Settings.errorRecoverySettings.enable);
+                put("mixins.fix.forge.ping_status.json", () -> Settings.fixOutdatedServerPingStatus);
             }
-            put("mixins.misc.command.json", () -> Settings.registerHybridFixCommands);
-            put("mixins.bukkit.plugin.json", () -> Settings.bukkitPluginConfig.enable);
-            put("mixins.fix.packet_limiter.drop_item.json", () -> Settings.packetSettings.maxDroppedItemsPerTick != 20);
-            put("mixins.debug.health.json", () -> Settings.debugSettings.entityHealthDebugger);
-            put("mixins.perf.te.snapshot.json", () -> Settings.dontCreateTESnapshotForInventoryMoveItemEvent && Settings.extraBukkitApi);
-            put("mixins.asm.plugin_patcher.json", () -> Settings.pluginPatcherSettings.enable);
-            put("mixins.fix.activation_range.json", () -> Settings.fixEntityActivationRange);
-            put("mixins.fix.error_recovery.json", () -> Settings.errorRecoverySettings.enable);
-            put("mixins.fix.forge.ping_status.json", () -> Settings.fixOutdatedServerPingStatus);
         }
     });
 
@@ -67,7 +69,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
-        if (!IS_HYBRID_ENV && !isClient) return configs;
         if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
         configs.addAll(commonMixinConfigs.keySet());
         return configs;
@@ -75,7 +76,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if (!IS_HYBRID_ENV && !isClient) return false;
         Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
         Supplier<Boolean> commonSupplier = commonMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {

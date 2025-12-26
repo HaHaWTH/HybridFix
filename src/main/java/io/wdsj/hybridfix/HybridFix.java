@@ -58,7 +58,7 @@ public class HybridFix {
             if (IS_HYBRID_ENV) {
                 return SupportStatus.FULL;
             } else {
-                return SupportStatus.DISABLED;
+                return SupportStatus.LIMITED;
             }
         }
         return SupportStatus.CLIENT;
@@ -67,6 +67,6 @@ public class HybridFix {
     public enum SupportStatus {
         FULL,
         CLIENT,
-        DISABLED
+        LIMITED
     }
 }

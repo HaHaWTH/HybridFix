@@ -121,6 +121,7 @@ Currently supported plugins:
 - Residence: Fixes compatibility with Residence 6.0.0.0+.
 
 ## About FakePlayers
+
 HybridFix utilizes Forge FakePlayer to fix some grief bugs, the naming logic is `[modid-ClassName]`.
 
 For example, the botania rannuncarpus patch is using the fake player with name `[botania-SubTileRannuncarpus]`.
