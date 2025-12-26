@@ -16,7 +16,9 @@ import java.util.List;
  * Updater class for checking for updates, requires semantic versioning.
  */
 public class Updater {
-    private static final String RELEASE_URL = "https://api.github.com/repos/HaHaWTH/HybridFix/releases/latest";
+    private static final String GITHUB_USERNAME = "HaHaWTH";
+    private static final String GITHUB_REPO = "HybridFix";
+    private static final String RELEASE_URL = "https://api.github.com/repos/" + GITHUB_USERNAME + "/" + GITHUB_REPO + "/releases/latest";
     private static final String VERSION_CHANNEL = HybridFix.VERSION_CHANNEL;
     @SuppressWarnings("ConstantConditions")
     private static final boolean isDev = "dev".equalsIgnoreCase(VERSION_CHANNEL);
@@ -56,7 +58,7 @@ public class Updater {
             URL url = uri.toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setRequestProperty("User-Agent", "HybridFix-Updater");
+            conn.setRequestProperty("User-Agent", GITHUB_REPO + "-Updater");
             conn.setRequestProperty("Accept", "application/vnd.github+json");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
