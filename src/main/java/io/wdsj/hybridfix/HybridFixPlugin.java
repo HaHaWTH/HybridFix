@@ -59,6 +59,9 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     private static final Map<String, Supplier<Boolean>> commonMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
     {
+        {
+            put("mixins.hybridfix.base.patch.forge.universal.json", () -> true);
+        }
     });
 
     @Override

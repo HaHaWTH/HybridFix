@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.base.patch.forge;
+package io.wdsj.hybridfix.mixin.base.patch.forge.universal;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

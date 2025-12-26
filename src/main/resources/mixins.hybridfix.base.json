@@ -11,6 +11,6 @@
     "patch.forge.FakePlayerMixin",
     "patch.forge.ExplosionEventDetonateMixin",
     "patch.forge.ExplosionEventStartMixin",
-    "patch.forge.JarDiscovererMixin"
+    "patch.forge.universal.JarDiscovererMixin"
   ]
 }
