@@ -7,9 +7,11 @@ import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Location;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
@@ -52,7 +54,7 @@ public abstract class PlayerListMixin {
     )
     public void afterCopy(EntityPlayerMP player, int dimensionId, boolean conqueredEnd, Location loc, boolean avoidSuffocation, CallbackInfoReturnable<EntityPlayerMP> cir, @Share("newCap") LocalRef<CapabilityDispatcher> newCap) {
         if (Settings.fixCapabilityReset) {
-            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(player.getEntityWorld(), player.getPosition(), player).get());
+            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(player.dimension), new BlockPos(loc.getX(), loc.getY(), loc.getZ()), player).get());
             CapabilityDispatcher dispatcher = newCap.get();
             ((EntityCapabilityAccessor) (Entity) dummyPlayer).setCapabilities(dispatcher); // Set the fake player's capabilities to the new dispatcher
             dummyPlayer.copyFrom(player, conqueredEnd);

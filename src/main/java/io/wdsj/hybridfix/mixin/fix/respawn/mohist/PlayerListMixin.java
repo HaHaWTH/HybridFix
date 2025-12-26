@@ -11,6 +11,7 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -54,7 +55,7 @@ public abstract class PlayerListMixin {
     )
     public void afterCopy(EntityPlayerMP player, int i, boolean b, CallbackInfoReturnable<EntityPlayerMP> cir, @Share("newCap") LocalRef<CapabilityDispatcher> newCap) {
         if (Settings.fixCapabilityReset) {
-            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(player.getEntityWorld(), player.getPosition(), player).get());
+            FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(player.dimension), player.getPosition(), player).get());
             CapabilityDispatcher dispatcher = newCap.get();
             ((EntityCapabilityAccessor) (Entity) dummyPlayer).setCapabilities(dispatcher); // Set the fake player's capabilities to the new dispatcher
             dummyPlayer.copyFrom(player, b);
