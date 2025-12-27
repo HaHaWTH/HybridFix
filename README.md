@@ -1,6 +1,6 @@
 # HybridFix (混合修复)
 
-Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server environments.
+Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server and client environments.
 
 ## Fixed issues
 
@@ -11,8 +11,8 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 
 ### Forge
 
-- Fix Forge JarDiscoverer attempting to read `module-info.class` and other multi-release classes.
-- Fix `outdated server` showing in ping before server fully boots.
+- (Universal) Fix Forge JarDiscoverer attempting to read `module-info.class` and other multi-release classes.
+- (Server) Fix `outdated server` showing in ping before server fully boots.
 
 ### Mods
 
@@ -76,7 +76,7 @@ Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
 Download HybridFix and its dependencies(MixinBooter and ConfigAnyTime) from CurseForge, drop HybridFix into `${minecraftDir}/mods` folder.
 
-HybridFix is not required to be installed on the client side, but some features may not work without them.
+HybridFix can be also installed on the client, some client-side fixes and optimizations will apply.
 
 ## How To (Developers)
 
