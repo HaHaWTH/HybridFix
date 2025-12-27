@@ -2,7 +2,7 @@ package io.wdsj.hybridfix.mixin.debug.health;
 
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.HybridFixServer;
-import io.wdsj.hybridfix.util.ClassUtils;
+import io.wdsj.hybridfix.util.Caller;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public abstract class EntityLivingBaseMixin extends Entity {
     )
     public void debug$setHealth(float health, CallbackInfo ci) {
         try {
-            Class<?> caller = ClassUtils.getCallerClass(1); // Skip first frame for mixin generated injectors
+            Class<?> caller = Caller.getCallerClass(1); // Skip first frame for mixin generated injectors
             if (caller == null) {
                 HybridFix.LOGGER.debug("Unknown caller of EntityLivingBase#setHealth");
                 return;

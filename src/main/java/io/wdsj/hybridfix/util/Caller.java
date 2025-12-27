@@ -12,8 +12,8 @@ import java.util.stream.Stream;
  * Utility class for getting the caller class.
  */
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
-public class ClassUtils {
-    private ClassUtils() {
+public class Caller {
+    private Caller() {
     }
 
     private static final Method SUN_REFLECT_REFLECTION_getCallerClass;

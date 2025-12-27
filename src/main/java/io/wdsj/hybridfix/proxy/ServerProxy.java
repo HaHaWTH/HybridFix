@@ -11,8 +11,8 @@ import static io.wdsj.hybridfix.HybridFix.LOGGER;
 @SuppressWarnings("unused")
 public class ServerProxy extends CommonProxy {
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
+    public void onPreInit(FMLPreInitializationEvent event) {
+        super.onPreInit(event);
         if (!HybridFix.IS_HYBRID_ENV) {
             LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to function, most features won't work in vanilla Forge.");
             return;

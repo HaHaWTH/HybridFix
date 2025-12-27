@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 
 public class CommonProxy {
-    public void preInit(FMLPreInitializationEvent event) {
+    public void onPreInit(FMLPreInitializationEvent event) {
         HybridFix.LOGGER.info("HybridFix support status: {}", HybridFix.getSupportStatus().toString());
     }
 

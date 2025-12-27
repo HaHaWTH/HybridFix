@@ -7,8 +7,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
+    public void onPreInit(FMLPreInitializationEvent event) {
+        super.onPreInit(event);
     }
 
     @Override

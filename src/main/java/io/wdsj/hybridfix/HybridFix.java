@@ -37,7 +37,7 @@ public class HybridFix {
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
+        proxy.onPreInit(event);
     }
 
 
