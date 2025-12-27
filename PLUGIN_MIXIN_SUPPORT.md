@@ -31,8 +31,10 @@ plugin_patcher_settings {
 To inject Mixins into a Bukkit plugin from your Forge mod, follow these steps:
 
 - Add Dependency
+
 Ensure your mod depends on HybridFix. You can do this via build.gradle (see README) or by checking if the class exists at runtime.
 - Listen to BukkitMixinSetupEvent
+
 Register an event listener. This event is fired when HybridFix is ready to accept Mixin configurations for plugins.
 ```java
 import io.wdsj.hybridfix.api.forge.event.bukkit_mixin.BukkitMixinSetupEvent;
@@ -67,6 +69,7 @@ Example mixins.my_mod.plugins.json:
 }
 ```
 - Writing the Mixin
+
 Write your Mixin class targeting the plugin class.
 ```java
 package com.example.mymod.mixin.plugin;

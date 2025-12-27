@@ -9,6 +9,11 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Bukkit plugins cannot handle some mod explosions(e.g., Tinkers' Construct EFLN)
 - Bridge some Forge events to Bukkit
 
+### Forge
+
+- Fix Forge JarDiscoverer attempting to read `module-info.class` and other multi-release classes.
+- Fix `outdated server` showing in ping before server fully boots.
+
 ### Mods
 
 #### Client
