@@ -4,9 +4,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Cancellable;
 import com.llamalad7.mixinextras.sugar.Local;
+import io.wdsj.hybridfix.api.bukkit.event.entity.EntityAttackByEntityEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.util.DamageSource;
 import org.bukkit.Bukkit;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -30,6 +32,11 @@ public abstract class ToolHelperMixin {
         org.bukkit.entity.Entity damager = attacker.getBukkitEntity();
         org.bukkit.entity.Entity victim = targetEntity.getBukkitEntity();
         float base = original.call(instance).floatValue();
+        EntityAttackByEntityEvent attackEvent = new EntityAttackByEntityEvent(victim, base, damager, DamageSource.GENERIC.getDamageType());
+        Bukkit.getPluginManager().callEvent(attackEvent);
+        if (attackEvent.isCancelled()) {
+            cir.setReturnValue(true);
+        }
         // noinspection deprecation
         EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, base); // Damage doesn't matter, we just need to check if it's cancelled
         Bukkit.getPluginManager().callEvent(event);
