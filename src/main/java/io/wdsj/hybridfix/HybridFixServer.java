@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public final class HybridFixServer {
     private static final Set<Class<? extends Entity>> modEntitiesWithoutInactiveTick = new ReferenceOpenHashSet<>();
 
-    public static void preInit() {
+    public static void onPreInit() {
         if (Settings.passExplosionEventToBukkit) {
             MinecraftForge.EVENT_BUS.register(new ExplosionDetonateHandler());
         }

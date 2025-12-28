@@ -38,7 +38,6 @@ public class HybridFixLateLoader implements ILateMixinLoader {
                 put("mixins.thaumcraft.flux.json", () -> isModLoaded("thaumcraft") && Settings.modPatchSettings.patchThaumcraftFlux);
                 // Tconstruct patches
                 put("mixins.tconstruct.tools.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTconstructToolDamage);
-                put("mixins.tconstruct.network.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTConstructNetworkCrash);
                 // So Many Enchantments patches
                 put("mixins.so_many_enchantments.disarm.json", () -> {
                     String modId = "somanyenchantments";
@@ -98,6 +97,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.industrial_foregoing.block.json", () -> isModLoaded("industrialforegoing") && Settings.modPatchSettings.disableIndustrialForegoingBlackholeControllerRecipe);
             // Actually Additions patches
             put("mixins.actuallyadditions.config.json", () -> isModLoaded("actuallyadditions") && Settings.modPatchSettings.patchActuallyAdditionsConfig);
+            // Tconstruct patches
+            put("mixins.tconstruct.network.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTConstructNetworkCrash);
         }
     });
 

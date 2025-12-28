@@ -223,7 +223,7 @@ public class Settings {
 
         @Config.Comment("(Server) Fix TConstruct crash bug due to the network design flaw.")
         @Config.RequiresMcRestart
-        public boolean patchTConstructNetworkCrash = false;
+        public boolean patchTConstructNetworkCrash = true;
 
         @Config.Comment("(Server) Patch Disarm enchantment in SME(1.0.0 and higher), prevent bypassing the bukkit protection.")
         @Config.RequiresMcRestart

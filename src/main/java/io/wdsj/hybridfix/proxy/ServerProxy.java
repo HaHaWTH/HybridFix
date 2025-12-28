@@ -17,7 +17,7 @@ public class ServerProxy extends CommonProxy {
             LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to function, most features won't work in vanilla Forge.");
             return;
         }
-        HybridFixServer.preInit();
+        HybridFixServer.onPreInit();
     }
 
     @Override
