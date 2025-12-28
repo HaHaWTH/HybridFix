@@ -57,7 +57,7 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean disableTimings = false;
 
-    @Config.Comment("(Server & Client) Optimize entity AI by using fast bit radix sort.")
+    @Config.Comment("(Server & Client) Optimize entity AI nearest entity lookup.")
     @Config.Name("Optimize entity AI")
     @Config.RequiresMcRestart
     public static boolean optimizeEntityAI = true;
