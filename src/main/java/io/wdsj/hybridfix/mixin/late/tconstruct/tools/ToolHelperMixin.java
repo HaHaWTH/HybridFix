@@ -32,7 +32,7 @@ public abstract class ToolHelperMixin {
         org.bukkit.entity.Entity damager = attacker.getBukkitEntity();
         org.bukkit.entity.Entity victim = targetEntity.getBukkitEntity();
         float base = original.call(instance).floatValue();
-        EntityAttackByEntityEvent attackEvent = new EntityAttackByEntityEvent(victim, base, damager, DamageSource.GENERIC.getDamageType());
+        EntityAttackByEntityEvent attackEvent = new EntityAttackByEntityEvent(victim, base, damager, "tconstructTools");
         Bukkit.getPluginManager().callEvent(attackEvent);
         if (attackEvent.isCancelled()) {
             cir.setReturnValue(true);
