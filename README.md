@@ -69,6 +69,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Extend Forge's error recovery system (`removeErroringEntities` and `removeErroringTileEntities`), notify server operators when errors occurred.
 - Guard player ticking process, kick player instead of directly crash.
 - Fix Forge bugs that affect server play experience.
+- (Universal) Optimize entity AI for faster nearest target lookup.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
