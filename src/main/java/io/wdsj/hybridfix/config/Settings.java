@@ -57,6 +57,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean disableTimings = false;
 
+    @Config.Comment("(Server & Client) Optimize entity AI by using fast bit radix sort.")
+    @Config.Name("Optimize entity AI")
+    @Config.RequiresMcRestart
+    public static boolean optimizeEntityAI = true;
+
     @Config.Comment("(Server) Register HybridFix commands.")
     @Config.Name("Register HybridFix commands")
     @Config.RequiresMcRestart

@@ -4,6 +4,7 @@ import ic2.core.block.machine.tileentity.TileEntityAdvMiner;
 import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
 import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import io.wdsj.hybridfix.util.entity.EntityUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
@@ -26,7 +27,7 @@ public abstract class TileEntityAdvMinerMixin extends TileEntityElectricMachine 
             cancellable = true,
             remap = false
     )
-    private void canMine(BlockPos target, net.minecraft.block.Block block, IBlockState state, CallbackInfoReturnable<Boolean> cir) {
+    private void canMine(BlockPos target, Block block, IBlockState state, CallbackInfoReturnable<Boolean> cir) {
         if (block.hasTileEntity(state)) { // DO NOT MINE TEs
             cir.setReturnValue(false);
             return;
