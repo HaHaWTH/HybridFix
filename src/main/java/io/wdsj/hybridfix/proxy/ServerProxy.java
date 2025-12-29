@@ -14,7 +14,7 @@ public class ServerProxy extends CommonProxy {
     public void onPreInit(FMLPreInitializationEvent event) {
         super.onPreInit(event);
         if (!HybridFix.IS_HYBRID_ENV) {
-            LOGGER.warn("HybridFix requires a Forge+Bukkit server environment to function, most features won't work in vanilla Forge.");
+            LOGGER.warn("HybridFix needs a Forge+Bukkit server environment to function, most features won't work in vanilla Forge.");
             return;
         }
         HybridFixServer.onPreInit();

@@ -226,7 +226,7 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchTconstructToolDamage = true;
 
-        @Config.Comment("(Server) Fix TConstruct crash bug due to the network design flaw.")
+        @Config.Comment("(Server / Client) Fix TConstruct crash bug due to the network design flaw.")
         @Config.RequiresMcRestart
         public boolean patchTConstructNetworkCrash = true;
 
