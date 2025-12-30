@@ -28,7 +28,7 @@ import java.lang.invoke.MethodHandle;
 /**
  * Early fire {@link PlayerPickupItemEvent} and {@link EntityPickupItemEvent} before Accio is applied.
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "LocalMayUseName"})
 @Mixin(AccioSymbolEffect.class)
 public abstract class AccioSymbolEffectMixin {
     /*
@@ -48,7 +48,7 @@ public abstract class AccioSymbolEffectMixin {
                     .virtualMethodHandle();
         } catch (Throwable t) {
             mh = null;
-            HybridFix.LOGGER.error("Failed to get InventoryPlayer#canHold, server will run normally, but some features may not work.");
+            HybridFix.LOGGER.error("Failed to get InventoryPlayer#canHold, server will continue to run, but some features may not work.");
             HybridFixServer.createServerDump(t);
         }
         mh_InventoryPlayer_canHold = mh;
