@@ -12,7 +12,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 ### Forge
 
 - (Universal) Fix Forge JarDiscoverer attempting to read `module-info.class` and other multi-release classes.
-- (Server) Fix `outdated server` showing in ping before server fully boots.
+- (Server) Fix `Outdated server` showing in ping before server fully boots.
 
 ### Mods
 
@@ -125,6 +125,7 @@ to resolve plugin compatibility problems with Forge+Bukkit environment.
 
 Currently supported plugins:
 - Residence: Fixes compatibility with Residence 6.0.0.0+.
+- Universal: Redirects InventoryView INVOKEINTERFACE call to INVOKEVIRTUAL.
 
 ## About FakePlayers
 
