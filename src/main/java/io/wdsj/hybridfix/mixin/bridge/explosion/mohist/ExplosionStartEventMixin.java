@@ -23,7 +23,8 @@ public abstract class ExplosionStartEventMixin extends ExplosionEvent {
                     value = "INVOKE",
                     target = "Lorg/bukkit/plugin/PluginManager;callEvent(Lorg/bukkit/event/Event;)V"
             ),
-            remap = false
+            remap = false,
+            require = 0
     )
     public void swallowEvent(PluginManager instance, Event event) {
         // no-op
