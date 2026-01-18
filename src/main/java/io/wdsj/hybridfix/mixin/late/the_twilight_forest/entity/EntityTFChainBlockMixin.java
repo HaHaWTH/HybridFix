@@ -2,8 +2,10 @@ package io.wdsj.hybridfix.mixin.late.the_twilight_forest.entity;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import io.wdsj.hybridfix.util.entity.EntityUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import twilightforest.entity.EntityTFChainBlock;
-import twilightforest.util.EntityUtil;
 
 @Mixin(EntityTFChainBlock.class)
 public abstract class EntityTFChainBlockMixin extends EntityThrowable {
@@ -40,11 +41,11 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             ),
             remap = false
     )
-    public boolean wrapDestroyBlock(World instance, BlockPos pos, boolean dropBlock, Operation<Boolean> original, @Share("harvestCalled") LocalBooleanRef isHarvestCalled) {
+    public boolean wrapDestroyBlock(World instance, BlockPos pos, boolean dropBlock, Operation<Boolean> original, @Share("harvestCalled") LocalBooleanRef isHarvestCalled, @Local(ordinal = 0) IBlockState state) {
         @Nullable
         EntityLivingBase thrower = this.getThrower();
         final boolean isPlayer = thrower instanceof EntityPlayerMP;
-        if (isHarvestCalled.get() || (!isPlayer && EntityUtil.canDestroyBlock(instance, pos, thrower != null ? thrower : this))) {
+        if (isHarvestCalled.get() || (!isPlayer && EntityUtils.callBlockBreakEventForEntity(instance, pos, state, thrower != null ? thrower : this))) {
             return original.call(instance, pos, dropBlock);
         }
         return false;
@@ -74,7 +75,6 @@ public abstract class EntityTFChainBlockMixin extends EntityThrowable {
             return;
         }
         if (event.isDropItems()) {
-            //noinspection MixinExtrasOperationParameters
             original.call(instance, world, player, pos, iBlockState, te, item);
             isHarvestCalled.set(true);
         } else {
