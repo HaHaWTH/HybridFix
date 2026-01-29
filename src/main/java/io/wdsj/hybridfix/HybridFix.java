@@ -21,10 +21,11 @@ public class HybridFix {
     public static final String DEPENDENCY = "required-after:mixinbooter@[10.1,);required-after:configanytime;";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final boolean IS_HYBRID_ENV = Utils.isClassExists("org.bukkit.Bukkit");
+    private static final boolean removeReflectionFilter = Boolean.getBoolean("hybridfix.removeReflectionFilter");
     public static final boolean IS_CLEANROOM = Utils.isClassExists("com.cleanroommc.common.CleanroomContainer");
     static {
         try {
-            JavaBypass.clearReflectionFilter();
+            if (removeReflectionFilter) JavaBypass.clearReflectionFilter();
         } catch (Throwable ignored) {
         }
     }

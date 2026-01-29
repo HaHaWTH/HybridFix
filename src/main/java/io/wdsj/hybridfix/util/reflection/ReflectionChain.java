@@ -58,7 +58,7 @@ public class ReflectionChain<T> {
         try {
             implLookup = JavaBypass.TRUSTED_LOOKUP;
             if (implLookup != null) HybridFix.LOGGER.debug("Found IMPL_LOOKUP");
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
         }
         PRIVATE_LOOKUP_IN = privateLookupIn;
         IMPL_LOOKUP = implLookup;
