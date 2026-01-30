@@ -64,7 +64,7 @@ public class EntityUtils {
      * @return true if the event was cancelled, false otherwise
      */
     public static boolean callBlockBreakEventForPlayer(World world, BlockPos pos, IBlockState state, EntityPlayerMP player) {
-        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, player);
+        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, player); // don't double firing bukkit event, hybrids will handle this
         return MinecraftForge.EVENT_BUS.post(event);
     }
 
