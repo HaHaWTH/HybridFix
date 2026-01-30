@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.util.entity;
 
+import io.wdsj.hybridfix.HybridFix;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -80,6 +81,7 @@ public class EntityUtils {
         if (!ForgeEventFactory.getMobGriefingEvent(world, entity)) {
             return true;
         }
+        if (!HybridFix.IS_HYBRID_ENV) return false;
         // noinspection deprecation
         EntityChangeBlockEvent event = new EntityChangeBlockEvent(bEntity, block, Material.AIR, (byte) 0);
         Bukkit.getPluginManager().callEvent(event);
@@ -87,6 +89,7 @@ public class EntityUtils {
     }
 
     public static boolean callBukkitEntityExplodeEvent(World world, BlockPos start, List<BlockPos> affectedBlocks, Entity entity) {
+        if (!HybridFix.IS_HYBRID_ENV) return false;
         org.bukkit.World bWorld = world.getWorld();
         org.bukkit.entity.Entity bEntity = entity.getBukkitEntity();
         List<Block> blockList = new ObjectArrayList<>(affectedBlocks.size());

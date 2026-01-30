@@ -37,7 +37,7 @@ import java.util.Objects;
  *
  * @param <T> the type of the target class
  */
-@SuppressWarnings({"unused", "UnusedReturnValue"})
+@SuppressWarnings({"unused", "UnusedReturnValue", "unchecked"})
 public class ReflectionChain<T> {
     private ReflectionChain() {
     }
@@ -311,6 +311,10 @@ public class ReflectionChain<T> {
          * @throws IllegalStateException if the class is not specified
          */
         MethodHandle constructorHandle();
+
+        UnsafeFieldAccessor virtualFieldAccessor();
+
+        UnsafeFieldAccessor staticFieldAccessor();
     }
 
     /**
@@ -782,6 +786,38 @@ public class ReflectionChain<T> {
             }
         }
 
+        @Override
+        public UnsafeFieldAccessor virtualFieldAccessor() {
+            checkNotTerminated();
+            markTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                Field field = resolveTargetClass().getDeclaredField(name);
+                return UnsafeFieldAccessorFactory.create(field);
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        @Override
+        public UnsafeFieldAccessor staticFieldAccessor() {
+            checkNotTerminated();
+            markTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                Field field = resolveTargetClass().getDeclaredField(name);
+                return UnsafeFieldAccessorFactory.create(field);
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
         private MethodHandles.Lookup getLookup(Class<T> clazz) {
             if (IMPL_LOOKUP != null) {
                 return IMPL_LOOKUP;
@@ -1053,7 +1089,9 @@ public class ReflectionChain<T> {
     }
 
     private static class SneakyThrow {
-        private SneakyThrow() {}
+        private SneakyThrow() {
+        }
+
         @SuppressWarnings("unchecked")
         public static <T extends Throwable> void throw0(Throwable t) throws T {
             throw (T) t;
