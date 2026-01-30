@@ -312,8 +312,24 @@ public class ReflectionChain<T> {
          */
         MethodHandle constructorHandle();
 
+        /**
+         * Retrieves an unsafe field accessor for a virtual field.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link UnsafeFieldAccessor} for the field
+         * @throws IllegalStateException if the field name or class is not specified
+         */
         UnsafeFieldAccessor virtualFieldAccessor();
 
+        /**
+         * Retrieves an unsafe field accessor for a static field.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link UnsafeFieldAccessor} for the field
+         * @throws IllegalStateException if the field name or class is not specified
+         */
         UnsafeFieldAccessor staticFieldAccessor();
     }
 
