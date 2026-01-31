@@ -811,7 +811,7 @@ public class ReflectionChain<T> {
                     throw new IllegalStateException("Field name must be specified");
                 }
                 Field field = resolveTargetClass().getDeclaredField(name);
-                return UnsafeFieldAccessorFactory.create(field);
+                return UnsafeFieldAccessorFactory.create(field, false);
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -827,7 +827,7 @@ public class ReflectionChain<T> {
                     throw new IllegalStateException("Field name must be specified");
                 }
                 Field field = resolveTargetClass().getDeclaredField(name);
-                return UnsafeFieldAccessorFactory.create(field);
+                return UnsafeFieldAccessorFactory.create(field, true);
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable

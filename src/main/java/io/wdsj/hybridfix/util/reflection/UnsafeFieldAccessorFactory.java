@@ -10,9 +10,12 @@ import java.lang.reflect.Modifier;
 public class UnsafeFieldAccessorFactory {
     static final Unsafe UNSAFE = JavaBypass.UNSAFE;
 
-    static UnsafeFieldAccessor create(Field field) {
+    static UnsafeFieldAccessor create(Field field, boolean isStaticExpected) {
         if (UNSAFE == null) throw new UnsupportedOperationException("Unsafe not available");
         boolean isStatic = Modifier.isStatic(field.getModifiers());
+        if (isStatic != isStaticExpected) {
+            throw new IllegalArgumentException("Field " + field.getName() + " is " + (isStatic ? "static" : "instance") + " but " + (isStaticExpected ? "static" : "instance") + " expected");
+        }
         Class<?> type = field.getType();
         if (isStatic) {
             Object base = UNSAFE.staticFieldBase(field);
