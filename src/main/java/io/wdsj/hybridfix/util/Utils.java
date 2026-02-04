@@ -1,6 +1,11 @@
 package io.wdsj.hybridfix.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -79,5 +84,11 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public static IBlockState getBlockStateIfLoaded(World world, BlockPos pos) {
+        Chunk chunk = world.getChunkProvider().getLoadedChunk(pos.getX() >> 4, pos.getZ() >> 4);
+        return chunk != null ? chunk.getBlockState(pos) : null;
     }
 }

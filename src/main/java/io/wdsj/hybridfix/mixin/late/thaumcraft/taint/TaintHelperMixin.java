@@ -55,7 +55,8 @@ public abstract class TaintHelperMixin {
                         return;
                     }
 
-                    IBlockState bs = world.getBlockState(t);
+                    IBlockState bs = io.wdsj.hybridfix.util.Utils.getBlockStateIfLoaded(world, t);
+                    if (bs == null) return;
                     Material bm = bs.getBlock().getMaterial(bs);
                     float bh = bs.getBlock().getBlockHardness(bs, world, t);
                     if (bh < 0.0F || bh > 10.0F) {

@@ -2,6 +2,7 @@ package io.wdsj.hybridfix.mixin.api.bukkit.block;
 
 import io.wdsj.hybridfix.duck.api.bukkit.block.IBlockInvoker;
 import io.wdsj.hybridfix.state.block.BlockEntitySnapshotState;
+import io.wdsj.hybridfix.util.TickThread;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import org.bukkit.World;
@@ -72,6 +73,7 @@ public abstract class CraftBlockMixin implements IBlockInvoker {
     @Unique
     @Override
     public BlockState getState(boolean useSnapshot) {
+        TickThread.ensureTickThread("cannot retrieve block state off-main");
         try {
             BlockEntitySnapshotState.ENABLE_SNAPSHOT = useSnapshot;
             return this.getState();

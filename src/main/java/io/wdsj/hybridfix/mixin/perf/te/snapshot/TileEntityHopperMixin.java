@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix.mixin.perf.te.snapshot;
 
 import io.wdsj.hybridfix.state.block.BlockEntitySnapshotState;
+import io.wdsj.hybridfix.util.TickThread;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.IHopper;
 import net.minecraft.tileentity.TileEntityHopper;
@@ -17,6 +18,7 @@ public abstract class TileEntityHopperMixin {
             at = @At("HEAD")
     )
     private static void pullItemFromSlotHead(IHopper hopper, IInventory inventoryIn, int index, EnumFacing direction, CallbackInfoReturnable<Boolean> cir) {
+        TickThread.ensureTickThread("cannot pull item off-main");
         BlockEntitySnapshotState.ENABLE_SNAPSHOT = false;
     }
 
