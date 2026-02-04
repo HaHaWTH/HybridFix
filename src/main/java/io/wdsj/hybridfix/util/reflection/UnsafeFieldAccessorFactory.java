@@ -1,14 +1,13 @@
 package io.wdsj.hybridfix.util.reflection;
 
 import net.lenni0451.reflect.JavaBypass;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 @SuppressWarnings({"unused", "unchecked", "removal"})
 public class UnsafeFieldAccessorFactory {
-    static final Unsafe UNSAFE = JavaBypass.UNSAFE;
+    static final sun.misc.Unsafe UNSAFE = JavaBypass.UNSAFE;
 
     static UnsafeFieldAccessor create(Field field, boolean isStaticExpected) {
         if (UNSAFE == null) throw new UnsupportedOperationException("Unsafe not available");
