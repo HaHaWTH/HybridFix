@@ -58,12 +58,14 @@ public class HybridFixBukkitApi {
 
     /**
      * Deserializes the data of a player from string.
+     * Warning: This method will overwrite the player's data.
      *
      * @param player The player to deserialize.
      * @param data   The serialized data of the player.
      */
+    @NotNull
     @ApiStatus.Experimental
-    public static void deserializePlayerData(@NotNull Player player, @NotNull String data) {
+    public static NBTTagCompound deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
         try {
             EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
             WorldServer serverLevel = serverPlayer.getServerWorld();
@@ -73,9 +75,10 @@ public class HybridFixBukkitApi {
             NBTTagCompound nbt = JsonToNBT.getTagFromJson(data);
             serverPlayer.readFromNBT(nbt);
             playerList.playerDataManager.writePlayerData(serverPlayer);
-            playerList.playerDataManager.readPlayerData(serverPlayer);
+            return Objects.requireNonNull(playerList.playerDataManager.readPlayerData(serverPlayer));
         } catch (Exception e) {
             SneakyThrow.sneaky(e);
+            throw new RuntimeException(e); // never reached
         }
     }
 }
