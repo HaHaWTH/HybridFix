@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.lang.invoke.MethodHandle;
 
+/**
+ * Based on {@link vazkii.quark.base.asm.ClassTransformer#transformEntity(byte[])}
+ */
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @Unique
