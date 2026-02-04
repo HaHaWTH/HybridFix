@@ -16,6 +16,10 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 
 ### Mods
 
+#### Common
+
+- Replace brittle asm transformer patches of Quark with mixins
+
 #### Client
 
 - Replace expensive reflection usages in Industrial Craft 2 with direct calls
