@@ -3,6 +3,8 @@ package io.wdsj.hybridfix;
 import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
+import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.UnsafeFieldAccessor;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
@@ -14,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static io.wdsj.hybridfix.HybridFix.IS_CLEANROOM;
-import static io.wdsj.hybridfix.HybridFix.IS_HYBRID_ENV;
+import static io.wdsj.hybridfix.HybridFix.*;
 
 @IFMLLoadingPlugin.Name("HybridFixPlugin")
 public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
@@ -68,11 +69,14 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
         }
     });
 
+    private final Map<String, Supplier<Boolean>> extraMixinConfigs = new LinkedHashMap<>();
+
     @Override
     public List<String> getMixinConfigs() {
         List<String> configs = new ArrayList<>();
         if (!isClient) configs.addAll(serversideMixinConfigs.keySet());
         configs.addAll(commonMixinConfigs.keySet());
+        configs.addAll(extraMixinConfigs.keySet());
         return configs;
     }
 
@@ -80,11 +84,15 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public boolean shouldMixinConfigQueue(String mixinConfig) {
         Supplier<Boolean> sidedSupplier = isClient ? null : serversideMixinConfigs.get(mixinConfig);
         Supplier<Boolean> commonSupplier = commonMixinConfigs.get(mixinConfig);
+        Supplier<Boolean> extraSupplier = extraMixinConfigs.get(mixinConfig);
         if (sidedSupplier != null) {
             return sidedSupplier.get();
         }
         if (commonSupplier != null) {
             return commonSupplier.get();
+        }
+        if (extraSupplier != null) {
+            return extraSupplier.get();
         }
         return true;
     }
@@ -107,10 +115,30 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public void injectData(Map<String, Object> data) {
+        if (!initialized) this.initModules();
     }
 
     @Override
     public String getAccessTransformerClass() {
         return null;
+    }
+
+    private volatile boolean initialized = false;
+    synchronized void initModules() {
+        if (initialized) return;
+        if (IS_HYBRID_ENV) {
+            try {
+                UnsafeFieldAccessor transformers = ReflectionChain.fromClass("vazkii.quark.base.asm.ClassTransformer")
+                        .name("transformers")
+                        .staticFieldAccessor();
+                Map<String, Object> transformersMap = transformers.get(null);
+                transformersMap.remove("net.minecraft.entity.Entity");
+                extraMixinConfigs.put("mixins.quark.asm_fix.json", () -> true);
+                LOGGER.info("Removed Quark's EntityTransformer");
+            } catch (Throwable t) {
+                LOGGER.error("Failed to fix Quark compatibility", t);
+            }
+        }
+        initialized = true;
     }
 }

@@ -219,6 +219,9 @@ dependencies {
     // Mekanism
     compileOnly rfg.deobf("curse.maven:mekanism-268560:2835175")
 
+    // Quark
+    compileOnly rfg.deobf("curse.maven:quark-243121:2924091")
+
     compileOnly "org.jetbrains:annotations:26.0.2"
     if (propertyBool('use_modern_java_syntax')) {
         annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
@@ -423,6 +426,7 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.deprecation = false
     options.incremental = false
+    options.compilerArgs << "-Xlint:-sunapi"
     if (propertyBool('use_modern_java_syntax')) {
         if (it.name in ['compileMcLauncherJava', 'compilePatchedMcJava']) {
             return
