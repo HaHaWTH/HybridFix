@@ -45,6 +45,7 @@ public class HybridFixBukkitApi {
      * @param player The player to serialize.
      * @return The serialized data of the player.
      */
+    @NotNull
     @ApiStatus.Experimental
     public static String serializePlayerData(@NotNull Player player) {
         EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
