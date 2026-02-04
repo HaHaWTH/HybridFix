@@ -126,7 +126,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private volatile boolean initialized = false;
     synchronized void initModules() {
         if (initialized) return;
-        if (IS_HYBRID_ENV) {
+        if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
             try {
                 UnsafeFieldAccessor transformers = ReflectionChain.fromClass("vazkii.quark.base.asm.ClassTransformer")
                         .name("transformers")

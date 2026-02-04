@@ -219,6 +219,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean patchTwilightForestItem = true;
 
+        @Config.Comment("(Server & Client) Patch fragile parts of Quark ASM (Behavior may slightly change).")
+        @Config.RequiresMcRestart
+        public boolean patchQuarkASM = false;
+
         @Config.Comment("(Server) Patch taint in thaumcraft spread event.")
         @Config.RequiresMcRestart
         public boolean patchThaumcraftTaintSpread = true;
