@@ -135,7 +135,7 @@ public class Settings {
     @Config.Comment("(Server) Fixes for Forge and Bukkit chunk systems.\n(Incompatible with: Quark)")
     @Config.Name("Fixes for Forge and Bukkit chunk systems")
     @Config.RequiresMcRestart
-    public static boolean fixesForForgeAndBukkitChunkSystems = true;
+    public static boolean fixesForForgeAndBukkitChunkSystems = false;
 
     @Config.Comment("(Server) Fix 'outdated server' showing in ping before server fully boots.")
     @Config.Name("Fix outdated server")
