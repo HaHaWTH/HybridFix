@@ -107,7 +107,7 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean invertFakePlayerBlacklist = false;
 
-    @Config.Comment("(Server) More Bukkit API implementation from Paper and modern versions.\n(Incompatible with: Quark)")
+    @Config.Comment("(Server) More Bukkit API implementation from Paper and modern versions.")
     @Config.Name("Extra Bukkit API")
     @Config.RequiresMcRestart
     public static boolean extraBukkitApi = false;
@@ -132,7 +132,7 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean compatModeForAttackBridge = false;
 
-    @Config.Comment("(Server) Fixes for Forge and Bukkit chunk systems.\n(Incompatible with: Quark)")
+    @Config.Comment("(Server) Fixes for Forge and Bukkit chunk systems.")
     @Config.Name("Fixes for Forge and Bukkit chunk systems")
     @Config.RequiresMcRestart
     public static boolean fixesForForgeAndBukkitChunkSystems = false;
