@@ -107,7 +107,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
                 patcher.setPluginDescriptionFile(null);
             }
         }
-        if (Settings.pluginPatcherSettings.enableMixin) {
+        if (Settings.pluginPatcherSettings.enableMixin && hybridFix$mixinTransformer != null) {
             ClassLoader prevLoader = Thread.currentThread().getContextClassLoader();
             try {
                 Thread.currentThread().setContextClassLoader(this);
