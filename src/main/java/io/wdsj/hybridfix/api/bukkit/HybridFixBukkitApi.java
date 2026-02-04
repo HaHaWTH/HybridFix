@@ -66,7 +66,7 @@ public class HybridFixBukkitApi {
      */
     @NotNull
     @ApiStatus.Experimental
-    public static NBTTagCompound deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
+    public static Object deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
         try {
             EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
             WorldServer serverLevel = serverPlayer.getServerWorld();
@@ -77,6 +77,16 @@ public class HybridFixBukkitApi {
             serverPlayer.readFromNBT(nbt);
             playerList.playerDataManager.writePlayerData(serverPlayer);
             return Objects.requireNonNull(playerList.playerDataManager.readPlayerData(serverPlayer));
+        } catch (Exception e) {
+            SneakyThrow.sneaky(e);
+            throw new RuntimeException(e); // never reached
+        }
+    }
+
+    @NotNull
+    public static Object deserializeNBT(@NotNull String data) {
+        try {
+            return JsonToNBT.getTagFromJson(data);
         } catch (Exception e) {
             SneakyThrow.sneaky(e);
             throw new RuntimeException(e); // never reached
