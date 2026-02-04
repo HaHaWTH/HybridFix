@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -45,6 +46,7 @@ public class HybridFixBukkitApi {
      * @param player The player to serialize.
      * @return The serialized data of the player.
      */
+    @Blocking
     @NotNull
     @ApiStatus.Experimental
     public static String serializePlayerData(@NotNull Player player) {
@@ -58,12 +60,13 @@ public class HybridFixBukkitApi {
     }
 
     /**
-     * Deserializes the data of a player from string.
+     * Deserializes and applies the data of a player from string.
      * Warning: This method will overwrite the player's data.
      *
      * @param player The player to deserialize.
      * @param data   The serialized data of the player.
      */
+    @Blocking
     @NotNull
     @ApiStatus.Experimental
     public static Object deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
@@ -76,7 +79,9 @@ public class HybridFixBukkitApi {
             NBTTagCompound nbt = JsonToNBT.getTagFromJson(data);
             serverPlayer.readFromNBT(nbt);
             playerList.playerDataManager.writePlayerData(serverPlayer);
-            return Objects.requireNonNull(playerList.playerDataManager.readPlayerData(serverPlayer));
+            Object fullNbt = Objects.requireNonNull(playerList.playerDataManager.readPlayerData(serverPlayer));
+            playerList.syncPlayerInventory(serverPlayer);
+            return fullNbt;
         } catch (Exception e) {
             SneakyThrow.sneaky(e);
             throw new RuntimeException(e); // never reached
