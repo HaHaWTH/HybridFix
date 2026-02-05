@@ -47,7 +47,7 @@ public class HybridFixFakePlayer {
 
     public static @NotNull WeakReference<@Nullable FakePlayer> getPlayerCopy(World world, BlockPos pos, EntityPlayerMP originalPlayer) {
         GameProfile profile = originalPlayer.getGameProfile();
-        FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) world, profile);
+        FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) world, new GameProfile(profile.getId(), profile.getName()));
         fakePlayer.posX = pos.getX();
         fakePlayer.posY = pos.getY();
         fakePlayer.posZ = pos.getZ();
