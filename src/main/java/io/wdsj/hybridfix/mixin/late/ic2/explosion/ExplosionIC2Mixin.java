@@ -112,27 +112,27 @@ public abstract class ExplosionIC2Mixin extends Explosion {
     @Unique private static final Field EntityDamage_field_distance = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("distance")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field EntityDamage_field_entity = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("entity")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field EntityDamage_field_damage = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("damage")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field EntityDamage_field_motionX = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("motionX")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field EntityDamage_field_motionY = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("motionY")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field EntityDamage_field_motionZ = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("motionZ")
             .accessible(true)
-            .field();
+            .declaredField();
     // XZPosition
     @Unique private static final Constructor<?> XZposition_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
             .params(int.class, int.class)
@@ -141,11 +141,11 @@ public abstract class ExplosionIC2Mixin extends Explosion {
     @Unique private static final Field XZposition_field_x = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
             .name("x")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field XZposition_field_z = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
             .name("z")
             .accessible(true)
-            .field();
+            .declaredField();
     // DropData
     @Unique private static final Constructor<?> DropData_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .params(int.class, int.class)
@@ -159,11 +159,11 @@ public abstract class ExplosionIC2Mixin extends Explosion {
     @Unique private static final Field DropData_field_n = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .name("n")
             .accessible(true)
-            .field();
+            .declaredField();
     @Unique private static final Field DropData_field_maxY = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .name("maxY")
             .accessible(true)
-            .field();
+            .declaredField();
     // @formatter:on
 
     /**

@@ -223,7 +223,7 @@ public class ReflectionChain<T> {
         Method declaredMethod();
 
         /**
-         * Retrieves a declared field with the specified name.
+         * Retrieves a field with the specified name.
          * <p>
          * This is a terminal operation.
          *
@@ -231,6 +231,16 @@ public class ReflectionChain<T> {
          * @throws IllegalStateException if the field name or class is not specified
          */
         Field field();
+
+        /**
+         * Retrieves a declared field with the specified name.
+         * <p>
+         * This is a terminal operation.
+         *
+         * @return the matching {@link Field}
+         * @throws IllegalStateException if the field name or class is not specified
+         */
+        Field declaredField();
 
         /**
          * Retrieves a constructor with no parameters.
@@ -664,6 +674,23 @@ public class ReflectionChain<T> {
 
         @Override
         public Field field() {
+            checkNotTerminated();
+            markTerminated();
+            try {
+                if (name == null) {
+                    throw new IllegalStateException("Field name must be specified");
+                }
+                Field field = resolveTargetClass().getField(name);
+                if (isAccessible) field.setAccessible(true);
+                return field;
+            } catch (Exception e) {
+                SneakyThrow.throw0(e);
+                throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        @Override
+        public Field declaredField() {
             checkNotTerminated();
             markTerminated();
             try {

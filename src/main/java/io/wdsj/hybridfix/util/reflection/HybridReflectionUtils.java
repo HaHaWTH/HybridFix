@@ -24,11 +24,11 @@ public class HybridReflectionUtils {
     private static final Field FD_WORLD_CAPTURE_TREE_GENERATION = ReflectionChain.fromClass(World.class)
             .name("captureTreeGeneration")
             .accessible(true)
-            .field();
+            .declaredField();
     private static final Field FD_BLOCK_SAPLING_TREE_TYPE = ReflectionChain.fromClass(BlockSapling.class)
             .name("treeType")
             .accessible(true)
-            .field();
+            .declaredField();
     private static final MethodHandle CTOR_CRAFT_BLOCK_STATE = ReflectionChain.fromClass(CraftBlockState.class)
             .param(BlockSnapshot.class)
             .accessible(true)
