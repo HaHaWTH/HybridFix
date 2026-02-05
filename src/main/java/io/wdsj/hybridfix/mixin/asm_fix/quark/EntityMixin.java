@@ -19,7 +19,7 @@ import java.lang.invoke.MethodHandle;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @Unique
-    private static final MethodHandle hybridFix$movementRecordHandle = ReflectionChain.fromClass("vazkii.quark.base.asm.ASMHooks")
+    private static final MethodHandle hybridFix$recordMotionHandle = ReflectionChain.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("recordMotion")
             .params(Entity.class)
             .accessible(true)
@@ -41,7 +41,8 @@ public abstract class EntityMixin {
         originX.set(x);
         originY.set(y);
         originZ.set(z);
-        hybridFix$movementRecordHandle.invokeExact((Entity) (Object) this);
+        //ASMHooks.recordMotion((Entity) (Object) this);
+        hybridFix$recordMotionHandle.invokeExact((Entity) (Object) this);
     }
 
     @Inject(
