@@ -36,9 +36,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                 put("mixins.fix.chunk_system.json", () -> Settings.fixesForForgeAndBukkitChunkSystems);
                 if (!IS_CLEANROOM) {
                     if (Utils.isMohist) {
-                        put("mixins.fix.respawn.mohist.json", () -> Settings.fixCapabilityReset);
-                    }
-                    if (Utils.isMohist) {
                         put("mixins.bridge.explosion.mohist.json", () -> Settings.passExplosionEventToBukkit && Settings.overrideMohistExplosionHandling);
                     }
                     put("mixins.perf.eventbus.json", () -> Settings.skipEventIfNoListeners);

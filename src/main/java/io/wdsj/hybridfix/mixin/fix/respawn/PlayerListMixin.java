@@ -19,10 +19,11 @@ import java.util.Objects;
 
 // Common injection logic for most hybrid server implementations, except Mohist
 @Mixin(PlayerList.class)
+@SuppressWarnings({"UnresolvedMixinReference"})
 public abstract class PlayerListMixin {
     @Dynamic("craftbukkit")
     @Inject(
-            method = "moveToWorld(Lnet/minecraft/entity/player/EntityPlayerMP;IZLorg/bukkit/Location;Z)Lnet/minecraft/entity/player/EntityPlayerMP;",
+            method = "moveToWorld",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/entity/player/EntityPlayerMP;copyFrom(Lnet/minecraft/entity/player/EntityPlayerMP;Z)V",
