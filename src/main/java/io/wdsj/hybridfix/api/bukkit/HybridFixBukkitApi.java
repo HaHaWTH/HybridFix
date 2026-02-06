@@ -49,7 +49,7 @@ public class HybridFixBukkitApi {
     @Blocking
     @NotNull
     @ApiStatus.Experimental
-    public static String serializePlayerData(@NotNull Player player) {
+    public String serializePlayerData(@NotNull Player player) {
         EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
         WorldServer serverLevel = serverPlayer.getServerWorld();
         MinecraftServer server = serverLevel.getMinecraftServer();
@@ -69,7 +69,7 @@ public class HybridFixBukkitApi {
     @Blocking
     @NotNull
     @ApiStatus.Experimental
-    public static Object deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
+    public Object deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
         try {
             EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
             WorldServer serverLevel = serverPlayer.getServerWorld();
@@ -89,7 +89,7 @@ public class HybridFixBukkitApi {
     }
 
     @NotNull
-    public static Object deserializeNBT(@NotNull String data) {
+    public Object deserializeNBT(@NotNull String data) {
         try {
             return JsonToNBT.getTagFromJson(data);
         } catch (Exception e) {
