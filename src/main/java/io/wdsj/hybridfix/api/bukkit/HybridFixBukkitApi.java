@@ -9,6 +9,7 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Blocking;
@@ -50,7 +51,7 @@ public class HybridFixBukkitApi {
     @NotNull
     @ApiStatus.Experimental
     public String serializePlayerData(@NotNull Player player) {
-        EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
+        EntityPlayerMP serverPlayer = ((CraftPlayer) player).getHandle();
         WorldServer serverLevel = serverPlayer.getServerWorld();
         MinecraftServer server = serverLevel.getMinecraftServer();
         Objects.requireNonNull(server, "Server is null");
@@ -71,7 +72,7 @@ public class HybridFixBukkitApi {
     @ApiStatus.Experimental
     public Object deserializePlayerDataAndApply(@NotNull Player player, @NotNull String data) {
         try {
-            EntityPlayerMP serverPlayer = (EntityPlayerMP) ((CraftEntity) player).getHandle();
+            EntityPlayerMP serverPlayer = ((CraftPlayer) player).getHandle();
             WorldServer serverLevel = serverPlayer.getServerWorld();
             MinecraftServer server = serverLevel.getMinecraftServer();
             Objects.requireNonNull(server, "Server is null");
