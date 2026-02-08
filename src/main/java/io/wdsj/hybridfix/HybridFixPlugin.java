@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.reflection.FluentReflect;
-import io.wdsj.hybridfix.util.reflection.UnsafeFieldAccessor;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
@@ -123,19 +122,17 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private volatile boolean initialized = false;
     synchronized void initModules() {
         if (initialized) return;
-        if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
-            try {
-                UnsafeFieldAccessor transformers = FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
-                        .name("transformers")
-                        .staticFieldAccessor();
-                Map<String, Object> transformersMap = transformers.get(null);
-                transformersMap.remove("net.minecraft.entity.Entity");
-                extraMixinConfigs.put("mixins.quark.asm_fix.json", () -> true);
-                LOGGER.info("Replaced Quark's EntityTransformer with our own mixins");
-            } catch (Throwable t) {
-                LOGGER.error("Failed to patch Quark ASM", t);
-            }
-        }
         initialized = true;
+        if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
+            FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
+                    .name("transformers")
+                    .findStaticFieldAccessor()
+                    .accept(accessor -> {
+                        Map<String, Object> transformersMap = accessor.get(null);
+                        transformersMap.remove("net.minecraft.entity.Entity");
+                        extraMixinConfigs.put("mixins.quark.asm_fix.json", () -> true);
+                        LOGGER.info("Replaced Quark's EntityTransformer with our own mixins");
+                    }, t -> LOGGER.error("Failed to patch Quark ASM", t));
+        }
     }
 }
