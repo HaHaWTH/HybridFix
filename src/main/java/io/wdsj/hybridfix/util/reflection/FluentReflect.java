@@ -120,8 +120,7 @@ public class FluentReflect<T> {
      * @param <T>   the type of the value
      * @return a successful ReflectHolder containing the value
      */
-    public static <T> ReflectHolder<Object, T> ofHolder(@NotNull T value) {
-        Objects.requireNonNull(value, "The value must not be null");
+    public static <T> ReflectHolder<Object, T> ofHolder(T value) {
         return ReflectHolder.success(value);
     }
 

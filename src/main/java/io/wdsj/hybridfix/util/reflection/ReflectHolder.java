@@ -28,38 +28,39 @@ public final class ReflectHolder<M, T> {
     private final T value;
     private final Throwable exception;
     private boolean verified = false;
+    private final boolean isFailure;
 
-    private ReflectHolder(T value, Throwable exception) {
+    private ReflectHolder(T value, Throwable exception, boolean isFailure) {
         this.value = value;
         this.exception = exception;
+        this.isFailure = isFailure;
     }
 
-    static <M, T> ReflectHolder<M, T> success(@NotNull T value) {
-        return new ReflectHolder<>(value, null);
+    static <M, T> ReflectHolder<M, T> success(T value) {
+        return new ReflectHolder<>(value, null, false);
     }
 
     static <M, T> ReflectHolder<M, T> failure(@NotNull Throwable exception) {
-        return new ReflectHolder<>(null, exception);
+        return new ReflectHolder<>(null, exception, true);
     }
 
     /**
      * Checks if a value is present in this holder.
      *
-     * @return {@code true} if the holder contains a non-null value, {@code false} otherwise
+     * @return {@code true} if the holder contains a value, {@code false} otherwise
      */
     public boolean isPresent() {
-        return value != null;
+        return !isFailure;
     }
 
     /**
      * Retrieves the contained value.
      *
-     * @return the non-null value
+     * @return the value
      * @throws RuntimeException (SneakyThrow) if this holder represents a failure
      */
-    @NotNull
     public T get() {
-        if (value != null) return value;
+        if (isPresent()) return value;
         if (exception == null) {
             throw new NoSuchElementException("No value or exception present in ReflectHolder");
         }
@@ -81,6 +82,9 @@ public final class ReflectHolder<M, T> {
         if (verified) return value;
 
         T val = get();
+        if (val == null) {
+            throw new IllegalStateException("ReflectHolder contains null, but expected a reflection member");
+        }
         boolean match = false;
         for (Class<?> type : expectedTypes) {
             if (type.isInstance(val)) {
@@ -139,7 +143,7 @@ public final class ReflectHolder<M, T> {
      * If this holder is a failure, the failure is propagated.
      * </p>
      *
-     * @param mapper the transformation function, which returns the non-null transformed value
+     * @param mapper the transformation function, which returns the transformed value
      * @param <U> the type of the new value
      * @return a new ReflectHolder containing the mapped value
      */
@@ -147,9 +151,6 @@ public final class ReflectHolder<M, T> {
         if (!isPresent()) return failure(exception);
         try {
             U result = mapper.apply(value);
-            if (result == null) {
-                return failure(new NullPointerException("Transformation result was null"));
-            }
             return success(result);
         } catch (Throwable t) {
             return failure(t);
@@ -232,7 +233,7 @@ public final class ReflectHolder<M, T> {
      * Any exception thrown during the task will be caught and passed to the fallback consumer.
      * </p>
      */
-    public void accept(@NotNull ThrowingConsumer<@NotNull T> task, @NotNull Consumer<@NotNull Throwable> fallback) {
+    public void accept(@NotNull ThrowingConsumer<T> task, @NotNull Consumer<@NotNull Throwable> fallback) {
         try {
             task.accept(get());
         } catch (Throwable t) {
@@ -243,7 +244,6 @@ public final class ReflectHolder<M, T> {
     /**
      * Retrieves the value of the contained field.
      */
-    @NotNull
     public <V> V get(@Nullable Object obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
