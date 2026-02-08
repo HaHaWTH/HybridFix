@@ -10,7 +10,7 @@ import ic2.core.util.StackUtil;
 import ic2.core.util.Util;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.api.forge.HybridFixForgeApi;
-import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -105,62 +105,62 @@ public abstract class ExplosionIC2Mixin extends Explosion {
 
     @Unique private static final String EXPLOSION_IC2_NAME = ExplosionIC2.class.getName();
     // EntityDamage
-    @Unique private static final Constructor<?> EntityDamage_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Constructor<?> EntityDamage_constructor = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .params(Entity.class, int.class, double.class)
             .accessible(true)
             .constructor();
-    @Unique private static final Field EntityDamage_field_distance = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Field EntityDamage_field_distance = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("distance")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field EntityDamage_field_entity = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Field EntityDamage_field_entity = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("entity")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field EntityDamage_field_damage = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Field EntityDamage_field_damage = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("damage")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field EntityDamage_field_motionX = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Field EntityDamage_field_motionX = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("motionX")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field EntityDamage_field_motionY = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Field EntityDamage_field_motionY = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("motionY")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field EntityDamage_field_motionZ = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
+    @Unique private static final Field EntityDamage_field_motionZ = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$EntityDamage")
             .name("motionZ")
             .accessible(true)
             .declaredField();
     // XZPosition
-    @Unique private static final Constructor<?> XZposition_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
+    @Unique private static final Constructor<?> XZposition_constructor = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
             .params(int.class, int.class)
             .accessible(true)
             .constructor();
-    @Unique private static final Field XZposition_field_x = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
+    @Unique private static final Field XZposition_field_x = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
             .name("x")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field XZposition_field_z = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
+    @Unique private static final Field XZposition_field_z = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$XZposition")
             .name("z")
             .accessible(true)
             .declaredField();
     // DropData
-    @Unique private static final Constructor<?> DropData_constructor = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+    @Unique private static final Constructor<?> DropData_constructor = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .params(int.class, int.class)
             .accessible(true)
             .constructor();
-    @Unique private static final Method DropData_method_add = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+    @Unique private static final Method DropData_method_add = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .name("add")
             .params(int.class, int.class)
             .accessible(true)
             .declaredMethod();
-    @Unique private static final Field DropData_field_n = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+    @Unique private static final Field DropData_field_n = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .name("n")
             .accessible(true)
             .declaredField();
-    @Unique private static final Field DropData_field_maxY = ReflectionChain.fromClass(EXPLOSION_IC2_NAME + "$DropData")
+    @Unique private static final Field DropData_field_maxY = FluentReflect.fromClass(EXPLOSION_IC2_NAME + "$DropData")
             .name("maxY")
             .accessible(true)
             .declaredField();

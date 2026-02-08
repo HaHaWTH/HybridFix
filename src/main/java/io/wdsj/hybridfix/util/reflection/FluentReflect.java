@@ -38,8 +38,8 @@ import java.util.Objects;
  * @param <T> the type of the target class
  */
 @SuppressWarnings({"unused", "UnusedReturnValue", "unchecked"})
-public class ReflectionChain<T> {
-    private ReflectionChain() {
+public class FluentReflect<T> {
+    private FluentReflect() {
     }
 
     private static final Method PRIVATE_LOOKUP_IN;
@@ -71,7 +71,7 @@ public class ReflectionChain<T> {
      * @param clazz the target class, which must not be null
      * @return a new reflection chain for the specified class
      */
-    public static <T> IReflectionChain<T> fromClass(@NotNull Class<T> clazz) {
+    public static <T> ReflectStream<T> fromClass(@NotNull Class<T> clazz) {
         return fromClass(clazz, null);
     }
 
@@ -83,9 +83,9 @@ public class ReflectionChain<T> {
      * @param classLoader the class loader to use for resolving parameters, or null to use default
      * @return a new reflection chain for the specified class
      */
-    public static <T> IReflectionChain<T> fromClass(@NotNull Class<T> clazz, @Nullable ClassLoader classLoader) {
+    public static <T> ReflectStream<T> fromClass(@NotNull Class<T> clazz, @Nullable ClassLoader classLoader) {
         Objects.requireNonNull(clazz, "The class must not be null");
-        return new ReflectionChainImpl<>(clazz, null, classLoader);
+        return new ReflectStreamImpl<>(clazz, null, classLoader);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ReflectionChain<T> {
      * @param className the full-qualified name of the target class, which must not be null
      * @return a new reflection chain for the specified class
      */
-    public static <T> IReflectionChain<?> fromClass(@NotNull String className) {
+    public static <T> ReflectStream<?> fromClass(@NotNull String className) {
         return fromClass(className, null);
     }
 
@@ -107,394 +107,12 @@ public class ReflectionChain<T> {
      * @param classLoader the class loader to use for resolution, or null to use default
      * @return a new reflection chain for the specified class
      */
-    public static <T> IReflectionChain<?> fromClass(@NotNull String className, @Nullable ClassLoader classLoader) {
+    public static <T> ReflectStream<?> fromClass(@NotNull String className, @Nullable ClassLoader classLoader) {
         Objects.requireNonNull(className, "The class name must not be null");
-        return new ReflectionChainImpl<>(null, className, classLoader);
+        return new ReflectStreamImpl<>(null, className, classLoader);
     }
 
-    /**
-     * Interface for configuring reflection operations without parameters.
-     * <p>
-     * All methods in this interface throw {@link IllegalStateException} if invoked
-     * after a terminal operation has been called on the chain.
-     */
-    public interface IReflectionChain<T> {
-        /**
-         * Specifies the name of the method or field to be accessed.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param name the name of the method or field, which must not be null
-         * @return this chain for further configuration
-         * @throws NullPointerException if {@code name} is null
-         */
-        IReflectionChain<T> name(@NotNull String name);
-
-        /**
-         * Sets whether private members should be made accessible.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param accessible {@code true} to allow access to private members, {@code false} otherwise
-         * @return this chain for further configuration
-         */
-        IReflectionChain<T> accessible(boolean accessible);
-
-        /**
-         * Specifies the return type of the method or the type of the field.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param returnType the return type or field type, which must not be null
-         * @return this chain for further configuration
-         */
-        IReflectionChain<T> returnType(@NotNull Class<?> returnType);
-
-        /**
-         * Specifies the return type of the method or the type of the field.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param returnType the fully qualified name of the return type, which must not be null
-         * @return this chain for further configuration
-         */
-        IReflectionChain<T> returnType(@NotNull String returnType);
-
-        /**
-         * Adds a single parameter type to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramType the parameter type, either a {@link Class} or a {@link String} class name
-         * @return a parameter chain for further configuration
-         * @throws IllegalArgumentException if {@code paramType} is neither a {@link Class} nor a {@link String}
-         */
-        IParameterChain<T> param(@NotNull Object paramType);
-
-        /**
-         * Adds multiple parameter types to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramTypes the parameter types, each either a {@link Class} or a {@link String} class name
-         * @return a parameter chain for further configuration
-         * @throws IllegalArgumentException if any element in {@code paramTypes} is neither a {@link Class} nor a {@link String}
-         */
-        IParameterChain<T> params(@NotNull Object... paramTypes);
-
-        /**
-         * Adds multiple parameter types to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramTypes the parameter types as {@link Class} objects
-         * @return a parameter chain for further configuration
-         */
-        IParameterChain<T> params(@NotNull Class<?>... paramTypes);
-
-        /**
-         * Adds multiple parameter types to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramTypes the parameter types as fully qualified class names
-         * @return a parameter chain for further configuration
-         */
-        IParameterChain<T> params(@NotNull String... paramTypes);
-
-        /**
-         * Retrieves a public method with the specified name and no parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Method}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        Method method();
-
-        /**
-         * Retrieves a declared method with the specified name and no parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Method}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        Method declaredMethod();
-
-        /**
-         * Retrieves a field with the specified name.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Field}
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        Field field();
-
-        /**
-         * Retrieves a declared field with the specified name.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Field}
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        Field declaredField();
-
-        /**
-         * Retrieves a constructor with no parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Constructor}
-         * @throws IllegalStateException if the class is not specified
-         */
-        Constructor<T> constructor();
-
-        /**
-         * Retrieves a {@link MethodHandle} for a virtual method with the specified name and no parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        MethodHandle virtualMethodHandle();
-
-        /**
-         * Retrieves a {@link MethodHandle} for a static method with the specified name and no parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        MethodHandle staticMethodHandle();
-
-        /**
-         * Retrieves a {@link MethodHandle} for getting the value of a virtual field.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle} for the field getter
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        MethodHandle virtualFieldGetter();
-
-        /**
-         * Retrieves a {@link MethodHandle} for getting the value of a static field.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle} for the field getter
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        MethodHandle staticFieldGetter();
-
-        /**
-         * Retrieves a {@link MethodHandle} for setting the value of a virtual field.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle} for the field setter
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        MethodHandle virtualFieldSetter();
-
-        /**
-         * Retrieves a {@link MethodHandle} for setting the value of a static field.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle} for the field setter
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        MethodHandle staticFieldSetter();
-
-        /**
-         * Retrieves a {@link MethodHandle} for a constructor with no parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle} for the constructor
-         * @throws IllegalStateException if the class is not specified
-         */
-        MethodHandle constructorHandle();
-
-        /**
-         * Retrieves an unsafe field accessor for a virtual field.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link UnsafeFieldAccessor} for the field
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        UnsafeFieldAccessor virtualFieldAccessor();
-
-        /**
-         * Retrieves an unsafe field accessor for a static field.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link UnsafeFieldAccessor} for the field
-         * @throws IllegalStateException if the field name or class is not specified
-         */
-        UnsafeFieldAccessor staticFieldAccessor();
-    }
-
-    /**
-     * Interface for configuring reflection operations with parameters.
-     * <p>
-     * All methods in this interface throw {@link IllegalStateException} if invoked
-     * after a terminal operation has been called on the chain.
-     */
-    public interface IParameterChain<T> {
-        /**
-         * Specifies the name of the method to be accessed.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param name the name of the method, which must not be null
-         * @return this chain for further configuration
-         * @throws NullPointerException if {@code name} is null
-         */
-        IParameterChain<T> name(@NotNull String name);
-
-        /**
-         * Sets whether private members should be made accessible.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param accessible {@code true} to allow access to private members, {@code false} otherwise
-         * @return this chain for further configuration
-         */
-        IParameterChain<T> accessible(boolean accessible);
-
-        /**
-         * Specifies the return type of the method.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param returnType the return type, which must not be null
-         * @return this chain for further configuration
-         */
-        IParameterChain<T> returnType(@NotNull Class<?> returnType);
-
-        /**
-         * Specifies the return type of the method.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param returnType the fully qualified name of the return type, which must not be null
-         * @return this chain for further configuration
-         */
-        IParameterChain<T> returnType(@NotNull String returnType);
-
-        /**
-         * Adds a single parameter type to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramType the parameter type, either a {@link Class} or a {@link String} class name
-         * @return this chain for further configuration
-         * @throws IllegalArgumentException if {@code paramType} is neither a {@link Class} nor a {@link String}
-         */
-        IParameterChain<T> param(@NotNull Object paramType);
-
-        /**
-         * Adds multiple parameter types to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramTypes the parameter types, each either a {@link Class} or a {@link String} class name
-         * @return this chain for further configuration
-         * @throws IllegalArgumentException if any element in {@code paramTypes} is neither a {@link Class} nor a {@link String}
-         */
-        IParameterChain<T> params(@NotNull Object... paramTypes);
-
-        /**
-         * Adds multiple parameter types to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramTypes the parameter types as {@link Class} objects
-         * @return this chain for further configuration
-         */
-        IParameterChain<T> params(@NotNull Class<?>... paramTypes);
-
-        /**
-         * Adds multiple parameter types to the method or constructor signature.
-         * <p>
-         * This is an intermediate operation.
-         *
-         * @param paramTypes the parameter types as fully qualified class names
-         * @return this chain for further configuration
-         */
-        IParameterChain<T> params(@NotNull String... paramTypes);
-
-        /**
-         * Retrieves a public method with the specified name and parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Method}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        Method method();
-
-        /**
-         * Retrieves a declared method with the specified name and parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Method}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        Method declaredMethod();
-
-        /**
-         * Retrieves a constructor with the specified parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link Constructor}
-         * @throws IllegalStateException if the class is not specified
-         */
-        Constructor<T> constructor();
-
-        /**
-         * Retrieves a {@link MethodHandle} for a virtual method with the specified name and parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        MethodHandle virtualMethodHandle();
-
-        /**
-         * Retrieves a {@link MethodHandle} for a static method with the specified name and parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle}
-         * @throws IllegalStateException if the method name or class is not specified
-         */
-        MethodHandle staticMethodHandle();
-
-        /**
-         * Retrieves a {@link MethodHandle} for a constructor with the specified parameters.
-         * <p>
-         * This is a terminal operation.
-         *
-         * @return the matching {@link MethodHandle} for the constructor
-         * @throws IllegalStateException if the class is not specified
-         */
-        MethodHandle constructorHandle();
-    }
-
-    private static class ReflectionChainImpl<T> implements IReflectionChain<T> {
+    private static class ReflectStreamImpl<T> implements ReflectStream<T> {
         private final Class<T> targetClass;
         private final String targetClassName;
         private final ClassLoader classLoader;
@@ -503,7 +121,7 @@ public class ReflectionChain<T> {
         private boolean isTerminated = false;
         private Object returnType = void.class;
 
-        ReflectionChainImpl(Class<T> clazz, String className, ClassLoader classLoader) {
+        ReflectStreamImpl(Class<T> clazz, String className, ClassLoader classLoader) {
             this.targetClass = clazz;
             this.targetClassName = className;
             this.classLoader = classLoader;
@@ -511,7 +129,7 @@ public class ReflectionChain<T> {
 
         private void checkNotTerminated() {
             if (isTerminated) {
-                throw new IllegalStateException("Chain has been terminated by a terminal operation and cannot be modified");
+                throw new IllegalStateException("Stream has been terminated by a terminal operation and cannot be modified");
             }
         }
 
@@ -533,7 +151,7 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IReflectionChain<T> name(@NotNull String name) {
+        public ReflectStream<T> name(@NotNull String name) {
             checkNotTerminated();
             Objects.requireNonNull(name, "Name cannot be null");
             this.name = name;
@@ -541,30 +159,30 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IReflectionChain<T> accessible(boolean accessible) {
+        public ReflectStream<T> accessible(boolean accessible) {
             checkNotTerminated();
             this.isAccessible = accessible;
             return this;
         }
 
         @Override
-        public IReflectionChain<T> returnType(@NotNull Class<?> returnType) {
+        public ReflectStream<T> returnType(@NotNull Class<?> returnType) {
             checkNotTerminated();
             this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
             return this;
         }
 
         @Override
-        public IReflectionChain<T> returnType(@NotNull String returnType) {
+        public ReflectStream<T> returnType(@NotNull String returnType) {
             checkNotTerminated();
             this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
             return this;
         }
 
         @Override
-        public IParameterChain<T> param(@NotNull Object paramType) {
+        public ParameterStream<T> param(@NotNull Object paramType) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            ParameterStreamImpl<T> chain = new ParameterStreamImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             if (this.returnType instanceof Class<?>) {
                 chain.returnType((Class<?>) this.returnType);
             } else {
@@ -576,9 +194,9 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> params(Object... paramTypes) {
+        public ParameterStream<T> params(Object... paramTypes) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            ParameterStreamImpl<T> chain = new ParameterStreamImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             if (this.returnType instanceof Class<?>) {
                 chain.returnType((Class<?>) this.returnType);
             } else {
@@ -590,9 +208,9 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> params(Class<?>... paramTypes) {
+        public ParameterStream<T> params(Class<?>... paramTypes) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            ParameterStreamImpl<T> chain = new ParameterStreamImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             if (this.returnType instanceof Class<?>) {
                 chain.returnType((Class<?>) this.returnType);
             } else {
@@ -604,9 +222,9 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> params(String... paramTypes) {
+        public ParameterStream<T> params(String... paramTypes) {
             checkNotTerminated();
-            ParameterChainImpl<T> chain = new ParameterChainImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
+            ParameterStreamImpl<T> chain = new ParameterStreamImpl<>(targetClass, targetClassName, name, isAccessible, classLoader);
             if (this.returnType instanceof Class<?>) {
                 chain.returnType((Class<?>) this.returnType);
             } else {
@@ -876,7 +494,7 @@ public class ReflectionChain<T> {
         }
     }
 
-    private static class ParameterChainImpl<T> implements IParameterChain<T> {
+    private static class ParameterStreamImpl<T> implements ParameterStream<T> {
         private final Class<T> targetClass;
         private final String targetClassName;
         private final ClassLoader classLoader;
@@ -886,7 +504,7 @@ public class ReflectionChain<T> {
         private boolean isTerminated = false;
         private Object returnType = void.class;
 
-        ParameterChainImpl(Class<T> targetClass, String targetClassName, String name, boolean isAccessible, ClassLoader classLoader) {
+        ParameterStreamImpl(Class<T> targetClass, String targetClassName, String name, boolean isAccessible, ClassLoader classLoader) {
             this.targetClass = targetClass;
             this.targetClassName = targetClassName;
             this.name = name;
@@ -896,7 +514,7 @@ public class ReflectionChain<T> {
 
         private void checkNotTerminated() {
             if (this.isTerminated) {
-                throw new IllegalStateException("Chain has been terminated by a terminal operation and cannot be modified");
+                throw new IllegalStateException("Stream has been terminated by a terminal operation and cannot be modified");
             }
         }
 
@@ -918,7 +536,7 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> name(@NotNull String name) {
+        public ParameterStream<T> name(@NotNull String name) {
             checkNotTerminated();
             Objects.requireNonNull(name, "Name cannot be null");
             this.name = name;
@@ -926,28 +544,28 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> accessible(boolean accessible) {
+        public ParameterStream<T> accessible(boolean accessible) {
             checkNotTerminated();
             this.isAccessible = accessible;
             return this;
         }
 
         @Override
-        public IParameterChain<T> returnType(@NotNull Class<?> returnType) {
+        public ParameterStream<T> returnType(@NotNull Class<?> returnType) {
             checkNotTerminated();
             this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
             return this;
         }
 
         @Override
-        public IParameterChain<T> returnType(@NotNull String returnType) {
+        public ParameterStream<T> returnType(@NotNull String returnType) {
             checkNotTerminated();
             this.returnType = Objects.requireNonNull(returnType, "Return type cannot be null");
             return this;
         }
 
         @Override
-        public IParameterChain<T> param(@NotNull Object paramType) {
+        public ParameterStream<T> param(@NotNull Object paramType) {
             checkNotTerminated();
             Objects.requireNonNull(paramType, "Parameter type cannot be null");
             if (paramType instanceof Class<?> || paramType instanceof String) {
@@ -959,7 +577,7 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> params(Object... paramTypes) {
+        public ParameterStream<T> params(Object... paramTypes) {
             checkNotTerminated();
             for (Object paramType : paramTypes) {
                 param(paramType);
@@ -968,14 +586,14 @@ public class ReflectionChain<T> {
         }
 
         @Override
-        public IParameterChain<T> params(Class<?>... paramTypes) {
+        public ParameterStream<T> params(Class<?>... paramTypes) {
             checkNotTerminated();
             this.parameterTypes.addAll(Arrays.asList(paramTypes));
             return this;
         }
 
         @Override
-        public IParameterChain<T> params(String... paramTypes) {
+        public ParameterStream<T> params(String... paramTypes) {
             checkNotTerminated();
             this.parameterTypes.addAll(Arrays.asList(paramTypes));
             return this;

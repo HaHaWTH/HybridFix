@@ -2,7 +2,7 @@ package io.wdsj.hybridfix.mixin.asm_fix.quark;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalDoubleRef;
-import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,19 +19,19 @@ import java.lang.invoke.MethodHandle;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @Unique
-    private static final MethodHandle hybridFix$recordMotionHandle = ReflectionChain.fromClass("vazkii.quark.base.asm.ASMHooks")
+    private static final MethodHandle hybridFix$recordMotionHandle = FluentReflect.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("recordMotion")
             .params(Entity.class)
             .accessible(true)
             .staticMethodHandle();
     @Unique
-    private static final MethodHandle hybridFix$applyCollisionLogicHandle = ReflectionChain.fromClass("vazkii.quark.base.asm.ASMHooks")
+    private static final MethodHandle hybridFix$applyCollisionLogicHandle = FluentReflect.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("applyCollisionLogic")
             .params(Entity.class, double.class, double.class, double.class, double.class, double.class, double.class)
             .accessible(true)
             .staticMethodHandle();
     @Unique
-    private static final MethodHandle hybridFix$onEntityUpdateHandle = ReflectionChain.fromClass("vazkii.quark.base.asm.ASMHooks")
+    private static final MethodHandle hybridFix$onEntityUpdateHandle = FluentReflect.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("onEntityUpdate")
             .params(Entity.class)
             .accessible(true)

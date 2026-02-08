@@ -14,7 +14,7 @@ import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockLis
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookPvpListener;
 import io.wdsj.hybridfix.entry.bukkit.listener.ExplodeListener;
 import io.wdsj.hybridfix.entry.bukkit.util.ListenerHackery;
-import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraftforge.fml.common.Loader;
 import org.bukkit.Bukkit;
@@ -59,12 +59,12 @@ public abstract class DedicatedServerMixin {
                     adder.save();
                     try {
                         ClassLoader cl = residence.getClass().getClassLoader();
-                        Object configManager = ReflectionChain.fromClass(residence.getClass(), cl)
+                        Object configManager = FluentReflect.fromClass(residence.getClass(), cl)
                                 .name("getConfigManager")
                                 .returnType("com.bekvon.bukkit.residence.ConfigManager")
                                 .virtualMethodHandle()
                                 .invoke(residence);
-                        ReflectionChain.fromClass(configManager.getClass(), cl)
+                        FluentReflect.fromClass(configManager.getClass(), cl)
                                 .name("UpdateConfigFile")
                                 .returnType(void.class)
                                 .virtualMethodHandle()

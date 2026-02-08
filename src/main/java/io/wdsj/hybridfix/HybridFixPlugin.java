@@ -3,7 +3,7 @@ package io.wdsj.hybridfix;
 import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
-import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import io.wdsj.hybridfix.util.reflection.UnsafeFieldAccessor;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
@@ -125,7 +125,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
         if (initialized) return;
         if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
             try {
-                UnsafeFieldAccessor transformers = ReflectionChain.fromClass("vazkii.quark.base.asm.ClassTransformer")
+                UnsafeFieldAccessor transformers = FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
                         .name("transformers")
                         .staticFieldAccessor();
                 Map<String, Object> transformersMap = transformers.get(null);

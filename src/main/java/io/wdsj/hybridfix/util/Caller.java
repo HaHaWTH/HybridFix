@@ -1,6 +1,6 @@
 package io.wdsj.hybridfix.util;
 
-import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.FluentReflect;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -27,7 +27,7 @@ public class Caller {
     static {
         Method md_getCallerClass = null;
         try {
-            md_getCallerClass = ReflectionChain.fromClass("sun.reflect.Reflection")
+            md_getCallerClass = FluentReflect.fromClass("sun.reflect.Reflection")
                     .name("getCallerClass")
                     .accessible(true)
                     .param(int.class)
@@ -44,7 +44,7 @@ public class Caller {
         Method md_walk = null;
         try {
             stackWalkerClass = Class.forName("java.lang.StackWalker");
-            md_getInstance = ReflectionChain.fromClass("java.lang.StackWalker")
+            md_getInstance = FluentReflect.fromClass("java.lang.StackWalker")
                     .name("getInstance")
                     .accessible(true)
                     .params(Set.class, int.class)
@@ -53,11 +53,11 @@ public class Caller {
             Class<? extends Enum> stackWalker$Option = (Class<? extends Enum>) Class.forName("java.lang.StackWalker$Option");
             retainClassReference = Enum.valueOf(stackWalker$Option, "RETAIN_CLASS_REFERENCE");
             stackFrameClass = Class.forName("java.lang.StackWalker$StackFrame");
-            md_getDeclaringClass = ReflectionChain.fromClass(stackFrameClass)
+            md_getDeclaringClass = FluentReflect.fromClass(stackFrameClass)
                     .name("getDeclaringClass")
                     .accessible(true)
                     .declaredMethod();
-            md_walk = ReflectionChain.fromClass(stackWalkerClass)
+            md_walk = FluentReflect.fromClass(stackWalkerClass)
                     .name("walk")
                     .accessible(true)
                     .param(Function.class)

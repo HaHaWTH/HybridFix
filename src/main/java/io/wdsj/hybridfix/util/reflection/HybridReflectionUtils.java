@@ -21,19 +21,19 @@ import static io.wdsj.hybridfix.util.reflection.BaseReflectionUtils.setBooleanFi
 import static io.wdsj.hybridfix.util.reflection.BaseReflectionUtils.setObjectFieldValue;
 
 public class HybridReflectionUtils {
-    private static final Field FD_WORLD_CAPTURE_TREE_GENERATION = ReflectionChain.fromClass(World.class)
+    private static final Field FD_WORLD_CAPTURE_TREE_GENERATION = FluentReflect.fromClass(World.class)
             .name("captureTreeGeneration")
             .accessible(true)
             .declaredField();
-    private static final Field FD_BLOCK_SAPLING_TREE_TYPE = ReflectionChain.fromClass(BlockSapling.class)
+    private static final Field FD_BLOCK_SAPLING_TREE_TYPE = FluentReflect.fromClass(BlockSapling.class)
             .name("treeType")
             .accessible(true)
             .declaredField();
-    private static final MethodHandle CTOR_CRAFT_BLOCK_STATE = ReflectionChain.fromClass(CraftBlockState.class)
+    private static final MethodHandle CTOR_CRAFT_BLOCK_STATE = FluentReflect.fromClass(CraftBlockState.class)
             .param(BlockSnapshot.class)
             .accessible(true)
             .constructorHandle();
-    private static final MethodHandle MH_FIRE_EVENT = ReflectionChain.fromClass(SimplePluginManager.class)
+    private static final MethodHandle MH_FIRE_EVENT = FluentReflect.fromClass(SimplePluginManager.class)
             .name("fireEvent")
             .param(Event.class)
             .accessible(true)

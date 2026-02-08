@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.HybridFixServer;
-import io.wdsj.hybridfix.util.reflection.ReflectionChain;
+import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -41,7 +41,7 @@ public abstract class AccioSymbolEffectMixin {
     static {
         MethodHandle mh;
         try {
-            mh = ReflectionChain.fromClass(InventoryPlayer.class)
+            mh = FluentReflect.fromClass(InventoryPlayer.class)
                     .name("canHold")
                     .param(ItemStack.class)
                     .accessible(true)
