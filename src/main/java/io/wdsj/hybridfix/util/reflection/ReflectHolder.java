@@ -87,6 +87,7 @@ public final class ReflectHolder<M, T> {
         return Optional.ofNullable(value);
     }
 
+    @NotNull
     public M newInstance(Object... args) {
         Constructor<M> c = (Constructor<M>) ensureType(Constructor.class);
         try {
@@ -97,6 +98,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    @NotNull
     public <R> R invoke(@Nullable Object obj, Object... args) {
         Method m = (Method) ensureType(Method.class);
         try {
@@ -107,16 +109,18 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    @NotNull
     public <R> R invokeHandle(Object... args) {
         MethodHandle mh = (MethodHandle) ensureType(MethodHandle.class);
         try {
             return (R) mh.invokeWithArguments(args);
         } catch (Throwable t) {
             SneakyThrow.throw0(t);
-            return null;
+            return null; // never reached
         }
     }
 
+    @NotNull
     public <V> V get(@Nullable Object obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
