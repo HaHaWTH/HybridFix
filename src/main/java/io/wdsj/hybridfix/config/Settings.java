@@ -45,7 +45,7 @@ public class Settings {
     @Config.Comment("(Server / Client) Optimize Vec3i hashing.")
     @Config.Name("Optimize Vec3i hashing")
     @Config.RequiresMcRestart
-    public static boolean optimizeVec3iHashing = true;
+    public static boolean optimizeVec3iHashing = false;
 
     @Config.Comment("(Server) Skip firing event if no listeners registered.")
     @Config.Name("Skip firing event if no listeners")
