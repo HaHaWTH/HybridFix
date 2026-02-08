@@ -334,7 +334,9 @@ public class FluentReflect<T> {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                return resolveTargetClass().getMethod(name);
+                Method method = resolveTargetClass().getMethod(name);
+                if (isAccessible) method.setAccessible(true);
+                return method;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
@@ -823,7 +825,9 @@ public class FluentReflect<T> {
                 if (name == null) {
                     throw new IllegalStateException("Method name must be specified");
                 }
-                return resolveTargetClass().getMethod(name, resolveParameterTypes());
+                Method method = resolveTargetClass().getMethod(name, resolveParameterTypes());
+                if (isAccessible) method.setAccessible(true);
+                return method;
             } catch (Exception e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
