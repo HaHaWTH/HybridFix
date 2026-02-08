@@ -53,10 +53,9 @@ public final class ReflectHolder<M, T> {
     }
 
     /**
-     * Retrieves the contained value.
+     * Retrieves the contained value, or throws an exception if the holder is a failure.
      *
      * @return the value
-     * @throws RuntimeException (SneakyThrow) if this holder represents a failure
      */
     public T get() {
         if (isPresent()) return value;
