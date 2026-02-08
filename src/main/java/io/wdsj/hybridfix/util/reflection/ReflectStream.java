@@ -57,6 +57,31 @@ public interface ReflectStream<T> {
     ReflectStream<T> returnType(@NotNull String returnType);
 
     /**
+     * Specifies the type to which the result  should be cast.
+     * <p>
+     * This is an intermediate operation.
+     *
+     * @param type the type to which the result should be cast, which must not be null
+     * @return this chain for further configuration
+     */
+    <U> ReflectStream<U> as(@NotNull Class<U> type);
+
+    /**
+     * Sets whether the target class should be initialized during resolution.
+     * <p>
+     * If set to {@code true}, the class will be initialized (running its static
+     * initializers) when it is resolved by a terminal operation.
+     * Default is {@code false}.
+     * </p>
+     * <p>
+     * This is an intermediate operation.
+     *
+     * @param initialize whether to initialize the class
+     * @return this chain for further configuration
+     */
+    ReflectStream<T> initialize(boolean initialize);
+
+    /**
      * Adds a single parameter type to the method or constructor signature.
      * <p>
      * This is an intermediate operation.
@@ -97,6 +122,24 @@ public interface ReflectStream<T> {
      * @return a parameter chain for further configuration
      */
     ParameterStream<T> params(@NotNull String... paramTypes);
+
+    /**
+     * Resolves the target class and returns it.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return the resolved {@link Class} object
+     */
+    Class<T> type();
+
+    /**
+     * Resolves the target class and returns a holder containing the result.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the class or the failure cause
+     */
+    ReflectHolder<T, Class<T>> findType();
 
     /**
      * Retrieves a public method with the specified name and no parameters.

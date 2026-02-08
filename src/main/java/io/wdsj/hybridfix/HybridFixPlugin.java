@@ -126,6 +126,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
         if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
             FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
                     .name("transformers")
+                    .initialize(true)
                     .findStaticFieldAccessor()
                     .accept(accessor -> {
                         Map<String, Object> transformersMap = accessor.get(null);

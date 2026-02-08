@@ -56,6 +56,31 @@ public interface ParameterStream<T> {
     ParameterStream<T> returnType(@NotNull String returnType);
 
     /**
+     * Specifies the type to which the result  should be cast.
+     * <p>
+     * This is an intermediate operation.
+     *
+     * @param type the type to which the result should be cast, which must not be null
+     * @return this chain for further configuration
+     */
+    <U> ParameterStream<U> as(@NotNull Class<U> type);
+
+    /**
+     * Sets whether the target class should be initialized during resolution.
+     * <p>
+     * If set to {@code true}, the class will be initialized (running its static
+     * initializers) when it is resolved by a terminal operation.
+     * Default is {@code false}.
+     * </p>
+     * <p>
+     * This is an intermediate operation.
+     *
+     * @param initialize whether to initialize the class
+     * @return this chain for further configuration
+     */
+    ParameterStream<T> initialize(boolean initialize);
+
+    /**
      * Adds a single parameter type to the method or constructor signature.
      * <p>
      * This is an intermediate operation.

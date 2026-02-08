@@ -132,6 +132,9 @@ public class FluentReflect<T> {
         private boolean isAccessible = false;
         private boolean isTerminated = false;
         private Object returnType = void.class;
+        private boolean initialize = false;
+
+        private Class<?> typeContract;
 
         ReflectStreamImpl(Class<T> clazz, String className, ClassLoader classLoader) {
             this.targetClass = clazz;
@@ -152,7 +155,7 @@ public class FluentReflect<T> {
                 try {
                     return classLoader != null
                             ? Class.forName((String) returnType, false, classLoader)
-                            : Class.forName((String) returnType);
+                            : Class.forName((String) returnType, initialize, getClass().getClassLoader());
                 } catch (ClassNotFoundException e) {
                     SneakyThrow.throw0(e);
                     throw new RuntimeException(e); // unreachable
@@ -160,6 +163,20 @@ public class FluentReflect<T> {
             } else {
                 throw new IllegalStateException("Invalid return type: " + returnType);
             }
+        }
+
+        @Override
+        public <U> ReflectStream<U> as(@NotNull Class<U> type) {
+            checkNotTerminated();
+            this.typeContract = type;
+            return (ReflectStream<U>) this;
+        }
+
+        @Override
+        public ReflectStream<T> initialize(boolean initialize) {
+            checkNotTerminated();
+            this.initialize = initialize;
+            return this;
         }
 
         @Override
@@ -200,6 +217,10 @@ public class FluentReflect<T> {
             } else {
                 chain.returnType((String) this.returnType);
             }
+            if (typeContract != null) {
+                chain.as(typeContract);
+            }
+            chain.initialize(initialize);
             chain.param(paramType);
             markTerminated();
             return chain;
@@ -214,6 +235,10 @@ public class FluentReflect<T> {
             } else {
                 chain.returnType((String) this.returnType);
             }
+            if (typeContract != null) {
+                chain.as(typeContract);
+            }
+            chain.initialize(initialize);
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -228,6 +253,10 @@ public class FluentReflect<T> {
             } else {
                 chain.returnType((String) this.returnType);
             }
+            if (typeContract != null) {
+                chain.as(typeContract);
+            }
+            chain.initialize(initialize);
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -242,6 +271,10 @@ public class FluentReflect<T> {
             } else {
                 chain.returnType((String) this.returnType);
             }
+            if (typeContract != null) {
+                chain.as(typeContract);
+            }
+            chain.initialize(initialize);
             chain.params(paramTypes);
             markTerminated();
             return chain;
@@ -249,6 +282,7 @@ public class FluentReflect<T> {
 
         private Class<T> resolveTargetClass() {
             if (targetClass != null) {
+                checkTypeContract(targetClass);
                 return targetClass;
             }
             if (targetClassName == null) {
@@ -257,8 +291,9 @@ public class FluentReflect<T> {
             try {
                 @SuppressWarnings("unchecked")
                 Class<T> clazz = (Class<T>) (classLoader != null
-                        ? Class.forName(targetClassName, false, classLoader)
-                        : Class.forName(targetClassName));
+                        ? Class.forName(targetClassName, initialize, classLoader)
+                        : Class.forName(targetClassName, initialize, getClass().getClassLoader()));
+                checkTypeContract(clazz);
                 return clazz;
             } catch (ClassNotFoundException e) {
                 SneakyThrow.throw0(e);
@@ -268,6 +303,27 @@ public class FluentReflect<T> {
 
         private void markTerminated() {
             isTerminated = true;
+        }
+
+        private void checkTypeContract(Class<T> clazz) {
+            if (typeContract != null && !typeContract.isAssignableFrom(clazz)) {
+                throw new ClassCastException("Class " + clazz.getName() +
+                        " does not match type contract: " + typeContract.getName());
+            }
+        }
+
+        @Override
+        public Class<T> type() {
+            checkNotTerminated();
+            markTerminated();
+            return resolveTargetClass();
+        }
+
+        @Override
+        public ReflectHolder<T, Class<T>> findType() {
+            checkNotTerminated();
+            markTerminated();
+            return findTerminal(this::resolveTargetClass);
         }
 
         @Override
@@ -593,6 +649,9 @@ public class FluentReflect<T> {
         private boolean isAccessible;
         private boolean isTerminated = false;
         private Object returnType = void.class;
+        private boolean initialize = false;
+
+        private Class<?> typeContract;
 
         ParameterStreamImpl(Class<T> targetClass, String targetClassName, String name, boolean isAccessible, ClassLoader classLoader) {
             this.targetClass = targetClass;
@@ -689,8 +748,23 @@ public class FluentReflect<T> {
             return this;
         }
 
+        @Override
+        public <U> ParameterStream<U> as(@NotNull Class<U> type) {
+            checkNotTerminated();
+            this.typeContract = type;
+            return (ParameterStream<U>) this;
+        }
+
+        @Override
+        public ParameterStream<T> initialize(boolean initialize) {
+            checkNotTerminated();
+            this.initialize = initialize;
+            return this;
+        }
+
         private Class<T> resolveTargetClass() {
             if (targetClass != null) {
+                checkTypeContract(targetClass);
                 return targetClass;
             }
             if (targetClassName == null) {
@@ -699,12 +773,20 @@ public class FluentReflect<T> {
             try {
                 @SuppressWarnings("unchecked")
                 Class<T> clazz = (Class<T>) (classLoader != null
-                        ? Class.forName(targetClassName, false, classLoader)
-                        : Class.forName(targetClassName));
+                        ? Class.forName(targetClassName, initialize, classLoader)
+                        : Class.forName(targetClassName, initialize, getClass().getClassLoader()));
+                checkTypeContract(clazz);
                 return clazz;
             } catch (ClassNotFoundException e) {
                 SneakyThrow.throw0(e);
                 throw new RuntimeException(e); // unreachable
+            }
+        }
+
+        private void checkTypeContract(Class<T> clazz) {
+            if (typeContract != null && !typeContract.isAssignableFrom(clazz)) {
+                throw new ClassCastException("Class " + clazz.getName() +
+                        " does not match type contract: " + typeContract.getName());
             }
         }
 
@@ -716,8 +798,8 @@ public class FluentReflect<T> {
                 } else if (paramType instanceof String) {
                     try {
                         resolvedTypes.add(classLoader != null
-                                ? Class.forName((String) paramType, false, classLoader)
-                                : Class.forName((String) paramType));
+                                ? Class.forName((String) paramType, initialize, classLoader)
+                                : Class.forName((String) paramType, initialize, getClass().getClassLoader()));
                     } catch (ClassNotFoundException e) {
                         SneakyThrow.throw0(e);
                         throw new RuntimeException(e); // unreachable
