@@ -237,4 +237,130 @@ public interface ReflectStream<T> {
      * @throws IllegalStateException if the field name or class is not specified
      */
     UnsafeFieldAccessor staticFieldAccessor();
+
+    /**
+     * Retrieves a public method with the specified name and no parameters, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
+     */
+    ReflectHolder<Method> findMethod();
+
+    /**
+     * Retrieves a declared method with the specified name and no parameters, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
+     */
+    ReflectHolder<Method> findDeclaredMethod();
+
+    /**
+     * Retrieves a field with the specified name, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Field} or the exception if not found
+     */
+    ReflectHolder<Field> findField();
+
+    /**
+     * Retrieves a declared field with the specified name, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Field} or the exception if not found
+     */
+    ReflectHolder<Field> findDeclaredField();
+
+    /**
+     * Retrieves a constructor with no parameters, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Constructor} or the exception if not found
+     */
+    ReflectHolder<Constructor<T>> findConstructor();
+
+    /**
+     * Retrieves a {@link MethodHandle} for a virtual method, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findVirtualMethodHandle();
+
+    /**
+     * Retrieves a {@link MethodHandle} for a static method, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findStaticMethodHandle();
+
+    /**
+     * Retrieves a {@link MethodHandle} for getting the value of a virtual field, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching getter {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findVirtualFieldGetter();
+
+    /**
+     * Retrieves a {@link MethodHandle} for getting the value of a static field, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching getter {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findStaticFieldGetter();
+
+    /**
+     * Retrieves a {@link MethodHandle} for setting the value of a virtual field, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching setter {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findVirtualFieldSetter();
+
+    /**
+     * Retrieves a {@link MethodHandle} for setting the value of a static field, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching setter {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findStaticFieldSetter();
+
+    /**
+     * Retrieves a {@link MethodHandle} for a constructor, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findConstructorHandle();
+
+    /**
+     * Retrieves an unsafe field accessor for a virtual field, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link UnsafeFieldAccessor} or the exception if not found
+     */
+    ReflectHolder<UnsafeFieldAccessor> findVirtualFieldAccessor();
+
+    /**
+     * Retrieves an unsafe field accessor for a static field, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link UnsafeFieldAccessor} or the exception if not found
+     */
+    ReflectHolder<UnsafeFieldAccessor> findStaticFieldAccessor();
 }

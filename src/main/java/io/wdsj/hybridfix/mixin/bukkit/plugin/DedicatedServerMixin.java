@@ -62,13 +62,13 @@ public abstract class DedicatedServerMixin {
                         Object configManager = FluentReflect.fromClass(residence.getClass(), cl)
                                 .name("getConfigManager")
                                 .returnType("com.bekvon.bukkit.residence.ConfigManager")
-                                .virtualMethodHandle()
-                                .invoke(residence);
+                                .findVirtualMethodHandle()
+                                .invokeHandle(residence);
                         FluentReflect.fromClass(configManager.getClass(), cl)
                                 .name("UpdateConfigFile")
                                 .returnType(void.class)
-                                .virtualMethodHandle()
-                                .invoke(configManager);
+                                .findVirtualMethodHandle()
+                                .invokeHandle(configManager);
                     } catch (Throwable t) {
                         HybridFix.LOGGER.warn("Unable to reload residence configuration, attempting to use command...", t);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "residence reload config");

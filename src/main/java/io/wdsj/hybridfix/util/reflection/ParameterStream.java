@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -156,4 +157,58 @@ public interface ParameterStream<T> {
      * @throws IllegalStateException if the class is not specified
      */
     MethodHandle constructorHandle();
+
+    /**
+     * Retrieves a public method with the specified name and no parameters, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
+     */
+    ReflectHolder<Method> findMethod();
+
+    /**
+     * Retrieves a declared method with the specified name and no parameters, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
+     */
+    ReflectHolder<Method> findDeclaredMethod();
+
+    /**
+     * Retrieves a constructor with no parameters, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link Constructor} or the exception if not found
+     */
+    ReflectHolder<Constructor<T>> findConstructor();
+
+    /**
+     * Retrieves a {@link MethodHandle} for a virtual method, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findVirtualMethodHandle();
+
+    /**
+     * Retrieves a {@link MethodHandle} for a static method, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findStaticMethodHandle();
+
+    /**
+     * Retrieves a {@link MethodHandle} for a constructor, wrapped in a {@link ReflectHolder}.
+     * <p>
+     * This is a terminal operation.
+     *
+     * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
+     */
+    ReflectHolder<MethodHandle> findConstructorHandle();
 }

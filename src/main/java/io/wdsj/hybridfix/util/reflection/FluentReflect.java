@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * A fluent API for reflection operations on a target class.
@@ -479,6 +480,84 @@ public class FluentReflect<T> {
             }
         }
 
+        private <R> ReflectHolder<R> findTerminal(Supplier<R> supplier) {
+            try {
+                return ReflectHolder.success(supplier.get());
+            } catch (Throwable t) {
+                return ReflectHolder.failure(t);
+            }
+        }
+
+        @Override
+        public ReflectHolder<Method> findMethod() {
+            return findTerminal(this::method);
+        }
+
+        @Override
+        public ReflectHolder<Method> findDeclaredMethod() {
+            return findTerminal(this::declaredMethod);
+        }
+
+        @Override
+        public ReflectHolder<Field> findField() {
+            return findTerminal(this::field);
+        }
+
+        @Override
+        public ReflectHolder<Field> findDeclaredField() {
+            return findTerminal(this::declaredField);
+        }
+
+        @Override
+        public ReflectHolder<Constructor<T>> findConstructor() {
+            return findTerminal(this::constructor);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findVirtualMethodHandle() {
+            return findTerminal(this::virtualMethodHandle);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findStaticMethodHandle() {
+            return findTerminal(this::staticMethodHandle);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findVirtualFieldGetter() {
+            return findTerminal(this::virtualFieldGetter);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findStaticFieldGetter() {
+            return findTerminal(this::staticFieldGetter);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findVirtualFieldSetter() {
+            return findTerminal(this::virtualFieldSetter);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findStaticFieldSetter() {
+            return findTerminal(this::staticFieldSetter);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findConstructorHandle() {
+            return findTerminal(this::constructorHandle);
+        }
+
+        @Override
+        public ReflectHolder<UnsafeFieldAccessor> findVirtualFieldAccessor() {
+            return findTerminal(this::virtualFieldAccessor);
+        }
+
+        @Override
+        public ReflectHolder<UnsafeFieldAccessor> findStaticFieldAccessor() {
+            return findTerminal(this::staticFieldAccessor);
+        }
+
         private MethodHandles.Lookup getLookup(Class<T> clazz) {
             if (IMPL_LOOKUP != null) {
                 return IMPL_LOOKUP;
@@ -734,6 +813,44 @@ public class FluentReflect<T> {
             }
         }
 
+        private <R> ReflectHolder<R> findTerminal(java.util.function.Supplier<R> supplier) {
+            try {
+                return ReflectHolder.success(supplier.get());
+            } catch (Throwable t) {
+                return ReflectHolder.failure(t);
+            }
+        }
+
+        @Override
+        public ReflectHolder<Method> findMethod() {
+            return findTerminal(this::method);
+        }
+
+        @Override
+        public ReflectHolder<Method> findDeclaredMethod() {
+            return findTerminal(this::declaredMethod);
+        }
+
+        @Override
+        public ReflectHolder<Constructor<T>> findConstructor() {
+            return findTerminal(this::constructor);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findVirtualMethodHandle() {
+            return findTerminal(this::virtualMethodHandle);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findStaticMethodHandle() {
+            return findTerminal(this::staticMethodHandle);
+        }
+
+        @Override
+        public ReflectHolder<MethodHandle> findConstructorHandle() {
+            return findTerminal(this::constructorHandle);
+        }
+
         private MethodHandles.Lookup getLookup(Class<T> clazz) {
             if (IMPL_LOOKUP != null) {
                 return IMPL_LOOKUP;
@@ -749,13 +866,4 @@ public class FluentReflect<T> {
         }
     }
 
-    private static class SneakyThrow {
-        private SneakyThrow() {
-        }
-
-        @SuppressWarnings("unchecked")
-        public static <T extends Throwable> void throw0(Throwable t) throws T {
-            throw (T) t;
-        }
-    }
 }
