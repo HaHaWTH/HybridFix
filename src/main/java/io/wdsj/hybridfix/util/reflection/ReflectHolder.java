@@ -7,6 +7,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -59,6 +60,9 @@ public final class ReflectHolder<M, T> {
     @NotNull
     public T get() {
         if (value != null) return value;
+        if (exception == null) {
+            throw new NoSuchElementException("No value or exception present in ReflectHolder");
+        }
         SneakyThrow.throw0(exception);
         return null; // unreachable
     }
@@ -135,16 +139,20 @@ public final class ReflectHolder<M, T> {
      * If this holder is a failure, the failure is propagated.
      * </p>
      *
-     * @param mapper the transformation function
+     * @param mapper the transformation function, which returns the non-null transformed value
      * @param <U> the type of the new value
      * @return a new ReflectHolder containing the mapped value
      */
     public <U> ReflectHolder<M, U> map(ThrowingFunction<? super T, ? extends U> mapper) {
         if (!isPresent()) return failure(exception);
         try {
-            return ReflectHolder.success(mapper.apply(value));
+            U result = mapper.apply(value);
+            if (result == null) {
+                return failure(new NullPointerException("Transformation result was null"));
+            }
+            return success(result);
         } catch (Throwable t) {
-            return ReflectHolder.failure(t);
+            return failure(t);
         }
     }
 
@@ -224,7 +232,7 @@ public final class ReflectHolder<M, T> {
      * Any exception thrown during the task will be caught and passed to the fallback consumer.
      * </p>
      */
-    public void accept(@NotNull ThrowingConsumer<T> task, @NotNull Consumer<Throwable> fallback) {
+    public void accept(@NotNull ThrowingConsumer<@NotNull T> task, @NotNull Consumer<@NotNull Throwable> fallback) {
         try {
             task.accept(get());
         } catch (Throwable t) {

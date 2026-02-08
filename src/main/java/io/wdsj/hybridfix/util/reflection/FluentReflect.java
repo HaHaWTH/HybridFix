@@ -113,6 +113,18 @@ public class FluentReflect<T> {
         return new ReflectStreamImpl<>(null, className, classLoader);
     }
 
+    /**
+     * Wraps an existing value into a ReflectHolder to start a functional chain.
+     *
+     * @param value the value to wrap
+     * @param <T>   the type of the value
+     * @return a successful ReflectHolder containing the value
+     */
+    public static <T> ReflectHolder<Object, T> ofHolder(@NotNull T value) {
+        Objects.requireNonNull(value, "The value must not be null");
+        return ReflectHolder.success(value);
+    }
+
     private static class ReflectStreamImpl<T> implements ReflectStream<T> {
         private final Class<T> targetClass;
         private final String targetClassName;
