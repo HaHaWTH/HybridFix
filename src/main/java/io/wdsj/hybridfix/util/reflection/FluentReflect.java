@@ -154,7 +154,7 @@ public class FluentReflect<T> {
             } else if (returnType instanceof String) {
                 try {
                     return classLoader != null
-                            ? Class.forName((String) returnType, false, classLoader)
+                            ? Class.forName((String) returnType, initialize, classLoader)
                             : Class.forName((String) returnType, initialize, getClass().getClassLoader());
                 } catch (ClassNotFoundException e) {
                     SneakyThrow.throw0(e);
