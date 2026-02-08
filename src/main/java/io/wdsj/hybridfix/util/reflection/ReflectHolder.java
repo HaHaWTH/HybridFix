@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "unchecked"})
@@ -77,13 +76,17 @@ public final class ReflectHolder<M, T> {
         return isPresent() ? value : other.get();
     }
 
-    public ReflectHolder<M, T> ifPresent(Consumer<? super T> action) {
-        if (isPresent()) action.accept(value);
+    public ReflectHolder<M, T> ifPresent(ThrowingConsumer<? super T> action) {
+        try {
+            if (isPresent()) action.accept(value);
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+        }
         return this;
     }
 
-    public <U> ReflectHolder<M, U> map(Function<? super T, ? extends U> mapper) {
-        if (!isPresent()) return ReflectHolder.failure(exception);
+    public <U> ReflectHolder<M, U> map(ThrowingFunction<? super T, ? extends U> mapper) {
+        if (!isPresent()) return failure(exception);
         try {
             return ReflectHolder.success(mapper.apply(value));
         } catch (Throwable t) {
@@ -336,5 +339,10 @@ public final class ReflectHolder<M, T> {
     @FunctionalInterface
     public interface ThrowingConsumer<T> {
         void accept(T t) throws Throwable;
+    }
+
+    @FunctionalInterface
+    public interface ThrowingFunction<T, R> {
+        R apply(T t) throws Throwable;
     }
 }

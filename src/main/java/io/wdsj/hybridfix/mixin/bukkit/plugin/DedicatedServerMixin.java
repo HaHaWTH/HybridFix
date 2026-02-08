@@ -62,8 +62,8 @@ public abstract class DedicatedServerMixin {
                             .name("getConfigManager")
                             .returnType("com.bekvon.bukkit.residence.ConfigManager")
                             .findVirtualMethodHandle()
-                            .accept(handle -> {
-                                Object configManager = handle.invokeWithArguments(residence);
+                            .map(handle -> handle.invokeWithArguments(residence))
+                            .accept(configManager -> {
                                 FluentReflect.fromClass(configManager.getClass(), cl)
                                         .name("UpdateConfigFile")
                                         .returnType(void.class)
