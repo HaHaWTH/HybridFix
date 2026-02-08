@@ -11,6 +11,17 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A container for reflection members or the results of reflection operations.
+ * <p>
+ * This holder allows for safe chaining of reflection tasks.
+ * It tracks both the resulting value (or reflection member) and any potential {@link Throwable}
+ * that occurred during the lookup or execution phase.
+ * </p>
+ *
+ * @param <M> the type of the target class (the owner of the reflection member)
+ * @param <T> the type of the contained value (a {@link Method}, {@link Field}, or an execution result)
+ */
 @SuppressWarnings({"unused", "unchecked"})
 public final class ReflectHolder<M, T> {
     private final T value;
@@ -30,10 +41,21 @@ public final class ReflectHolder<M, T> {
         return new ReflectHolder<>(null, exception);
     }
 
+    /**
+     * Checks if a value is present in this holder.
+     *
+     * @return {@code true} if the holder contains a non-null value, {@code false} otherwise
+     */
     public boolean isPresent() {
         return value != null;
     }
 
+    /**
+     * Retrieves the contained value.
+     *
+     * @return the non-null value
+     * @throws RuntimeException (SneakyThrow) if this holder represents a failure
+     */
     @NotNull
     public T get() {
         if (value != null) return value;
@@ -41,6 +63,16 @@ public final class ReflectHolder<M, T> {
         return null; // unreachable
     }
 
+    /**
+     * Ensures the contained value is of the expected type.
+     * <p>
+     * Type checking is performed only once and cached for performance.
+     * </p>
+     *
+     * @param expectedTypes valid classes the value should be an instance of
+     * @return the contained value cast to {@code T}
+     * @throws IllegalStateException if the type does not match
+     */
     private T ensureType(Class<?>... expectedTypes) {
         if (verified) return value;
 
@@ -68,14 +100,26 @@ public final class ReflectHolder<M, T> {
         return val;
     }
 
+    /**
+     * Returns the contained value if present, otherwise returns {@code other}.
+     */
     public T orElse(T other) {
         return isPresent() ? value : other;
     }
 
+    /**
+     * Returns the contained value if present, otherwise invokes {@code other} and returns its result.
+     */
     public T orElseGet(Supplier<? extends T> other) {
         return isPresent() ? value : other.get();
     }
 
+    /**
+     * Executes the given action if a value is present.
+     *
+     * @param action the task to execute
+     * @return this holder
+     */
     public ReflectHolder<M, T> ifPresent(ThrowingConsumer<? super T> action) {
         try {
             if (isPresent()) action.accept(value);
@@ -85,6 +129,16 @@ public final class ReflectHolder<M, T> {
         return this;
     }
 
+    /**
+     * Transforms the contained value using the provided mapper.
+     * <p>
+     * If this holder is a failure, the failure is propagated.
+     * </p>
+     *
+     * @param mapper the transformation function
+     * @param <U> the type of the new value
+     * @return a new ReflectHolder containing the mapped value
+     */
     public <U> ReflectHolder<M, U> map(ThrowingFunction<? super T, ? extends U> mapper) {
         if (!isPresent()) return failure(exception);
         try {
@@ -94,15 +148,27 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    /**
+     * Retrieves the exception that caused the failure, if any.
+     */
     @Nullable
     public Throwable getException() {
         return exception;
     }
 
+    /**
+     * Converts this holder to a standard {@link Optional}.
+     * <p>
+     * Note: This operation loses the exception information.
+     * </p>
+     */
     public Optional<T> toOptional() {
         return Optional.ofNullable(value);
     }
 
+    /**
+     * Creates a new instance using the contained constructor.
+     */
     @NotNull
     public M newInstance(Object... args) {
         Constructor<M> c = (Constructor<M>) ensureType(Constructor.class);
@@ -114,6 +180,9 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    /**
+     * Invokes the contained method.
+     */
     @NotNull
     public <R> R invoke(@Nullable Object obj, Object... args) {
         Method m = (Method) ensureType(Method.class);
@@ -125,6 +194,9 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    /**
+     * Invokes the contained MethodHandle.
+     */
     @NotNull
     public <R> R invokeHandle(Object... args) {
         MethodHandle mh = (MethodHandle) ensureType(MethodHandle.class);
@@ -132,10 +204,13 @@ public final class ReflectHolder<M, T> {
             return (R) mh.invokeWithArguments(args);
         } catch (Throwable t) {
             SneakyThrow.throw0(t);
-            return null; // never reached
+            return null;
         }
     }
 
+    /**
+     * Executes the consumer if this holder represents a failure.
+     */
     public ReflectHolder<M, T> ifFailure(Consumer<Throwable> consumer) {
         if (!isPresent()) {
             consumer.accept(exception);
@@ -143,6 +218,12 @@ public final class ReflectHolder<M, T> {
         return this;
     }
 
+    /**
+     * Safely accepts a task using the contained value.
+     * <p>
+     * Any exception thrown during the task will be caught and passed to the fallback consumer.
+     * </p>
+     */
     public void accept(@NotNull ThrowingConsumer<T> task, @NotNull Consumer<Throwable> fallback) {
         try {
             task.accept(get());
@@ -151,6 +232,9 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    /**
+     * Retrieves the value of the contained field.
+     */
     @NotNull
     public <V> V get(@Nullable Object obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
@@ -163,6 +247,9 @@ public final class ReflectHolder<M, T> {
         }
     }
 
+    /**
+     * Sets the value of the contained field.
+     */
     public void set(@Nullable Object obj, Object value) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
