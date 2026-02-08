@@ -245,7 +245,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
      */
-    ReflectHolder<Method> findMethod();
+    ReflectHolder<T, Method> findMethod();
 
     /**
      * Retrieves a declared method with the specified name and no parameters, wrapped in a {@link ReflectHolder}.
@@ -254,7 +254,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
      */
-    ReflectHolder<Method> findDeclaredMethod();
+    ReflectHolder<T, Method> findDeclaredMethod();
 
     /**
      * Retrieves a field with the specified name, wrapped in a {@link ReflectHolder}.
@@ -263,7 +263,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Field} or the exception if not found
      */
-    ReflectHolder<Field> findField();
+    ReflectHolder<T, Field> findField();
 
     /**
      * Retrieves a declared field with the specified name, wrapped in a {@link ReflectHolder}.
@@ -272,7 +272,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Field} or the exception if not found
      */
-    ReflectHolder<Field> findDeclaredField();
+    ReflectHolder<T, Field> findDeclaredField();
 
     /**
      * Retrieves a constructor with no parameters, wrapped in a {@link ReflectHolder}.
@@ -281,7 +281,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Constructor} or the exception if not found
      */
-    ReflectHolder<Constructor<T>> findConstructor();
+    ReflectHolder<T, Constructor<T>> findConstructor();
 
     /**
      * Retrieves a {@link MethodHandle} for a virtual method, wrapped in a {@link ReflectHolder}.
@@ -290,7 +290,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findVirtualMethodHandle();
+    ReflectHolder<T, MethodHandle> findVirtualMethodHandle();
 
     /**
      * Retrieves a {@link MethodHandle} for a static method, wrapped in a {@link ReflectHolder}.
@@ -299,7 +299,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findStaticMethodHandle();
+    ReflectHolder<T, MethodHandle> findStaticMethodHandle();
 
     /**
      * Retrieves a {@link MethodHandle} for getting the value of a virtual field, wrapped in a {@link ReflectHolder}.
@@ -308,7 +308,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching getter {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findVirtualFieldGetter();
+    ReflectHolder<T, MethodHandle> findVirtualFieldGetter();
 
     /**
      * Retrieves a {@link MethodHandle} for getting the value of a static field, wrapped in a {@link ReflectHolder}.
@@ -317,7 +317,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching getter {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findStaticFieldGetter();
+    ReflectHolder<T, MethodHandle> findStaticFieldGetter();
 
     /**
      * Retrieves a {@link MethodHandle} for setting the value of a virtual field, wrapped in a {@link ReflectHolder}.
@@ -326,7 +326,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching setter {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findVirtualFieldSetter();
+    ReflectHolder<T, MethodHandle> findVirtualFieldSetter();
 
     /**
      * Retrieves a {@link MethodHandle} for setting the value of a static field, wrapped in a {@link ReflectHolder}.
@@ -335,7 +335,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching setter {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findStaticFieldSetter();
+    ReflectHolder<T, MethodHandle> findStaticFieldSetter();
 
     /**
      * Retrieves a {@link MethodHandle} for a constructor, wrapped in a {@link ReflectHolder}.
@@ -344,7 +344,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findConstructorHandle();
+    ReflectHolder<T, MethodHandle> findConstructorHandle();
 
     /**
      * Retrieves an unsafe field accessor for a virtual field, wrapped in a {@link ReflectHolder}.
@@ -353,7 +353,7 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link UnsafeFieldAccessor} or the exception if not found
      */
-    ReflectHolder<UnsafeFieldAccessor> findVirtualFieldAccessor();
+    ReflectHolder<T, UnsafeFieldAccessor> findVirtualFieldAccessor();
 
     /**
      * Retrieves an unsafe field accessor for a static field, wrapped in a {@link ReflectHolder}.
@@ -362,5 +362,5 @@ public interface ReflectStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link UnsafeFieldAccessor} or the exception if not found
      */
-    ReflectHolder<UnsafeFieldAccessor> findStaticFieldAccessor();
+    ReflectHolder<T, UnsafeFieldAccessor> findStaticFieldAccessor();
 }

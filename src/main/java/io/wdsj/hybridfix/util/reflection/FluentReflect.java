@@ -480,7 +480,7 @@ public class FluentReflect<T> {
             }
         }
 
-        private <R> ReflectHolder<R> findTerminal(Supplier<R> supplier) {
+        private <R> ReflectHolder<T, R> findTerminal(Supplier<R> supplier) {
             try {
                 return ReflectHolder.success(supplier.get());
             } catch (Throwable t) {
@@ -489,72 +489,72 @@ public class FluentReflect<T> {
         }
 
         @Override
-        public ReflectHolder<Method> findMethod() {
+        public ReflectHolder<T, Method> findMethod() {
             return findTerminal(this::method);
         }
 
         @Override
-        public ReflectHolder<Method> findDeclaredMethod() {
+        public ReflectHolder<T, Method> findDeclaredMethod() {
             return findTerminal(this::declaredMethod);
         }
 
         @Override
-        public ReflectHolder<Field> findField() {
+        public ReflectHolder<T, Field> findField() {
             return findTerminal(this::field);
         }
 
         @Override
-        public ReflectHolder<Field> findDeclaredField() {
+        public ReflectHolder<T, Field> findDeclaredField() {
             return findTerminal(this::declaredField);
         }
 
         @Override
-        public ReflectHolder<Constructor<T>> findConstructor() {
+        public ReflectHolder<T, Constructor<T>> findConstructor() {
             return findTerminal(this::constructor);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findVirtualMethodHandle() {
+        public ReflectHolder<T, MethodHandle> findVirtualMethodHandle() {
             return findTerminal(this::virtualMethodHandle);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findStaticMethodHandle() {
+        public ReflectHolder<T, MethodHandle> findStaticMethodHandle() {
             return findTerminal(this::staticMethodHandle);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findVirtualFieldGetter() {
+        public ReflectHolder<T, MethodHandle> findVirtualFieldGetter() {
             return findTerminal(this::virtualFieldGetter);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findStaticFieldGetter() {
+        public ReflectHolder<T, MethodHandle> findStaticFieldGetter() {
             return findTerminal(this::staticFieldGetter);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findVirtualFieldSetter() {
+        public ReflectHolder<T, MethodHandle> findVirtualFieldSetter() {
             return findTerminal(this::virtualFieldSetter);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findStaticFieldSetter() {
+        public ReflectHolder<T, MethodHandle> findStaticFieldSetter() {
             return findTerminal(this::staticFieldSetter);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findConstructorHandle() {
+        public ReflectHolder<T, MethodHandle> findConstructorHandle() {
             return findTerminal(this::constructorHandle);
         }
 
         @Override
-        public ReflectHolder<UnsafeFieldAccessor> findVirtualFieldAccessor() {
+        public ReflectHolder<T, UnsafeFieldAccessor> findVirtualFieldAccessor() {
             return findTerminal(this::virtualFieldAccessor);
         }
 
         @Override
-        public ReflectHolder<UnsafeFieldAccessor> findStaticFieldAccessor() {
+        public ReflectHolder<T, UnsafeFieldAccessor> findStaticFieldAccessor() {
             return findTerminal(this::staticFieldAccessor);
         }
 
@@ -813,7 +813,7 @@ public class FluentReflect<T> {
             }
         }
 
-        private <R> ReflectHolder<R> findTerminal(java.util.function.Supplier<R> supplier) {
+        private <R> ReflectHolder<T, R> findTerminal(Supplier<R> supplier) {
             try {
                 return ReflectHolder.success(supplier.get());
             } catch (Throwable t) {
@@ -822,32 +822,32 @@ public class FluentReflect<T> {
         }
 
         @Override
-        public ReflectHolder<Method> findMethod() {
+        public ReflectHolder<T, Method> findMethod() {
             return findTerminal(this::method);
         }
 
         @Override
-        public ReflectHolder<Method> findDeclaredMethod() {
+        public ReflectHolder<T, Method> findDeclaredMethod() {
             return findTerminal(this::declaredMethod);
         }
 
         @Override
-        public ReflectHolder<Constructor<T>> findConstructor() {
+        public ReflectHolder<T, Constructor<T>> findConstructor() {
             return findTerminal(this::constructor);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findVirtualMethodHandle() {
+        public ReflectHolder<T, MethodHandle> findVirtualMethodHandle() {
             return findTerminal(this::virtualMethodHandle);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findStaticMethodHandle() {
+        public ReflectHolder<T, MethodHandle> findStaticMethodHandle() {
             return findTerminal(this::staticMethodHandle);
         }
 
         @Override
-        public ReflectHolder<MethodHandle> findConstructorHandle() {
+        public ReflectHolder<T, MethodHandle> findConstructorHandle() {
             return findTerminal(this::constructorHandle);
         }
 

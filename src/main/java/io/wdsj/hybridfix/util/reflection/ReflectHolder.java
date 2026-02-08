@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"unused", "unchecked"})
-public class ReflectHolder<T> {
+public final class ReflectHolder<M, T> {
     private final T value;
     private final Throwable exception;
 
@@ -22,11 +22,11 @@ public class ReflectHolder<T> {
         this.exception = exception;
     }
 
-    public static <T> ReflectHolder<T> success(@NotNull T value) {
+    static <M, T> ReflectHolder<M, T> success(@NotNull T value) {
         return new ReflectHolder<>(value, null);
     }
 
-    public static <T> ReflectHolder<T> failure(@NotNull Throwable exception) {
+    static <M, T> ReflectHolder<M, T> failure(@NotNull Throwable exception) {
         return new ReflectHolder<>(null, exception);
     }
 
@@ -34,6 +34,7 @@ public class ReflectHolder<T> {
         return value != null;
     }
 
+    @NotNull
     public T get() {
         if (value != null) return value;
         SneakyThrow.throw0(exception);
@@ -63,17 +64,17 @@ public class ReflectHolder<T> {
         return isPresent() ? value : other.get();
     }
 
-    public ReflectHolder<T> ifPresent(Consumer<? super T> action) {
+    public ReflectHolder<M, T> ifPresent(Consumer<? super T> action) {
         if (isPresent()) action.accept(value);
         return this;
     }
 
-    public <U> ReflectHolder<U> map(Function<? super T, ? extends U> mapper) {
-        if (!isPresent()) return failure(exception);
+    public <U> ReflectHolder<M, U> map(Function<? super T, ? extends U> mapper) {
+        if (!isPresent()) return ReflectHolder.failure(exception);
         try {
-            return success(mapper.apply(value));
+            return ReflectHolder.success(mapper.apply(value));
         } catch (Throwable t) {
-            return failure(t);
+            return ReflectHolder.failure(t);
         }
     }
 
@@ -86,10 +87,10 @@ public class ReflectHolder<T> {
         return Optional.ofNullable(value);
     }
 
-    public <R> R newInstance(Object... args) {
-        Constructor<?> c = (Constructor<?>) ensureType(Constructor.class);
+    public M newInstance(Object... args) {
+        Constructor<M> c = (Constructor<M>) ensureType(Constructor.class);
         try {
-            return (R) c.newInstance(args);
+            return c.newInstance(args);
         } catch (Throwable t) {
             SneakyThrow.throw0(t);
             return null;

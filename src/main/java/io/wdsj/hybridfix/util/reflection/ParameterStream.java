@@ -165,7 +165,7 @@ public interface ParameterStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
      */
-    ReflectHolder<Method> findMethod();
+    ReflectHolder<T, Method> findMethod();
 
     /**
      * Retrieves a declared method with the specified name and no parameters, wrapped in a {@link ReflectHolder}.
@@ -174,7 +174,7 @@ public interface ParameterStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Method} or the exception if not found
      */
-    ReflectHolder<Method> findDeclaredMethod();
+    ReflectHolder<T, Method> findDeclaredMethod();
 
     /**
      * Retrieves a constructor with no parameters, wrapped in a {@link ReflectHolder}.
@@ -183,7 +183,7 @@ public interface ParameterStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link Constructor} or the exception if not found
      */
-    ReflectHolder<Constructor<T>> findConstructor();
+    ReflectHolder<T, Constructor<T>> findConstructor();
 
     /**
      * Retrieves a {@link MethodHandle} for a virtual method, wrapped in a {@link ReflectHolder}.
@@ -192,7 +192,7 @@ public interface ParameterStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findVirtualMethodHandle();
+    ReflectHolder<T, MethodHandle> findVirtualMethodHandle();
 
     /**
      * Retrieves a {@link MethodHandle} for a static method, wrapped in a {@link ReflectHolder}.
@@ -201,7 +201,7 @@ public interface ParameterStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findStaticMethodHandle();
+    ReflectHolder<T, MethodHandle> findStaticMethodHandle();
 
     /**
      * Retrieves a {@link MethodHandle} for a constructor, wrapped in a {@link ReflectHolder}.
@@ -210,5 +210,5 @@ public interface ParameterStream<T> {
      *
      * @return a {@link ReflectHolder} containing the matching {@link MethodHandle} or the exception if not found
      */
-    ReflectHolder<MethodHandle> findConstructorHandle();
+    ReflectHolder<T, MethodHandle> findConstructorHandle();
 }
