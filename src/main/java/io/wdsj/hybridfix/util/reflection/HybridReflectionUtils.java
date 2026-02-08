@@ -24,20 +24,28 @@ public class HybridReflectionUtils {
     private static final Field FD_WORLD_CAPTURE_TREE_GENERATION = FluentReflect.fromClass(World.class)
             .name("captureTreeGeneration")
             .accessible(true)
-            .declaredField();
+            .findDeclaredField()
+            .ifFailure(Throwable::printStackTrace)
+            .orElse(null);
     private static final Field FD_BLOCK_SAPLING_TREE_TYPE = FluentReflect.fromClass(BlockSapling.class)
             .name("treeType")
             .accessible(true)
-            .declaredField();
+            .findDeclaredField()
+            .ifFailure(Throwable::printStackTrace)
+            .orElse(null);
     private static final MethodHandle CTOR_CRAFT_BLOCK_STATE = FluentReflect.fromClass(CraftBlockState.class)
             .param(BlockSnapshot.class)
             .accessible(true)
-            .constructorHandle();
+            .findConstructorHandle()
+            .ifFailure(Throwable::printStackTrace)
+            .orElse(null);
     private static final MethodHandle MH_FIRE_EVENT = FluentReflect.fromClass(SimplePluginManager.class)
             .name("fireEvent")
             .param(Event.class)
             .accessible(true)
-            .virtualMethodHandle();
+            .findVirtualMethodHandle()
+            .ifFailure(Throwable::printStackTrace)
+            .orElse(null);
 
     public static void setCaptureTreeGeneration(World world, boolean value) {
         Preconditions.checkNotNull(FD_WORLD_CAPTURE_TREE_GENERATION);

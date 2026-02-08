@@ -36,23 +36,17 @@ public abstract class AccioSymbolEffectMixin {
      * Descriptor: public int canHold (net.minecraft.item.ItemStack)
      */
     @Unique
-    private static final MethodHandle mh_InventoryPlayer_canHold;
-
-    static {
-        MethodHandle mh;
-        try {
-            mh = FluentReflect.fromClass(InventoryPlayer.class)
-                    .name("canHold")
-                    .param(ItemStack.class)
-                    .accessible(true)
-                    .virtualMethodHandle();
-        } catch (Throwable t) {
-            mh = null;
-            HybridFix.LOGGER.error("Failed to get InventoryPlayer#canHold, server will continue to run, but some features may not work.");
-            HybridFixServer.createServerDump(t);
-        }
-        mh_InventoryPlayer_canHold = mh;
-    }
+    private static final MethodHandle mh_InventoryPlayer_canHold = FluentReflect.fromClass(InventoryPlayer.class)
+            .name("canHold")
+            .param(ItemStack.class)
+            .accessible(true)
+            .returnType(int.class)
+            .findVirtualMethodHandle()
+            .ifFailure(t -> {
+                HybridFix.LOGGER.error("Failed to get InventoryPlayer#canHold, server will continue to run, but some features may not work.");
+                HybridFixServer.createServerDump(t);
+            })
+            .orElse(null);
 
     @WrapOperation(
             method = "onCollision",
