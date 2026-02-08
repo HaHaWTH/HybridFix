@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,6 +32,7 @@ public abstract class SpiderHandlerMixin {
     )
     private boolean wrapSetBlockState(World instance, BlockPos pos, IBlockState state, Operation<Boolean> original, @Local(argsOnly = true) LivingHurtEvent event) {
         assert Blocks.WEB != null;
+        if (!ForgeEventFactory.getMobGriefingEvent(instance, event.getSource().getTrueSource())) return false;
         byte data = (byte) Blocks.WEB.getMetaFromState(state);
         org.bukkit.World bWorld = instance.getWorld();
         org.bukkit.block.Block bBlock = bWorld.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
