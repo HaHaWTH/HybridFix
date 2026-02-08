@@ -11,66 +11,45 @@ import java.util.stream.Stream;
 /**
  * Utility class for getting the caller class.
  */
-@SuppressWarnings({"rawtypes", "unchecked", "unused"})
+@SuppressWarnings({"unchecked", "unused"})
 public class Caller {
     private Caller() {
     }
 
-    private static final Method SUN_REFLECT_REFLECTION_getCallerClass;
-    private static final Method STACK_WALKER_getInstance;
-    private static final Object RETAIN_CLASS_REFERENCE;
-    private static final Class<?> STACK_WALKER_CLASS;
-    private static final Class<?> STACK_FRAME_CLASS;
-    private static final Method STACK_FRAME_GET_DECLARING_CLASS;
-    private static final Method STACK_WALKER_walk;
-
-    static {
-        Method md_getCallerClass = null;
-        try {
-            md_getCallerClass = FluentReflect.fromClass("sun.reflect.Reflection")
-                    .name("getCallerClass")
-                    .accessible(true)
-                    .param(int.class)
-                    .declaredMethod();
-        } catch (Throwable ignored) {
-        }
-        SUN_REFLECT_REFLECTION_getCallerClass = md_getCallerClass;
-
-        Method md_getInstance = null;
-        Object retainClassReference = null;
-        Class<?> stackWalkerClass = null;
-        Class<?> stackFrameClass = null;
-        Method md_getDeclaringClass = null;
-        Method md_walk = null;
-        try {
-            stackWalkerClass = Class.forName("java.lang.StackWalker");
-            md_getInstance = FluentReflect.fromClass("java.lang.StackWalker")
-                    .name("getInstance")
-                    .accessible(true)
-                    .params(Set.class, int.class)
-                    .declaredMethod();
-
-            Class<? extends Enum> stackWalker$Option = (Class<? extends Enum>) Class.forName("java.lang.StackWalker$Option");
-            retainClassReference = Enum.valueOf(stackWalker$Option, "RETAIN_CLASS_REFERENCE");
-            stackFrameClass = Class.forName("java.lang.StackWalker$StackFrame");
-            md_getDeclaringClass = FluentReflect.fromClass(stackFrameClass)
-                    .name("getDeclaringClass")
-                    .accessible(true)
-                    .declaredMethod();
-            md_walk = FluentReflect.fromClass(stackWalkerClass)
-                    .name("walk")
-                    .accessible(true)
-                    .param(Function.class)
-                    .declaredMethod();
-        } catch (Throwable ignored) {
-        }
-        STACK_WALKER_getInstance = md_getInstance;
-        RETAIN_CLASS_REFERENCE = retainClassReference;
-        STACK_WALKER_CLASS = stackWalkerClass;
-        STACK_FRAME_CLASS = stackFrameClass;
-        STACK_FRAME_GET_DECLARING_CLASS = md_getDeclaringClass;
-        STACK_WALKER_walk = md_walk;
-    }
+    private static final Method SUN_REFLECT_REFLECTION_getCallerClass = FluentReflect.fromClass("sun.reflect.Reflection")
+            .name("getCallerClass")
+            .accessible(true)
+            .param(int.class)
+            .findDeclaredMethod()
+            .orElse(null);
+    private static final Method STACK_WALKER_getInstance = FluentReflect.fromClass("java.lang.StackWalker")
+            .name("getInstance")
+            .accessible(true)
+            .params(Set.class, int.class)
+            .findDeclaredMethod()
+            .orElse(null);
+    private static final Object RETAIN_CLASS_REFERENCE = FluentReflect.fromClass("java.lang.StackWalker$Option")
+            .as(Enum.class)
+            .findType()
+            .map(enumClass -> Enum.valueOf(enumClass, "RETAIN_CLASS_REFERENCE"))
+            .orElse(null);
+    private static final Class<?> STACK_WALKER_CLASS = FluentReflect.fromClass("java.lang.StackWalker")
+            .findType()
+            .orElse(null);
+    private static final Class<?> STACK_FRAME_CLASS = FluentReflect.fromClass("java.lang.StackWalker$StackFrame")
+            .findType()
+            .orElse(null);
+    private static final Method STACK_FRAME_GET_DECLARING_CLASS = FluentReflect.fromClass(STACK_FRAME_CLASS)
+            .name("getDeclaringClass")
+            .accessible(true)
+            .findDeclaredMethod()
+            .orElse(null);
+    private static final Method STACK_WALKER_walk = FluentReflect.fromClass(STACK_WALKER_CLASS)
+            .name("walk")
+            .accessible(true)
+            .param(Function.class)
+            .findDeclaredMethod()
+            .orElse(null);
 
     private static final int OVERLOAD_METHOD_DEFAULT_SKIP_FRAMES = 1;
     public static Class<?> getCallerClass() {

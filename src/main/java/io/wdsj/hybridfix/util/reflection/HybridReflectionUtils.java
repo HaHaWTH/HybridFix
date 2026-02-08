@@ -43,6 +43,7 @@ public class HybridReflectionUtils {
             .name("fireEvent")
             .param(Event.class)
             .accessible(true)
+            .returnType(void.class)
             .findVirtualMethodHandle()
             .ifFailure(Throwable::printStackTrace)
             .orElse(null);

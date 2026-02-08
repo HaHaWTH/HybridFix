@@ -7,7 +7,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -62,7 +61,7 @@ public final class ReflectHolder<M, T> {
     public T get() {
         if (isPresent()) return value;
         if (exception == null) {
-            throw new NoSuchElementException("No value or exception present in ReflectHolder");
+            throw new IllegalStateException("No value or exception present in ReflectHolder");
         }
         SneakyThrow.throw0(exception);
         return null; // unreachable
@@ -228,16 +227,16 @@ public final class ReflectHolder<M, T> {
     }
 
     /**
-     * Safely accepts a task using the contained value.
+     * Safely accepts a consumer using the contained value.
      * <p>
-     * Any exception thrown during the task will be caught and passed to the fallback consumer.
+     * Any exception thrown during the task will be caught and passed to the exceptionProcessor.
      * </p>
      */
-    public void accept(@NotNull ThrowingConsumer<T> task, @NotNull Consumer<@NotNull Throwable> fallback) {
+    public void accept(@NotNull ThrowingConsumer<T> consumer, @NotNull Consumer<@NotNull Throwable> exceptionProcessor) {
         try {
-            task.accept(get());
+            consumer.accept(get());
         } catch (Throwable t) {
-            fallback.accept(t);
+            exceptionProcessor.accept(t);
         }
     }
 
