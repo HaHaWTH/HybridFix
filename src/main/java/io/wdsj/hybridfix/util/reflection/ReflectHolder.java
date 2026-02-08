@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 public final class ReflectHolder<M, T> {
     private final T value;
     private final Throwable exception;
+    private boolean verified = false;
 
     private ReflectHolder(T value, Throwable exception) {
         this.value = value;
@@ -42,18 +43,30 @@ public final class ReflectHolder<M, T> {
     }
 
     private T ensureType(Class<?>... expectedTypes) {
+        if (verified) return value;
+
         T val = get();
+        boolean match = false;
         for (Class<?> type : expectedTypes) {
-            if (type.isInstance(val)) return val;
+            if (type.isInstance(val)) {
+                match = true;
+                break;
+            }
         }
-        StringBuilder sb = new StringBuilder("ReflectHolder contains ")
-                .append(val.getClass().getName())
-                .append(", but expected one of: ");
-        for (int i = 0; i < expectedTypes.length; i++) {
-            sb.append(expectedTypes[i].getSimpleName());
-            if (i < expectedTypes.length - 1) sb.append(", ");
+
+        if (!match) {
+            StringBuilder sb = new StringBuilder("ReflectHolder contains ")
+                    .append(val.getClass().getName())
+                    .append(", but expected one of: ");
+            for (int i = 0; i < expectedTypes.length; i++) {
+                sb.append(expectedTypes[i].getSimpleName());
+                if (i < expectedTypes.length - 1) sb.append(", ");
+            }
+            throw new IllegalStateException(sb.toString());
         }
-        throw new IllegalStateException(sb.toString());
+
+        verified = true;
+        return val;
     }
 
     public T orElse(T other) {
@@ -117,6 +130,21 @@ public final class ReflectHolder<M, T> {
         } catch (Throwable t) {
             SneakyThrow.throw0(t);
             return null; // never reached
+        }
+    }
+
+    public ReflectHolder<M, T> ifFailure(Consumer<Throwable> consumer) {
+        if (!isPresent()) {
+            consumer.accept(exception);
+        }
+        return this;
+    }
+
+    public void accept(@NotNull ThrowingConsumer<T> task, @NotNull Consumer<Throwable> fallback) {
+        try {
+            task.accept(get());
+        } catch (Throwable t) {
+            fallback.accept(t);
         }
     }
 
@@ -303,5 +331,10 @@ public final class ReflectHolder<M, T> {
         } catch (Throwable t) {
             SneakyThrow.throw0(t);
         }
+    }
+
+    @FunctionalInterface
+    public interface ThrowingConsumer<T> {
+        void accept(T t) throws Throwable;
     }
 }

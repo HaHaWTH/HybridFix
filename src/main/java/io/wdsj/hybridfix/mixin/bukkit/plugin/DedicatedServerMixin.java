@@ -57,22 +57,23 @@ public abstract class DedicatedServerMixin {
                     adder.addCustomBothClicks();
                     adder.addCustomRightClicks();
                     adder.save();
-                    try {
-                        ClassLoader cl = residence.getClass().getClassLoader();
-                        Object configManager = FluentReflect.fromClass(residence.getClass(), cl)
-                                .name("getConfigManager")
-                                .returnType("com.bekvon.bukkit.residence.ConfigManager")
-                                .findVirtualMethodHandle()
-                                .invokeHandle(residence);
-                        FluentReflect.fromClass(configManager.getClass(), cl)
-                                .name("UpdateConfigFile")
-                                .returnType(void.class)
-                                .findVirtualMethodHandle()
-                                .invokeHandle(configManager);
-                    } catch (Throwable t) {
-                        HybridFix.LOGGER.warn("Unable to reload residence configuration, attempting to use command...", t);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "residence reload config");
-                    }
+                    ClassLoader cl = residence.getClass().getClassLoader();
+                    FluentReflect.fromClass(residence.getClass(), cl)
+                            .name("getConfigManager")
+                            .returnType("com.bekvon.bukkit.residence.ConfigManager")
+                            .findVirtualMethodHandle()
+                            .accept(handle -> {
+                                Object configManager = handle.invokeWithArguments(residence);
+                                FluentReflect.fromClass(configManager.getClass(), cl)
+                                        .name("UpdateConfigFile")
+                                        .returnType(void.class)
+                                        .virtualMethodHandle()
+                                        .invokeWithArguments(configManager);
+                                HybridFix.LOGGER.info("Reloaded residence configuration.");
+                            }, t -> {
+                                HybridFix.LOGGER.warn("Unable to reload residence configuration, attempting to use command...", t);
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "residence reload config");
+                            });
                 }
                 if (Settings.modPatchSettings.patchAppliedEnergistics2SpatialPylon && Loader.isModLoaded("appliedenergistics2")) {
                     ListenerHackery.registerListenerToTargetPlugin(ResHookAE2SpatialPylonListener.class, res);
