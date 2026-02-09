@@ -221,7 +221,7 @@ public class Settings {
 
         @Config.Comment("(Server & Client) Patch fragile parts of Quark ASM (Behavior may slightly change).")
         @Config.RequiresMcRestart
-        public boolean patchQuarkASM = false;
+        public boolean patchQuarkASM = HybridFix.IS_HYBRID_ENV;
 
         @Config.Comment("(Server) Patch taint in thaumcraft spread event.")
         @Config.RequiresMcRestart
