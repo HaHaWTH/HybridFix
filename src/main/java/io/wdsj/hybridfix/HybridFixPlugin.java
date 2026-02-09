@@ -122,7 +122,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private volatile boolean initialized = false;
     synchronized void initModules() {
         if (initialized) return;
-        initialized = true;
         if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
             FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
                     .name("transformers")
@@ -135,5 +134,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                         LOGGER.info("Replaced Quark's EntityTransformer with our own mixins");
                     }, t -> LOGGER.error("Failed to patch Quark ASM", t));
         }
+        initialized = true;
     }
 }
