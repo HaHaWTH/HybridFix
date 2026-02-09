@@ -6,8 +6,8 @@ repositories {
     exclusiveContent {
         forRepository {
             maven {
-                name 'CurseMaven'
-                url 'https://curse.cleanroommc.com'
+                name = 'CurseMaven'
+                url = 'https://curse.cleanroommc.com'
             }
         }
         filter {
@@ -17,8 +17,8 @@ repositories {
     exclusiveContent {
         forRepository {
             maven {
-                name 'Modrinth'
-                url 'https://api.modrinth.com/maven'
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
             }
         }
         filter {

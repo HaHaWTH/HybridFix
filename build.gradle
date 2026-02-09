@@ -49,7 +49,7 @@ base {
     archivesName.set(propertyString('mod_id'))
 }
 
-tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources')
+tasks.decompressDecompiledSources.enabled = !propertyBool('change_minecraft_sources')
 
 java {
     toolchain {
@@ -103,39 +103,39 @@ minecraft {
 
 repositories {
     maven {
-        name 'CleanroomMC Maven'
-        url 'https://maven.cleanroommc.com'
+        name = 'CleanroomMC Maven'
+        url = 'https://maven.cleanroommc.com'
     }
     maven {
-        name 'SpigotMC'
-        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        name = 'SpigotMC'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
     maven {
-        name 'SpigotMC Public'
-        url 'https://hub.spigotmc.org/nexus/content/repositories/public/'
+        name = 'SpigotMC Public'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/public/'
     }
     maven {
-        name 'codemc-nms'
-        url 'https://repo.codemc.io/repository/nms/'
+        name = 'codemc-nms'
+        url = 'https://repo.codemc.io/repository/nms/'
     }
     maven {
-        name 'sonatype'
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
     }
     maven {
-        name 'blamejared'
-        url 'https://maven.blamejared.com/'
+        name = 'blamejared'
+        url = 'https://maven.blamejared.com/'
     }
     maven {
-        name 'ModMaven'
-        url 'https://modmaven.dev/'
+        name = 'ModMaven'
+        url = 'https://modmaven.dev/'
     }
     maven {
-        name "lenni0451"
-        url "https://maven.lenni0451.net/releases"
+        name = 'lenni0451'
+        url ='https://maven.lenni0451.net/releases'
     }
     ivy {
-        url "https://witchery-api.msrandom.net/download/"
+        url = "https://witchery-api.msrandom.net/download/"
         patternLayout {
             artifact "[organisation]/[artifact]-[revision](-[classifier])(.[ext])"
         }
@@ -157,7 +157,7 @@ dependencies {
     compileOnly files("libs/plugin/Citizens-2.0.32-b3124.jar")
 
     // Reflect
-    embed "net.lenni0451:Reflect:1.6.2+curseforge"
+    embed "net.lenni0451:Reflect:1.6.1+curseforge"
 
     // Witchery
     compileOnly rfg.deobf('WitcheryResurrected0.5.2Hotfix4:WitcheryResurrected:1.12.2-0.5.2.4:forge-all')
