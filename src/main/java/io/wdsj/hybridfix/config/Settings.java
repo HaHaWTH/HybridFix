@@ -142,6 +142,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean fixOutdatedServerPingStatus = false;
 
+    @Config.Comment("(Client / Server) Prevent setting NaN health to entities.")
+    @Config.Name("Prevent setting NaN health")
+    @Config.RequiresMcRestart
+    public static boolean preventSettingNaNHealth = true;
+
     @Config.Comment("(Server) Startup MOTD settings. (Only works when 'Fix outdated server' is enabled)")
     @Config.Name("Startup MOTD Settings")
     @Config.RequiresMcRestart

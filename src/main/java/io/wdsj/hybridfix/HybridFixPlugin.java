@@ -62,6 +62,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.hybridfix.base.patch.forge.universal.json", () -> true);
             put("mixins.perf.ai.universal.json", () -> Settings.optimizeEntityAI);
             put("mixins.perf.core.math.json", () -> Settings.optimizeVec3iHashing);
+            put("mixins.fix.health.not_a_number.json", () -> Settings.preventSettingNaNHealth);
         }
     });
 
