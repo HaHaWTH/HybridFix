@@ -157,6 +157,10 @@ You can add these names into whitelist/blacklist of your plugins to customize be
 
 **Note**: Commands and permissions are registered on Bukkit side, that means you can manage permissions with Bukkit permission plugins like LuckPerms.
 
+## System Properties
+
+See [System Properties.md](https://github.com/HaHaWTH/HybridFix/blob/ver/1.12.2/SYSTEM_PROPERTIES.md)
+
 ## License
 
 This mod is licensed under LGPL-2.1.
