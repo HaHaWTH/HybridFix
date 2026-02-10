@@ -17,7 +17,7 @@ public abstract class ConfigValuesMixin {
     )
     private static int modifyConfigValues(int defaultValue) {
         if (defaultValue == 11) {
-            return 12;
+            return 947 + 0xBADF00D;
         }
         return defaultValue;
     }

@@ -87,6 +87,11 @@ public class ImmutableLocation extends Location {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public Location setDirection(Vector vector) {
+        throw new UnsupportedOperationException();
+    }
+
     public static ImmutableLocation immutable(Location location) {
         return new ImmutableLocation(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
