@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.versioning.ArtifactVersion;
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
-import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
 import net.minecraftforge.fml.common.versioning.VersionRange;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import zone.rong.mixinbooter.ILateMixinLoader;
@@ -154,13 +153,12 @@ public class HybridFixLateLoader implements ILateMixinLoader {
         if (modContainer == null) {
             return false;
         }
-        String actualVersionString = modContainer.getVersion();
-        ArtifactVersion actualVersion = new DefaultArtifactVersion(actualVersionString);
-
         try {
+            String actualVersionString = modContainer.getVersion();
+            ArtifactVersion actualVersion = new DefaultArtifactVersion(actualVersionString);
             VersionRange requiredRange = VersionRange.createFromVersionSpec(versionRange);
             return requiredRange.containsVersion(actualVersion);
-        } catch (InvalidVersionSpecificationException e) {
+        } catch (Exception e) {
             HybridFix.LOGGER.error("Invalid version range specification: {}", versionRange, e);
             return false;
         }
