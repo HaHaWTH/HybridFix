@@ -306,6 +306,10 @@ public class Settings {
         @Config.Comment("(Server) Patch Mekanism Digital Miner to prevent mining TEs.")
         @Config.RequiresMcRestart
         public boolean patchMekanismDigitalMiner = true;
+
+        @Config.Comment("(Client / Server) Patch entity control logic of Aether Legacy.")
+        @Config.RequiresMcRestart
+        public boolean patchAetherLegacyEntityControl = true;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")

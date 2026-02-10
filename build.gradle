@@ -159,6 +159,9 @@ dependencies {
     // Reflect
     embed "net.lenni0451:Reflect:1.6.1+curseforge"
 
+    // Aether Legacy
+    compileOnly rfg.deobf("curse.maven:aether-255308:6316434")
+
     // Witchery
     compileOnly rfg.deobf('WitcheryResurrected0.5.2Hotfix4:WitcheryResurrected:1.12.2-0.5.2.4:forge-all')
 
