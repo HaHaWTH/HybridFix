@@ -5,6 +5,8 @@ import com.gildedgames.the_aether.entities.util.EntityMountable;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
+// Reference: https://github.com/The-Aether-Team/The-Aether-Archived/issues/186
+// https://github.com/The-Aether-Team/The-Aether-Archived/commit/099591bc4c9777c2366fd82d1e54ac08163eaa45
 @Mixin(EntitySwet.class)
 public abstract class EntitySwetMixin extends EntityMountable {
     public EntitySwetMixin(World world) {
