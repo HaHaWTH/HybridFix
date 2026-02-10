@@ -67,10 +67,10 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Extensive APIs for mod developers to maintain compatibility with hybrid servers easily.
 - General CraftBukkit performance improvements.
 - Auto deobfuscate plugin stacktraces when Censored ASM is installed for easier debugging.
-- **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](./FORGE_CALL_BUKKIT.md))**
+- **Cross ClassLoader access, make Forge mods can easily interact with Bukkit plugins. ([Details](https://github.com/HaHaWTH/HybridFix/blob/ver/1.12.2/FORGE_CALL_BUKKIT.md))**
 - Bukkit APIs backported from modern version.
 - **Builtin plugin ASM patcher, compatible with your favourite plugins.**
-- **Bukkit plugin mixin support, allows you to inject code into plugins via mods.** *(Experimental)* ([Docs](./PLUGIN_MIXIN_SUPPORT.md))
+- **Bukkit plugin mixin support, allows you to inject code into plugins via mods.** *(Experimental)* ([Docs](https://github.com/HaHaWTH/HybridFix/blob/ver/1.12.2/PLUGIN_MIXIN_SUPPORT.md))
 - Extend Forge's error recovery system (`removeErroringEntities` and `removeErroringTileEntities`), notify server operators when errors occurred.
 - Guard player ticking process, kick player instead of directly crash.
 - Fix Forge bugs that affect server play experience.
