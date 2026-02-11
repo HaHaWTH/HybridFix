@@ -23,7 +23,7 @@ public class ResidenceBlockDataPatcher extends AbstractPluginPatcher {
     private static final String BLOCK_CLASS = "org/bukkit/block/Block";
 
     @Override
-    public byte[] transform(String className, byte[] basicClass) {
+    public byte[] transform(String untransformedName, String className, byte[] basicClass) {
         if (TARGET_CLASS.equals(className)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);

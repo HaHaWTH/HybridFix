@@ -2,6 +2,7 @@ package io.wdsj.hybridfix.asm;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.wdsj.hybridfix.HybridFix;
+import net.minecraft.launchwrapper.IClassTransformer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -15,7 +16,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public interface IBytecodePatcher {
+public interface IBytecodePatcher extends IClassTransformer {
     boolean DEBUG_DUMP_BYTECODE = Boolean.getBoolean("hybridfix.asm.debug.export");
 
     ExecutorService DUMP_EXECUTOR = Executors.newSingleThreadExecutor(
@@ -26,7 +27,7 @@ public interface IBytecodePatcher {
                     .build()
     );
 
-    byte[] transform(String className, byte[] basicClass);
+    byte[] transform(String untransformedName, String className, byte[] basicClass);
 
     default void dump(String className, byte[] classBytes) {
         if (!DEBUG_DUMP_BYTECODE) return;

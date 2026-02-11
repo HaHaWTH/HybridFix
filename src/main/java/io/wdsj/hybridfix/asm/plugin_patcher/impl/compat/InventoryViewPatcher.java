@@ -28,7 +28,7 @@ public class InventoryViewPatcher extends ConfigurablePluginPatcher {
     }
 
     @Override
-    public byte[] transform(String className, byte[] basicClass) {
+    public byte[] transform(String untransformedName, String className, byte[] basicClass) {
         if (!isCommonPackage(className)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);

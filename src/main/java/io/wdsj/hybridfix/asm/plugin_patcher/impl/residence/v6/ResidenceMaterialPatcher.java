@@ -23,7 +23,7 @@ public class ResidenceMaterialPatcher extends AbstractPluginPatcher {
     private static final String TARGET_CLASS_PACKAGE = "com.bekvon.bukkit.residence";
 
     @Override
-    public byte[] transform(String className, byte[] basicClass) {
+    public byte[] transform(String untransformedName, String className, byte[] basicClass) {
         if (className.startsWith(TARGET_CLASS_PACKAGE)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);

@@ -102,7 +102,7 @@ public abstract class PluginClassLoaderMixin extends URLClassLoader {
             for (AbstractPluginPatcher patcher : this.hybridFix$pluginPatchers) {
                 patcher.setPluginClassLoader(this);
                 patcher.setPluginDescriptionFile(description);
-                transformedBytecode = patcher.transform(name, transformedBytecode);
+                transformedBytecode = patcher.transform(name, name, transformedBytecode); // Untransformed name is for mods
                 patcher.setPluginClassLoader(null);
                 patcher.setPluginDescriptionFile(null);
             }
