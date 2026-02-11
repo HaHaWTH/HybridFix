@@ -57,7 +57,7 @@ public final class ReflectHolder<M, T> {
      *
      * @return the value
      */
-    public T get() {
+    public T getValue() {
         if (isPresent()) return value;
         if (exception == null) {
             throw new IllegalStateException("No value or exception present in ReflectHolder");
@@ -79,7 +79,7 @@ public final class ReflectHolder<M, T> {
     private T ensureType(Class<?>... expectedTypes) {
         if (verified) return value;
 
-        T val = get();
+        T val = getValue();
         if (val == null) {
             throw new IllegalStateException("ReflectHolder contains null, but expected a reflection member");
         }
@@ -145,8 +145,8 @@ public final class ReflectHolder<M, T> {
      * @param <U> the type of the new value
      * @return a ReflectHolder containing the mapped value
      */
-    public <U> ReflectHolder<M, U> map(ThrowingFunction<? super T, ? extends U> mapper) {
-        if (!isPresent()) return (ReflectHolder<M, U>) this;
+    public <U> ReflectHolder<Object, U> map(ThrowingFunction<? super T, ? extends U> mapper) {
+        if (!isPresent()) return (ReflectHolder<Object, U>) this;
         try {
             U result = mapper.apply(value);
             return success(result);
@@ -191,7 +191,7 @@ public final class ReflectHolder<M, T> {
      * Invokes the contained method.
      */
     @NotNull
-    public <R> R invoke(@Nullable Object obj, Object... args) {
+    public <R> R invoke(@Nullable M obj, Object... args) {
         Method m = (Method) ensureType(Method.class);
         try {
             return (R) m.invoke(obj, args);
@@ -233,7 +233,7 @@ public final class ReflectHolder<M, T> {
      */
     public void accept(@NotNull ThrowingConsumer<T> consumer, @NotNull Consumer<@NotNull Throwable> exceptionProcessor) {
         try {
-            consumer.accept(get());
+            consumer.accept(getValue());
         } catch (Throwable t) {
             exceptionProcessor.accept(t);
         }
@@ -242,7 +242,7 @@ public final class ReflectHolder<M, T> {
     /**
      * Retrieves the value of the contained field.
      */
-    public <V> V get(@Nullable Object obj) {
+    public <V> V get(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) return (V) ((Field) val).get(obj);
@@ -256,7 +256,7 @@ public final class ReflectHolder<M, T> {
     /**
      * Sets the value of the contained field.
      */
-    public void set(@Nullable Object obj, Object value) {
+    public void set(@Nullable M obj, Object value) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) {
@@ -269,7 +269,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public int getInt(@Nullable Object obj) {
+    public int getInt(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getInt(obj) : ((UnsafeFieldAccessor) val).getInt(obj);
@@ -279,7 +279,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setInt(@Nullable Object obj, int v) {
+    public void setInt(@Nullable M obj, int v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setInt(obj, v);
@@ -289,7 +289,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public long getLong(@Nullable Object obj) {
+    public long getLong(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getLong(obj) : ((UnsafeFieldAccessor) val).getLong(obj);
@@ -299,7 +299,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setLong(@Nullable Object obj, long v) {
+    public void setLong(@Nullable M obj, long v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setLong(obj, v);
@@ -309,7 +309,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public boolean getBoolean(@Nullable Object obj) {
+    public boolean getBoolean(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getBoolean(obj) : ((UnsafeFieldAccessor) val).getBoolean(obj);
@@ -319,7 +319,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setBoolean(@Nullable Object obj, boolean v) {
+    public void setBoolean(@Nullable M obj, boolean v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setBoolean(obj, v);
@@ -329,7 +329,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public double getDouble(@Nullable Object obj) {
+    public double getDouble(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getDouble(obj) : ((UnsafeFieldAccessor) val).getDouble(obj);
@@ -339,7 +339,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setDouble(@Nullable Object obj, double v) {
+    public void setDouble(@Nullable M obj, double v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setDouble(obj, v);
@@ -349,7 +349,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public float getFloat(@Nullable Object obj) {
+    public float getFloat(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getFloat(obj) : ((UnsafeFieldAccessor) val).getFloat(obj);
@@ -359,7 +359,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setFloat(@Nullable Object obj, float v) {
+    public void setFloat(@Nullable M obj, float v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setFloat(obj, v);
@@ -369,7 +369,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public byte getByte(@Nullable Object obj) {
+    public byte getByte(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getByte(obj) : ((UnsafeFieldAccessor) val).getByte(obj);
@@ -379,7 +379,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setByte(@Nullable Object obj, byte v) {
+    public void setByte(@Nullable M obj, byte v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setByte(obj, v);
@@ -389,7 +389,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public short getShort(@Nullable Object obj) {
+    public short getShort(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getShort(obj) : ((UnsafeFieldAccessor) val).getShort(obj);
@@ -399,7 +399,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setShort(@Nullable Object obj, short v) {
+    public void setShort(@Nullable M obj, short v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setShort(obj, v);
@@ -409,7 +409,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public char getChar(@Nullable Object obj) {
+    public char getChar(@Nullable M obj) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             return (val instanceof Field) ? ((Field) val).getChar(obj) : ((UnsafeFieldAccessor) val).getChar(obj);
@@ -419,7 +419,7 @@ public final class ReflectHolder<M, T> {
         }
     }
 
-    public void setChar(@Nullable Object obj, char v) {
+    public void setChar(@Nullable M obj, char v) {
         T val = ensureType(Field.class, UnsafeFieldAccessor.class);
         try {
             if (val instanceof Field) ((Field) val).setChar(obj, v);
