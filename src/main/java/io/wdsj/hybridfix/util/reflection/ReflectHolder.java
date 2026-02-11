@@ -143,10 +143,10 @@ public final class ReflectHolder<M, T> {
      *
      * @param mapper the transformation function, which returns the transformed value
      * @param <U> the type of the new value
-     * @return a new ReflectHolder containing the mapped value
+     * @return a ReflectHolder containing the mapped value
      */
     public <U> ReflectHolder<M, U> map(ThrowingFunction<? super T, ? extends U> mapper) {
-        if (!isPresent()) return failure(exception);
+        if (!isPresent()) return (ReflectHolder<M, U>) this;
         try {
             U result = mapper.apply(value);
             return success(result);
