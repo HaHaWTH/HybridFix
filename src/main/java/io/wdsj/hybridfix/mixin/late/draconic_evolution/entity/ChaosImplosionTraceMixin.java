@@ -8,8 +8,9 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import io.wdsj.hybridfix.util.entity.EntityUtils;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
@@ -23,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -73,9 +73,9 @@ public abstract class ChaosImplosionTraceMixin {
             ),
             remap = false
     )
-    private boolean onAttackEntityFrom(Entity instance, DamageSource source, float amount, Operation<Boolean> original, @Share("entityMap") LocalRef<Map<Entity, Float>> entityMap) {
-        if (entityMap.get() == null) entityMap.set(new Object2FloatOpenHashMap<>());
-        entityMap.get().merge(instance, amount, Float::sum);
+    private boolean onAttackEntityFrom(Entity instance, DamageSource source, float amount, Operation<Boolean> original, @Share("entityMap") LocalRef<Reference2FloatOpenHashMap<Entity>> entityMap) {
+        if (entityMap.get() == null) entityMap.set(new Reference2FloatOpenHashMap<>());
+        entityMap.get().addTo(instance, amount);
         return false;
     }
 
@@ -84,9 +84,9 @@ public abstract class ChaosImplosionTraceMixin {
             at = @At("TAIL"),
             remap = false
     )
-    private void onUpdateProcess(CallbackInfo ci, @Share("blockList") LocalRef<List<BlockPos>> blockList, @Share("entityMap") LocalRef<Map<Entity, Float>> entityMap) {
+    private void onUpdateProcess(CallbackInfo ci, @Share("blockList") LocalRef<List<BlockPos>> blockList, @Share("entityMap") LocalRef<Reference2FloatOpenHashMap<Entity>> entityMap) {
         List<BlockPos> list = blockList.get();
-        Map<Entity, Float> map = entityMap.get();
+        Reference2FloatOpenHashMap<Entity> map = entityMap.get();
         if (list != null) {
             BlockPos start = new BlockPos(this.hybridFix$startX, this.hybridFix$startY, this.hybridFix$startZ);
             EntityPlayerMP dummy = Objects.requireNonNull(HybridFixFakePlayer.get(this.world, start, "[draconicevolution-ChaosImplosionTrace]").get());
@@ -101,9 +101,9 @@ public abstract class ChaosImplosionTraceMixin {
             }
         }
         if (map != null) {
-            for (Map.Entry<Entity, Float> entry : map.entrySet()) {
+            for (Reference2FloatMap.Entry<Entity> entry : map.reference2FloatEntrySet()) {
                 Entity entity = entry.getKey();
-                float amount = entry.getValue();
+                float amount = entry.getFloatValue();
                 entity.attackEntityFrom(ProcessChaosImplosion.chaosImplosion, amount);
             }
         }
