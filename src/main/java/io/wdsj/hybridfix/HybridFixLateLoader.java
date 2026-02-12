@@ -99,7 +99,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             // Tconstruct patches
             put("mixins.tconstruct.network.json", () -> isModLoaded("tconstruct") && Settings.modPatchSettings.patchTConstructNetworkCrash);
             // Aether Legacy patches
-            put("mixins.aether_legacy.universal.entity.json", () -> {
+            put("mixins.aether_legacy.universal.fix.entity.json", () -> {
                 if (isModLoaded("aether_legacy") && Settings.modPatchSettings.patchAetherLegacyEntityControl) {
                     String versionRange = "(1.5.3.3,)";
                     if (isModVersionInRange("aether_legacy", versionRange)) {
@@ -110,6 +110,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
                 }
                 return false;
             });
+            put("mixins.aether_legacy.universal.feature.entity.swet_dissolve.json", () -> isModLoaded("aether_legacy") && Settings.modPatchSettings.aetherLegacySwetsDissolveSlowly);
         }
     });
 

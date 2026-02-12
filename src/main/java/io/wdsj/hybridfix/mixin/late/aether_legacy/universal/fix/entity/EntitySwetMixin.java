@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.late.aether_legacy.universal.entity;
+package io.wdsj.hybridfix.mixin.late.aether_legacy.universal.fix.entity;
 
 import com.gildedgames.the_aether.entities.passive.mountable.EntitySwet;
 import com.gildedgames.the_aether.entities.util.EntityMountable;

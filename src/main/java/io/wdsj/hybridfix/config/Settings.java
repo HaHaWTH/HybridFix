@@ -315,6 +315,10 @@ public class Settings {
         @Config.Comment("(Client / Server) Patch entity control logic of Aether Legacy.")
         @Config.RequiresMcRestart
         public boolean patchAetherLegacyEntityControl = true;
+
+        @Config.Comment("(Client & Server) Make Swets dissolve slowly like modern versions.")
+        @Config.RequiresMcRestart
+        public boolean aetherLegacySwetsDissolveSlowly = false;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
