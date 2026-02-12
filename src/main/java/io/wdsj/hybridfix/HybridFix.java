@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix;
 
-import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.proxy.CommonProxy;
 import io.wdsj.hybridfix.util.Utils;
 import net.lenni0451.reflect.JavaBypass;
@@ -9,14 +8,10 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.network.NetworkCheckHandler;
-import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
-
-@Mod(modid = HybridFix.MOD_ID, name = HybridFix.MOD_NAME, version = HybridFix.VERSION, dependencies = HybridFix.DEPENDENCY)
+@Mod(modid = HybridFix.MOD_ID, name = HybridFix.MOD_NAME, version = HybridFix.VERSION, dependencies = HybridFix.DEPENDENCY, acceptableRemoteVersions = "*")
 public class HybridFix {
     public static final String MOD_ID = Tags.MOD_ID;
     public static final String MOD_NAME = Tags.MOD_NAME;
@@ -54,20 +49,6 @@ public class HybridFix {
     @Mod.EventHandler
     public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
         proxy.onServerAboutToStart(event);
-    }
-
-    @NetworkCheckHandler
-    public boolean isRemoteAcceptable(Map<String, String> mods, Side side) {
-        if (side.isClient()) { // we are on the server
-            String modVersion = mods.get(MOD_ID);
-            if (Settings.modPatchSettings.disableIndustrialForegoingBlackholeControllerRecipe) {
-                return VERSION.equals(modVersion);
-            }
-            if (Settings.modPatchSettings.aetherLegacySwetsDissolveSlowly) {
-                return VERSION.equals(modVersion);
-            }
-        }
-        return true;
     }
 
     // for mods
