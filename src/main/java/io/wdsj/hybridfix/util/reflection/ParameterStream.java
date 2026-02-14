@@ -37,6 +37,7 @@ public interface ParameterStream<T> {
 
     /**
      * Specifies the return type of the method.
+     * If not specified, the return type will be void by default.
      * <p>
      * This is an intermediate operation.
      *
@@ -47,6 +48,7 @@ public interface ParameterStream<T> {
 
     /**
      * Specifies the return type of the method.
+     * If not specified, the return type will be void by default.
      * <p>
      * This is an intermediate operation.
      *

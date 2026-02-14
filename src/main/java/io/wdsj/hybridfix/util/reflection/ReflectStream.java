@@ -38,6 +38,7 @@ public interface ReflectStream<T> {
 
     /**
      * Specifies the return type of the method or the type of the field.
+     * If not specified, the return type will be void by default.
      * <p>
      * This is an intermediate operation.
      *
@@ -48,6 +49,7 @@ public interface ReflectStream<T> {
 
     /**
      * Specifies the return type of the method or the type of the field.
+     * If not specified, the return type will be void by default.
      * <p>
      * This is an intermediate operation.
      *
