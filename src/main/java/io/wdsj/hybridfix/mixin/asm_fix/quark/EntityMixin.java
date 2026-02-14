@@ -21,18 +21,21 @@ public abstract class EntityMixin {
     @Unique
     private static final MethodHandle hybridFix$recordMotionHandle = FluentReflect.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("recordMotion")
+            .returnType(void.class)
             .params(Entity.class)
             .accessible(true)
             .staticMethodHandle();
     @Unique
     private static final MethodHandle hybridFix$applyCollisionLogicHandle = FluentReflect.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("applyCollisionLogic")
+            .returnType(void.class)
             .params(Entity.class, double.class, double.class, double.class, double.class, double.class, double.class)
             .accessible(true)
             .staticMethodHandle();
     @Unique
     private static final MethodHandle hybridFix$onEntityUpdateHandle = FluentReflect.fromClass("vazkii.quark.base.asm.ASMHooks")
             .name("onEntityUpdate")
+            .returnType(void.class)
             .params(Entity.class)
             .accessible(true)
             .staticMethodHandle();
