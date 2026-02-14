@@ -45,58 +45,33 @@ import java.util.stream.Collectors;
 public abstract class ExplosionIC2Mixin extends Explosion {
     // @formatter:off
     @Shadow @Final private Entity exploder;
-
     @Shadow @Final private World worldObj;
-
     @Shadow @Final private float power;
-
     @Shadow @Final private int areaSize;
-
     @Shadow @Final private EntityLivingBase igniter;
-
     @Shadow @Final private int radiationRange;
-
     @Shadow @Final private double maxDistance;
-
     @Shadow private ChunkCache chunkCache;
-
     @Shadow @Final private double explosionX;
-
-    @Shadow
-    private static double getEntityHealth(Entity entity) {
+    @Shadow private static double getEntityHealth(Entity entity) {
         return 0;
     }
-
     @Shadow @Final private List<Object /* ExplosionsIC2.EntityDamage */> entitiesInRange;
-
     @Shadow @Final private double explosionY;
-
     @Shadow @Final private double explosionZ;
-
     @Shadow protected abstract void shootRay(double x, double y, double z, double phi, double theta, double power1, boolean killEntities, BlockPos.MutableBlockPos tmpPos);
-
     @Shadow @Final private DamageSource damageSource;
-
     @Shadow protected abstract boolean isNuclear();
-
     @Shadow @Final private long[][] destroyedBlockPositions;
-
-    @Shadow
-    private static int nextSetIndex(int start, long[] array, int step) {
+    @Shadow private static int nextSetIndex(int start, long[] array, int step) {
         return 0;
     }
-
     @Shadow @Final private int areaX;
-
     @Shadow @Final private int areaZ;
-
-    @Shadow
-    private static int getAtIndex(int index, long[] array, int step) {
+    @Shadow private static int getAtIndex(int index, long[] array, int step) {
         return 0;
     }
-
     @Shadow @Final private float explosionDropRate;
-
     @Shadow @Final private ExplosionIC2.Type type;
 
     public ExplosionIC2Mixin(World worldIn, Entity entityIn, double x, double y, double z, float size, List<BlockPos> affectedPositions) {
