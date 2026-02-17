@@ -322,6 +322,7 @@ public class Settings {
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
+    @Config.Name("Plugin Patcher Settings")
     @Config.RequiresMcRestart
     public static PluginPatcherSettings pluginPatcherSettings = new PluginPatcherSettings();
 
@@ -345,6 +346,25 @@ public class Settings {
         @Config.Comment("(Server) Plugins that should be patched by InventoryView patcher.")
         @Config.RequiresMcRestart
         public String[] patchInventoryViewPlugins = new String[]{"fairy-lib-plugin"};
+    }
+
+    @Config.Comment("(Server / Client) Configuration for HybridFix ASM mod patcher.")
+    @Config.Name("ASM Mod Patcher Settings")
+    @Config.RequiresMcRestart
+    public static ASMModPatcherSettings asmModPatcherSettings = new ASMModPatcherSettings();
+
+    public static class ASMModPatcherSettings {
+        @Config.Comment("(Server) Enable HybridFix ASM mod patcher.")
+        @Config.RequiresMcRestart
+        public boolean enable = false;
+
+        @Config.Comment("(Server) Remove instanceof FakePlayer checks in PlayerEvent.Clone listeners.")
+        @Config.RequiresMcRestart
+        public boolean removeFakePlayerInstOf = true;
+
+        @Config.Comment("(Server) Classes that instanceof FakePlayer removal should target.")
+        @Config.RequiresMcRestart
+        public String[] removeFakePlayerInstOfClasses = new String[]{"com.othermod.core.PlayerEventHandler"};
     }
 
     @Config.Comment("(Server) Configuration for HybridFix built-in bukkit plugin.")

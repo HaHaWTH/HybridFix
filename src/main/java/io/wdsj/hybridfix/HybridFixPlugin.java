@@ -2,6 +2,7 @@ package io.wdsj.hybridfix;
 
 import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.asm.IBytecodePatcher;
+import io.wdsj.hybridfix.asm.mod_patcher.ModPatcherBootstrap;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.reflection.FluentReflect;
@@ -97,7 +98,11 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        List<String> transformers = new ArrayList<>();
+        if (Settings.asmModPatcherSettings.enable) {
+            transformers.add(ModPatcherBootstrap.class.getName());
+        }
+        return transformers.toArray(new String[0]);
     }
 
     @Override

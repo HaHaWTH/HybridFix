@@ -2,7 +2,7 @@ package io.wdsj.hybridfix.asm.plugin_patcher.impl.compat;
 
 import io.wdsj.hybridfix.asm.plugin_patcher.ConfigurablePluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginClassWriter;
-import io.wdsj.hybridfix.asm.annotation.ApplyTo;
+import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import org.bukkit.inventory.InventoryView;
 import org.objectweb.asm.ClassReader;
@@ -18,7 +18,7 @@ import java.util.ListIterator;
 /**
  * Redirect InventoryView {@code INVOKEINTERFACE} calls to {@code INVOKEVIRTUAL}.
  */
-@ApplyTo.Configurable
+@ApplyToPlugin.Configurable
 public class InventoryViewPatcher extends ConfigurablePluginPatcher {
     private static final String INVENTORY_VIEW_OWNER = "org/bukkit/inventory/InventoryView";
 

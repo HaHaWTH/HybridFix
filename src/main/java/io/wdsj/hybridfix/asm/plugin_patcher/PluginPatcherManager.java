@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.asm.plugin_patcher;
 
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.asm.annotation.ApplyTo;
+import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
 import it.unimi.dsi.fastutil.objects.ObjectArrays;
@@ -39,8 +39,8 @@ public enum PluginPatcherManager {
             return false;
         }
         try {
-            ApplyTo applyToPlugin = patcher.getClass().getAnnotation(ApplyTo.class);
-            ApplyTo.Configurable configurable = patcher.getClass().getAnnotation(ApplyTo.Configurable.class);
+            ApplyToPlugin applyToPlugin = patcher.getClass().getAnnotation(ApplyToPlugin.class);
+            ApplyToPlugin.Configurable configurable = patcher.getClass().getAnnotation(ApplyToPlugin.Configurable.class);
             boolean applyToPluginExists = applyToPlugin != null;
             boolean configurableExists = configurable != null;
             if (!applyToPluginExists && !configurableExists) {
@@ -60,7 +60,7 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private boolean registerApplyTo(AbstractPluginPatcher patcher, ApplyTo applyToPlugin) {
+    private boolean registerApplyTo(AbstractPluginPatcher patcher, ApplyToPlugin applyToPlugin) {
         String[] pluginNames = applyToPlugin.value();
         boolean flag = patcher.isEnabled();
         if (flag) {
@@ -72,7 +72,7 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private boolean registerConfigurable(AbstractPluginPatcher patcher, ApplyTo.Configurable ignored) {
+    private boolean registerConfigurable(AbstractPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
         boolean flag = patcher.isEnabled();
         if (!(patcher instanceof ConfigurablePluginPatcher)) {
             HybridFix.LOGGER.error("Plugin patcher {} is not extending ConfigurablePluginPatcher, skipping.", patcher.getClass().getName());

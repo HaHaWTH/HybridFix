@@ -1,16 +1,16 @@
-package io.wdsj.hybridfix.asm.annotation;
+package io.wdsj.hybridfix.asm.plugin_patcher.annotation;
 
 import io.wdsj.hybridfix.asm.plugin_patcher.ConfigurablePluginPatcher;
 
 import java.lang.annotation.*;
 
 /**
- * Specify targets this patch will apply to.
+ * Specify plugins this patch will apply to.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ApplyTo {
+public @interface ApplyToPlugin {
     String[] value();
 
     /**
