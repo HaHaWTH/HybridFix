@@ -35,7 +35,9 @@ public abstract class PlayerListMixin {
     public void afterCopy(EntityPlayerMP player, int dimensionId, boolean conqueredEnd, Location loc, boolean avoidSuffocation, CallbackInfoReturnable<EntityPlayerMP> cir) {
         if (Settings.fixCapabilityReset) {
             FakePlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(player.dimension), player.getPosition(), player).get());
+            dummyPlayer.connection = player.connection;
             dummyPlayer.copyFrom(player, conqueredEnd);
+            dummyPlayer.connection = null;
             //ForgeEventFactory.onPlayerClone(dummyPlayer, player, !conqueredEnd); // Fire another event for the fake player
             CapabilityDispatcher newCapability = ((EntityCapabilityAccessor) (Entity) dummyPlayer).getCapabilities();
             ((EntityCapabilityAccessor) (Entity) player).setCapabilities(newCapability); // Copy the re-gathered CapabilityDispatcher to the actual player
