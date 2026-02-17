@@ -2,7 +2,6 @@ package io.wdsj.hybridfix;
 
 import com.google.common.collect.ImmutableMap;
 import io.wdsj.hybridfix.asm.IBytecodePatcher;
-import io.wdsj.hybridfix.asm.mod_patcher.ModPatcherBootstrap;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.reflection.FluentReflect;
