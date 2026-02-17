@@ -1,6 +1,7 @@
 package io.wdsj.hybridfix;
 
 import com.google.common.collect.ImmutableMap;
+import io.wdsj.hybridfix.asm.IBytecodePatcher;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.reflection.FluentReflect;
@@ -123,6 +124,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private volatile boolean initialized = false;
     synchronized void initModules() {
         if (initialized) return;
+        IBytecodePatcher.clearDebugDumpDirectory();
         if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
             FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
                     .name("transformers")

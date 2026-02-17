@@ -2,7 +2,7 @@ package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
 import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginClassWriter;
-import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
+import io.wdsj.hybridfix.asm.annotation.ApplyTo;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -15,7 +15,7 @@ import java.util.ListIterator;
  * Remove 1.13+ BlockData instructions that causes NoClassDefFoundError.
  * @see <a href="https://github.com/Zrips/Residence/blob/master/src/main/java/com/bekvon/bukkit/residence/listeners/ResidenceBlockListener.java#L124">ResidenceBlockListener</a>
  */
-@ApplyToPlugin("Residence")
+@ApplyTo("Residence")
 public class ResidenceBlockDataPatcher extends AbstractPluginPatcher {
 
     private static final String TARGET_CLASS = "com.bekvon.bukkit.residence.listeners.ResidenceBlockListener";

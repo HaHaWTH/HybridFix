@@ -2,7 +2,7 @@ package io.wdsj.hybridfix.asm.plugin_patcher.impl.residence.v6;
 
 import io.wdsj.hybridfix.asm.plugin_patcher.AbstractPluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginClassWriter;
-import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
+import io.wdsj.hybridfix.asm.annotation.ApplyTo;
 import io.wdsj.hybridfix.config.Settings;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -18,7 +18,7 @@ import java.util.ListIterator;
  * Remaps the SPAWNER material to MOB_SPAWNER.
  * @see <a href="https://github.com/Zrips/Residence/blob/master/src/main/java/com/bekvon/bukkit/residence/listeners/ResidencePlayerListener.java#L1158">ResidncePlayerListener</a>
  */
-@ApplyToPlugin("Residence")
+@ApplyTo("Residence")
 public class ResidenceMaterialPatcher extends AbstractPluginPatcher {
     private static final String TARGET_CLASS_PACKAGE = "com.bekvon.bukkit.residence";
 

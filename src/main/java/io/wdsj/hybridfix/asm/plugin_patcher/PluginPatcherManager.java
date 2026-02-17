@@ -1,30 +1,20 @@
 package io.wdsj.hybridfix.asm.plugin_patcher;
 
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.asm.IBytecodePatcher;
-import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
+import io.wdsj.hybridfix.asm.annotation.ApplyTo;
 import io.wdsj.hybridfix.config.Settings;
+import io.wdsj.hybridfix.util.Utils;
 import it.unimi.dsi.fastutil.objects.ObjectArrays;
-import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 public enum PluginPatcherManager {
     INSTANCE;
     private final Map<String, List<AbstractPluginPatcher>> pluginPatchers = new LinkedHashMap<>();
 
     PluginPatcherManager() {
-        IBytecodePatcher.clearDebugDumpDirectory();
         String patcherPackage = PluginPatcherManager.class.getPackage().getName() + ".impl";
-        Class<?>[] classes = getClasses(patcherPackage).toArray(new Class[0]);
+        Class<?>[] classes = Utils.getClasses(patcherPackage).toArray(new Class[0]);
         ObjectArrays.quickSort(classes, Comparator.comparing(Class::getSimpleName));
         for (Class<?> clazz : classes) {
             try {
@@ -49,8 +39,8 @@ public enum PluginPatcherManager {
             return false;
         }
         try {
-            ApplyToPlugin applyToPlugin = patcher.getClass().getAnnotation(ApplyToPlugin.class);
-            ApplyToPlugin.Configurable configurable = patcher.getClass().getAnnotation(ApplyToPlugin.Configurable.class);
+            ApplyTo applyToPlugin = patcher.getClass().getAnnotation(ApplyTo.class);
+            ApplyTo.Configurable configurable = patcher.getClass().getAnnotation(ApplyTo.Configurable.class);
             boolean applyToPluginExists = applyToPlugin != null;
             boolean configurableExists = configurable != null;
             if (!applyToPluginExists && !configurableExists) {
@@ -70,7 +60,7 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private boolean registerApplyTo(AbstractPluginPatcher patcher, ApplyToPlugin applyToPlugin) {
+    private boolean registerApplyTo(AbstractPluginPatcher patcher, ApplyTo applyToPlugin) {
         String[] pluginNames = applyToPlugin.value();
         boolean flag = patcher.isEnabled();
         if (flag) {
@@ -82,7 +72,7 @@ public enum PluginPatcherManager {
         return false;
     }
 
-    private boolean registerConfigurable(AbstractPluginPatcher patcher, ApplyToPlugin.Configurable ignored) {
+    private boolean registerConfigurable(AbstractPluginPatcher patcher, ApplyTo.Configurable ignored) {
         boolean flag = patcher.isEnabled();
         if (!(patcher instanceof ConfigurablePluginPatcher)) {
             HybridFix.LOGGER.error("Plugin patcher {} is not extending ConfigurablePluginPatcher, skipping.", patcher.getClass().getName());
@@ -106,89 +96,5 @@ public enum PluginPatcherManager {
             currentList.add(patcher);
             return currentList;
         });
-    }
-
-    // Adapted from Winds-Studio/Leaf, licensed under MIT
-    public static @NotNull Set<Class<?>> getClasses(String pack) {
-        Set<Class<?>> classes = new LinkedHashSet<>();
-        String packageDirName = pack.replace('.', '/');
-        Enumeration<URL> dirs;
-
-        try {
-            dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
-            while (dirs.hasMoreElements()) {
-                URL url = dirs.nextElement();
-                String protocol = url.getProtocol();
-                if ("file".equals(protocol)) {
-                    String filePath = URLDecoder.decode(url.getFile(), StandardCharsets.UTF_8.name());
-                    findClassesInPackageByFile(pack, filePath, classes);
-                } else if ("jar".equals(protocol)) {
-                    JarFile jar;
-                    try {
-                        jar = ((JarURLConnection) url.openConnection()).getJarFile();
-                        Enumeration<JarEntry> entries = jar.entries();
-                        findClassesInPackageByJar(pack, entries, packageDirName, classes);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return classes;
-    }
-
-    private static void findClassesInPackageByFile(String packageName, String packagePath, Set<Class<?>> classes) {
-        File dir = new File(packagePath);
-
-        if (!dir.exists() || !dir.isDirectory()) {
-            return;
-        }
-
-        File[] dirFiles = dir.listFiles((file) -> file.isDirectory() || file.getName().endsWith(".class"));
-        if (dirFiles != null) {
-            for (File file : dirFiles) {
-                if (file.isDirectory()) {
-                    findClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), classes);
-                } else {
-                    String className = file.getName().substring(0, file.getName().length() - 6);
-                    try {
-                        classes.add(Class.forName(packageName + '.' + className));
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void findClassesInPackageByJar(String packageName, Enumeration<JarEntry> entries, String packageDirName, Set<Class<?>> classes) {
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            String name = entry.getName();
-
-            if (name.charAt(0) == '/') {
-                name = name.substring(1);
-            }
-
-            if (name.startsWith(packageDirName)) {
-                int idx = name.lastIndexOf('/');
-
-                if (idx != -1) {
-                    packageName = name.substring(0, idx).replace('/', '.');
-                }
-
-                if (name.endsWith(".class") && !entry.isDirectory()) {
-                    String className = name.substring(packageName.length() + 1, name.length() - 6);
-                    try {
-                        classes.add(Class.forName(packageName + '.' + className));
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
     }
 }
