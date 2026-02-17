@@ -100,7 +100,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public String[] getASMTransformerClass() {
         List<String> transformers = new ArrayList<>();
         if (Settings.asmModPatcherSettings.enable) {
-            transformers.add(ModPatcherBootstrap.class.getName());
+            transformers.add("io.wdsj.hybridfix.asm.mod_patcher.ModPatcherBootstrap");
         }
         return transformers.toArray(new String[0]);
     }
