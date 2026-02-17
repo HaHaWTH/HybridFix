@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.asm.plugin_patcher.impl.compat;
 
+import io.wdsj.hybridfix.asm.IBytecodePatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.ConfigurablePluginPatcher;
 import io.wdsj.hybridfix.asm.plugin_patcher.PluginClassWriter;
 import io.wdsj.hybridfix.asm.plugin_patcher.annotation.ApplyToPlugin;
@@ -29,7 +30,7 @@ public class InventoryViewPatcher extends ConfigurablePluginPatcher {
 
     @Override
     public byte[] transform(String untransformedName, String className, byte[] basicClass) {
-        if (!isCommonPackage(className)) {
+        if (!IBytecodePatcher.isCommonPackage(className)) {
             ClassNode classNode = new ClassNode();
             ClassReader classReader = new ClassReader(basicClass);
             classReader.accept(classNode, 0);

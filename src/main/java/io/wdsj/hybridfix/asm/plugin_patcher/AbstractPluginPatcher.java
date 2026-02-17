@@ -21,8 +21,4 @@ public abstract class AbstractPluginPatcher implements IBytecodePatcher {
     public PluginDescriptionFile getPluginDescriptionFile() {
         return this.pdf;
     }
-
-    protected static boolean isCommonPackage(String packageName) {
-        return packageName.contains("fastutil") || packageName.contains("org.apache") || packageName.contains("javax");
-    }
 }

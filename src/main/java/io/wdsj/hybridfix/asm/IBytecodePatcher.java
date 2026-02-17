@@ -89,4 +89,8 @@ public interface IBytecodePatcher {
             HybridFix.LOGGER.error("Failed to clear debug dump directory", e);
         }
     }
+
+    static boolean isCommonPackage(String packageName) {
+        return packageName.contains("fastutil") || packageName.contains("org.apache") || packageName.contains("javax");
+    }
 }
