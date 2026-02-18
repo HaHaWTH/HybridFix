@@ -346,6 +346,14 @@ public class Settings {
         @Config.Comment("(Server) Plugins that should be patched by InventoryView patcher.")
         @Config.RequiresMcRestart
         public String[] patchInventoryViewPlugins = new String[]{"fairy-lib-plugin"};
+
+        @Config.Comment("(Server) Enable HybridFix ASM plugin patcher for MapPalette.")
+        @Config.RequiresMcRestart
+        public boolean enableMapPalettePatch = true;
+
+        @Config.Comment("(Server) Plugins that should be patched by MapPalette patcher.")
+        @Config.RequiresMcRestart
+        public String[] mapPalettePatchPlugins = new String[]{};
     }
 
     @Config.Comment("(Server / Client) Configuration for HybridFix ASM mod patcher.")
