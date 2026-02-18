@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +31,6 @@ import org.eclipse.aether.resolution.DependencyResult;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transfer.AbstractTransferListener;
-import org.eclipse.aether.transfer.TransferCancelledException;
 import org.eclipse.aether.transfer.TransferEvent;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +58,7 @@ public class LibraryLoader {
         session.setLocalRepositoryManager(repository.newLocalRepositoryManager(session, new LocalRepository("libraries")));
         session.setTransferListener(new AbstractTransferListener() {
             @Override
-            public void transferStarted(@NotNull TransferEvent event) throws TransferCancelledException {
+            public void transferStarted(@NotNull TransferEvent event) {
                 logger.log(Level.INFO, "Downloading {0}", event.getResource().getRepositoryUrl() + event.getResource().getResourceName());
             }
         });
@@ -70,7 +69,7 @@ public class LibraryLoader {
         session.setSystemProperties(System.getProperties());
         session.setReadOnly();
 
-        this.repositories = repository.newResolutionRepositories(session, Arrays.asList(new RemoteRepository.Builder("central", "default", System.getProperty(REPOSITORY_PROPERTY, "https://repo.maven.apache.org/maven2")).build()));
+        this.repositories = repository.newResolutionRepositories(session, Collections.singletonList(new RemoteRepository.Builder("central", "default", System.getProperty(REPOSITORY_PROPERTY, "https://repo.maven.apache.org/maven2")).build()));
     }
 
     @Nullable
@@ -111,8 +110,6 @@ public class LibraryLoader {
             logger.log(Level.INFO, "[{0}] Loaded library {1}", new Object[]{desc.getName(), file});
         }
 
-        URLClassLoader loader = new URLClassLoader(jarFiles.toArray(new URL[jarFiles.size()]), getClass().getClassLoader());
-
-        return loader;
+        return new URLClassLoader(jarFiles.toArray(new URL[0]), getClass().getClassLoader());
     }
 }
