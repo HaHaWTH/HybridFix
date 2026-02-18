@@ -22,6 +22,10 @@ import static io.wdsj.hybridfix.HybridFix.*;
 public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     public static final boolean isClient = FMLLaunchHandler.side().isClient();
 
+    static {
+        IBytecodePatcher.clearDebugDumpDirectory();
+    }
+
     private static final Map<String, Supplier<Boolean>> serversideMixinConfigs = ImmutableMap.copyOf(new LinkedHashMap<String, Supplier<Boolean>>()
     {
         {
@@ -128,7 +132,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private volatile boolean initialized = false;
     synchronized void initModules() {
         if (initialized) return;
-        IBytecodePatcher.clearDebugDumpDirectory();
         if (Settings.modPatchSettings.patchQuarkASM && Utils.isClassExists("vazkii.quark.base.asm.ClassTransformer")) {
             FluentReflect.fromClass("vazkii.quark.base.asm.ClassTransformer")
                     .name("transformers")
