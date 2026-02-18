@@ -158,6 +158,10 @@ dependencies {
 
     // Reflect
     embed "net.lenni0451:Reflect:1.6.1+curseforge"
+    // Spigot LibraryLoader dependencies
+    embed "org.apache.maven:maven-resolver-provider:3.9.6"
+    embed "org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18"
+    embed "org.apache.maven.resolver:maven-resolver-transport-http:1.9.18"
 
     // Aether Legacy
     compileOnly rfg.deobf("curse.maven:aether-255308:6316434")
@@ -479,6 +483,7 @@ tasks.named('shadowJar', ShadowJar).configure {
     configurations = [project.configurations.embed]
 
     relocate 'net.lenni0451.reflect', "${propertyString('root_package')}.${propertyString('mod_id')}.libs.reflect"
+    relocate 'org.apache.maven', "${propertyString('root_package')}.${propertyString('mod_id')}.libs.apache.maven"
 
     mergeServiceFiles()
 

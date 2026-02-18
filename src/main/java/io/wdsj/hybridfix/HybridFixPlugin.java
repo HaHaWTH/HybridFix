@@ -57,6 +57,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                 put("mixins.fix.activation_range.json", () -> Settings.fixEntityActivationRange);
                 put("mixins.fix.error_recovery.json", () -> Settings.errorRecoverySettings.enable);
                 put("mixins.fix.forge.ping_status.json", () -> Settings.fixOutdatedServerPingStatus);
+                put("mixins.api.library_loader.json", () -> true);
             }
         }
     });
