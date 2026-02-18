@@ -11,6 +11,9 @@
     "block.CraftBlockEntityStateMixin",
     "block.CraftBlockMixin",
     "entity.CraftPlayerMixin",
-    "event.block.ActionMixin"
+    "event.block.ActionMixin",
+    "BukkitMixin",
+    "CraftServerMixin",
+    "ServerMixin"
   ]
 }
