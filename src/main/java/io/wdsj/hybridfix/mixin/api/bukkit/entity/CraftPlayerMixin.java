@@ -29,6 +29,7 @@ public abstract class CraftPlayerMixin {
     @Shadow public abstract EntityPlayerMP getHandle();
     @Unique
     private final Player.Spigot hybridFix$fakePlayerSpigot = new Player.Spigot() {
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
         private final Set<Player> EMPTY_SET = new HashSet<>(0);
         public InetSocketAddress getRawAddress() {
             return null;

@@ -14,6 +14,7 @@
     "event.block.ActionMixin",
     "BukkitMixin",
     "CraftServerMixin",
-    "ServerMixin"
+    "ServerMixin",
+    "event.EventMixin"
   ]
 }
