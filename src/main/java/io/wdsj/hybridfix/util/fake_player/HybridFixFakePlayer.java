@@ -170,8 +170,8 @@ public class HybridFixFakePlayer {
         }
     }
 
-    public static class DummyPlayerFactory {
-        public static HybridFixDummyPlayer get(WorldServer world, GameProfile username) {
+    private static class DummyPlayerFactory {
+        private static HybridFixDummyPlayer get(WorldServer world, GameProfile username) {
             return new HybridFixDummyPlayer(world, username);
         }
     }
