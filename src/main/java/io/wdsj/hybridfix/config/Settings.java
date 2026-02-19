@@ -366,7 +366,7 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean enable = false;
 
-        @Config.Comment("(Server) Remove instanceof FakePlayer checks in PlayerEvent.Clone listeners.")
+        @Config.Comment("(Server) Remove instanceof FakePlayer and HybridFixDummyPlayer checks in PlayerEvent.Clone listeners.")
         @Config.RequiresMcRestart
         public boolean removeFakePlayerInstOf = true;
 
