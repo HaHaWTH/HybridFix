@@ -18,7 +18,6 @@ import java.util.ListIterator;
 public class FakePlayerInstOfPatcher extends ConfigurableModPatcher {
     private static final String EVENT_DESC = "(Lnet/minecraftforge/event/entity/player/PlayerEvent$Clone;)V";
     private static final String FAKE_PLAYER_INTERNAL_NAME = "net/minecraftforge/common/util/FakePlayer";
-    private static final String DUMMY_PLAYER_INTERNAL_NAME = "io/wdsj/hybridfix/util/HybridFixFakePlayer$HybridFixDummyPlayer";
     @Override
     public byte[] transform(String untransformedName, String className, byte[] basicClass) {
         ClassNode cn = new ClassNode();
@@ -33,7 +32,7 @@ public class FakePlayerInstOfPatcher extends ConfigurableModPatcher {
                     if (insn.getOpcode() == Opcodes.INSTANCEOF) {
                         TypeInsnNode tin = (TypeInsnNode) insn;
                         String desc = tin.desc;
-                        if (desc.equals(FAKE_PLAYER_INTERNAL_NAME) || desc.equals(DUMMY_PLAYER_INTERNAL_NAME)) {
+                        if (desc.equals(FAKE_PLAYER_INTERNAL_NAME)) {
                             InsnList list = new InsnList();
                             list.add(new InsnNode(Opcodes.POP));
                             list.add(new InsnNode(Opcodes.ICONST_0));

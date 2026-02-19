@@ -24,6 +24,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +59,11 @@ public class HybridFixFakePlayer {
         return new WeakReference<>(player);
     }
 
+    /**
+     * Extremely unstable, internal use only.
+     * This fake player instance must not trigger ANY Bukkit events.
+     */
+    @ApiStatus.Internal
     public static @NotNull WeakReference<@Nullable HybridFixDummyPlayer> getPlayerCopy(World world, BlockPos pos, EntityPlayerMP originalPlayer) {
         GameProfile profile = originalPlayer.getGameProfile();
         HybridFixDummyPlayer fakePlayer = DummyPlayerFactory.get((WorldServer) world, new GameProfile(profile.getId(), profile.getName()));
