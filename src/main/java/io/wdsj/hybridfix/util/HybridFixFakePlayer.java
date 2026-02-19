@@ -156,6 +156,11 @@ public class HybridFixFakePlayer {
         @Override
         public void loadResourcePack(@NotNull String url, @NotNull String hash) {
         }
+
+        @Override
+        public @NotNull String getPlayerIP() {
+            return "1.1.1.1"; // Thank you, Cloudflare
+        }
     }
 
     public static class DummyPlayerFactory {
