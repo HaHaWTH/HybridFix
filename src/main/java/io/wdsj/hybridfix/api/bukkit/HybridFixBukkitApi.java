@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.api.bukkit;
 
+import io.wdsj.hybridfix.util.HybridFixFakePlayer;
 import io.wdsj.hybridfix.util.SneakyThrow;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.JsonToNBT;
@@ -8,7 +9,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -37,7 +37,8 @@ public class HybridFixBukkitApi {
      * @return {@code true} if the player is a fake player instance, {@code false} otherwise.
      */
     public boolean isFakePlayer(Player player) {
-        return ((CraftEntity) player).getHandle() instanceof FakePlayer;
+        EntityPlayerMP serverPlayer = ((CraftPlayer) player).getHandle();
+        return serverPlayer instanceof FakePlayer || serverPlayer instanceof HybridFixFakePlayer.HybridFixDummyPlayer;
     }
 
     /**
