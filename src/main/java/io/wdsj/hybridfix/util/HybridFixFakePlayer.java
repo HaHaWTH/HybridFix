@@ -4,8 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.authlib.GameProfile;
-import io.wdsj.hybridfix.HybridFix;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,11 +22,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.ITeleporter;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +38,6 @@ import java.util.concurrent.TimeUnit;
  *
  * @apiNote To bypass server FakePlayer checks, use {@link io.wdsj.hybridfix.util.reflection.HybridReflectionUtils#callEventDirect(Event)}
  */
-@Mod.EventBusSubscriber(modid = HybridFix.MOD_ID)
 public class HybridFixFakePlayer {
     private HybridFixFakePlayer() {
     }
@@ -71,6 +64,7 @@ public class HybridFixFakePlayer {
         fakePlayer.posX = pos.getX();
         fakePlayer.posY = pos.getY();
         fakePlayer.posZ = pos.getZ();
+        new EmptyNetHandler(fakePlayer);
         return new WeakReference<>(fakePlayer);
     }
 
@@ -165,26 +159,8 @@ public class HybridFixFakePlayer {
     }
 
     public static class DummyPlayerFactory {
-        private static final Object2ObjectOpenHashMap<GameProfile, HybridFixDummyPlayer> fakePlayers = new Object2ObjectOpenHashMap<>();
-
-        /**
-         * Get a fake player with a given username,
-         * Mods should either hold weak references to the return value, or listen for a
-         * WorldEvent.Unload and kill all references to prevent worlds staying in memory.
-         */
         public static HybridFixDummyPlayer get(WorldServer world, GameProfile username) {
-            return fakePlayers.computeIfAbsent(username, k -> new HybridFixDummyPlayer(world, username));
-        }
-
-        private static void unloadWorld(WorldServer world) {
-            fakePlayers.object2ObjectEntrySet().removeIf(entry -> entry.getValue().world == world);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onDimensionUnload(WorldEvent.Unload event) {
-        if (event.getWorld() instanceof WorldServer) {
-            DummyPlayerFactory.unloadWorld((WorldServer) event.getWorld());
+            return new HybridFixDummyPlayer(world, username);
         }
     }
 

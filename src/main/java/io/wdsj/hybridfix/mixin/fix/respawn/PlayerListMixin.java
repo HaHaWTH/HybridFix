@@ -2,11 +2,8 @@ package io.wdsj.hybridfix.mixin.fix.respawn;
 
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.HybridFixFakePlayer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
-import net.minecraftforge.common.capabilities.CapabilityDispatcher;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Location;
 import org.spongepowered.asm.mixin.Dynamic;
@@ -35,12 +32,9 @@ public abstract class PlayerListMixin {
     public void afterCopy(EntityPlayerMP player, int dimensionId, boolean conqueredEnd, Location loc, boolean avoidSuffocation, CallbackInfoReturnable<EntityPlayerMP> cir) {
         if (Settings.fixCapabilityReset) {
             HybridFixFakePlayer.HybridFixDummyPlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(player.dimension), player.getPosition(), player).get());
-            dummyPlayer.connection = player.connection;
             dummyPlayer.copyFrom(player, conqueredEnd);
-            dummyPlayer.connection = null;
             //ForgeEventFactory.onPlayerClone(dummyPlayer, player, !conqueredEnd); // Fire another event for the fake player
-            CapabilityDispatcher newCapability = ((EntityCapabilityAccessor) (Entity) dummyPlayer).getCapabilities();
-            ((EntityCapabilityAccessor) (Entity) player).setCapabilities(newCapability); // Copy the re-gathered CapabilityDispatcher to the actual player
+            player.copyFrom(dummyPlayer, conqueredEnd);
         }
     }
 }
