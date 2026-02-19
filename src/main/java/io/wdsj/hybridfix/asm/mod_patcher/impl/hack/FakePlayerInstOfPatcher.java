@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.*;
 import java.util.ListIterator;
 
 /**
- * Removes instanceof {@link FakePlayer} and {@link io.wdsj.hybridfix.util.HybridFixFakePlayer.HybridFixDummyPlayer} check from PlayerEvent.Clone event handlers.
+ * Removes instanceof {@link FakePlayer} check from PlayerEvent.Clone event handlers.
  */
 @ApplyToMod.Configurable
 public class FakePlayerInstOfPatcher extends ConfigurableModPatcher {

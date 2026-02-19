@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.util;
+package io.wdsj.hybridfix.util.fake_player;
 
 import io.netty.channel.*;
 import net.minecraft.network.*;

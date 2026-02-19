@@ -1,9 +1,10 @@
-package io.wdsj.hybridfix.util;
+package io.wdsj.hybridfix.util.fake_player;
 
 import com.google.common.base.Charsets;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.authlib.GameProfile;
+import io.wdsj.hybridfix.util.SneakyThrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

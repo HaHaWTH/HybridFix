@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.util;
+package io.wdsj.hybridfix.util.fake_player;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.EnumPacketDirection;

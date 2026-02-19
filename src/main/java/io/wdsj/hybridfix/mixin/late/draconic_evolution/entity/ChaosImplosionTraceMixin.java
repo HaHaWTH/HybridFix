@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.util.HybridFixFakePlayer;
+import io.wdsj.hybridfix.util.fake_player.HybridFixFakePlayer;
 import io.wdsj.hybridfix.util.entity.EntityUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2FloatMap;

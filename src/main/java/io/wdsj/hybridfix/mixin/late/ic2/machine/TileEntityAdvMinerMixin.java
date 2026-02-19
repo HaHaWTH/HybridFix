@@ -2,7 +2,7 @@ package io.wdsj.hybridfix.mixin.late.ic2.machine;
 
 import ic2.core.block.machine.tileentity.TileEntityAdvMiner;
 import ic2.core.block.machine.tileentity.TileEntityElectricMachine;
-import io.wdsj.hybridfix.util.HybridFixFakePlayer;
+import io.wdsj.hybridfix.util.fake_player.HybridFixFakePlayer;
 import io.wdsj.hybridfix.util.entity.EntityUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

@@ -1,6 +1,6 @@
 package io.wdsj.hybridfix.api.bukkit;
 
-import io.wdsj.hybridfix.util.HybridFixFakePlayer;
+import io.wdsj.hybridfix.util.fake_player.HybridFixFakePlayer;
 import io.wdsj.hybridfix.util.SneakyThrow;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.JsonToNBT;

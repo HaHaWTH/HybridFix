@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.mixin.fix.respawn;
 
 import io.wdsj.hybridfix.config.Settings;
-import io.wdsj.hybridfix.util.HybridFixFakePlayer;
+import io.wdsj.hybridfix.util.fake_player.HybridFixFakePlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.fml.common.FMLCommonHandler;

@@ -3,7 +3,7 @@ package io.wdsj.hybridfix.mixin.late.botania.block;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import io.wdsj.hybridfix.util.HybridFixFakePlayer;
+import io.wdsj.hybridfix.util.fake_player.HybridFixFakePlayer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
