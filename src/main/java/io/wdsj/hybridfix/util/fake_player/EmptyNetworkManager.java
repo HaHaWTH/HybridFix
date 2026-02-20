@@ -12,6 +12,10 @@ public class EmptyNetworkManager extends NetworkManager {
         this.channel = new EmptyChannel(null);
         this.socketAddress = new SocketAddress() {
             private static final long serialVersionUID = 8207338859896320185L;
+            @Override
+            public String toString() {
+                return "/1.1.1.1:25565";
+            }
         };
     }
 
