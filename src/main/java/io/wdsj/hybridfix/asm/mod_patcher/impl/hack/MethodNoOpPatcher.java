@@ -96,7 +96,7 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
                 il.add(new InsnNode(Opcodes.RETURN));
                 break;
             case Type.BOOLEAN:
-                boolean boolVal = target.value != null && target.value.equalsIgnoreCase("true");
+                boolean boolVal = target.value != null && (target.value.equalsIgnoreCase("true") || target.value.equals("1"));
                 il.add(new InsnNode(boolVal ? Opcodes.ICONST_1 : Opcodes.ICONST_0));
                 il.add(new InsnNode(Opcodes.IRETURN));
                 break;
