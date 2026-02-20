@@ -20,6 +20,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 
 - Replace brittle asm transformer patches of Quark with mixins
 - Fix Swet AI control of Aether Legacy
+- Fix unsafe network calls of Aether Legacy
 
 #### Client
 
