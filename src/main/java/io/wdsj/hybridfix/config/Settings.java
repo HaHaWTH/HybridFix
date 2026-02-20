@@ -319,6 +319,10 @@ public class Settings {
         @Config.Comment("(Client & Server) Make Swets dissolve slowly like modern versions.")
         @Config.RequiresMcRestart
         public boolean aetherLegacySwetsDissolveSlowly = false;
+
+        @Config.Comment("(Client / Server) Patch unsafe calls in Aether Legacy.")
+        @Config.RequiresMcRestart
+        public boolean patchAetherLegacyUnsafeCall = true;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
@@ -373,6 +377,16 @@ public class Settings {
         @Config.Comment("(Server) Classes that instanceof FakePlayer removal should target.")
         @Config.RequiresMcRestart
         public String[] removeFakePlayerInstOfClasses = new String[]{"com.othermod.core.PlayerEventHandler"};
+
+        @Config.Comment("(Server) Clear specified method and return the value.")
+        @Config.RequiresMcRestart
+        public boolean methodNoOpPatcher = true;
+
+        @Config.Comment("(Server) Targets of method no op patcher should apply.")
+        @Config.RequiresMcRestart
+        public String[] methodNoOpPatcherTargets = new String[]{
+                "com.othermod.core.PlayerEventHandler|doStuff(Z)I|114514"
+        };
     }
 
     @Config.Comment("(Server) Configuration for HybridFix built-in bukkit plugin.")
