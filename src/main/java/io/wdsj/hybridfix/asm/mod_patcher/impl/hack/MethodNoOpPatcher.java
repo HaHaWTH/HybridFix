@@ -65,7 +65,8 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
 
         for (MethodNode mn : cn.methods) {
             for (TargetMethod target : targets) {
-                if (mn.name.equals(target.name) && (target.desc == null || mn.desc.equals(target.desc))) {                    rewriteMethod(mn, target);
+                if (mn.name.equals(target.name) && (target.desc == null || mn.desc.equals(target.desc))) {
+                    rewriteMethod(mn, target);
                     changed = true;
                     HybridFix.LOGGER.info("Applied No-Op to method: {}.{}{}", className, mn.name, mn.desc);
                 }
