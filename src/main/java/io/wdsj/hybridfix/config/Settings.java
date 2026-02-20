@@ -142,6 +142,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean preventSettingNaNHealth = true;
 
+    @Config.Comment("(Server) Fix Authlib's profile lookup.")
+    @Config.Name("Fix Authlib's profile lookup")
+    public static boolean fixAuthLibProfileLookup = true;
+
     @Config.Comment("(Server) Startup MOTD settings. (Only works when 'Fix outdated server' is enabled)")
     @Config.Name("Startup MOTD Settings")
     @Config.RequiresMcRestart

@@ -10,7 +10,6 @@
     "duck.WorldMixin",
     "patch.forge.FakePlayerMixin",
     "patch.forge.ExplosionEventDetonateMixin",
-    "patch.forge.ExplosionEventStartMixin",
-    "patch.forge.universal.JarDiscovererMixin"
+    "patch.forge.ExplosionEventStartMixin"
   ]
 }
