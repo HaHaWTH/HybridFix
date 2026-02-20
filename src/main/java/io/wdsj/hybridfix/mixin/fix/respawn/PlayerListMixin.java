@@ -2,8 +2,10 @@ package io.wdsj.hybridfix.mixin.fix.respawn;
 
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.fake_player.HybridFixFakePlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
+import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.bukkit.Location;
 import org.spongepowered.asm.mixin.Dynamic;
@@ -34,7 +36,8 @@ public abstract class PlayerListMixin {
             HybridFixFakePlayer.HybridFixDummyPlayer dummyPlayer = Objects.requireNonNull(HybridFixFakePlayer.getPlayerCopy(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(player.dimension), player.getPosition(), player).get());
             dummyPlayer.copyFrom(player, conqueredEnd);
             //ForgeEventFactory.onPlayerClone(dummyPlayer, player, !conqueredEnd); // Fire another event for the fake player
-            player.copyFrom(dummyPlayer, conqueredEnd);
+            CapabilityDispatcher newCapability = ((EntityCapabilityAccessor) (Entity) dummyPlayer).getCapabilities();
+            ((EntityCapabilityAccessor) (Entity) player).setCapabilities(newCapability);
         }
     }
 }
