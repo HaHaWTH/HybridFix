@@ -10,6 +10,7 @@ import java.util.*;
 public enum ModPatcherManager {
     INSTANCE;
     private final ModPatcherEntry[] modPatchers;
+
     private static class ModPatcherEntry {
         final String[] targetClasses;
         final AbstractModPatcher patcher;
@@ -17,6 +18,10 @@ public enum ModPatcherManager {
         ModPatcherEntry(String[] targetClasses, AbstractModPatcher patcher) {
             this.targetClasses = targetClasses;
             this.patcher = patcher;
+        }
+
+        public byte[] applyTransform(String name, String className, byte[] basicClass) {
+            return patcher.transform(name, className, basicClass);
         }
 
         @Override
@@ -121,7 +126,7 @@ public enum ModPatcherManager {
         for (ModPatcherEntry entry : modPatchers) {
             for (String targetClass : entry.targetClasses) {
                 if (className.equals(targetClass)) {
-                    basicClass = entry.patcher.transform(name, className, basicClass);
+                    basicClass = entry.applyTransform(name, className, basicClass);
                 }
             }
         }

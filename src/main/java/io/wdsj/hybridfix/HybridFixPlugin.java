@@ -7,9 +7,9 @@ import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.jetbrains.annotations.Nullable;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -66,7 +66,6 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
         {
             put("mixins.hybridfix.base.patch.forge.universal.json", () -> true);
             put("mixins.perf.ai.universal.json", () -> Settings.optimizeEntityAI);
-            put("mixins.perf.core.math.json", () -> Settings.optimizeVec3iHashing);
             put("mixins.fix.health.not_a_number.json", () -> Settings.preventSettingNaNHealth);
         }
     });

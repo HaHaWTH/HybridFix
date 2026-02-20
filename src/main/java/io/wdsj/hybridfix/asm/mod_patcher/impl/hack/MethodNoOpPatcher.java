@@ -32,12 +32,19 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
                 if (parts.length < 2) continue;
 
                 String className = parts[0].trim();
-                String methodFull = parts[1].trim();
+                String methodPart = parts[1].trim();
                 String value = parts.length > 2 ? parts[2].trim() : null;
 
-                int descStart = methodFull.indexOf('(');
-                String name = methodFull.substring(0, descStart);
-                String desc = methodFull.substring(descStart);
+                String name;
+                String desc = null;
+
+                if (methodPart.contains("(")) {
+                    int descStart = methodPart.indexOf('(');
+                    name = methodPart.substring(0, descStart);
+                    desc = methodPart.substring(descStart);
+                } else {
+                    name = methodPart;
+                }
 
                 this.targetMap.computeIfAbsent(className, k -> new ArrayList<>())
                         .add(new TargetMethod(name, desc, value));
@@ -58,15 +65,15 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
 
         for (MethodNode mn : cn.methods) {
             for (TargetMethod target : targets) {
-                if (mn.name.equals(target.name) && mn.desc.equals(target.desc)) {
-                    rewriteMethod(mn, target);
+                if (mn.name.equals(target.name) && (target.desc == null || mn.desc.equals(target.desc))) {                    rewriteMethod(mn, target);
                     changed = true;
+                    HybridFix.LOGGER.info("Applied No-Op to method: {}.{}{}", className, mn.name, mn.desc);
                 }
             }
         }
 
         if (changed) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
             cn.accept(cw);
             byte[] bytes = cw.toByteArray();
             log(className);
@@ -116,8 +123,15 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
                 il.add(new LdcInsnNode(doubleVal));
                 il.add(new InsnNode(Opcodes.DRETURN));
                 break;
-            case Type.ARRAY:
             case Type.OBJECT:
+                if (returnType.getInternalName().equals("java/lang/String") && target.value != null) {
+                    il.add(new LdcInsnNode(target.value));
+                } else {
+                    il.add(new InsnNode(Opcodes.ACONST_NULL));
+                }
+                il.add(new InsnNode(Opcodes.ARETURN));
+                break;
+            case Type.ARRAY:
                 il.add(new InsnNode(Opcodes.ACONST_NULL));
                 il.add(new InsnNode(Opcodes.ARETURN));
                 break;
