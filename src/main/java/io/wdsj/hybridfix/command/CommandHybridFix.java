@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.util.FormatUtils;
+import io.wdsj.hybridfix.util.TickThread;
 import io.wdsj.hybridfix.util.Updater;
 import io.wdsj.hybridfix.util.Utils;
 import io.wdsj.hybridfix.util.entity.EntityUtils;
@@ -78,7 +79,7 @@ public class CommandHybridFix extends Command {
                         }
                     } else {
                         CompletableFuture.supplyAsync(Updater::checkNow, Utils.commonWorker())
-                                .thenAccept(
+                                .thenAcceptAsync(
                                         result -> {
                                             if (result.isUpdateAvailable()) {
                                                 sender.sendMessage(ChatColor.YELLOW + "* There is an update available: " + result.getLatestVersion() + ", you're on: " + HybridFix.VERSION + ".");
@@ -91,7 +92,7 @@ public class CommandHybridFix extends Command {
                                             }
                                             versionCache.put(HybridFix.VERSION, result);
                                         }
-                                );
+                                , TickThread.mainThreadExecutor());
                     }
                 }
                 break;

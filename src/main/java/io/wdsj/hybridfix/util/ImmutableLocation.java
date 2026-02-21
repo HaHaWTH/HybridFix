@@ -8,12 +8,12 @@ import org.bukkit.util.Vector;
  * A location that cannot be modified.
  */
 @SuppressWarnings("unused")
-public class ImmutableLocation extends Location {
-    protected ImmutableLocation(World world, double x, double y, double z) {
+public final class ImmutableLocation extends Location {
+    private ImmutableLocation(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
-    protected ImmutableLocation(World world, double x, double y, double z, float yaw, float pitch) {
+    private ImmutableLocation(World world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, yaw, pitch);
     }
 

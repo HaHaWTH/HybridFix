@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 @SuppressWarnings({"unused", "unchecked", "removal"})
-public class UnsafeFieldAccessorFactory {
+public final class UnsafeFieldAccessorFactory {
     static final sun.misc.Unsafe UNSAFE = JavaBypass.UNSAFE;
 
     static UnsafeFieldAccessor create(Field field, boolean isStaticExpected) {
