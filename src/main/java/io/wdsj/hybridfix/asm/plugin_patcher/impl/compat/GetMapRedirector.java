@@ -45,7 +45,7 @@ public class GetMapRedirector extends ConfigurablePluginPatcher {
         }
 
         if (modified) {
-            ClassWriter classWriter = new PluginClassWriter(0, getPluginClassLoader());
+            ClassWriter classWriter = new PluginClassWriter(ClassWriter.COMPUTE_MAXS, getPluginClassLoader());
             cn.accept(classWriter);
             byte[] bytes = classWriter.toByteArray();
             dump(className, bytes);
