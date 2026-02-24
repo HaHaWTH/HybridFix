@@ -7,18 +7,22 @@ public class SerializedResidence {
     public final String name;
     public final String owner;
     public final int minX;
+    public final int minY;
     public final int minZ;
     public final int maxX;
+    public final int maxY;
     public final int maxZ;
 
     public final int colorHash;
 
-    public SerializedResidence(String name, String owner, int minX, int minZ, int maxX, int maxZ) {
+    public SerializedResidence(String name, String owner, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         this.name = name;
         this.owner = owner;
         this.minX = minX;
+        this.minY = minY;
         this.minZ = minZ;
         this.maxX = maxX;
+        this.maxY = maxY;
         this.maxZ = maxZ;
 
         float hue = (float) (Math.abs(owner.hashCode() % 360) / 360.0);
@@ -36,12 +40,12 @@ public class SerializedResidence {
         if (!(obj instanceof SerializedResidence)) return false;
         SerializedResidence other = (SerializedResidence) obj;
         return name.equals(other.name) && owner.equals(other.owner) &&
-                minX == other.minX && minZ == other.minZ &&
-                maxX == other.maxX && maxZ == other.maxZ;
+                minX == other.minX && minY == other.minY && minZ == other.minZ &&
+                maxX == other.maxX && maxY == other.maxY && maxZ == other.maxZ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, owner, minX, minZ, maxX, maxZ);
+        return Objects.hash(name, owner, minX, minY, minZ, maxX, maxY, maxZ);
     }
 }

@@ -146,13 +146,15 @@ public final class VoxelMapResidenceStorage {
                     String name = in.readUTF();
                     String owner = in.readUTF();
                     int minX = in.readInt();
+                    int minY = in.readInt();
                     int minZ = in.readInt();
                     int maxX = in.readInt();
+                    int maxY = in.readInt();
                     int maxZ = in.readInt();
                     if (PACKET_REMOVE.equals(type)) {
                         this.remove(name);
                     } else {
-                        this.put(name, new SerializedResidence(name, owner, minX, minZ, maxX, maxZ));
+                        this.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
                     }
                 }
             } catch (Throwable t) {

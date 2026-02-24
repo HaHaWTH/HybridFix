@@ -139,8 +139,10 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
             out.writeUTF(res.getOwner() == null ? "Unknown" : res.getOwner());
 
             out.writeInt(area.getLowLocation().getBlockX());
+            out.writeInt(area.getLowLocation().getBlockY());
             out.writeInt(area.getLowLocation().getBlockZ());
             out.writeInt(area.getHighLocation().getBlockX());
+            out.writeInt(area.getHighLocation().getBlockY());
             out.writeInt(area.getHighLocation().getBlockZ());
         }
 

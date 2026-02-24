@@ -2,15 +2,18 @@ package io.wdsj.hybridfix.mixin.late.voxelmap.residence_ext;
 
 import com.mamiyaotaru.voxelmap.Map;
 import com.mamiyaotaru.voxelmap.util.GLShim;
+import com.mamiyaotaru.voxelmap.util.I18nUtils;
 import io.wdsj.hybridfix.handler.voxelmap.SerializedResidence;
 import io.wdsj.hybridfix.handler.voxelmap.VoxelMapResidenceStorage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,10 +22,19 @@ import java.util.Collection;
 
 @Mixin(value = Map.class, remap = false)
 public abstract class VoxelMapMixin {
+    // @formatter:off
     @Shadow private double zoomScaleAdjusted;
     @Shadow private int lastImageX;
     @Shadow private int lastImageZ;
     @Shadow private Minecraft game;
+    @Shadow private FontRenderer fontRenderer;
+    @Shadow private boolean fullscreenMap;
+    @Shadow protected abstract int chkLen(String paramStr);
+    @Shadow private int scHeight;
+    @Shadow private int ztimer;
+    @Shadow private int scWidth;
+    @Shadow protected abstract void write(String text, float x, float y, int color);
+    // @formatter:on
 
     @Inject(method = "onTickInGame", at = @At("HEAD"))
     private void hybridfix$updateResidenceTracker(CallbackInfo ci) {
@@ -30,6 +42,36 @@ public abstract class VoxelMapMixin {
             int vd = this.game.gameSettings.renderDistanceChunks;
             VoxelMapResidenceStorage.INSTANCE.updatePlayerPos(this.game.player.posX, this.game.player.posZ, vd);
         }
+    }
+
+    @Unique
+    private static final Object[] hybridfix$CACHE = new Object[2];
+    @Inject(method = "showCoords", at = @At("RETURN"))
+    private void hybridfix$displayCurrentResName(int x, int y, CallbackInfo ci) {
+        if (!this.fullscreenMap || this.game.player == null) return;
+
+        SerializedResidence current = hybridfix$findCurrentRes();
+        if (current == null) return;
+
+        hybridfix$CACHE[0] = current.name;
+        hybridfix$CACHE[1] = current.owner;
+        String name = I18nUtils.getString("hybridfix.voxelmap_ext.current_residence", hybridfix$CACHE);
+        hybridfix$CACHE[0] = null;
+        hybridfix$CACHE[1] = null;
+        float yOff = (ztimer > 0) ? 25.0F : 15.0F;
+        this.write(name, (float)(this.scWidth / 2 - this.chkLen(name) / 2), yOff, 0xFFFFFF);
+    }
+
+    @Unique
+    private SerializedResidence hybridfix$findCurrentRes() {
+        double px = this.game.player.posX;
+        double py = this.game.player.posY;
+        double pz = this.game.player.posZ;
+        for (SerializedResidence res : VoxelMapResidenceStorage.INSTANCE.getActiveResidences()) {
+            if (px >= res.minX && px <= res.maxX + 1 && py >= res.minY && py <= res.maxY + 1 && pz >= res.minZ && pz <= res.maxZ + 1)
+                return res;
+        }
+        return null;
     }
 
     @Inject(
