@@ -15,6 +15,16 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.*;
 
+/**
+ * A client-side storage and spatial tracker for Residence data, specifically designed
+ * to integrate with VoxelMap.
+ * <p>
+ * This class handles the reception of residence data from the server, stores them efficiently
+ * and performs 2D spatial culling based on the player's
+ * view distance to ensure only visible residences are passed to the rendering pipeline.
+ *
+ * @see SingleUserAreaMap
+ */
 public final class VoxelMapResidenceStorage {
     public static final VoxelMapResidenceStorage INSTANCE = new VoxelMapResidenceStorage();
 
@@ -63,6 +73,14 @@ public final class VoxelMapResidenceStorage {
         return (long) x & 4294967295L | ((long) z & 4294967295L) << 32;
     }
 
+    /**
+     * Updates the player's current position and view distance, triggering visibility
+     * calculations for residences.
+     *
+     * @param x  The player's absolute X coordinate.
+     * @param z  The player's absolute Z coordinate.
+     * @param vd The current render distance in chunks.
+     */
     public void updatePlayerPos(double x, double z, int vd) {
         int cx = MathHelper.floor(x) >> 4;
         int cz = MathHelper.floor(z) >> 4;
@@ -73,6 +91,14 @@ public final class VoxelMapResidenceStorage {
         }
     }
 
+    /**
+     * Inserts or updates a residence in the storage. Recalculates its presence
+     * in the chunk grid and immediately marks it as active if it falls within
+     * the player's current view distance.
+     *
+     * @param name The name of the residence.
+     * @param res  The serialized residence data.
+     */
     public void put(String name, SerializedResidence res) {
         remove(name);
         allResidences.put(name, res);
@@ -87,6 +113,12 @@ public final class VoxelMapResidenceStorage {
         if (inViewCount > 0) activeResidences.put(res, inViewCount);
     }
 
+    /**
+     * Completely removes a residence from the storage, cleaning up its references
+     * from the chunk grid and active render list.
+     *
+     * @param name The name of the residence to remove.
+     */
     public void remove(String name) {
         SerializedResidence res = allResidences.remove(name);
         if (res == null) return;
@@ -112,14 +144,30 @@ public final class VoxelMapResidenceStorage {
         return cx >= lx - d && cx <= lx + d && cz >= lz - d && cz <= lz + d;
     }
 
+    /**
+     * Gets a collection of residences that are currently within the player's view distance
+     * and should be rendered on the minimap or full-screen map.
+     *
+     * @return A sorted set of active {@link SerializedResidence}.
+     */
     public ReferenceSortedSet<SerializedResidence> getActiveResidences() {
         return activeResidences.keySet();
     }
 
+    /**
+     * Gets a collection of all residences currently stored in memory for this dimension.
+     *
+     * @return A collection of all known {@link SerializedResidence}
+     */
     public ObjectCollection<SerializedResidence> getAllResidences() {
         return allResidences.values();
     }
 
+    /**
+     * Clears all stored data, resetting the client-side state.
+     * This is typically called when switching dimensions, disconnecting, or
+     * receiving a full state update from the server.
+     */
     public void clear() {
         allResidences.clear();
         chunkGrid.clear();
