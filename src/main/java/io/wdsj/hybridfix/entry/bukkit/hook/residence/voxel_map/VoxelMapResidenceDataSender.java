@@ -3,12 +3,14 @@ package io.wdsj.hybridfix.entry.bukkit.hook.residence.voxel_map;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.event.ResidenceCreationEvent;
 import com.bekvon.bukkit.residence.event.ResidenceDeleteEvent;
+import com.bekvon.bukkit.residence.event.ResidenceSizeChangeEvent;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
+import io.wdsj.hybridfix.handler.voxelmap.SerializedResidence;
 import io.wdsj.hybridfix.util.TickThread;
 import io.wdsj.hybridfix.util.Utils;
 import org.bukkit.Bukkit;
@@ -40,17 +42,31 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
     public void onWorldChange(PlayerChangedWorldEvent event) {
         sendWorldResidences(event.getPlayer(), 1L);
     }
+    
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onResidenceSizeChange(ResidenceSizeChangeEvent event) {
+        if (event.getResidence() == null) return;
+        ClaimedResidence res = event.getResidence();
+        SerializedResidence oldArea = toSerializedResidence(res.getName(), res.getOwner(), event.getOldArea());
+        broadcastSingleUpdate(res.getWorld(), oldArea, true);
+        SerializedResidence newArea = toSerializedResidence(res.getName(), res.getOwner(), event.getNewArea());
+        broadcastSingleUpdate(res.getWorld(), newArea, false);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onResidenceCreate(ResidenceCreationEvent event) {
         if (event.getResidence() == null) return;
-        broadcastSingleUpdate(event.getResidence(), false);
+        ClaimedResidence res = event.getResidence();
+        SerializedResidence serializedResidence = toSerializedResidence(event.getResidence());
+        broadcastSingleUpdate(res.getWorld(), serializedResidence, false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onResidenceDelete(ResidenceDeleteEvent event) {
         if (event.getResidence() == null) return;
-        broadcastSingleUpdate(event.getResidence(), true);
+        ClaimedResidence res = event.getResidence();
+        SerializedResidence serializedResidence = toSerializedResidence(event.getResidence());
+        broadcastSingleUpdate(res.getWorld(), serializedResidence, true);
     }
 
     public void sendWorldResidences(Player player, long delayTicks) {
@@ -73,10 +89,7 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
         }, delayTicks);
     }
 
-    private void broadcastSingleUpdate(ClaimedResidence res, boolean isDelete) {
-        if (res.getWorld() == null) return;
-        final String worldName = res.getWorld();
-
+    private void broadcastSingleUpdate(String worldName, SerializedResidence res, boolean isDelete) {
         CompletableFuture.supplyAsync(() -> {
             try {
                 return isDelete ? buildSingleDataDeletePacket(res) : buildSingleDataPacket(res);
@@ -93,59 +106,63 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
         }, TickThread.mainThreadExecutor());
     }
 
+
     private byte[] buildWorldDataPacket(String worldName) throws IOException {
         ResidenceManager manager = Residence.getInstance().getResidenceManager();
         if (manager == null) return null;
 
         Collection<ClaimedResidence> allResidences = manager.getResidences().values();
-        List<ClaimedResidence> targetResidences = new ArrayList<>();
+        List<SerializedResidence> targetResidences = new ArrayList<>();
 
         for (ClaimedResidence res : allResidences) {
             if (res.getMainArea() == null || res.getWorld() == null) continue;
             if (res.getWorld().equals(worldName)) {
-                targetResidences.add(res);
+                targetResidences.add(toSerializedResidence(res));
             }
         }
 
         return serializeResidences(targetResidences, PACKET_ALL);
     }
 
-    private byte[] buildSingleDataPacket(ClaimedResidence res) throws IOException {
-        List<ClaimedResidence> list = new ArrayList<>();
+    private byte[] buildSingleDataPacket(SerializedResidence res) throws IOException {
+        List<SerializedResidence> list = new ArrayList<>();
         list.add(res);
         return serializeResidences(list, PACKET_UPDATE);
     }
 
-    private byte[] buildSingleDataDeletePacket(ClaimedResidence res) throws IOException {
-        List<ClaimedResidence> list = new ArrayList<>();
+    private byte[] buildSingleDataDeletePacket(SerializedResidence res) throws IOException {
+        List<SerializedResidence> list = new ArrayList<>();
         list.add(res);
         return serializeResidences(list, PACKET_REMOVE);
     }
 
-    private byte[] serializeResidences(List<ClaimedResidence> residences, String packetType) throws IOException {
+    private byte[] serializeResidences(List<SerializedResidence> residences, String packetType) throws IOException {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(b);
 
         out.writeUTF(packetType);
         out.writeInt(residences.size());
 
-        for (ClaimedResidence res : residences) {
-            CuboidArea area = res.getMainArea();
-            if (area == null) {
-                throw new IOException("Residence " + res.getName() + " has no main area");
-            }
+        for (SerializedResidence res : residences) {
+            out.writeUTF(res.name);
+            out.writeUTF(res.owner);
 
-            out.writeUTF(res.getName());
-            out.writeUTF(res.getOwner() == null ? "Unknown" : res.getOwner());
-
-            out.writeInt(area.getLowLocation().getBlockX());
-            out.writeInt(area.getLowLocation().getBlockY());
-            out.writeInt(area.getLowLocation().getBlockZ());
-            out.writeInt(area.getHighLocation().getBlockX());
-            out.writeInt(area.getHighLocation().getBlockY());
-            out.writeInt(area.getHighLocation().getBlockZ());
+            out.writeInt(res.minX);
+            out.writeInt(res.minY);
+            out.writeInt(res.minZ);
+            out.writeInt(res.maxX);
+            out.writeInt(res.maxY);
+            out.writeInt(res.maxZ);
         }
 
         return b.toByteArray();
+    }
+    
+    public static SerializedResidence toSerializedResidence(ClaimedResidence res) {
+        return new SerializedResidence(res.getName(), res.getOwner(), res.getMainArea().getLowLocation().getBlockX(), res.getMainArea().getLowLocation().getBlockY(), res.getMainArea().getLowLocation().getBlockZ(), res.getMainArea().getHighLocation().getBlockX(), res.getMainArea().getHighLocation().getBlockY(), res.getMainArea().getHighLocation().getBlockZ());
+    }
+
+    public static SerializedResidence toSerializedResidence(String areaName, String owner, CuboidArea area) {
+        return new SerializedResidence(areaName, owner, area.getLowLocation().getBlockX(), area.getLowLocation().getBlockY(), area.getLowLocation().getBlockZ(), area.getHighLocation().getBlockX(), area.getHighLocation().getBlockY(), area.getHighLocation().getBlockZ());
     }
 }
