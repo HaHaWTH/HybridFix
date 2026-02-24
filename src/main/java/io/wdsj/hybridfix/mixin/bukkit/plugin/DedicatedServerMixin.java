@@ -4,10 +4,12 @@ import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
 import io.wdsj.hybridfix.entry.bukkit.hook.citizens.CitizensHookNPCDamageListener;
+import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
+import io.wdsj.hybridfix.entry.bukkit.hook.residence.voxel_map.VoxelMapResidenceDataSender;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
@@ -51,6 +53,10 @@ public abstract class DedicatedServerMixin {
             if (Bukkit.getPluginManager().isPluginEnabled(res)) {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookEntityChangeBlockListener.class, res);
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
+                if (Settings.bukkitPluginConfig.sendClientResidenceData) {
+                    Bukkit.getMessenger().registerOutgoingPluginChannel(internalPlugin, AbstractResidenceDataSender.CHANNEL);
+                    ListenerHackery.registerListenerToTargetPlugin(VoxelMapResidenceDataSender.class, res);
+                }
                 if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
                     Plugin residence = Bukkit.getPluginManager().getPlugin(res);
                     ResidenceCustomBlockAdder adder = new ResidenceCustomBlockAdder(residence);

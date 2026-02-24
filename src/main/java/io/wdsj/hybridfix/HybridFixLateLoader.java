@@ -119,6 +119,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
         {
             // Industrial Craft client patches
             put("mixins.ic2.client.audio.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2AudioManager);
+            // VoxelMap client patches
+            put("mixins.voxelmap.residence_ext.json", () -> isModLoaded("voxelmap") && Settings.modPatchSettings.voxelMapResidenceSupport);
         }
     });
 

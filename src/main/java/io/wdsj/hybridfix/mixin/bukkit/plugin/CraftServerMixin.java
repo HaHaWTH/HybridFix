@@ -1,7 +1,10 @@
 package io.wdsj.hybridfix.mixin.bukkit.plugin;
 
 import io.wdsj.hybridfix.HybridFix;
+import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
+import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.event.HandlerList;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,5 +31,8 @@ public abstract class CraftServerMixin {
     private void hybridFix$disableInternalPlugin() {
         HybridFix.LOGGER.info("[HybridFix] Disabling HybridFix internal plugin v{}", HybridFix.VERSION);
         HandlerList.unregisterAll(HybridFixInternalPlugin.getInstance());
+        if (Settings.bukkitPluginConfig.sendClientResidenceData) {
+            Bukkit.getMessenger().unregisterOutgoingPluginChannel(HybridFixInternalPlugin.getInstance(), AbstractResidenceDataSender.CHANNEL);
+        }
     }
 }

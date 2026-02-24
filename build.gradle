@@ -159,6 +159,9 @@ dependencies {
     // Reflect
     embed "net.lenni0451:Reflect:1.6.1+curseforge"
 
+    // VoxelMap
+    compileOnly rfg.deobf("curse.maven:voxelmap-225179:3029445")
+
     // Aether Legacy
     compileOnly rfg.deobf("curse.maven:aether-255308:6316434")
 

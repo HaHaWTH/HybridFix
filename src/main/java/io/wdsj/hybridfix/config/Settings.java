@@ -322,6 +322,9 @@ public class Settings {
         @Config.Comment("(Client / Server) Patch unsafe calls in Aether Legacy.")
         @Config.RequiresMcRestart
         public boolean patchAetherLegacyUnsafeCall = true;
+
+        @Config.Comment("(Client) Enable VoxelMap Residence support, drawing nearby residences on the map.")
+        public boolean voxelMapResidenceSupport = false;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
@@ -408,6 +411,10 @@ public class Settings {
         @Config.Name("Hook Residence")
         @Config.RequiresMcRestart
         public boolean hookResidence = false;
+
+        @Config.Comment("(Server) Send server Residence data to client.")
+        @Config.Name("Send client Residence data")
+        public boolean sendClientResidenceData = true;
 
         @Config.Comment("(Server) Automatically add mod blocks to Residence config.")
         @Config.Name("Auto add mod blocks to Residence config")
