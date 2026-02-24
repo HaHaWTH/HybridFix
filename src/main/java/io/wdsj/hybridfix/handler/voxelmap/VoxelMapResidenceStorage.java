@@ -15,10 +15,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class VoxelMapResidenceStorage {
+public final class VoxelMapResidenceStorage {
     public static final VoxelMapResidenceStorage INSTANCE = new VoxelMapResidenceStorage();
 
-    public final Map<String, SerializedResidence> allResidences = new ConcurrentHashMap<>();
+    private final Map<String, SerializedResidence> allResidences = new ConcurrentHashMap<>();
     private final Map<Long, List<SerializedResidence>> chunkGrid = new ConcurrentHashMap<>();
     private final Map<SerializedResidence, Integer> activeResidences = new ConcurrentHashMap<>();
 
@@ -29,7 +29,9 @@ public class VoxelMapResidenceStorage {
     }
 
     private static class ResidenceTracker extends SingleUserAreaMap<VoxelMapResidenceStorage> {
-        public ResidenceTracker(VoxelMapResidenceStorage cache) { super(cache); }
+        public ResidenceTracker(VoxelMapResidenceStorage cache) {
+            super(cache);
+        }
 
         @Override
         protected void addCallback(VoxelMapResidenceStorage cache, int cx, int cz) {
