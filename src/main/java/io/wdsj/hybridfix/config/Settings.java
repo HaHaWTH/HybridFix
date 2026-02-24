@@ -324,6 +324,7 @@ public class Settings {
         public boolean patchAetherLegacyUnsafeCall = true;
 
         @Config.Comment("(Client) Enable VoxelMap Residence support, drawing nearby residences on the map.")
+        @Config.RequiresMcRestart
         public boolean voxelMapResidenceSupport = false;
     }
 
