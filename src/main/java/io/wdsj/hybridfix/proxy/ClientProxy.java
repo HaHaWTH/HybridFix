@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.proxy;
 
+import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.config.Settings;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
 import io.wdsj.hybridfix.handler.voxelmap.VoxelMapResidenceStorage;
@@ -20,6 +21,7 @@ public class ClientProxy extends CommonProxy {
             FMLEventChannel channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(AbstractResidenceDataSender.CHANNEL);
             channel.register(VoxelMapResidenceStorage.INSTANCE);
             MinecraftForge.EVENT_BUS.register(VoxelMapResidenceStorage.INSTANCE);
+            HybridFix.LOGGER.info("VoxelMap Residence support enabled");
         }
     }
 

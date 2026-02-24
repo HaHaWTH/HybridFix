@@ -4,6 +4,7 @@ import com.mamiyaotaru.voxelmap.Map;
 import com.mamiyaotaru.voxelmap.util.GLShim;
 import io.wdsj.hybridfix.handler.voxelmap.SerializedResidence;
 import io.wdsj.hybridfix.handler.voxelmap.VoxelMapResidenceStorage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -21,6 +22,15 @@ public abstract class VoxelMapMixin {
     @Shadow private double zoomScaleAdjusted;
     @Shadow private int lastImageX;
     @Shadow private int lastImageZ;
+    @Shadow private Minecraft game;
+
+    @Inject(method = "onTickInGame", at = @At("HEAD"))
+    private void hybridfix$updateResidenceTracker(CallbackInfo ci) {
+        if (this.game.player != null && this.game.gameSettings != null) {
+            int vd = this.game.gameSettings.renderDistanceChunks;
+            VoxelMapResidenceStorage.INSTANCE.updatePlayerPos(this.game.player.posX, this.game.player.posZ, vd);
+        }
+    }
 
     @Inject(
             method = "renderMap",
@@ -32,7 +42,7 @@ public abstract class VoxelMapMixin {
             )
     )
     private void hybridfix$drawResOutlineWithNativeMask(int x, int y, int scScale, CallbackInfo ci) {
-        Collection<SerializedResidence> areas = VoxelMapResidenceStorage.INSTANCE.areas.values();
+        Collection<SerializedResidence> areas = VoxelMapResidenceStorage.INSTANCE.getActiveResidences();
         if (areas.isEmpty()) return;
 
         GLShim.glDisable(GL11.GL_TEXTURE_2D);
