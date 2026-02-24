@@ -131,7 +131,9 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
 
         for (ClaimedResidence res : residences) {
             CuboidArea area = res.getMainArea();
-            if (area == null) continue;
+            if (area == null) {
+                throw new IOException("Residence " + res.getName() + " has no main area");
+            }
 
             out.writeUTF(res.getName());
             out.writeUTF(res.getOwner() == null ? "Unknown" : res.getOwner());

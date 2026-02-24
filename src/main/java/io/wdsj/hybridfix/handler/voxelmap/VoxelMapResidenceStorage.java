@@ -1,26 +1,28 @@
 package io.wdsj.hybridfix.handler.voxelmap;
 
-import io.netty.buffer.ByteBufInputStream;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
 import io.wdsj.hybridfix.util.SingleUserAreaMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class VoxelMapResidenceStorage {
     public static final VoxelMapResidenceStorage INSTANCE = new VoxelMapResidenceStorage();
 
-    private final Map<String, SerializedResidence> allResidences = new ConcurrentHashMap<>();
-    private final Map<Long, List<SerializedResidence>> chunkGrid = new ConcurrentHashMap<>();
-    private final Map<SerializedResidence, Integer> activeResidences = new ConcurrentHashMap<>();
+    private final Object2ObjectOpenHashMap<String, SerializedResidence> allResidences = new Object2ObjectOpenHashMap<>();
+    private final Long2ObjectOpenHashMap<List<SerializedResidence>> chunkGrid = new Long2ObjectOpenHashMap<>();
+    private final Object2IntOpenHashMap<SerializedResidence> activeResidences = new Object2IntOpenHashMap<>();
 
     private final ResidenceTracker tracker;
 
@@ -38,7 +40,7 @@ public final class VoxelMapResidenceStorage {
             List<SerializedResidence> list = cache.chunkGrid.get(chunkKey(cx, cz));
             if (list != null) {
                 for (SerializedResidence res : list) {
-                    cache.activeResidences.merge(res, 1, Integer::sum);
+                    cache.activeResidences.addTo(res, 1);
                 }
             }
         }
@@ -48,13 +50,12 @@ public final class VoxelMapResidenceStorage {
             List<SerializedResidence> list = cache.chunkGrid.get(chunkKey(cx, cz));
             if (list != null) {
                 for (SerializedResidence res : list) {
-                    cache.activeResidences.computeIfPresent(res, (r, count) -> {
-                        if (count <= 1) {
-                            return null;
-                        } else {
-                            return count - 1;
-                        }
-                    });
+                    int current = cache.activeResidences.getInt(res);
+                    if (current <= 1) {
+                        cache.activeResidences.removeInt(res);
+                    } else {
+                        cache.activeResidences.put(res, current - 1);
+                    }
                 }
             }
         }
@@ -81,7 +82,7 @@ public final class VoxelMapResidenceStorage {
         int inViewCount = 0;
         for (int cx = res.minX >> 4; cx <= res.maxX >> 4; cx++) {
             for (int cz = res.minZ >> 4; cz <= res.maxZ >> 4; cz++) {
-                chunkGrid.computeIfAbsent(chunkKey(cx, cz), k -> new CopyOnWriteArrayList<>()).add(res);
+                chunkGrid.computeIfAbsent(chunkKey(cx, cz), k -> new ObjectArrayList<>()).add(res);
                 if (isChunkInTracker(cx, cz)) inViewCount++;
             }
         }
@@ -102,7 +103,7 @@ public final class VoxelMapResidenceStorage {
                 }
             }
         }
-        activeResidences.remove(res);
+        activeResidences.removeInt(res);
     }
 
     private boolean isChunkInTracker(int cx, int cz) {
@@ -136,25 +137,29 @@ public final class VoxelMapResidenceStorage {
     @SubscribeEvent
     public void onClientPacket(FMLNetworkEvent.ClientCustomPacketEvent event) {
         if (!event.getPacket().channel().equals(AbstractResidenceDataSender.CHANNEL)) return;
-        try (DataInputStream in = new DataInputStream(new ByteBufInputStream(event.getPacket().payload()))) {
-            String type = in.readUTF();
-            int count = in.readInt();
-            if (PACKET_ALL.equals(type)) this.clear(); // this will be handled later by updatePlayerPos
-            for (int i = 0; i < count; i++) {
-                String name = in.readUTF();
-                String owner = in.readUTF();
-                int minX = in.readInt();
-                int minZ = in.readInt();
-                int maxX = in.readInt();
-                int maxZ = in.readInt();
-                if (PACKET_REMOVE.equals(type)) {
-                    this.remove(name);
-                } else {
-                    this.put(name, new SerializedResidence(name, owner, minX, minZ, maxX, maxZ));
+        byte[] data = new byte[event.getPacket().payload().readableBytes()];
+        event.getPacket().payload().readBytes(data);
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(data))) {
+                String type = in.readUTF();
+                int count = in.readInt();
+                if (PACKET_ALL.equals(type)) this.clear(); // this will be handled later by updatePlayerPos
+                for (int i = 0; i < count; i++) {
+                    String name = in.readUTF();
+                    String owner = in.readUTF();
+                    int minX = in.readInt();
+                    int minZ = in.readInt();
+                    int maxX = in.readInt();
+                    int maxZ = in.readInt();
+                    if (PACKET_REMOVE.equals(type)) {
+                        this.remove(name);
+                    } else {
+                        this.put(name, new SerializedResidence(name, owner, minX, minZ, maxX, maxZ));
+                    }
                 }
+            } catch (Throwable t) {
+                HybridFix.LOGGER.error("Failed to handle residence packet", t);
             }
-        } catch (IOException | RuntimeException e) {
-            HybridFix.LOGGER.error("Failed to handle residence packet", e);
-        }
+        });
     }
 }
