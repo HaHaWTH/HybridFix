@@ -68,7 +68,6 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
                     .thenAcceptAsync(data -> {
                         if (data != null && player.isOnline() && player.getWorld().getName().equals(targetWorld)) {
                             player.sendPluginMessage(HybridFixInternalPlugin.getInstance(), CHANNEL, data);
-                            HybridFix.LOGGER.info("[HybridFix] Sent residence data to {}", player.getName());
                         }
                     }, TickThread.mainThreadExecutor());
         }, delayTicks);

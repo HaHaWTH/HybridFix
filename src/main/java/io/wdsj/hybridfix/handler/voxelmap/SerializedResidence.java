@@ -1,5 +1,6 @@
 package io.wdsj.hybridfix.handler.voxelmap;
 
+import java.awt.Color;
 import java.util.Objects;
 
 public class SerializedResidence {
@@ -19,7 +20,14 @@ public class SerializedResidence {
         this.minZ = minZ;
         this.maxX = maxX;
         this.maxZ = maxZ;
-        this.colorHash = (name.hashCode() & 0x00FFFFFF) | 0x4D000000;
+
+        float hue = (float) (Math.abs(owner.hashCode() % 360) / 360.0);
+        long variationSeed = Objects.hash(name, minX, minZ);
+        float saturation = 0.5f + (float) (Math.abs(variationSeed % 30) / 100.0);
+        float brightness = 0.6f + (float) (Math.abs((variationSeed >> 4) % 30) / 100.0);
+        int rgb = Color.HSBtoRGB(hue, saturation, brightness);
+
+        this.colorHash = (rgb & 0x00FFFFFF) | 0x4D000000;
     }
 
     @Override
@@ -27,7 +35,9 @@ public class SerializedResidence {
         if (this == obj) return true;
         if (!(obj instanceof SerializedResidence)) return false;
         SerializedResidence other = (SerializedResidence) obj;
-        return name.equals(other.name) && owner.equals(other.owner) && minX == other.minX && minZ == other.minZ && maxX == other.maxX && maxZ == other.maxZ;
+        return name.equals(other.name) && owner.equals(other.owner) &&
+                minX == other.minX && minZ == other.minZ &&
+                maxX == other.maxX && maxZ == other.maxZ;
     }
 
     @Override
