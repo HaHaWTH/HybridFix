@@ -31,30 +31,30 @@ public final class VoxelMapResidenceStorage {
     }
 
     private static class ResidenceTracker extends SingleUserAreaMap<VoxelMapResidenceStorage> {
-        public ResidenceTracker(VoxelMapResidenceStorage cache) {
-            super(cache);
+        public ResidenceTracker(VoxelMapResidenceStorage storage) {
+            super(storage);
         }
 
         @Override
-        protected void addCallback(VoxelMapResidenceStorage cache, int cx, int cz) {
-            List<SerializedResidence> list = cache.chunkGrid.get(chunkKey(cx, cz));
+        protected void addCallback(VoxelMapResidenceStorage storage, int cx, int cz) {
+            List<SerializedResidence> list = storage.chunkGrid.get(chunkKey(cx, cz));
             if (list != null) {
                 for (SerializedResidence res : list) {
-                    cache.activeResidences.addTo(res, 1);
+                    storage.activeResidences.addTo(res, 1);
                 }
             }
         }
 
         @Override
-        protected void removeCallback(VoxelMapResidenceStorage cache, int cx, int cz) {
-            List<SerializedResidence> list = cache.chunkGrid.get(chunkKey(cx, cz));
+        protected void removeCallback(VoxelMapResidenceStorage storage, int cx, int cz) {
+            List<SerializedResidence> list = storage.chunkGrid.get(chunkKey(cx, cz));
             if (list != null) {
                 for (SerializedResidence res : list) {
-                    int current = cache.activeResidences.getInt(res);
+                    int current = storage.activeResidences.getInt(res);
                     if (current <= 1) {
-                        cache.activeResidences.removeInt(res);
+                        storage.activeResidences.removeInt(res);
                     } else {
-                        cache.activeResidences.put(res, current - 1);
+                        storage.activeResidences.put(res, current - 1);
                     }
                 }
             }
