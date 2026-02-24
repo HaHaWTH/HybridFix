@@ -5,6 +5,7 @@ import com.mamiyaotaru.voxelmap.util.GLShim;
 import com.mamiyaotaru.voxelmap.util.I18nUtils;
 import io.wdsj.hybridfix.handler.voxelmap.SerializedResidence;
 import io.wdsj.hybridfix.handler.voxelmap.VoxelMapResidenceStorage;
+import it.unimi.dsi.fastutil.objects.ReferenceSortedSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -17,8 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Collection;
 
 @Mixin(value = Map.class, remap = false)
 public abstract class VoxelMapMixin {
@@ -34,6 +33,7 @@ public abstract class VoxelMapMixin {
     @Shadow private int ztimer;
     @Shadow private int scWidth;
     @Shadow protected abstract void write(String text, float x, float y, int color);
+    @Shadow private int zoom;
     // @formatter:on
 
     @Inject(method = "onTickInGame", at = @At("HEAD"))
@@ -84,7 +84,7 @@ public abstract class VoxelMapMixin {
             )
     )
     private void hybridfix$drawResOutlineWithNativeMask(int x, int y, int scScale, CallbackInfo ci) {
-        Collection<SerializedResidence> areas = VoxelMapResidenceStorage.INSTANCE.getActiveResidences();
+        ReferenceSortedSet<SerializedResidence> areas = VoxelMapResidenceStorage.INSTANCE.getActiveResidences();
         if (areas.isEmpty()) return;
 
         GLShim.glDisable(GL11.GL_TEXTURE_2D);
@@ -121,6 +121,93 @@ public abstract class VoxelMapMixin {
         }
 
         GL11.glLineWidth(1.0f);
+        GLShim.glEnable(GL11.GL_DEPTH_TEST);
+        GLShim.glEnable(GL11.GL_TEXTURE_2D);
+        GLShim.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    @Inject(
+            method = "renderMapFull",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/mamiyaotaru/voxelmap/util/GLUtils;drawPost()V",
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void hybridfix$drawResOnFullscreenMap(int scWidth, int scHeight, CallbackInfo ci) {
+        ReferenceSortedSet<SerializedResidence> areas = VoxelMapResidenceStorage.INSTANCE.getActiveResidences();
+        if (areas.isEmpty()) return;
+
+        int multi = 1 << this.zoom;
+        double pixelsPerBlock = 8.0 / multi;
+        double centerX = scWidth / 2.0;
+        double centerZ = scHeight / 2.0;
+
+        GLShim.glDisable(GL11.GL_TEXTURE_2D);
+        GLShim.glDisable(GL11.GL_DEPTH_TEST);
+        GLShim.glEnable(GL11.GL_BLEND);
+        GLShim.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        double guiScale = (double) this.game.displayWidth / (double) scWidth;
+        int mapLeft = scWidth / 2 - 128;
+        int mapTop = scHeight / 2 - 128;
+        GLShim.glEnable(GL11.GL_SCISSOR_TEST);
+        GLShim.glScissor(
+                (int) (guiScale * mapLeft),
+                (int) (guiScale * (scHeight - mapTop - 256)),
+                (int) (guiScale * 256),
+                (int) (guiScale * 256)
+        );
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        for (SerializedResidence res : areas) {
+            double rx1 = centerX + (res.minX - lastImageX) * pixelsPerBlock;
+            double rz1 = centerZ + (res.minZ - lastImageZ) * pixelsPerBlock;
+            double rx2 = centerX + (res.maxX + 1 - lastImageX) * pixelsPerBlock;
+            double rz2 = centerZ + (res.maxZ + 1 - lastImageZ) * pixelsPerBlock;
+
+            int c = res.colorHash;
+            int r = (c >> 16) & 0xFF;
+            int g = (c >> 8) & 0xFF;
+            int b = c & 0xFF;
+            int a = (c >> 24) & 0xFF;
+
+            buffer.pos(rx1, rz1, 0).color(r, g, b, a).endVertex();
+            buffer.pos(rx1, rz2, 0).color(r, g, b, a).endVertex();
+            buffer.pos(rx2, rz2, 0).color(r, g, b, a).endVertex();
+            buffer.pos(rx2, rz1, 0).color(r, g, b, a).endVertex();
+        }
+        tessellator.draw();
+
+        GL11.glLineWidth(2.0f);
+        buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        for (SerializedResidence res : areas) {
+            double rx1 = centerX + (res.minX - lastImageX) * pixelsPerBlock;
+            double rz1 = centerZ + (res.minZ - lastImageZ) * pixelsPerBlock;
+            double rx2 = centerX + (res.maxX + 1 - lastImageX) * pixelsPerBlock;
+            double rz2 = centerZ + (res.maxZ + 1 - lastImageZ) * pixelsPerBlock;
+
+            int c = res.colorHash;
+            int r = (c >> 16) & 0xFF;
+            int g = (c >> 8) & 0xFF;
+            int b = c & 0xFF;
+
+            buffer.pos(rx1, rz2, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx2, rz2, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx2, rz2, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx2, rz1, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx2, rz1, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx1, rz1, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx1, rz1, 0).color(r, g, b, 255).endVertex();
+            buffer.pos(rx1, rz2, 0).color(r, g, b, 255).endVertex();
+        }
+        tessellator.draw();
+
+        GL11.glLineWidth(1.0f);
+        GLShim.glDisable(GL11.GL_SCISSOR_TEST);
         GLShim.glEnable(GL11.GL_DEPTH_TEST);
         GLShim.glEnable(GL11.GL_TEXTURE_2D);
         GLShim.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

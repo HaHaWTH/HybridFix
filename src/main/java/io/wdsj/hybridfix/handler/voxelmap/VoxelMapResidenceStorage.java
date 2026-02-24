@@ -112,8 +112,12 @@ public final class VoxelMapResidenceStorage {
         return cx >= lx - d && cx <= lx + d && cz >= lz - d && cz <= lz + d;
     }
 
-    public Collection<SerializedResidence> getActiveResidences() {
+    public ReferenceSortedSet<SerializedResidence> getActiveResidences() {
         return activeResidences.keySet();
+    }
+
+    public ObjectCollection<SerializedResidence> getAllResidences() {
+        return allResidences.values();
     }
 
     public void clear() {
