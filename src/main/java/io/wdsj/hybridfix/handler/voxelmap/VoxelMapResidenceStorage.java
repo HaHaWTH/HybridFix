@@ -4,9 +4,7 @@ import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
 import io.wdsj.hybridfix.util.SingleUserAreaMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.world.WorldEvent;
@@ -22,7 +20,7 @@ public final class VoxelMapResidenceStorage {
 
     private final Object2ObjectOpenHashMap<String, SerializedResidence> allResidences = new Object2ObjectOpenHashMap<>();
     private final Long2ObjectOpenHashMap<List<SerializedResidence>> chunkGrid = new Long2ObjectOpenHashMap<>();
-    private final Object2IntOpenHashMap<SerializedResidence> activeResidences = new Object2IntOpenHashMap<>();
+    private final Reference2IntLinkedOpenHashMap<SerializedResidence> activeResidences = new Reference2IntLinkedOpenHashMap<>();
 
     private final ResidenceTracker tracker;
 
