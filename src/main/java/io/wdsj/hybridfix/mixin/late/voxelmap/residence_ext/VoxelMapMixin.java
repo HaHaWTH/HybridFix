@@ -48,6 +48,9 @@ public abstract class VoxelMapMixin {
         GLShim.glDisable(GL11.GL_TEXTURE_2D);
         GLShim.glDisable(GL11.GL_DEPTH_TEST);
 
+        float dynamicLineWidth = (float) (2.0 / zoomScaleAdjusted);
+        dynamicLineWidth = Math.max(1.0f, Math.min(dynamicLineWidth, 4.0f));
+        GL11.glLineWidth(dynamicLineWidth);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
@@ -67,7 +70,6 @@ public abstract class VoxelMapMixin {
             int g = c >> 8 & 255;
             int b = c & 255;
 
-            GL11.glLineWidth(1.0f);
             buffer.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR);
             buffer.pos(renderX1, renderZ2, 0).color(r, g, b, 255).endVertex();
             buffer.pos(renderX2, renderZ2, 0).color(r, g, b, 255).endVertex();
@@ -76,6 +78,7 @@ public abstract class VoxelMapMixin {
             tessellator.draw();
         }
 
+        GL11.glLineWidth(1.0f);
         GLShim.glEnable(GL11.GL_DEPTH_TEST);
         GLShim.glEnable(GL11.GL_TEXTURE_2D);
         GLShim.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
