@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-@Mixin(PlayerChunkMap.class)
+@Mixin(value = PlayerChunkMap.class, priority = 999)
 public abstract class PlayerChunkMapMixin {
 
     @Shadow private int playerViewRadius;
