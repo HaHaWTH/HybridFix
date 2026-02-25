@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.*;
 
 import java.lang.invoke.MethodHandle;
 
+// Reference: https://github.com/TerraFirmaCraft-The-Final-Frontier/RoughlyEnoughIDs/blob/master/src/main/java/org/dimdev/jeid/mixin/core/world/MixinChunk.java
 @Mixin(value = CraftWorld.class, remap = false)
 public abstract class CraftWorldMixin {
     @Shadow
