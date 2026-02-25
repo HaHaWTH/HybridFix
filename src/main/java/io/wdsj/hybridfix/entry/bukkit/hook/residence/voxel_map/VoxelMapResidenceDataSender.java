@@ -9,6 +9,7 @@ import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
+import io.wdsj.hybridfix.entry.bukkit.util.DataSender;
 import io.wdsj.hybridfix.handler.voxelmap.SerializedResidence;
 import io.wdsj.hybridfix.handler.voxelmap.VMResidenceChannel;
 import io.wdsj.hybridfix.util.TickThread;
@@ -29,7 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class VoxelMapResidenceDataSender implements Listener {
+public class VoxelMapResidenceDataSender extends DataSender implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         sendWorldResidences(event.getPlayer(), 40L);
@@ -80,7 +81,7 @@ public class VoxelMapResidenceDataSender implements Listener {
                     }, Utils.commonWorker())
                     .thenAcceptAsync(data -> {
                         if (data != null && player.isOnline() && player.getWorld().getName().equals(targetWorld)) {
-                            player.sendPluginMessage(HybridFixInternalPlugin.getInstance(), VMResidenceChannel.CHANNEL, data);
+                            sendPluginMessage(player, VMResidenceChannel.CHANNEL, data);
                         }
                     }, TickThread.mainThreadExecutor());
         }, delayTicks);
@@ -97,7 +98,7 @@ public class VoxelMapResidenceDataSender implements Listener {
             if (data == null) return;
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.getWorld().getName().equals(worldName)) {
-                    p.sendPluginMessage(HybridFixInternalPlugin.getInstance(), VMResidenceChannel.CHANNEL, data);
+                    sendPluginMessage(p, VMResidenceChannel.CHANNEL, data);
                 }
             }
         }, TickThread.mainThreadExecutor());

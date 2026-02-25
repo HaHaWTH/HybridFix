@@ -15,7 +15,6 @@ import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockLis
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookPvpListener;
 import io.wdsj.hybridfix.entry.bukkit.listener.ExplodeListener;
 import io.wdsj.hybridfix.entry.bukkit.util.ListenerHackery;
-import io.wdsj.hybridfix.handler.voxelmap.VMResidenceChannel;
 import io.wdsj.hybridfix.util.reflection.FluentReflect;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraftforge.fml.common.Loader;
@@ -54,7 +53,6 @@ public abstract class DedicatedServerMixin {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookEntityChangeBlockListener.class, res);
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
                 if (Settings.bukkitPluginConfig.sendClientResidenceData) {
-                    Bukkit.getMessenger().registerOutgoingPluginChannel(internalPlugin, VMResidenceChannel.CHANNEL);
                     ListenerHackery.registerListenerToTargetPlugin(VoxelMapResidenceDataSender.class, res);
                 }
                 if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
