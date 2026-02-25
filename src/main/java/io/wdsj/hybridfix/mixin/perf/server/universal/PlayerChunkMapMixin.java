@@ -1,6 +1,5 @@
 package io.wdsj.hybridfix.mixin.perf.server.universal;
 
-import io.wdsj.hybridfix.util.collection.SingleUserAreaMap;
 import io.wdsj.hybridfix.util.collection.player.PlayerChunkTracker;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
@@ -19,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 @Mixin(value = PlayerChunkMap.class, priority = 999)
 public abstract class PlayerChunkMapMixin {
@@ -31,7 +29,7 @@ public abstract class PlayerChunkMapMixin {
     @Shadow protected abstract void markSortPending();
     @Shadow @Final private WorldServer world;
     @Unique
-    private final Map<EntityPlayerMP, SingleUserAreaMap<EntityPlayerMP>> hybridfix$trackers = new Reference2ReferenceOpenHashMap<>();
+    private final Reference2ReferenceOpenHashMap<EntityPlayerMP, PlayerChunkTracker> hybridfix$trackers = new Reference2ReferenceOpenHashMap<>();
 
     @Inject(method = "addPlayer", at = @At("HEAD"), cancellable = true)
     private void onAddPlayer(EntityPlayerMP player, CallbackInfo ci) {
@@ -40,7 +38,7 @@ public abstract class PlayerChunkMapMixin {
         player.managedPosX = player.posX;
         player.managedPosZ = player.posZ;
 
-        SingleUserAreaMap<EntityPlayerMP> tracker = new PlayerChunkTracker(player, this.world);
+        PlayerChunkTracker tracker = new PlayerChunkTracker(player, this.world);
         this.hybridfix$trackers.put(player, tracker);
 
         tracker.add(cx, cz, this.playerViewRadius);
@@ -52,7 +50,7 @@ public abstract class PlayerChunkMapMixin {
 
     @Inject(method = "removePlayer", at = @At("HEAD"), cancellable = true)
     private void onRemovePlayer(EntityPlayerMP player, CallbackInfo ci) {
-        SingleUserAreaMap<EntityPlayerMP> tracker = this.hybridfix$trackers.remove(player);
+        PlayerChunkTracker tracker = this.hybridfix$trackers.remove(player);
         if (tracker != null) {
             tracker.remove();
         }
@@ -75,7 +73,7 @@ public abstract class PlayerChunkMapMixin {
             int oldCz = (int) player.managedPosZ >> 4;
 
             if (cx != oldCx || cz != oldCz) {
-                SingleUserAreaMap<EntityPlayerMP> tracker = this.hybridfix$trackers.get(player);
+                PlayerChunkTracker tracker = this.hybridfix$trackers.get(player);
                 if (tracker != null) {
                     tracker.update(cx, cz, this.playerViewRadius);
                 }
@@ -93,7 +91,7 @@ public abstract class PlayerChunkMapMixin {
 
         if (radius != this.playerViewRadius) {
             for (EntityPlayerMP player : new ObjectArrayList<>(this.players)) {
-                SingleUserAreaMap<EntityPlayerMP> tracker = this.hybridfix$trackers.get(player);
+                PlayerChunkTracker tracker = this.hybridfix$trackers.get(player);
                 if (tracker != null) {
                     tracker.update(tracker.getLastChunkX(), tracker.getLastChunkZ(), radius);
                 }
