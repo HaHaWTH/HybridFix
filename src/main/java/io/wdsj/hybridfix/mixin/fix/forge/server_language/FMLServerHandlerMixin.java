@@ -42,7 +42,7 @@ public abstract class FMLServerHandlerMixin {
                     value = "RETURN"
             )
     )
-    private static void injectExtraLangFiles(ModContainer container, CallbackInfo ci) {
+    private void injectExtraLangFiles(ModContainer container, CallbackInfo ci) {
         if (hybridFix$splitLang.length < 2) return;
         String langFile = "assets/" + container.getModId().toLowerCase() + "/lang/" + hybridFix$splitLang[0] + ".lang";
         String langFile2 = "assets/" + container.getModId().toLowerCase() + "/lang/" + hybridFix$splitLang[1] + ".lang";
