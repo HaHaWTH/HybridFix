@@ -146,6 +146,9 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                         LOGGER.info("Replaced Quark's EntityTransformer with our own mixins");
                     }, t -> LOGGER.error("Failed to patch Quark ASM", t));
         }
+        if (Settings.modPatchSettings.patchJEIDBukkitSupport && (Utils.isClassExists("org.dimdev.jeid.core.JEIDLoadingPlugin") || Utils.isClassExists("org.dimdev.jeid.JEIDLoadingPlugin"))) {
+            extraMixinConfigs.put("mixins.fix.mod_compat.jeid.json", () -> true);
+        }
         initialized = true;
     }
 }

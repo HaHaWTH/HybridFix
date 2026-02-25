@@ -57,8 +57,7 @@ public abstract class FMLServerHandlerMixin {
                 if (!f.exists())
                     throw new FileNotFoundException(source.toURI().resolve(langFile).getPath());
                 stream = new FileInputStream(f);
-            } else if (source.exists()) //Fake sources.. Yay coremods -.-
-            {
+            } else if (source.exists()) {
                 zip = new ZipFile(source);
                 ZipEntry entry = zip.getEntry(langFile);
                 if (entry == null) entry = zip.getEntry(langFile2);
@@ -69,8 +68,7 @@ public abstract class FMLServerHandlerMixin {
                 LanguageMap.inject(stream);
         } catch (FileNotFoundException e) {
             FMLLog.log.debug("Missing {} translation for {}: {}", hybridFix$splitLang[0], container.getModId(), e.getMessage());
-        } catch (IOException e) {
-            // hush
+        } catch (IOException ignored) {
         } catch (Exception e) {
             FMLLog.log.error(e);
         } finally {

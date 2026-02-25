@@ -339,6 +339,10 @@ public class Settings {
         @Config.Comment("(Client) Enable VoxelMap Residence support, drawing nearby residences on the map.")
         @Config.RequiresMcRestart
         public boolean voxelMapResidenceSupport = false;
+
+        @Config.Comment("(Server) Enable JEID Bukkit support.")
+        @Config.RequiresMcRestart
+        public boolean patchJEIDBukkitSupport = true;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
