@@ -52,6 +52,11 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean enableCraftServerOptimizations = true;
 
+    @Config.Comment("(Client / Server) Optimize PlayerChunkMap.")
+    @Config.Name("Optimize PlayerChunkMap")
+    @Config.RequiresMcRestart
+    public static boolean optimizePlayerChunkMap = false;
+
     @Config.Comment("(Server) Disable Spigot's built-in Timings to save performance. (Only support Timings v1)")
     @Config.Name("Disable Timings")
     @Config.RequiresMcRestart

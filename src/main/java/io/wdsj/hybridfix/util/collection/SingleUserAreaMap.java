@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.util;
+package io.wdsj.hybridfix.util.collection;
 
 // From moonrise, licensed under GPL-3.0
 public abstract class SingleUserAreaMap<T> {

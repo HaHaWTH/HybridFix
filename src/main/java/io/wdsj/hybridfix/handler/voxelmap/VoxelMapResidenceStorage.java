@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.handler.voxelmap;
 
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.util.SingleUserAreaMap;
+import io.wdsj.hybridfix.util.collection.SingleUserAreaMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.client.Minecraft;
