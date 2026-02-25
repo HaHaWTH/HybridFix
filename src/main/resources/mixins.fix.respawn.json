@@ -7,7 +7,6 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "EntityCapabilityAccessor",
-    "PlayerListMixin",
-    "AbstractAttributeMapMixin"
+    "PlayerListMixin"
   ]
 }
