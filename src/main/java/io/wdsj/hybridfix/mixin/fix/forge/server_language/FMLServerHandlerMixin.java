@@ -28,8 +28,8 @@ public abstract class FMLServerHandlerMixin {
             try {
                 if (inputstream != null) {
                     LanguageMap.inject(inputstream);
+                    HybridFix.LOGGER.info("Injected {}.lang for Minecraft", hybridFix$splitLang[0]);
                 }
-                HybridFix.LOGGER.info("Injected {}.lang for Minecraft", hybridFix$splitLang[0]);
             } catch (Exception ignored) {
             } finally {
                 IOUtils.closeQuietly(inputstream);
