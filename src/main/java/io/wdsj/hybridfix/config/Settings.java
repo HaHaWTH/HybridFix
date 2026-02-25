@@ -413,7 +413,7 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean hookResidence = false;
 
-        @Config.Comment("(Server) Send server Residence data to client.")
+        @Config.Comment("(Server) Send server Residence data to client for VoxelMap display feature.")
         @Config.Name("Send client Residence data")
         public boolean sendClientResidenceData = true;
 

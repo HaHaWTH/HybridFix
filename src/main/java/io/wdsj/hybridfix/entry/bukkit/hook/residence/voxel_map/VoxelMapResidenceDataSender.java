@@ -9,8 +9,8 @@ import com.bekvon.bukkit.residence.protection.CuboidArea;
 import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import io.wdsj.hybridfix.HybridFix;
 import io.wdsj.hybridfix.entry.bukkit.HybridFixInternalPlugin;
-import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
 import io.wdsj.hybridfix.handler.voxelmap.SerializedResidence;
+import io.wdsj.hybridfix.handler.voxelmap.VMResidenceChannel;
 import io.wdsj.hybridfix.util.TickThread;
 import io.wdsj.hybridfix.util.Utils;
 import org.bukkit.Bukkit;
@@ -29,10 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender implements Listener {
-    private static final String PACKET_ALL = "ALL";
-    private static final String PACKET_UPDATE = "UPDATE";
-    private static final String PACKET_REMOVE = "REMOVE";
+public class VoxelMapResidenceDataSender implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         sendWorldResidences(event.getPlayer(), 40L);
@@ -83,7 +80,7 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
                     }, Utils.commonWorker())
                     .thenAcceptAsync(data -> {
                         if (data != null && player.isOnline() && player.getWorld().getName().equals(targetWorld)) {
-                            player.sendPluginMessage(HybridFixInternalPlugin.getInstance(), CHANNEL, data);
+                            player.sendPluginMessage(HybridFixInternalPlugin.getInstance(), VMResidenceChannel.CHANNEL, data);
                         }
                     }, TickThread.mainThreadExecutor());
         }, delayTicks);
@@ -100,7 +97,7 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
             if (data == null) return;
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (p.getWorld().getName().equals(worldName)) {
-                    p.sendPluginMessage(HybridFixInternalPlugin.getInstance(), CHANNEL, data);
+                    p.sendPluginMessage(HybridFixInternalPlugin.getInstance(), VMResidenceChannel.CHANNEL, data);
                 }
             }
         }, TickThread.mainThreadExecutor());
@@ -121,19 +118,19 @@ public class VoxelMapResidenceDataSender extends AbstractResidenceDataSender imp
             }
         }
 
-        return serializeResidences(targetResidences, PACKET_ALL);
+        return serializeResidences(targetResidences, VMResidenceChannel.FULL_UPDATE);
     }
 
     private byte[] buildSingleDataPacket(SerializedResidence res) throws IOException {
         List<SerializedResidence> list = new ArrayList<>();
         list.add(res);
-        return serializeResidences(list, PACKET_UPDATE);
+        return serializeResidences(list, VMResidenceChannel.SINGLE_UPDATE);
     }
 
     private byte[] buildSingleDataDeletePacket(SerializedResidence res) throws IOException {
         List<SerializedResidence> list = new ArrayList<>();
         list.add(res);
-        return serializeResidences(list, PACKET_REMOVE);
+        return serializeResidences(list, VMResidenceChannel.SINGLE_REMOVE);
     }
 
     private byte[] serializeResidences(List<SerializedResidence> residences, String packetType) throws IOException {

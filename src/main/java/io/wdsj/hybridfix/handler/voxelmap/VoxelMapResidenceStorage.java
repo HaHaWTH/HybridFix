@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.handler.voxelmap;
 
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.entry.bukkit.hook.residence.AbstractResidenceDataSender;
 import io.wdsj.hybridfix.util.SingleUserAreaMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.*;
@@ -177,23 +176,21 @@ public final class VoxelMapResidenceStorage {
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        if (event.getWorld().isRemote) this.clear();
+        if (event.getWorld().isRemote) {
+            this.clear();
+        }
     }
-
-    private static final String PACKET_ALL = "ALL";
-    private static final String PACKET_REMOVE = "REMOVE";
-    private static final String PACKET_UPDATE = "UPDATE";
 
     @SubscribeEvent
     public void onClientPacket(FMLNetworkEvent.ClientCustomPacketEvent event) {
-        if (!event.getPacket().channel().equals(AbstractResidenceDataSender.CHANNEL)) return;
+        if (!event.getPacket().channel().equals(VMResidenceChannel.CHANNEL)) return;
         byte[] data = new byte[event.getPacket().payload().readableBytes()];
         event.getPacket().payload().readBytes(data);
         Minecraft.getMinecraft().addScheduledTask(() -> {
             try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(data))) {
                 String type = in.readUTF();
                 int count = in.readInt();
-                if (PACKET_ALL.equals(type)) this.clear(); // this will be handled later by updatePlayerPos
+                if (VMResidenceChannel.FULL_UPDATE.equals(type)) this.clear(); // this will be handled later by updatePlayerPos
                 for (int i = 0; i < count; i++) {
                     String name = in.readUTF();
                     String owner = in.readUTF();
@@ -203,10 +200,14 @@ public final class VoxelMapResidenceStorage {
                     int maxX = in.readInt();
                     int maxY = in.readInt();
                     int maxZ = in.readInt();
-                    if (PACKET_REMOVE.equals(type)) {
-                        this.remove(name);
-                    } else {
-                        this.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
+                    switch (type) {
+                        case VMResidenceChannel.SINGLE_UPDATE:
+                        case VMResidenceChannel.FULL_UPDATE:
+                            this.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
+                            break;
+                        case VMResidenceChannel.SINGLE_REMOVE:
+                            this.remove(name);
+                            break;
                     }
                 }
             } catch (Throwable t) {
