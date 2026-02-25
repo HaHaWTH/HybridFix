@@ -13,6 +13,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 
 - (Universal) Fix Forge JarDiscoverer attempting to read `module-info.class` and other multi-release classes.
 - (Server) Fix `Outdated server` showing in ping before server fully boots.
+- (Universal) Fix an internal NPE crash in Authlib caused by looking up illegal profiles.
 
 ### Mods
 
@@ -25,6 +26,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 #### Client
 
 - Replace expensive reflection usages in Industrial Craft 2 with direct calls
+- Drawing nearby residences in VoxelMap mod
 
 #### Server
 
@@ -76,6 +78,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Guard player ticking process, kick player instead of directly crash.
 - Fix Forge bugs that affect server play experience.
 - (Universal) Optimize entity AI for faster nearest target lookup.
+- (Universal) Optimize PlayerChunkMap with incremental update algorithm, significantly reducing CPU usage during movement.
 
 Configuration file is under `${minecraftDir}/config/hybridfix.cfg`
 
