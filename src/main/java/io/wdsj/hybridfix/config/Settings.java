@@ -151,6 +151,14 @@ public class Settings {
     @Config.Name("Fix Authlib's profile lookup")
     public static boolean fixAuthLibProfileLookup = true;
 
+    @Config.Comment("(Server) Load extra language file for dedicated servers.")
+    @Config.Name("Load extra language file")
+    public static boolean extraLanguageFile = false;
+
+    @Config.Comment("(Server) Preferred language for extra lang file.")
+    @Config.Name("Preferred language")
+    public static String preferredLanguage = "en_us:en_US";
+
     @Config.Comment("(Server) Startup MOTD settings. (Only works when 'Fix outdated server' is enabled)")
     @Config.Name("Startup MOTD Settings")
     @Config.RequiresMcRestart

@@ -186,12 +186,7 @@ public class CommandHybridFix extends Command {
             return;
         }
 
-        if (target instanceof EntityPlayer) {
-            name = target.getName();
-        } else {
-            ResourceLocation rl = EntityList.getKey(target);
-            name = rl != null ? rl.toString() : "unknown:unknown";
-        }
+        name = target.getName();
 
         BlockPos pos = target.getPosition();
         Class<? extends Entity> clazz = target.getClass();
