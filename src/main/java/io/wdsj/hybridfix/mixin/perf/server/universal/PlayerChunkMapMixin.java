@@ -8,13 +8,7 @@ import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.*;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,8 +25,12 @@ public abstract class PlayerChunkMapMixin {
     @Unique
     private final Reference2ReferenceOpenHashMap<EntityPlayerMP, PlayerChunkTracker> hybridfix$trackers = new Reference2ReferenceOpenHashMap<>();
 
-    @Inject(method = "addPlayer", at = @At("HEAD"), cancellable = true)
-    private void onAddPlayer(EntityPlayerMP player, CallbackInfo ci) {
+    /**
+     * @author Creeam
+     * @reason Rewrite player chunk tracking
+     */
+    @Overwrite
+    public void addPlayer(EntityPlayerMP player) {
         int cx = (int) player.posX >> 4;
         int cz = (int) player.posZ >> 4;
         player.managedPosX = player.posX;
@@ -45,11 +43,14 @@ public abstract class PlayerChunkMapMixin {
 
         this.players.add(player);
         this.markSortPending();
-        ci.cancel();
     }
 
-    @Inject(method = "removePlayer", at = @At("HEAD"), cancellable = true)
-    private void onRemovePlayer(EntityPlayerMP player, CallbackInfo ci) {
+    /**
+     * @author Creeam
+     * @reason Rewrite player chunk tracking
+     */
+    @Overwrite
+    public void removePlayer(EntityPlayerMP player) {
         PlayerChunkTracker tracker = this.hybridfix$trackers.remove(player);
         if (tracker != null) {
             tracker.remove();
@@ -57,11 +58,14 @@ public abstract class PlayerChunkMapMixin {
 
         this.players.remove(player);
         this.markSortPending();
-        ci.cancel();
     }
 
-    @Inject(method = "updateMovingPlayer", at = @At("HEAD"), cancellable = true)
-    private void onUpdateMovingPlayer(EntityPlayerMP player, CallbackInfo ci) {
+    /**
+     * @author Creeam
+     * @reason Rewrite player chunk tracking
+     */
+    @Overwrite
+    public void updateMovingPlayer(EntityPlayerMP player) {
         double d0 = player.managedPosX - player.posX;
         double d1 = player.managedPosZ - player.posZ;
         double d2 = d0 * d0 + d1 * d1;
@@ -82,11 +86,14 @@ public abstract class PlayerChunkMapMixin {
                 this.markSortPending();
             }
         }
-        ci.cancel();
     }
 
-    @Inject(method = "setPlayerViewRadius", at = @At("HEAD"), cancellable = true)
-    private void onSetPlayerViewRadius(int radius, CallbackInfo ci) {
+    /**
+     * @author Creeam
+     * @reason Rewrite player chunk tracking
+     */
+    @Overwrite
+    public void setPlayerViewRadius(int radius) {
         radius = MathHelper.clamp(radius, 3, 32);
 
         if (radius != this.playerViewRadius) {
@@ -99,6 +106,5 @@ public abstract class PlayerChunkMapMixin {
             this.playerViewRadius = radius;
             this.markSortPending();
         }
-        ci.cancel();
     }
 }
