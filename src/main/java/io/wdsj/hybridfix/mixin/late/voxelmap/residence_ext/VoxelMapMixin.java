@@ -59,7 +59,7 @@ public abstract class VoxelMapMixin {
         hybridfix$CACHE[0] = null;
         hybridfix$CACHE[1] = null;
         float yOff = (ztimer > 0) ? 25.0F : 15.0F;
-        this.write(name, (float)(this.scWidth / 2 - this.chkLen(name) / 2), yOff, 0xFFFFFF);
+        this.write(name, (float)((this.scWidth >> 1) - (this.chkLen(name) >> 1)), yOff, 0xFFFFFF);
     }
 
     @Unique
@@ -103,12 +103,13 @@ public abstract class VoxelMapMixin {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
 
+        double invScale = 1.0 / zoomScaleAdjusted;
         for (SerializedResidence res : areas) {
             if (!hybridfix$isPlayerYRelevant(res)) continue;
-            double x1 = (res.minX - lastImageX) / zoomScaleAdjusted;
-            double z1 = (res.minZ - lastImageZ) / zoomScaleAdjusted;
-            double x2 = (res.maxX + 1 - lastImageX) / zoomScaleAdjusted;
-            double z2 = (res.maxZ + 1 - lastImageZ) / zoomScaleAdjusted;
+            double x1 = (res.minX - lastImageX) * invScale;
+            double z1 = (res.minZ - lastImageZ) * invScale;
+            double x2 = (res.maxX + 1 - lastImageX) * invScale;
+            double z2 = (res.maxZ + 1 - lastImageZ) * invScale;
 
             double renderX1 = x + x1;
             double renderZ1 = y + z1;
@@ -148,8 +149,8 @@ public abstract class VoxelMapMixin {
 
         int multi = 1 << this.zoom;
         double pixelsPerBlock = 8.0 / multi;
-        double centerX = scWidth / 2.0;
-        double centerZ = scHeight / 2.0;
+        double centerX = scWidth * 0.5;
+        double centerZ = scHeight * 0.5;
 
         GLShim.glDisable(GL11.GL_TEXTURE_2D);
         GLShim.glDisable(GL11.GL_DEPTH_TEST);
@@ -157,8 +158,8 @@ public abstract class VoxelMapMixin {
         GLShim.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         double guiScale = (double) this.game.displayWidth / (double) scWidth;
-        int mapLeft = scWidth / 2 - 128;
-        int mapTop = scHeight / 2 - 128;
+        int mapLeft = (scWidth >> 1) - 128;
+        int mapTop = (scHeight >> 1) - 128;
         GLShim.glEnable(GL11.GL_SCISSOR_TEST);
         GLShim.glScissor(
                 (int) (guiScale * mapLeft),
