@@ -1,15 +1,9 @@
 package io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor;
 
 import io.wdsj.hybridfix.HybridFix;
-import io.wdsj.hybridfix.util.ObfHelper;
+import io.wdsj.hybridfix.util.reflection.HybridReflectionUtils;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
@@ -55,12 +49,11 @@ public class ResidenceCustomBlockAdder {
             String materialName = key.toString().toUpperCase().replaceAll("(:|\\s)", "_").replaceAll("\\W", "");
             try {
                 Material material = Material.getMaterial(materialName);
-                Method m = block.getClass().getMethod(ObfHelper.getName("onBlockActivated", "func_180639_a"), World.class, BlockPos.class, IBlockState.class, EntityPlayer.class, EnumHand.class, EnumFacing.class, float.class, float.class, float.class);
-                if (material != null && isMethodDeclaredInModBlock(m) && !addedMaterials.contains(materialName)) {
+                if (material != null && HybridReflectionUtils.isMethodOverriddenByModSafe(block.getClass(), "func_180639_a", "onBlockActivated") && !addedMaterials.contains(materialName)) {
                     newRightClicks.add(materialName);
                     addedMaterials.add(materialName);
                 }
-            } catch (Exception e)  {
+            } catch (Throwable e)  {
                 HybridFix.LOGGER.warn("Failed to add custom right click for block {}", materialName, e);
             }
         }
@@ -92,14 +85,12 @@ public class ResidenceCustomBlockAdder {
             String materialName = key.toString().toUpperCase().replaceAll("(:|\\s)", "_").replaceAll("\\W", "");
             try {
                 Material material = Material.getMaterial(materialName);
-                Method m = block.getClass().getMethod(ObfHelper.getName("onBlockActivated", "func_180639_a"), World.class, BlockPos.class, IBlockState.class, EntityPlayer.class, EnumHand.class, EnumFacing.class, float.class, float.class, float.class);
-                Method m2 = block.getClass().getMethod(ObfHelper.getName("onBlockClicked", "func_180649_a"), World.class, BlockPos.class, EntityPlayer.class);
-                if (material != null && isMethodDeclaredInModBlock(m) && isMethodDeclaredInModBlock(m2) && !addedMaterials.contains(materialName)) {
+                if (material != null && HybridReflectionUtils.isMethodOverriddenByModSafe(block.getClass(), "func_180639_a", "onBlockActivated") && HybridReflectionUtils.isMethodOverriddenByModSafe(block.getClass(), "func_180649_a", "onBlockClicked") && !addedMaterials.contains(materialName)) {
                     newBothClicks.add(materialName);
                     addedMaterials.add(materialName);
                 }
-            } catch (Exception e)  {
-                HybridFix.LOGGER.warn("Failed to add custom both click for block {}", materialName, e);
+            } catch (Throwable t)  {
+                HybridFix.LOGGER.warn("Failed to add custom both click for block {}", materialName, t);
             }
         }
         newBothClicks.addAll(oldBothClicks);

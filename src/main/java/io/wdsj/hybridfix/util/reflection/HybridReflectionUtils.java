@@ -13,7 +13,11 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.SimplePluginManager;
 import org.jetbrains.annotations.ApiStatus;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
+import java.io.InputStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Field;
 
@@ -94,5 +98,34 @@ public class HybridReflectionUtils {
         } catch (Throwable th) {
             SneakyThrow.sneaky(th);
         }
+    }
+
+    public static boolean isMethodOverriddenByModSafe(Class<?> targetClass, String srgName, String mcpName) {
+        Class<?> current = targetClass;
+
+        while (current != null && current != Object.class) {
+            String className = current.getName();
+            if (current.getName().startsWith("net.minecraft.")) break;
+            String resourceName = className.replace('.', '/') + ".class";
+
+            try (InputStream is = current.getClassLoader().getResourceAsStream(resourceName)) {
+                if (is != null) {
+                    ClassReader cr = new ClassReader(is);
+                    ClassNode cn = new ClassNode();
+
+                    cr.accept(cn, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+
+                    for (MethodNode mn : cn.methods) {
+                        if (mn.name.equals(srgName) || mn.name.equals(mcpName)) {
+                            return true;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+
+            current = current.getSuperclass();
+        }
+        return false;
     }
 }
