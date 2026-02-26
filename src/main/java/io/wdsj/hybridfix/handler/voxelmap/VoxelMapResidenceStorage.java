@@ -184,34 +184,64 @@ public final class VoxelMapResidenceStorage {
     @SubscribeEvent
     public void onClientPacket(FMLNetworkEvent.ClientCustomPacketEvent event) {
         if (!event.getPacket().channel().equals(VMResidenceChannel.CHANNEL)) return;
+
         byte[] data = new byte[event.getPacket().payload().readableBytes()];
         event.getPacket().payload().readBytes(data);
+
+        String parsedType;
+        Map<String, SerializedResidence> parsedUpdates = new Object2ObjectLinkedOpenHashMap<>();
+        List<String> parsedRemoves = new ObjectArrayList<>();
+
+        try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(data))) {
+            parsedType = in.readUTF();
+            int count = in.readInt();
+
+            for (int i = 0; i < count; i++) {
+                String name = in.readUTF();
+                String owner = in.readUTF();
+                int minX = in.readInt();
+                int minY = in.readInt();
+                int minZ = in.readInt();
+                int maxX = in.readInt();
+                int maxY = in.readInt();
+                int maxZ = in.readInt();
+
+                switch (parsedType) {
+                    case VMResidenceChannel.SINGLE_UPDATE:
+                    case VMResidenceChannel.FULL_UPDATE:
+                        parsedUpdates.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
+                        break;
+                    case VMResidenceChannel.SINGLE_REMOVE:
+                        parsedRemoves.add(name);
+                        break;
+                }
+            }
+        } catch (Throwable t) {
+            HybridFix.LOGGER.error("Failed to parse residence packet", t);
+            return;
+        }
+
         Minecraft.getMinecraft().addScheduledTask(() -> {
-            try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(data))) {
-                String type = in.readUTF();
-                int count = in.readInt();
-                if (VMResidenceChannel.FULL_UPDATE.equals(type)) this.clear(); // this will be handled later by updatePlayerPos
-                for (int i = 0; i < count; i++) {
-                    String name = in.readUTF();
-                    String owner = in.readUTF();
-                    int minX = in.readInt();
-                    int minY = in.readInt();
-                    int minZ = in.readInt();
-                    int maxX = in.readInt();
-                    int maxY = in.readInt();
-                    int maxZ = in.readInt();
-                    switch (type) {
-                        case VMResidenceChannel.SINGLE_UPDATE:
-                        case VMResidenceChannel.FULL_UPDATE:
-                            this.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
-                            break;
-                        case VMResidenceChannel.SINGLE_REMOVE:
+            try {
+                if (VMResidenceChannel.FULL_UPDATE.equals(parsedType)) {
+                    this.clear();
+                }
+
+                switch (parsedType) {
+                    case VMResidenceChannel.SINGLE_UPDATE:
+                    case VMResidenceChannel.FULL_UPDATE:
+                        for (Map.Entry<String, SerializedResidence> entry : parsedUpdates.entrySet()) {
+                            this.put(entry.getKey(), entry.getValue());
+                        }
+                        break;
+                    case VMResidenceChannel.SINGLE_REMOVE:
+                        for (String name : parsedRemoves) {
                             this.remove(name);
-                            break;
-                    }
+                        }
+                        break;
                 }
             } catch (Throwable t) {
-                HybridFix.LOGGER.error("Failed to handle residence packet", t);
+                HybridFix.LOGGER.error("Failed to apply residence state", t);
             }
         });
     }
