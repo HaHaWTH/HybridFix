@@ -52,10 +52,10 @@ public class Settings {
     @Config.RequiresMcRestart
     public static boolean enableCraftServerOptimizations = true;
 
-    @Config.Comment("(Client / Server) Optimize PlayerChunkMap.")
-    @Config.Name("Optimize PlayerChunkMap")
+    @Config.Comment("(Client / Server) Optimize Player and Entity tracking.")
+    @Config.Name("Optimize Player and Entity tracking")
     @Config.RequiresMcRestart
-    public static boolean optimizePlayerChunkMap = false;
+    public static boolean optimizePlayerTracking = false;
 
     @Config.Comment("(Server) Disable Spigot's built-in Timings to save performance. (Only support Timings v1)")
     @Config.Name("Disable Timings")
@@ -405,7 +405,13 @@ public class Settings {
         @Config.Comment("(Server) Targets of method no op patcher should apply.")
         @Config.RequiresMcRestart
         public String[] methodNoOpPatcherTargets = new String[]{
-                "com.othermod.core.PlayerEventHandler|doStuff(Z)I|114514"
+                "com.othermod.core.PlayerEventHandler|doStuff(Z)I|114514",
+                "blusunrize.immersiveengineering.ImmersiveEngineering$ThreadContributorSpecialsDownloader|run()V",
+                "hellfirepvp.astralsorcery.common.base.patreon.PatreonDataManager|loadPatreonEffects()V",
+                "vazkii.quark.base.client.ContributorRewardHandler|init()V",
+                "vazkii.quark.base.client.ContributorRewardHandler|onRenderPlayer",
+                "vazkii.quark.base.client.ContributorRewardHandler|onPlayerJoin",
+                "vazkii.quark.base.client.ContributorRewardHandler$ThreadContributorListLoader|run()V"
         };
     }
 
