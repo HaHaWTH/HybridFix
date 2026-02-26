@@ -74,7 +74,7 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
         }
 
         if (changed) {
-            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+            ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
             cn.accept(cw);
             byte[] bytes = cw.toByteArray();
             log(className);
