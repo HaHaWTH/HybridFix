@@ -74,6 +74,13 @@ public abstract class VoxelMapMixin {
         return null;
     }
 
+    @Unique
+    private boolean hybridfix$isPlayerYRelevant(SerializedResidence res) {
+        if (this.game.player == null) return true;
+        double py = this.game.player.posY;
+        return py >= res.minY && py <= res.maxY + 1;
+    }
+
     @Inject(
             method = "renderMap",
             at = @At(
@@ -97,6 +104,7 @@ public abstract class VoxelMapMixin {
         BufferBuilder buffer = tessellator.getBuffer();
 
         for (SerializedResidence res : areas) {
+            if (!hybridfix$isPlayerYRelevant(res)) continue;
             double x1 = (res.minX - lastImageX) / zoomScaleAdjusted;
             double z1 = (res.minZ - lastImageZ) / zoomScaleAdjusted;
             double x2 = (res.maxX + 1 - lastImageX) / zoomScaleAdjusted;
@@ -164,6 +172,7 @@ public abstract class VoxelMapMixin {
 
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         for (SerializedResidence res : areas) {
+            if (!hybridfix$isPlayerYRelevant(res)) continue;
             double rx1 = centerX + (res.minX - lastImageX) * pixelsPerBlock;
             double rz1 = centerZ + (res.minZ - lastImageZ) * pixelsPerBlock;
             double rx2 = centerX + (res.maxX + 1 - lastImageX) * pixelsPerBlock;
