@@ -82,8 +82,7 @@ public abstract class GuiPersistentMapMixin {
             int r = (c >> 16) & 0xFF;
             int g = (c >> 8) & 0xFF;
             int b = c & 0xFF;
-            int a = (c >> 24) & 0xFF; // 0x4D ≈ 30%
-
+            int a = (int) (((c >> 24) & 0xFF) * yAlpha);
             buffer.pos(rx1, rz1, 0).color(r, g, b, a).endVertex();
             buffer.pos(rx1, rz2, 0).color(r, g, b, a).endVertex();
             buffer.pos(rx2, rz2, 0).color(r, g, b, a).endVertex();

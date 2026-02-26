@@ -194,6 +194,7 @@ public abstract class VoxelMapMixin {
         GL11.glLineWidth(2.0f);
         buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
         for (SerializedResidence res : areas) {
+            if (!hybridfix$isPlayerYRelevant(res)) continue;
             double rx1 = centerX + (res.minX - lastImageX) * pixelsPerBlock;
             double rz1 = centerZ + (res.minZ - lastImageZ) * pixelsPerBlock;
             double rx2 = centerX + (res.maxX + 1 - lastImageX) * pixelsPerBlock;
