@@ -39,9 +39,10 @@ public class SerializedResidence {
         if (this == obj) return true;
         if (!(obj instanceof SerializedResidence)) return false;
         SerializedResidence other = (SerializedResidence) obj;
-        return name.equals(other.name) && owner.equals(other.owner) &&
-                minX == other.minX && minY == other.minY && minZ == other.minZ &&
-                maxX == other.maxX && maxY == other.maxY && maxZ == other.maxZ;
+        return minX == other.minX && minZ == other.minZ &&
+                maxX == other.maxX && maxZ == other.maxZ &&
+                minY == other.minY && maxY == other.maxY &&
+                name.equals(other.name) && owner.equals(other.owner);
     }
 
     @Override

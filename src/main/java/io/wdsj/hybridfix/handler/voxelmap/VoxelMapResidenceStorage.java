@@ -105,7 +105,7 @@ public final class VoxelMapResidenceStorage {
         int inViewCount = 0;
         for (int cx = res.minX >> 4; cx <= res.maxX >> 4; cx++) {
             for (int cz = res.minZ >> 4; cz <= res.maxZ >> 4; cz++) {
-                chunkGrid.computeIfAbsent(chunkKey(cx, cz), k -> new ObjectArrayList<>()).add(res);
+                chunkGrid.computeIfAbsent(chunkKey(cx, cz), k -> new ReferenceArrayList<>()).add(res);
                 if (isChunkInTracker(cx, cz)) inViewCount++;
             }
         }
