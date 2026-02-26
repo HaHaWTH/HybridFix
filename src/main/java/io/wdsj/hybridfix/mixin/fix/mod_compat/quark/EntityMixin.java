@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.asm_fix.quark;
+package io.wdsj.hybridfix.mixin.fix.mod_compat.quark;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalDoubleRef;

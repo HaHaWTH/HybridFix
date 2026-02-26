@@ -142,7 +142,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
                     .accept(accessor -> {
                         Map<String, Object> transformersMap = accessor.get(null);
                         transformersMap.remove("net.minecraft.entity.Entity");
-                        extraMixinConfigs.put("mixins.quark.asm_fix.json", () -> true);
+                        extraMixinConfigs.put("mixins.fix.mod_compat.quark.json", () -> true);
                         LOGGER.info("Replaced Quark's EntityTransformer with our own mixins");
                     }, t -> LOGGER.error("Failed to patch Quark ASM", t));
         }

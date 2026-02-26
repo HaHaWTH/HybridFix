@@ -1,5 +1,5 @@
 {
-  "package": "io.wdsj.hybridfix.mixin.asm_fix.quark",
+  "package": "io.wdsj.hybridfix.mixin.fix.mod_compat.quark",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",
