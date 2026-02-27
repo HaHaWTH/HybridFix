@@ -431,7 +431,14 @@ public class Settings {
                 "org.cyclops.cyclopscore.tracking.ImportantUsers|checkAll()V",
                 "org.cyclops.cyclopscore.tracking.Analytics|sendAll()V",
                 "org.cyclops.cyclopscore.tracking.Versions|checkAll()V",
-                "org.cyclops.cyclopscore.tracking.Versions|onTick"
+                "org.cyclops.cyclopscore.tracking.Versions|onTick",
+                "vazkii.botania.common.core.version.VersionChecker|init()V",
+                "vazkii.botania.common.core.version.VersionChecker|onTick",
+                "vazkii.botania.common.core.version.ThreadVersionChecker|run()V",
+                "vazkii.botania.common.core.version.ThreadDownloadMod|run()V",
+                "vazkii.botania.common.core.version.ThreadDownloadMod|sendError()V",
+                "shadows.placebo.patreon.PatreonManager|init",
+                "shadows.placebo.patreon.PatreonManager|onPlayerTick"
         };
     }
 
