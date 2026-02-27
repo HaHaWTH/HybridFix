@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.late.voxelmap.residence_ext;
+package io.wdsj.hybridfix.mixin.late.voxelmap.client.residence_ext;
 
 import com.mamiyaotaru.voxelmap.persistent.GuiPersistentMap;
 import com.mamiyaotaru.voxelmap.util.GLShim;

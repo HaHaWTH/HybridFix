@@ -1,5 +1,5 @@
 {
-  "package": "io.wdsj.hybridfix.mixin.late.voxelmap.teleport.fix",
+  "package": "io.wdsj.hybridfix.mixin.late.voxelmap.client.fix.teleport",
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",

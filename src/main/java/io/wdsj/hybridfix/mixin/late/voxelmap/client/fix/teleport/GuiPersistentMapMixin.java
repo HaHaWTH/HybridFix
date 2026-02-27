@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.late.voxelmap.teleport.fix;
+package io.wdsj.hybridfix.mixin.late.voxelmap.client.fix.teleport;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
