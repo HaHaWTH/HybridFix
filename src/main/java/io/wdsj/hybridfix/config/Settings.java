@@ -396,11 +396,11 @@ public class Settings {
     public static class ASMModPatcherSettings {
         @Config.Comment("(Client / Server) Enable HybridFix ASM mod patcher.")
         @Config.RequiresMcRestart
-        public boolean enable = false;
+        public boolean enable = true;
 
         @Config.Comment("(Client / Server) Remove instanceof FakePlayer checks in PlayerEvent.Clone listeners.")
         @Config.RequiresMcRestart
-        public boolean removeFakePlayerInstOf = true;
+        public boolean removeFakePlayerInstOf = false;
 
         @Config.Comment("(Client / Server) Classes that instanceof FakePlayer removal should target.")
         @Config.RequiresMcRestart
