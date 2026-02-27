@@ -133,7 +133,46 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
                 il.add(new InsnNode(Opcodes.ARETURN));
                 break;
             case Type.ARRAY:
-                il.add(new InsnNode(Opcodes.ACONST_NULL));
+                if (target.value != null && (target.value.equalsIgnoreCase("empty") || target.value.equals("[]"))) {
+                    il.add(new InsnNode(Opcodes.ICONST_0));
+                    Type componentType = Type.getType(returnType.getDescriptor().substring(1));
+                    if (componentType.getSort() == Type.OBJECT || componentType.getSort() == Type.ARRAY) {
+                        il.add(new TypeInsnNode(Opcodes.ANEWARRAY, componentType.getInternalName()));
+                    } else {
+                        int typeCode;
+                        switch (componentType.getSort()) {
+                            case Type.BOOLEAN:
+                                typeCode = Opcodes.T_BOOLEAN;
+                                break;
+                            case Type.CHAR:
+                                typeCode = Opcodes.T_CHAR;
+                                break;
+                            case Type.BYTE:
+                                typeCode = Opcodes.T_BYTE;
+                                break;
+                            case Type.SHORT:
+                                typeCode = Opcodes.T_SHORT;
+                                break;
+                            case Type.INT:
+                                typeCode = Opcodes.T_INT;
+                                break;
+                            case Type.FLOAT:
+                                typeCode = Opcodes.T_FLOAT;
+                                break;
+                            case Type.LONG:
+                                typeCode = Opcodes.T_LONG;
+                                break;
+                            case Type.DOUBLE:
+                                typeCode = Opcodes.T_DOUBLE;
+                                break;
+                            default:
+                                throw new IllegalArgumentException("Unknown primitive array type: " + componentType);
+                        }
+                        il.add(new IntInsnNode(Opcodes.NEWARRAY, typeCode));
+                    }
+                } else {
+                    il.add(new InsnNode(Opcodes.ACONST_NULL));
+                }
                 il.add(new InsnNode(Opcodes.ARETURN));
                 break;
         }
