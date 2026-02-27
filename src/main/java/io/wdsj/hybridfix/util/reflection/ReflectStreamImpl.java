@@ -44,9 +44,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
                 return classLoader != null
                         ? Class.forName((String) returnType, initialize, classLoader)
                         : Class.forName((String) returnType, initialize, getClass().getClassLoader());
-            } catch (ClassNotFoundException e) {
-                SneakyThrow.throw0(e);
-                throw new RuntimeException(e); // unreachable
+            } catch (Throwable t) {
+                SneakyThrow.throw0(t);
+                throw new RuntimeException(t); // unreachable
             }
         } else {
             throw new IllegalStateException("Invalid return type: " + returnType);
@@ -183,9 +183,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
                     : Class.forName(targetClassName, initialize, getClass().getClassLoader()));
             checkTypeContract(clazz);
             return clazz;
-        } catch (ClassNotFoundException e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -225,9 +225,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             Method method = resolveTargetClass().getMethod(name);
             if (isAccessible) method.setAccessible(true);
             return method;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -242,9 +242,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             Method method = resolveTargetClass().getDeclaredMethod(name);
             if (isAccessible) method.setAccessible(true);
             return method;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -259,9 +259,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             Field field = resolveTargetClass().getField(name);
             if (isAccessible) field.setAccessible(true);
             return field;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -276,9 +276,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             Field field = resolveTargetClass().getDeclaredField(name);
             if (isAccessible) field.setAccessible(true);
             return field;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -290,9 +290,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             Constructor<T> constructor = resolveTargetClass().getDeclaredConstructor();
             if (isAccessible) constructor.setAccessible(true);
             return constructor;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -306,9 +306,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findVirtual(targetClazz, name, MethodType.methodType(resolveReturnType()));
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -322,9 +322,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findStatic(targetClazz, name, MethodType.methodType(resolveReturnType()));
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -338,9 +338,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findGetter(targetClazz, name, resolveReturnType());
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -354,9 +354,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findStaticGetter(targetClazz, name, resolveReturnType());
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -370,9 +370,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findSetter(targetClazz, name, resolveReturnType());
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -386,9 +386,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findStaticSetter(targetClazz, name, resolveReturnType());
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -399,9 +399,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
         try {
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findConstructor(targetClazz, MethodType.methodType(void.class));
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -415,9 +415,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Field field = resolveTargetClass().getDeclaredField(name);
             return UnsafeFieldAccessorFactory.create(field, false);
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -431,9 +431,9 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             }
             Field field = resolveTargetClass().getDeclaredField(name);
             return UnsafeFieldAccessorFactory.create(field, true);
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -524,7 +524,7 @@ class ReflectStreamImpl<T> implements ReflectStream<T> {
             if (FluentReflect.PRIVATE_LOOKUP_IN != null) {
                 return (MethodHandles.Lookup) FluentReflect.PRIVATE_LOOKUP_IN.invoke(null, clazz, MethodHandles.lookup());
             }
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
         }
         return MethodHandles.lookup();
     }

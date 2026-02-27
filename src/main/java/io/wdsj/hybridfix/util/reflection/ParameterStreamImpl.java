@@ -49,9 +49,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
                 return classLoader != null
                         ? Class.forName((String) returnType, false, classLoader)
                         : Class.forName((String) returnType);
-            } catch (ClassNotFoundException e) {
-                SneakyThrow.throw0(e);
-                throw new RuntimeException(e); // unreachable
+            } catch (Throwable t) {
+                SneakyThrow.throw0(t);
+                throw new RuntimeException(t); // unreachable
             }
         } else {
             throw new IllegalStateException("Invalid return type: " + returnType);
@@ -151,9 +151,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
                     : Class.forName(targetClassName, initialize, getClass().getClassLoader()));
             checkTypeContract(clazz);
             return clazz;
-        } catch (ClassNotFoundException e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -174,9 +174,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
                     resolvedTypes.add(classLoader != null
                             ? Class.forName((String) paramType, initialize, classLoader)
                             : Class.forName((String) paramType, initialize, getClass().getClassLoader()));
-                } catch (ClassNotFoundException e) {
-                    SneakyThrow.throw0(e);
-                    throw new RuntimeException(e); // unreachable
+                } catch (Throwable t) {
+                    SneakyThrow.throw0(t);
+                    throw new RuntimeException(t); // unreachable
                 }
             } else {
                 throw new IllegalStateException("Invalid parameter type: " + paramType);
@@ -200,9 +200,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
             Method method = resolveTargetClass().getMethod(name, resolveParameterTypes());
             if (isAccessible) method.setAccessible(true);
             return method;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -217,9 +217,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
             Method method = resolveTargetClass().getDeclaredMethod(name, resolveParameterTypes());
             if (isAccessible) method.setAccessible(true);
             return method;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -231,9 +231,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
             Constructor<T> constructor = resolveTargetClass().getDeclaredConstructor(resolveParameterTypes());
             if (isAccessible) constructor.setAccessible(true);
             return constructor;
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -247,9 +247,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findVirtual(targetClazz, name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -263,9 +263,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
             }
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findStatic(targetClazz, name, MethodType.methodType(resolveReturnType(), resolveParameterTypes()));
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -276,9 +276,9 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
         try {
             Class<T> targetClazz = resolveTargetClass();
             return getLookup(targetClazz).findConstructor(targetClazz, MethodType.methodType(void.class, resolveParameterTypes()));
-        } catch (Exception e) {
-            SneakyThrow.throw0(e);
-            throw new RuntimeException(e); // unreachable
+        } catch (Throwable t) {
+            SneakyThrow.throw0(t);
+            throw new RuntimeException(t); // unreachable
         }
     }
 
@@ -329,7 +329,7 @@ class ParameterStreamImpl<T> implements ParameterStream<T> {
             if (FluentReflect.PRIVATE_LOOKUP_IN != null) {
                 return (MethodHandles.Lookup) FluentReflect.PRIVATE_LOOKUP_IN.invoke(null, clazz, MethodHandles.lookup());
             }
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
         }
         return MethodHandles.lookup();
     }
