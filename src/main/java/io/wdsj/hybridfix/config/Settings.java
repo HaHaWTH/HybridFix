@@ -396,7 +396,7 @@ public class Settings {
     public static class ASMModPatcherSettings {
         @Config.Comment("(Client / Server) Enable HybridFix ASM mod patcher.")
         @Config.RequiresMcRestart
-        public boolean enable = true;
+        public boolean enable = false;
 
         @Config.Comment("(Client / Server) Remove instanceof FakePlayer checks in PlayerEvent.Clone listeners.")
         @Config.RequiresMcRestart
@@ -426,7 +426,11 @@ public class Settings {
                 "com.brandon3055.draconicevolution.handlers.ContributorHandler|onPlayerLogin|",
                 "com.brandon3055.draconicevolution.handlers.ContributorHandler$DLThread|run()V",
                 "com.brandon3055.draconicevolution.handlers.ContributorHandler|loadContributorConfig()V",
-                "com.brandon3055.draconicevolution.handlers.ContributorHandler|saveContributorConfig()V"
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler|saveContributorConfig()V",
+                "org.cyclops.cyclopscore.tracking.ImportantUsers|checkAll()V",
+                "org.cyclops.cyclopscore.tracking.Analytics|sendAll()V",
+                "org.cyclops.cyclopscore.tracking.Versions|checkAll()V",
+                "org.cyclops.cyclopscore.tracking.Versions|onTick"
         };
     }
 
