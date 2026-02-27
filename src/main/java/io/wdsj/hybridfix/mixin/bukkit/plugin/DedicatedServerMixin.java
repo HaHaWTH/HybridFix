@@ -9,6 +9,7 @@ import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.ResHookEntityChangeBlockListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.config_editor.ResidenceCustomBlockAdder;
 import io.wdsj.hybridfix.entry.bukkit.hook.residence.voxel_map.VoxelMapResidenceDataSender;
+import io.wdsj.hybridfix.entry.bukkit.hook.voxelmap.VoxelMapWorldInfoSender;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookAE2SpatialPylonListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookBlockFormListener;
 import io.wdsj.hybridfix.entry.bukkit.hook.worldguard.WGHookEntityChangeBlockListener;
@@ -46,6 +47,9 @@ public abstract class DedicatedServerMixin {
         Plugin internalPlugin = HybridFixInternalPlugin.getInstance();
         if (Settings.bukkitPluginConfig.antiExplode) {
             Bukkit.getPluginManager().registerEvents(new ExplodeListener(), internalPlugin);
+        }
+        if (Settings.bukkitPluginConfig.sendClientWorldInfo) {
+            Bukkit.getPluginManager().registerEvents(new VoxelMapWorldInfoSender(), internalPlugin);
         }
         if (Settings.bukkitPluginConfig.hookResidence) {
             final String res = "Residence";

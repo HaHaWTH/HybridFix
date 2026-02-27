@@ -471,6 +471,10 @@ public class Settings {
         @Config.Name("Send client Residence data")
         public boolean sendClientResidenceData = true;
 
+        @Config.Comment("(Server) Send server world info to client for VoxelMap.")
+        @Config.Name("Send VoxelMap client world info")
+        public boolean sendClientWorldInfo = true;
+
         @Config.Comment("(Server) Automatically add mod blocks to Residence config.")
         @Config.Name("Auto add mod blocks to Residence config")
         @Config.RequiresMcRestart
