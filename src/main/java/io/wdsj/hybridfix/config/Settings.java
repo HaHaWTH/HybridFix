@@ -419,7 +419,14 @@ public class Settings {
                 "vazkii.quark.base.client.ContributorRewardHandler|init()V",
                 "vazkii.quark.base.client.ContributorRewardHandler|onRenderPlayer",
                 "vazkii.quark.base.client.ContributorRewardHandler|onPlayerJoin",
-                "vazkii.quark.base.client.ContributorRewardHandler$ThreadContributorListLoader|run()V"
+                "vazkii.quark.base.client.ContributorRewardHandler$ThreadContributorListLoader|run()V",
+                "com.buuz135.industrial.proxy.CommonProxy|readUrl|{\"uuid\":[]}",
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler|init()V",
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler|isPlayerContributor|false",
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler|onPlayerLogin|",
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler$DLThread|run()V",
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler|loadContributorConfig()V",
+                "com.brandon3055.draconicevolution.handlers.ContributorHandler|saveContributorConfig()V"
         };
     }
 
