@@ -378,6 +378,14 @@ public class Settings {
         @Config.Comment("(Server) Plugins that should be patched by MapPalette patcher.")
         @Config.RequiresMcRestart
         public String[] mapPalettePatchPlugins = new String[]{};
+
+        @Config.Comment("(Server) Patch reflection operations of plugins on Cleanroom.")
+        @Config.RequiresMcRestart
+        public boolean patchReflectField = true;
+
+        @Config.Comment("(Server) Plugins that should be patched by reflection field patcher.")
+        @Config.RequiresMcRestart
+        public String[] patchReflectFieldPlugins = new String[]{};
     }
 
     @Config.Comment("(Server / Client) Configuration for HybridFix ASM mod patcher.")
