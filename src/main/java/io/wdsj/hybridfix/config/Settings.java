@@ -414,6 +414,7 @@ public class Settings {
         @Config.RequiresMcRestart
         public String[] methodNoOpPatcherTargets = new String[]{
                 "com.othermod.core.PlayerEventHandler|doStuff(Z)I|114514",
+                "com.example.config.UpdaterClass|getUpdate()Ljava/lang/String;|It's MyGO!!!!!",
                 "blusunrize.immersiveengineering.ImmersiveEngineering$ThreadContributorSpecialsDownloader|run()V",
                 "hellfirepvp.astralsorcery.common.base.patreon.PatreonDataManager|loadPatreonEffects()V",
                 "vazkii.quark.base.client.ContributorRewardHandler|init()V",
