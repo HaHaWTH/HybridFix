@@ -394,23 +394,23 @@ public class Settings {
     public static ASMModPatcherSettings asmModPatcherSettings = new ASMModPatcherSettings();
 
     public static class ASMModPatcherSettings {
-        @Config.Comment("(Server) Enable HybridFix ASM mod patcher.")
+        @Config.Comment("(Client / Server) Enable HybridFix ASM mod patcher.")
         @Config.RequiresMcRestart
         public boolean enable = false;
 
-        @Config.Comment("(Server) Remove instanceof FakePlayer checks in PlayerEvent.Clone listeners.")
+        @Config.Comment("(Client / Server) Remove instanceof FakePlayer checks in PlayerEvent.Clone listeners.")
         @Config.RequiresMcRestart
         public boolean removeFakePlayerInstOf = true;
 
-        @Config.Comment("(Server) Classes that instanceof FakePlayer removal should target.")
+        @Config.Comment("(Client / Server) Classes that instanceof FakePlayer removal should target.")
         @Config.RequiresMcRestart
         public String[] removeFakePlayerInstOfClasses = new String[]{"com.othermod.core.PlayerEventHandler"};
 
-        @Config.Comment("(Server) Clear specified method and return the value.")
+        @Config.Comment("(Client / Server) Clear specified method and return the value.")
         @Config.RequiresMcRestart
         public boolean methodNoOpPatcher = true;
 
-        @Config.Comment("(Server) Targets of method no op patcher should apply.")
+        @Config.Comment("(Client / Server) Targets of method no op patcher should apply.")
         @Config.RequiresMcRestart
         public String[] methodNoOpPatcherTargets = new String[]{
                 "com.othermod.core.PlayerEventHandler|doStuff(Z)I|114514",
