@@ -340,6 +340,10 @@ public class Settings {
         @Config.RequiresMcRestart
         public boolean voxelMapResidenceSupport = false;
 
+        @Config.Comment("(Client) Patch VoxelMap teleport command.")
+        @Config.RequiresMcRestart
+        public boolean patchVoxelMapTeleportCommand = true;
+
         @Config.Comment("(Server) Enable JEID Bukkit support.")
         @Config.RequiresMcRestart
         public boolean patchJEIDBukkitSupport = true;

@@ -1,0 +1,12 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.late.voxelmap.teleport.fix",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "GuiWaypointsMixin",
+    "GuiPersistentMapMixin"
+  ]
+}

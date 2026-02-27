@@ -121,6 +121,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             put("mixins.ic2.client.audio.json", () -> isModLoaded("ic2") && Settings.modPatchSettings.patchIC2AudioManager);
             // VoxelMap client patches
             put("mixins.voxelmap.residence_ext.json", () -> isModLoaded("voxelmap") && Settings.modPatchSettings.voxelMapResidenceSupport);
+            put("mixins.voxelmap.teleport.fix.json", () -> isModLoaded("voxelmap") && Settings.modPatchSettings.patchVoxelMapTeleportCommand);
         }
     });
 
