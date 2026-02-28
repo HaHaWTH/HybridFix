@@ -20,5 +20,7 @@ jobs:
         run: ./gradlew --no-daemon build
       - uses: actions/upload-artifact@v7
         with:
-          path: build/libs
+          path: |
+            build/libs/hybridfix-*.jar
+            !build/libs/hybridfix-*-*.jar
           archive: false
