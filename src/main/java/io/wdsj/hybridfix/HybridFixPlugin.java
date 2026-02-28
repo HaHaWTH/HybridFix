@@ -70,6 +70,7 @@ public class HybridFixPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
             put("mixins.fix.health.not_a_number.json", () -> Settings.preventSettingNaNHealth);
             put("mixins.fix.profile_lookup.json", () -> Settings.fixAuthLibProfileLookup);
             put("mixins.perf.server.universal.json", () -> Settings.optimizePlayerTracking);
+            put("mixins.fix.forge.packet_race_condition.json", () -> Settings.fixPacketRaceCondition);
         }
     });
 

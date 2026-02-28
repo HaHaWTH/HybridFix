@@ -151,6 +151,10 @@ public class Settings {
     @Config.Name("Fix Authlib's profile lookup")
     public static boolean fixAuthLibProfileLookup = true;
 
+    @Config.Comment("(Client / Server) Fix packet race condition.")
+    @Config.Name("Fix packet race condition")
+    public static boolean fixPacketRaceCondition = true;
+
     @Config.Comment("(Server) Load extra language file for dedicated servers.")
     @Config.Name("Load extra language file")
     public static boolean extraLanguageFile = false;
