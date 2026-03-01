@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.wdsj.hybridfix.util.TickThread;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.GameType;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import thedarkcolour.futuremc.network.GameModeSwitchPacket;
@@ -22,10 +21,6 @@ public abstract class GameModeSwitchPacket_HandlerMixin {
             remap = false
     )
     private void fixUnsafeCall(EntityPlayerMP instance, GameType gameType, Operation<Void> original) {
-        if (!TickThread.isTickThread()) {
-            FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> original.call(instance, gameType));
-            return;
-        }
-        original.call(instance, gameType);
+        TickThread.ensureRunningOnMain(() -> original.call(instance, gameType));
     }
 }

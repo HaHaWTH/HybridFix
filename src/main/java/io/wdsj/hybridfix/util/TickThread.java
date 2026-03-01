@@ -16,6 +16,14 @@ public final class TickThread {
         }
     }
 
+    public static void ensureRunningOnMain(Runnable runnable) {
+        if (!isTickThread()) {
+            mainThreadExecutor().execute(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
     public static boolean isTickThread() {
         return Thread.currentThread() == FMLCommonHandler.instance().getMinecraftServerInstance().getServerThread();
     }

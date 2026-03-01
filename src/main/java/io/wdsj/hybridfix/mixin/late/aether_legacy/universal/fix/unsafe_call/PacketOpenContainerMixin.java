@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import io.wdsj.hybridfix.util.TickThread;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(PacketOpenContainer.class)
@@ -15,11 +14,7 @@ public abstract class PacketOpenContainerMixin {
             remap = false
     )
     public void handleServer(PacketOpenContainer message, EntityPlayer player, Operation<Void> original) {
-        if (TickThread.isTickThread()) {
-            original.call(message, player);
-            return;
-        }
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(
+        TickThread.ensureRunningOnMain(
                 () -> original.call(message, player)
         );
     }
