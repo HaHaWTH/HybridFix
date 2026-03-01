@@ -351,6 +351,10 @@ public class Settings {
         @Config.Comment("(Server) Enable JEID Bukkit support.")
         @Config.RequiresMcRestart
         public boolean patchJEIDBukkitSupport = true;
+
+        @Config.Comment("(Client / Server) Patch FutureMC unsafe calls.")
+        @Config.RequiresMcRestart
+        public boolean patchFutureMCUnsafeCall = true;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")

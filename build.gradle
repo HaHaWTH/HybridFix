@@ -159,6 +159,9 @@ dependencies {
     // Reflect
     embed "net.lenni0451:Reflect:1.6.1+curseforge"
 
+    // Future MC
+    compileOnly rfg.deobf("curse.maven:future-mc-310059:6162819")
+
     // VoxelMap
     compileOnly rfg.deobf("curse.maven:voxelmap-225179:3029445")
 

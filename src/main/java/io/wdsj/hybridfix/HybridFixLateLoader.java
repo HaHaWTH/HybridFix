@@ -112,6 +112,8 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             });
             put("mixins.aether_legacy.universal.feature.entity.swet_dissolve.json", () -> isModLoaded("aether_legacy") && Settings.modPatchSettings.aetherLegacySwetsDissolveSlowly);
             put("mixins.aether_legacy.universal.fix.unsafe_call.json", () -> isModLoaded("aether_legacy") && Settings.modPatchSettings.patchAetherLegacyUnsafeCall);
+            // FutureMC patches
+            put("mixins.futuremc.universal.fix.unsafe_call.json", () -> isModLoaded("futuremc") && Settings.modPatchSettings.patchFutureMCUnsafeCall);
         }
     });
 
