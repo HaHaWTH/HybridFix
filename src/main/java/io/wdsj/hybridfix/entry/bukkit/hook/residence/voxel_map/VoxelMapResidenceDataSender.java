@@ -74,7 +74,7 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
             final String targetWorld = player.getWorld().getName();
             CompletableFuture.supplyAsync(() -> {
                         try {
-                            return buildWorldDataPacket(targetWorld);
+                            return buildWorldDataPackets(targetWorld);
                         } catch (Exception e) {
                             HybridFix.LOGGER.error("[HybridFix] Failed to build residence packet", e);
                             return null;
@@ -83,10 +83,54 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
                     .thenAcceptAsync(data -> {
                         if (data != null && player.isOnline() && player.getWorld().getName().equals(targetWorld)) {
                             clearResidences(player);
-                            sendPluginMessage(player, VMResidenceChannel.CHANNEL, data);
+                            for (byte[] packet : data) {
+                                sendPluginMessage(player, VMResidenceChannel.CHANNEL, packet);
+                            }
                         }
                     }, TickThread.mainThreadExecutor());
         }, delayTicks);
+    }
+
+    private static final int MAX_PACKET_SIZE = 30000;
+    private List<byte[]> buildWorldDataPackets(String worldName) throws IOException {
+        ResidenceManager manager = Residence.getInstance().getResidenceManager();
+        if (manager == null) return null;
+
+        Collection<ClaimedResidence> allResidences = manager.getResidences().values();
+
+        List<byte[]> packets = new ArrayList<>();
+        List<SerializedResidence> currentBatch = new ArrayList<>();
+        int currentBatchSize = 0;
+
+        for (ClaimedResidence res : allResidences) {
+            if (res.getMainArea() == null || res.getWorld() == null) continue;
+            if (res.getWorld().equals(worldName)) {
+                SerializedResidence serializedRes = toSerializedResidence(res);
+
+                int itemSize = estimateSize(serializedRes);
+
+                if (currentBatchSize + itemSize > MAX_PACKET_SIZE && !currentBatch.isEmpty()) {
+                    packets.add(serializeResidences(currentBatch, VMResidenceChannel.BATCH_UPDATE));
+                    currentBatch.clear();
+                    currentBatchSize = 0;
+                }
+
+                currentBatch.add(serializedRes);
+                currentBatchSize += itemSize;
+            }
+        }
+
+        if (!currentBatch.isEmpty()) {
+            packets.add(serializeResidences(currentBatch, VMResidenceChannel.BATCH_UPDATE));
+        }
+
+        return packets;
+    }
+
+    private int estimateSize(SerializedResidence res) {
+        int nameLen = 2 + (res.name != null ? res.name.length() * 3 : 0);
+        int ownerLen = 2 + (res.owner != null ? res.owner.length() * 3 : 0);
+        return nameLen + ownerLen + 24;
     }
 
     private void broadcastSingleUpdate(String worldName, SerializedResidence res, boolean isDelete) {
