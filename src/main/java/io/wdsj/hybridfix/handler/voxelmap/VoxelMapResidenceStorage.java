@@ -208,7 +208,7 @@ public final class VoxelMapResidenceStorage {
 
                 switch (parsedType) {
                     case VMResidenceChannel.SINGLE_UPDATE:
-                    case VMResidenceChannel.FULL_UPDATE:
+                    case VMResidenceChannel.BATCH_UPDATE:
                         parsedUpdates.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
                         break;
                     case VMResidenceChannel.SINGLE_REMOVE:
@@ -223,13 +223,12 @@ public final class VoxelMapResidenceStorage {
 
         Minecraft.getMinecraft().addScheduledTask(() -> {
             try {
-                if (VMResidenceChannel.FULL_UPDATE.equals(parsedType)) {
-                    this.clear();
-                }
-
                 switch (parsedType) {
+                    case VMResidenceChannel.CLEAR:
+                        this.clear();
+                        break;
                     case VMResidenceChannel.SINGLE_UPDATE:
-                    case VMResidenceChannel.FULL_UPDATE:
+                    case VMResidenceChannel.BATCH_UPDATE:
                         for (Map.Entry<String, SerializedResidence> entry : parsedUpdates.entrySet()) {
                             this.put(entry.getKey(), entry.getValue());
                         }

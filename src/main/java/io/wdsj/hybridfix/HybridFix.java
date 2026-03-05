@@ -40,7 +40,6 @@ public class HybridFix {
         proxy.onPreInit(event);
     }
 
-
     @Mod.EventHandler
     public void onServerStartComplete(FMLServerStartedEvent event) {
         proxy.onServerStartComplete(event);

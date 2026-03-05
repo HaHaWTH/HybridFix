@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("deprecation")
 public class VoxelMapResidenceDataSender extends DataSender implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -81,6 +82,7 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
                     }, Utils.commonWorker())
                     .thenAcceptAsync(data -> {
                         if (data != null && player.isOnline() && player.getWorld().getName().equals(targetWorld)) {
+                            clearResidences(player);
                             sendPluginMessage(player, VMResidenceChannel.CHANNEL, data);
                         }
                     }, TickThread.mainThreadExecutor());
@@ -119,7 +121,7 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
             }
         }
 
-        return serializeResidences(targetResidences, VMResidenceChannel.FULL_UPDATE);
+        return serializeResidences(targetResidences, VMResidenceChannel.BATCH_UPDATE);
     }
 
     private byte[] buildSingleDataPacket(SerializedResidence res) throws IOException {
@@ -154,6 +156,18 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
         }
 
         return b.toByteArray();
+    }
+
+    private void clearResidences(Player player) {
+        try {
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream(b);
+
+            out.writeUTF(VMResidenceChannel.CLEAR);
+            sendPluginMessage(player, VMResidenceChannel.CHANNEL, b.toByteArray());
+        } catch (Exception e) {
+            HybridFix.LOGGER.error("[HybridFix] Failed to clear residences", e);
+        }
     }
     
     public static SerializedResidence toSerializedResidence(ClaimedResidence res) {
