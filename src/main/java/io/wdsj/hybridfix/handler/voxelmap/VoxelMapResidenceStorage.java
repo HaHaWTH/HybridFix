@@ -194,9 +194,8 @@ public final class VoxelMapResidenceStorage {
 
         try (DataInputStream in = new DataInputStream(new ByteArrayInputStream(data))) {
             parsedType = in.readUTF();
-            int count = in.readInt();
-
             if (!VMResidenceChannel.CLEAR.equals(parsedType)) {
+                int count = in.readInt();
                 for (int i = 0; i < count; i++) {
                     String name = in.readUTF();
                     String owner = in.readUTF();
