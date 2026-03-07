@@ -196,24 +196,26 @@ public final class VoxelMapResidenceStorage {
             parsedType = in.readUTF();
             int count = in.readInt();
 
-            for (int i = 0; i < count; i++) {
-                String name = in.readUTF();
-                String owner = in.readUTF();
-                int minX = in.readInt();
-                int minY = in.readInt();
-                int minZ = in.readInt();
-                int maxX = in.readInt();
-                int maxY = in.readInt();
-                int maxZ = in.readInt();
+            if (!VMResidenceChannel.CLEAR.equals(parsedType)) {
+                for (int i = 0; i < count; i++) {
+                    String name = in.readUTF();
+                    String owner = in.readUTF();
+                    int minX = in.readInt();
+                    int minY = in.readInt();
+                    int minZ = in.readInt();
+                    int maxX = in.readInt();
+                    int maxY = in.readInt();
+                    int maxZ = in.readInt();
 
-                switch (parsedType) {
-                    case VMResidenceChannel.SINGLE_UPDATE:
-                    case VMResidenceChannel.BATCH_UPDATE:
-                        parsedUpdates.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
-                        break;
-                    case VMResidenceChannel.SINGLE_REMOVE:
-                        parsedRemoves.add(name);
-                        break;
+                    switch (parsedType) {
+                        case VMResidenceChannel.SINGLE_UPDATE:
+                        case VMResidenceChannel.BATCH_UPDATE:
+                            parsedUpdates.put(name, new SerializedResidence(name, owner, minX, minY, minZ, maxX, maxY, maxZ));
+                            break;
+                        case VMResidenceChannel.SINGLE_REMOVE:
+                            parsedRemoves.add(name);
+                            break;
+                    }
                 }
             }
         } catch (Throwable t) {
