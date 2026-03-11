@@ -239,6 +239,8 @@ public final class VoxelMapResidenceStorage {
                             this.remove(name);
                         }
                         break;
+                    default:
+                        HybridFix.LOGGER.error("Unknown residence packet type: {}", parsedType);
                 }
             } catch (Throwable t) {
                 HybridFix.LOGGER.error("Failed to apply residence state", t);
