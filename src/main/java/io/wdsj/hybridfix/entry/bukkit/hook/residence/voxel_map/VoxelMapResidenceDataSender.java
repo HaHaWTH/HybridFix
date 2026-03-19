@@ -150,24 +150,6 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
         }, TickThread.mainThreadExecutor());
     }
 
-
-    private byte[] buildWorldDataPacket(String worldName) throws IOException {
-        ResidenceManager manager = Residence.getInstance().getResidenceManager();
-        if (manager == null) return null;
-
-        Collection<ClaimedResidence> allResidences = manager.getResidences().values();
-        List<SerializedResidence> targetResidences = new ArrayList<>();
-
-        for (ClaimedResidence res : allResidences) {
-            if (res.getMainArea() == null || res.getWorld() == null) continue;
-            if (res.getWorld().equals(worldName)) {
-                targetResidences.add(toSerializedResidence(res));
-            }
-        }
-
-        return serializeResidences(targetResidences, VMResidenceChannel.BATCH_UPDATE);
-    }
-
     private byte[] buildSingleDataPacket(SerializedResidence res) throws IOException {
         List<SerializedResidence> list = new ArrayList<>();
         list.add(res);
