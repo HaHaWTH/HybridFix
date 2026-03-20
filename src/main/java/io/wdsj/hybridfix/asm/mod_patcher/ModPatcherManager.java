@@ -114,8 +114,8 @@ public enum ModPatcherManager {
         return false;
     }
 
-    private static void register0(AbstractModPatcher patcher, String[] pluginNames, List<ModPatcherEntry> modPatchers) {
-        ModPatcherEntry entry = new ModPatcherEntry(Arrays.stream(pluginNames).map(String::trim).toArray(String[]::new), patcher);
+    private static void register0(AbstractModPatcher patcher, String[] targetNames, List<ModPatcherEntry> modPatchers) {
+        ModPatcherEntry entry = new ModPatcherEntry(Arrays.stream(targetNames).map(String::trim).toArray(String[]::new), patcher);
         if (modPatchers.contains(entry)) throw new IllegalStateException("Duplicate mod patcher entry: " + entry);
         modPatchers.add(entry);
     }

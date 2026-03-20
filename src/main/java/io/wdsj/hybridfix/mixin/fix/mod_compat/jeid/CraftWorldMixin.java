@@ -33,8 +33,9 @@ public abstract class CraftWorldMixin {
                     .virtualMethodHandle(); // delayed init for JEID mixin injection
         }
         net.minecraft.world.biome.Biome bb = CraftBlock.biomeToBiomeBase(bio);
-        if (this.world.isBlockLoaded(new BlockPos(x, 0, z))) {
-            Chunk chunk = this.world.getChunk(new BlockPos(x, 0, z));
+        BlockPos pos = new BlockPos(x, 0, z);
+        if (this.world.isBlockLoaded(pos)) {
+            Chunk chunk = this.world.getChunk(pos);
             //noinspection ConstantConditions
             if (chunk != null) {
                 int[] biomevals = (int[]) mh_getIntBiomeArray.invoke(chunk);
