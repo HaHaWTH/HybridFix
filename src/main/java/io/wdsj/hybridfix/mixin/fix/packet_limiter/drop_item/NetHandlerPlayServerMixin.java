@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(NetHandlerPlayServer.class)
 public abstract class NetHandlerPlayServerMixin {
-
     @Dynamic("craftbukkit")
     @ModifyConstant(
             method = "processPlayerDigging",

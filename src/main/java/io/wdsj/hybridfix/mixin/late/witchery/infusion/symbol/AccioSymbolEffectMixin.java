@@ -28,7 +28,7 @@ import java.lang.invoke.MethodHandle;
 /**
  * Early fire {@link PlayerPickupItemEvent} and {@link EntityPickupItemEvent} before Accio is applied.
  */
-@SuppressWarnings({"deprecation", "LocalMayUseName"})
+@SuppressWarnings({"deprecation"})
 @Mixin(AccioSymbolEffect.class)
 public abstract class AccioSymbolEffectMixin {
     /*

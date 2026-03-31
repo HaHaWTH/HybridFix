@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -101,9 +100,5 @@ public class ResidenceCustomBlockAdder {
 
     public void save() {
         plugin.saveConfig();
-    }
-
-    private boolean isMethodDeclaredInModBlock(Method method) {
-        return method.getDeclaringClass() != Block.class;
     }
 }
