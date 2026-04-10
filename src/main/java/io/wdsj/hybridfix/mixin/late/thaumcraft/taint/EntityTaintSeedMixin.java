@@ -28,6 +28,7 @@ public abstract class EntityTaintSeedMixin extends EntityMob implements ITainted
     public EntityTaintSeedMixin(World worldIn) {
         super(worldIn);
     }
+    // TODO less invasive than this?
 
     @Inject(
             method = "spawnTentacles",
