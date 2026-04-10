@@ -29,7 +29,10 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
         for (String config : configs) {
             try {
                 String[] parts = config.split("\\|");
-                if (parts.length < 2) continue;
+                if (parts.length < 2) {
+                    HybridFix.LOGGER.warn("Skipping incomplete configuration: {}", config);
+                    continue;
+                }
 
                 String className = parts[0].trim();
                 String methodPart = parts[1].trim();
