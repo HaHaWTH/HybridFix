@@ -124,6 +124,7 @@ public class HybridFixLateLoader implements ILateMixinLoader {
             // VoxelMap client patches
             put("mixins.voxelmap.client.residence_ext.json", () -> isModLoaded("voxelmap") && Settings.modPatchSettings.voxelMapResidenceSupport);
             put("mixins.voxelmap.client.fix.teleport.json", () -> isModLoaded("voxelmap") && Settings.modPatchSettings.patchVoxelMapTeleportCommand);
+            put("mixins.redstone_chemical_elements.client.json", () -> isModLoaded("redstone_chemical_elements") && Settings.modPatchSettings.patchRedstoneChanChemical);
         }
     });
 

@@ -355,6 +355,10 @@ public class Settings {
         @Config.Comment("(Client / Server) Patch FutureMC unsafe calls.")
         @Config.RequiresMcRestart
         public boolean patchFutureMCUnsafeCall = true;
+
+        @Config.Comment("(Client) Patch Redstone Chan Chemical to restore vanilla font renderer.")
+        @Config.RequiresMcRestart
+        public boolean patchRedstoneChanChemical = false;
     }
 
     @Config.Comment("(Server) Configuration for HybridFix ASM plugin patcher.")
