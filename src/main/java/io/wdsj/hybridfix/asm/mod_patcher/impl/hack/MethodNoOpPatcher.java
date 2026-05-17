@@ -30,7 +30,7 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
             try {
                 String[] parts = config.split("\\|", 3);
                 if (parts.length < 2) {
-                    HybridFix.LOGGER.warn("Skipping incomplete configuration: {}", config);
+                    HybridFix.LOGGER.warn("Skipping incomplete MethodNoOpPatcher configuration: {}", config);
                     continue;
                 }
 
@@ -52,7 +52,7 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
                 this.targetMap.computeIfAbsent(className, k -> new ArrayList<>())
                         .add(new TargetMethod(name, desc, value));
             } catch (Exception e) {
-                HybridFix.LOGGER.error("Failed to parse MethodNoOpPatcher config: {}", config);
+                HybridFix.LOGGER.error("Failed to parse MethodNoOpPatcher config: {}", config, e);
             }
         }
     }
@@ -65,20 +65,26 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
         ClassNode cn = new ClassNode();
         new ClassReader(basicClass).accept(cn, 0);
         boolean changed = false;
+        Set<TargetMethod> matchedTargets = Collections.newSetFromMap(new IdentityHashMap<>());
 
         for (MethodNode mn : cn.methods) {
             for (TargetMethod target : targets) {
-                if (mn.name.equals(target.name) && (target.desc == null || mn.desc.equals(target.desc))) {
-                    if ((mn.access & (Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE)) != 0) {
-                        HybridFix.LOGGER.warn("Skipping abstract/native method: {}.{}{}", className, mn.name, mn.desc);
-                        continue;
-                    }
+                if (matches(mn, target)) {
                     rewriteMethod(mn, target);
                     changed = true;
-                    HybridFix.LOGGER.info("Applied No-Op to method: {}.{}{}", className, mn.name, mn.desc);
+                    matchedTargets.add(target);
+
+                    HybridFix.LOGGER.info(
+                            "Applied No-Op to method: {}.{}{}",
+                            className,
+                            mn.name,
+                            mn.desc
+                    );
                 }
             }
         }
+
+        logMissingTargets(className, targets, matchedTargets);
 
         if (changed) {
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -89,6 +95,22 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
             return bytes;
         }
         return basicClass;
+    }
+
+    private static boolean matches(MethodNode mn, TargetMethod target) {
+        return mn.name.equals(target.name) && (target.desc == null || mn.desc.equals(target.desc));
+    }
+
+    private static void logMissingTargets(String className, List<TargetMethod> targets, Set<TargetMethod> matchedTargets) {
+        for (TargetMethod target : targets) {
+            if (!matchedTargets.contains(target)) {
+                HybridFix.LOGGER.warn(
+                        "Configured MethodNoOpPatcher target was not found: {}.{}",
+                        className,
+                        target.toDisplayString()
+                );
+            }
+        }
     }
 
     private void rewriteMethod(MethodNode mn, TargetMethod target) {
@@ -216,6 +238,14 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
             this.name = name;
             this.desc = desc;
             this.value = value;
+        }
+
+        String toDisplayString() {
+            if (desc == null) {
+                return name + "(*)";
+            }
+
+            return name + desc;
         }
     }
 }
