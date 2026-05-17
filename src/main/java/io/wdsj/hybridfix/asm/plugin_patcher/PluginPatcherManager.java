@@ -49,6 +49,7 @@ public enum PluginPatcherManager {
             }
             if (applyToPluginExists && configurableExists) {
                 HybridFix.LOGGER.error("Found multiple annotations in plugin patcher {}, skipping.", patcher.getClass().getName());
+                return false;
             }
             if (applyToPluginExists) {
                 return registerApplyTo(patcher, applyToPlugin);
