@@ -79,6 +79,7 @@ public enum ModPatcherManager {
             }
             if (applyToModExists && configurableExists) {
                 HybridFix.LOGGER.error("Found multiple annotations in mod patcher {}, skipping.", patcher.getClass().getName());
+                return false;
             }
             if (applyToModExists) {
                 return registerApplyTo(patcher, applyToMod, modPatchers);
@@ -120,7 +121,7 @@ public enum ModPatcherManager {
         modPatchers.add(entry);
     }
 
-    public byte[] processTransform(String name, String className, byte[] basicClass) {
+    byte[] processTransform(String name, String className, byte[] basicClass) {
         if (basicClass == null) return null;
 
         for (ModPatcherEntry entry : modPatchers) {
