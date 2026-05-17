@@ -9,7 +9,8 @@ import java.util.*;
 
 public enum ModPatcherManager {
     INSTANCE;
-    private final ModPatcherEntry[] modPatchers;
+
+    private final Map<String, ModPatcherEntry[]> modPatchersByTargetClass;
 
     private static class ModPatcherEntry {
         final String[] targetClasses;
@@ -51,6 +52,7 @@ public enum ModPatcherManager {
         Class<?>[] classes = Utils.getClasses(patcherPackage).toArray(new Class[0]);
         Arrays.sort(classes, Comparator.comparing(Class::getSimpleName));
         List<ModPatcherEntry> patchers = new ArrayList<>();
+
         for (Class<?> clazz : classes) {
             try {
                 if (AbstractModPatcher.class.isAssignableFrom(clazz)) {
@@ -63,14 +65,36 @@ public enum ModPatcherManager {
                 HybridFix.LOGGER.error("Failed to load mod patcher {}", clazz.getName(), e);
             }
         }
-        modPatchers = patchers.toArray(new ModPatcherEntry[0]);
+        modPatchersByTargetClass = buildTargetClassIndex(patchers);
+    }
+
+    private static Map<String, ModPatcherEntry[]> buildTargetClassIndex(List<ModPatcherEntry> modPatchers) {
+        Map<String, List<ModPatcherEntry>> index = new HashMap<>();
+
+        for (ModPatcherEntry entry : modPatchers) {
+            for (String targetClass : entry.targetClasses) {
+                index.computeIfAbsent(targetClass, ignored -> new ArrayList<>()).add(entry);
+            }
+        }
+
+        Map<String, ModPatcherEntry[]> result = new HashMap<>();
+        for (Map.Entry<String, List<ModPatcherEntry>> indexedEntry : index.entrySet()) {
+            result.put(
+                    indexedEntry.getKey(),
+                    indexedEntry.getValue().toArray(new ModPatcherEntry[0])
+            );
+        }
+
+        return Collections.unmodifiableMap(result);
     }
 
     private static boolean registerModPatcher(AbstractModPatcher patcher, List<ModPatcherEntry> modPatchers) {
         if (!Settings.asmModPatcherSettings.enable) return false;
+
         try {
             ApplyToMod applyToMod = patcher.getClass().getAnnotation(ApplyToMod.class);
             ApplyToMod.Configurable configurable = patcher.getClass().getAnnotation(ApplyToMod.Configurable.class);
+
             boolean applyToModExists = applyToMod != null;
             boolean configurableExists = configurable != null;
             if (!applyToModExists && !configurableExists) {
@@ -88,49 +112,64 @@ public enum ModPatcherManager {
         } catch (Exception e) {
             HybridFix.LOGGER.error("Failed to register mod patcher {}", patcher.getClass().getSimpleName(), e);
         }
+
         return false;
     }
 
     private static boolean registerApplyTo(AbstractModPatcher patcher, ApplyToMod applyToMod, List<ModPatcherEntry> modPatchers) {
         String[] modClassNames = applyToMod.value();
         boolean flag = patcher.isEnabled();
+
         if (flag) {
             register0(patcher, modClassNames, modPatchers);
             return true;
         }
+
         return false;
     }
 
     private static boolean registerConfigurable(AbstractModPatcher patcher, ApplyToMod.Configurable ignored, List<ModPatcherEntry> modPatchers) {
         boolean flag = patcher.isEnabled();
+
         if (!(patcher instanceof ConfigurableModPatcher)) {
             HybridFix.LOGGER.error("Mod patcher {} is not extending ConfigurableModPatcher, skipping.", patcher.getClass().getName());
             return false;
         }
+
         if (flag) {
             ConfigurableModPatcher configurablePatcher = (ConfigurableModPatcher) patcher;
             register0(configurablePatcher, configurablePatcher.getTargetClasses(), modPatchers);
             return true;
         }
+
         return false;
     }
 
     private static void register0(AbstractModPatcher patcher, String[] targetNames, List<ModPatcherEntry> modPatchers) {
-        ModPatcherEntry entry = new ModPatcherEntry(Arrays.stream(targetNames).map(String::trim).toArray(String[]::new), patcher);
-        if (modPatchers.contains(entry)) throw new IllegalStateException("Duplicate mod patcher entry: " + entry);
+        ModPatcherEntry entry = new ModPatcherEntry(
+                Arrays.stream(targetNames)
+                        .map(String::trim)
+                        .toArray(String[]::new),
+                patcher
+        );
+
+        if (modPatchers.contains(entry)) {
+            throw new IllegalStateException("Duplicate mod patcher entry: " + entry);
+        }
+
         modPatchers.add(entry);
     }
 
     byte[] processTransform(String name, String className, byte[] basicClass) {
         if (basicClass == null) return null;
 
-        for (ModPatcherEntry entry : modPatchers) {
-            for (String targetClass : entry.targetClasses) {
-                if (className.equals(targetClass)) {
-                    basicClass = entry.applyTransform(name, className, basicClass);
-                }
-            }
+        ModPatcherEntry[] patchers = modPatchersByTargetClass.get(className);
+        if (patchers == null) return basicClass;
+
+        for (ModPatcherEntry entry : patchers) {
+            basicClass = entry.applyTransform(name, className, basicClass);
         }
+
         return basicClass;
     }
 }

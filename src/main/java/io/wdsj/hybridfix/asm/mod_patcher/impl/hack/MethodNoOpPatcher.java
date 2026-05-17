@@ -28,7 +28,7 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
 
         for (String config : configs) {
             try {
-                String[] parts = config.split("\\|");
+                String[] parts = config.split("\\|", 3);
                 if (parts.length < 2) {
                     HybridFix.LOGGER.warn("Skipping incomplete configuration: {}", config);
                     continue;
@@ -69,6 +69,10 @@ public class MethodNoOpPatcher extends ConfigurableModPatcher {
         for (MethodNode mn : cn.methods) {
             for (TargetMethod target : targets) {
                 if (mn.name.equals(target.name) && (target.desc == null || mn.desc.equals(target.desc))) {
+                    if ((mn.access & (Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE)) != 0) {
+                        HybridFix.LOGGER.warn("Skipping abstract/native method: {}.{}{}", className, mn.name, mn.desc);
+                        continue;
+                    }
                     rewriteMethod(mn, target);
                     changed = true;
                     HybridFix.LOGGER.info("Applied No-Op to method: {}.{}{}", className, mn.name, mn.desc);
