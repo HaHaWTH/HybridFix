@@ -46,8 +46,8 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
     public void onResidenceSizeChange(ResidenceSizeChangeEvent event) {
         if (event.getResidence() == null) return;
         ClaimedResidence res = event.getResidence();
-        SerializedResidence oldArea = toSerializedResidence(res.getName(), res.getOwner(), event.getOldArea());
-        broadcastSingleUpdate(res.getWorld(), oldArea, true);
+//        SerializedResidence oldArea = toSerializedResidence(res.getName(), res.getOwner(), event.getOldArea());
+//        broadcastSingleUpdate(res.getWorld(), oldArea, true);
         SerializedResidence newArea = toSerializedResidence(res.getName(), res.getOwner(), event.getNewArea());
         broadcastSingleUpdate(res.getWorld(), newArea, false);
     }
