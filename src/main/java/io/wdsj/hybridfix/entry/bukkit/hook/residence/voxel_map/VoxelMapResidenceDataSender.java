@@ -91,6 +91,7 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
         sendQueue.clear();
         senderExecutor.shutdownNow();
         workerStarted.set(false);
+        HybridFix.LOGGER.info("[HybridFix] VoxelMap Residence data sender stopped");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

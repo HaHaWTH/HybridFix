@@ -136,5 +136,4 @@ public class HybridFixInternalPlugin extends PluginBase {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         throw new UnsupportedOperationException("Not supported.");
     }
-
 }
