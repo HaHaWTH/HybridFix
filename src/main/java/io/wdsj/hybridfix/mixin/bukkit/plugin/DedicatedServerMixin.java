@@ -58,6 +58,7 @@ public abstract class DedicatedServerMixin {
                 ListenerHackery.registerListenerToTargetPlugin(ResHookBlockFormListener.class, res);
                 if (Settings.bukkitPluginConfig.sendClientResidenceData) {
                     ListenerHackery.registerListenerToTargetPlugin(VoxelMapResidenceDataSender.class, res);
+                    ListenerHackery.injectClassToTargetPlugin(VoxelMapResidenceDataSender.QueuedSendTask.class, res);
                 }
                 if (Settings.bukkitPluginConfig.autoAddModBlocksToResidenceConfig) {
                     Plugin residence = Bukkit.getPluginManager().getPlugin(res);

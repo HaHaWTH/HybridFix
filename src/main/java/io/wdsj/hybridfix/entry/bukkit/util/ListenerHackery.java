@@ -88,7 +88,7 @@ public class ListenerHackery {
     }
 
     @NotNull
-    private static <T> Class<? extends T> injectClassToTargetPlugin(Class<? extends T> clazz, String pluginName) {
+    public static <T> Class<? extends T> injectClassToTargetPlugin(Class<? extends T> clazz, String pluginName) {
         try (InputStream inputStream = clazz.getClassLoader().getResourceAsStream(
                 clazz.getName().replace('.', '/') + ".class")) {
             assert inputStream != null;

@@ -328,7 +328,7 @@ public class VoxelMapResidenceDataSender extends DataSender implements Listener 
         );
     }
 
-    private static final class QueuedSendTask implements Comparable<QueuedSendTask> {
+    public static final class QueuedSendTask implements Comparable<QueuedSendTask> {
         private final int priority;
         private final long sequence;
         private final Runnable action;
