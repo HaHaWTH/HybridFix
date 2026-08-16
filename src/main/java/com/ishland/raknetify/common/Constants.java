@@ -34,6 +34,7 @@ public class Constants {
     public static final int RAKNET_GAME_PACKET_ID = 0xFD;
     public static final int RAKNET_STREAMING_COMPRESSION_PACKET_ID = 0xED;
     public static final int RAKNET_ZSTD_COMPRESSION_PACKET_ID = 0xEE;
+    public static final int RAKNET_CUSTOM_PAYLOAD_BARRIER_PACKET_ID = 0xEF;
     public static final int RAKNET_STREAMING_COMPRESSION_HANDSHAKE_PACKET_ID = 0xEC;
     public static final int RAKNET_SYNC_PACKET_ID = 0xFC;
     public static final int RAKNET_METRICS_SYNC_PACKET_ID = 0xFB;

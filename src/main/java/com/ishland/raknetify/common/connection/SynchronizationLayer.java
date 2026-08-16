@@ -29,6 +29,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.handler.codec.DecoderException;
+import io.netty.util.ReferenceCountUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -45,11 +47,13 @@ import network.ycc.raknet.pipeline.FrameJoiner;
 import network.ycc.raknet.pipeline.FrameOrderIn;
 import network.ycc.raknet.pipeline.FrameOrderOut;
 import network.ycc.raknet.pipeline.ReliabilityHandler;
+import network.ycc.raknet.utils.UINT;
 import org.apache.commons.math3.util.Pair;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -69,6 +73,16 @@ public class SynchronizationLayer extends ChannelDuplexHandler {
     // Response callback is handled using reliable transport
 
     public static final Object SYNC_REQUEST_OBJECT = new Object();
+
+    private static final int BARRIER_EPOCH_TRAILER_MAGIC = 0x48464245; // HFBE
+
+    public static Object synchronizationRequest(int barrierEpoch) {
+        return new SynchronizationRequest(barrierEpoch);
+    }
+
+    public static boolean isSynchronizationRequest(Object msg) {
+        return msg == SYNC_REQUEST_OBJECT || msg instanceof SynchronizationRequest;
+    }
 
     static final Class<?> CLASS_QUEUE;
     static final Class<?> CLASS_FRAME_JOINER_BUILDER;
@@ -161,22 +175,65 @@ public class SynchronizationLayer extends ChannelDuplexHandler {
         initializeIfNecessary(ctx);
         if (msg instanceof FrameData && ((FrameData) msg).getPacketId() == Constants.RAKNET_SYNC_PACKET_ID) {
             FrameData packet = (FrameData) msg;
-            // read
-            {
+            try {
                 if (Constants.DEBUG) System.out.println("Raknetify: Received sync packet");
-                ctx.fireUserEventTriggered(SYNC_REQUEST_OBJECT);
-                final ByteBuf byteBuf = packet.createData().skipBytes(1);
+                final ByteBuf byteBuf = packet.createData();
                 try {
-                    final byte count = byteBuf.readByte();
+                    byteBuf.skipBytes(1);
+                    final int count = byteBuf.readUnsignedByte();
+                    if (count > frameOrderInQueues.length || byteBuf.readableBytes() < count * 5 + 4) {
+                        throw new DecoderException("Invalid Raknetify synchronization packet");
+                    }
+
+                    final int[] channels = new int[count];
+                    final int[] orderIndices = new int[count];
                     for (int i = 0; i < count; i++) {
-                        final byte channel = byteBuf.readByte();
-                        final int orderIndex = byteBuf.readInt();
+                        final int channel = byteBuf.readUnsignedByte();
+                        if (channel >= frameOrderInQueues.length) {
+                            throw new DecoderException("Invalid synchronization channel " + channel);
+                        }
+                        channels[i] = channel;
+                        orderIndices[i] = byteBuf.readInt();
+                    }
+                    final int seqId = byteBuf.readInt();
+
+                    int barrierEpoch = -1;
+                    if (byteBuf.readableBytes() >= 8
+                            && byteBuf.readInt() == BARRIER_EPOCH_TRAILER_MAGIC) {
+                        barrierEpoch = byteBuf.readInt();
+                    }
+
+                    if (barrierEpoch < 0) {
+                        if (legacySyncSeen
+                                && UINT.B3.minusWrap(seqId, lastLegacySyncSeqId) <= 0) {
+                            return; // duplicate or stale legacy reliable-unordered sync packet
+                        }
+                        legacySyncSeen = true;
+                        lastLegacySyncSeqId = seqId;
+                    }
+
+                    final CustomPayloadOrderBarrier barrier = ctx.pipeline().get(CustomPayloadOrderBarrier.class);
+                    if (barrier != null) {
+                        if (barrierEpoch >= 0) {
+                            if (!barrier.resetForSynchronization(barrierEpoch)) {
+                                return; // duplicate or stale reliable-unordered sync packet
+                            }
+                        } else {
+                            barrier.resetForSynchronization();
+                        }
+                    }
+
+                    ctx.fireUserEventTriggered(SYNC_REQUEST_OBJECT);
+                    for (int i = 0; i < count; i++) {
+                        final int channel = channels[i];
+                        final int orderIndex = orderIndices[i];
                         if (Constants.DEBUG)
                             System.out.println(String.format("Raknetify: Channel %d: %d -> %d",
                                     channel,
                                             (int) FIELD_QUEUE_LAST_ORDER_INDEX.get(frameOrderInQueues[channel]),
                                             orderIndex
                                     ));
+                        METHOD_QUEUE_CLEAR.invoke(frameOrderInQueues[channel]);
                         FIELD_QUEUE_LAST_ORDER_INDEX.set(frameOrderInQueues[channel], orderIndex);
                         final ObjectIterator<?> iterator = this.frameJoinerPendingPackets.values().iterator();
                         while (iterator.hasNext()) {
@@ -192,7 +249,6 @@ public class SynchronizationLayer extends ChannelDuplexHandler {
                             }
                         }
                     }
-                    final int seqId = byteBuf.readInt();
                     if (Constants.DEBUG)
                         System.out.println(String.format("Raknetify: ReliabilityHandler: %d -> %d",
                                 (int) FIELD_RELIABILITY_LAST_RECEIVED_SEQ_ID.get(this.reliabilityHandler),
@@ -202,48 +258,98 @@ public class SynchronizationLayer extends ChannelDuplexHandler {
                 } finally {
                     byteBuf.release();
                 }
+            } finally {
+                packet.release();
             }
             return;
         }
         ctx.fireChannelRead(msg);
     }
 
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        cleanupPendingWrites(new ClosedChannelException());
+        super.handlerRemoved(ctx);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        cleanupPendingWrites(new ClosedChannelException());
+        super.channelInactive(ctx);
+    }
+
     private final ReferenceLinkedOpenHashSet<Pair<ChannelPromise, Object>> queue = new ReferenceLinkedOpenHashSet<>();
     private final ObjectArrayList<Frame> queuedFrames = new ObjectArrayList<>();
     private boolean isWaitingForResponse = false;
+    private boolean legacySyncSeen;
+    private int lastLegacySyncSeqId;
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         initializeIfNecessary(ctx);
-        if (msg == SYNC_REQUEST_OBJECT) {
+        if (isSynchronizationRequest(msg)) {
             if (isWaitingForResponse) {
-                promise.setSuccess();
+                promise.trySuccess();
                 return;
             }
 
-            dropSenderPackets();
+            final int barrierEpoch = msg instanceof SynchronizationRequest
+                    ? ((SynchronizationRequest) msg).barrierEpoch
+                    : -1;
+            ByteBuf byteBuf = null;
+            FrameData frameData = null;
+            boolean frameTransferred = false;
+            try {
+                dropSenderPackets();
 
-            final ByteBuf byteBuf = ctx.alloc().buffer(1 + channelsLength * 5 + 4);
-            byteBuf.writeByte(channelsLength);
-            for (int channel = 0, frameOrderOutNextOrderIndexLength = frameOrderOutNextOrderIndex.length; channel < frameOrderOutNextOrderIndexLength; channel++) {
-                if (channelToIgnore.contains(channel)) continue;
-                int orderOutNextOrderIndex = frameOrderOutNextOrderIndex[channel];
+                byteBuf = ctx.alloc().buffer(
+                        1 + channelsLength * 5 + 4 + (barrierEpoch >= 0 ? 8 : 0));
+                byteBuf.writeByte(channelsLength);
+                for (int channel = 0, frameOrderOutNextOrderIndexLength = frameOrderOutNextOrderIndex.length; channel < frameOrderOutNextOrderIndexLength; channel++) {
+                    if (channelToIgnore.contains(channel)) continue;
+                    int orderOutNextOrderIndex = frameOrderOutNextOrderIndex[channel];
+                    if (Constants.DEBUG)
+                        System.out.println(String.format("Raknetify: Writing sync packet: Channel %d: %d", channel, orderOutNextOrderIndex - 1));
+                    byteBuf.writeByte(channel);
+                    byteBuf.writeInt(orderOutNextOrderIndex - 1);
+                }
+                int seqId = (int) FIELD_RELIABILITY_NEXT_SEND_SEQ_ID.get(this.reliabilityHandler); // TODO implementation details (probable lib bug): nextSendSeqId == lastReceivedSeqId
                 if (Constants.DEBUG)
-                    System.out.println(String.format("Raknetify: Writing sync packet: Channel %d: %d", channel, orderOutNextOrderIndex - 1));
-                byteBuf.writeByte(channel);
-                byteBuf.writeInt(orderOutNextOrderIndex - 1);
-            }
-            int seqId = (int) FIELD_RELIABILITY_NEXT_SEND_SEQ_ID.get(this.reliabilityHandler); // TODO implementation details (probable lib bug): nextSendSeqId == lastReceivedSeqId
-            if (Constants.DEBUG)
-                System.out.println(String.format("Raknetify: Writing sync packet: ReliabilityHandler: %d", seqId));
-            byteBuf.writeInt(seqId);
+                    System.out.println(String.format("Raknetify: Writing sync packet: ReliabilityHandler: %d", seqId));
+                byteBuf.writeInt(seqId);
+                if (barrierEpoch >= 0) {
+                    byteBuf.writeInt(BARRIER_EPOCH_TRAILER_MAGIC);
+                    byteBuf.writeInt(barrierEpoch);
+                }
 
-            final FrameData frameData = FrameData.create(ctx.alloc(), Constants.RAKNET_SYNC_PACKET_ID, byteBuf);
-            frameData.setReliability(FramedPacket.Reliability.RELIABLE);
-            this.isWaitingForResponse = true;
-            ctx.write(frameData).addListener(future -> this.flushQueue(ctx));
-            byteBuf.release();
-            promise.setSuccess();
+                frameData = FrameData.create(ctx.alloc(), Constants.RAKNET_SYNC_PACKET_ID, byteBuf);
+                frameData.setReliability(FramedPacket.Reliability.RELIABLE);
+                this.isWaitingForResponse = true;
+                final io.netty.channel.ChannelFuture syncFuture = ctx.write(frameData);
+                frameTransferred = true;
+                syncFuture.addListener(future -> {
+                    if (future.isSuccess()) {
+                        this.flushQueue(ctx);
+                    } else {
+                        Throwable failureCause = future.cause();
+                        if (failureCause == null) {
+                            failureCause = new ClosedChannelException();
+                        }
+                        final Throwable cause = failureCause;
+                        this.failSynchronization(ctx, cause);
+                    }
+                });
+                promise.trySuccess();
+            } catch (RuntimeException | Error t) {
+                cleanupPendingWrites(t);
+                promise.tryFailure(t);
+                throw t;
+            } finally {
+                ReferenceCountUtil.safeRelease(byteBuf);
+                if (!frameTransferred) {
+                    ReferenceCountUtil.safeRelease(frameData);
+                }
+            }
             return;
         }
         if (isWaitingForResponse) {
@@ -314,7 +420,80 @@ public class SynchronizationLayer extends ChannelDuplexHandler {
             Pair<ChannelPromise, Object> pair = this.queue.removeFirst();
             final ChannelPromise promise = pair.getFirst();
             final Object msg = pair.getSecond();
-            ctx.write(msg, promise);
+            boolean handedOff = false;
+            try {
+                ctx.write(msg, promise);
+                handedOff = true;
+            } catch (Throwable t) {
+                promise.tryFailure(t);
+                if (!handedOff) {
+                    ReferenceCountUtil.safeRelease(msg);
+                }
+                cleanupPendingWrites(t);
+                try {
+                    ctx.fireExceptionCaught(t);
+                } finally {
+                    ctx.close();
+                }
+                return;
+            }
+        }
+    }
+
+    private void failSynchronization(ChannelHandlerContext ctx, Throwable cause) {
+        if (!ctx.channel().eventLoop().inEventLoop()) {
+            ctx.channel().eventLoop().execute(() -> failSynchronization(ctx, cause));
+            return;
+        }
+        if (!isWaitingForResponse) {
+            return;
+        }
+        cleanupPendingWrites(cause);
+        ctx.close();
+    }
+
+    private void cleanupPendingWrites(Throwable cause) {
+        final boolean hadSynchronizationState = isWaitingForResponse || !this.queuedFrames.isEmpty();
+        isWaitingForResponse = false;
+
+        while (!this.queue.isEmpty()) {
+            Pair<ChannelPromise, Object> pair = this.queue.removeFirst();
+            try {
+                pair.getFirst().tryFailure(cause);
+            } finally {
+                ReferenceCountUtil.safeRelease(pair.getSecond());
+            }
+        }
+
+        for (Frame frame : this.queuedFrames) {
+            try {
+                final ChannelPromise promise = frame.getPromise();
+                if (promise != null) {
+                    promise.tryFailure(cause);
+                    frame.setPromise(null);
+                }
+            } finally {
+                ReferenceCountUtil.safeRelease(frame);
+            }
+        }
+        this.queuedFrames.clear();
+
+        if (hadSynchronizationState && this.reliabilityHandler != null) {
+            try {
+                FIELD_RELIABILITY_QUEUED_BYTES.set(this.reliabilityHandler, 0);
+            } catch (Throwable resetFailure) {
+                if (cause != resetFailure) {
+                    cause.addSuppressed(resetFailure);
+                }
+            }
+        }
+    }
+
+    private static final class SynchronizationRequest {
+        private final int barrierEpoch;
+
+        private SynchronizationRequest(int barrierEpoch) {
+            this.barrierEpoch = barrierEpoch;
         }
     }
 

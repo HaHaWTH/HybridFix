@@ -24,6 +24,7 @@
 
 package com.ishland.raknetify.common.connection;
 
+import com.ishland.raknetify.common.Constants;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -61,6 +62,14 @@ public class MultiChannellingEncryption extends ChannelDuplexHandler {
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         if (msg instanceof FrameData) {
             FrameData data = (FrameData) msg;
+            // The parent-channel barrier must be able to read the epoch from the
+            // marker. Marker payloads contain no Minecraft data and are consumed
+            // before reaching the application pipeline on the receiving side.
+            if (!data.isFragment()
+                    && data.getPacketId() == Constants.RAKNET_CUSTOM_PAYLOAD_BARRIER_PACKET_ID) {
+                super.write(ctx, msg, promise);
+                return;
+            }
             data.touch();
             final ByteBuf buf = data.createData().skipBytes(1);
             ByteBuf res = null;

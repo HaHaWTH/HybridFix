@@ -1,7 +1,7 @@
 package io.wdsj.hybridfix.raknetify;
 
 import com.ishland.raknetify.common.connection.RakNetSimpleMultiChannelCodec;
-import com.ishland.raknetify.common.connection.multichannel.CustomPayloadChannel;
+import com.ishland.raknetify.common.connection.CustomPayloadOrderBarrier;
 import com.ishland.raknetify.common.util.MathUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -27,8 +27,10 @@ public final class MultiChannellingPacketCapture112 extends ChannelOutboundHandl
     }
 
     public RakNetSimpleMultiChannelCodec.OverrideHandler getCustomPayloadHandler() {
-        return new CustomPayloadChannel.OverrideHandler(ignored ->
-                packet instanceof SPacketCustomPayload || packet instanceof CPacketCustomPayload);
+        return (ignored, suppressWarning) ->
+                packet instanceof SPacketCustomPayload || packet instanceof CPacketCustomPayload
+                        ? CustomPayloadOrderBarrier.CHANNEL_OVERRIDE
+                        : 0;
     }
 
     /**

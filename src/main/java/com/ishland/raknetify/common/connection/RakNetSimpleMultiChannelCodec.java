@@ -28,8 +28,10 @@ import com.ishland.raknetify.common.Constants;
 import com.ishland.raknetify.common.util.MathUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.util.ReferenceCountUtil;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -81,27 +83,48 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
 
     private boolean queuePendingWrites = false;
     private final Queue<PendingWrite> pendingWrites = new LinkedList<>();
+    private int outboundBarrierEpoch;
+    private int nextCustomPayloadBarrierSequence;
+    private boolean handlerUnavailable;
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        this.handlerUnavailable = true;
+        failPendingWrites(new IllegalStateException("Channel closed"));
         super.handlerRemoved(ctx);
-        for (PendingWrite pendingWrite : pendingWrites) {
-            pendingWrite.promise.setFailure(new IllegalStateException("Channel closed"));
-            pendingWrite.frameData.release();
-        }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        this.handlerUnavailable = true;
+        failPendingWrites(new IllegalStateException("Channel closed"));
+        super.channelInactive(ctx);
     }
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         if (this.queuePendingWrites && msg instanceof ByteBuf) {
             ByteBuf buf = (ByteBuf) msg;
-            final FrameData data = encode0(ctx, buf);
-            if (data != null) {
-                pendingWrites.add(new PendingWrite(data, promise));
-            } else {
-                promise.setSuccess();
+            EncodedFrame encoded = null;
+            boolean queued = false;
+            try {
+                encoded = encode0(ctx, buf);
+                if (encoded != null) {
+                    pendingWrites.add(new PendingWrite(encoded.frameData,
+                            encoded.waitForPriorChannels, promise));
+                    queued = true;
+                } else {
+                    promise.trySuccess();
+                }
+            } catch (RuntimeException | Error t) {
+                if (encoded != null && !queued) {
+                    ReferenceCountUtil.safeRelease(encoded.frameData);
+                }
+                promise.tryFailure(t);
+                throw t;
+            } finally {
+                buf.release();
             }
-            buf.release();
             return;
         }
 
@@ -117,11 +140,32 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
                 final FrameData frameData = FrameData.create(ctx.alloc(), Constants.RAKNET_PING_PACKET_ID, buf);
                 frameData.setOrderChannel(7);
                 this.queuePendingWrites = true;
-                ctx.write(frameData).addListener(future -> {
-                    isMultichannelEnabled = true;
-                    if (Constants.DEBUG) System.out.println("Raknetify: [MultiChannellingDataCodec] Started multichannel");
-                    flushPendingWrites(ctx);
-                });
+                boolean handedOff = false;
+                try {
+                    final ChannelFuture future = ctx.write(frameData);
+                    handedOff = true;
+                    future.addListener(result -> {
+                        if (!result.isSuccess() || handlerUnavailable || !ctx.channel().isActive()) {
+                            Throwable cause = result.cause();
+                            if (cause == null) {
+                                cause = new IllegalStateException("Channel closed before multichannel startup completed");
+                            }
+                            failPendingWrites(cause);
+                            return;
+                        }
+
+                        isMultichannelEnabled = true;
+                        if (Constants.DEBUG) System.out.println("Raknetify: [MultiChannellingDataCodec] Started multichannel");
+                        flushPendingWrites(ctx);
+                    });
+                } catch (RuntimeException | Error t) {
+                    failPendingWrites(t);
+                    throw t;
+                } finally {
+                    if (!handedOff) {
+                        ReferenceCountUtil.safeRelease(frameData);
+                    }
+                }
             } finally {
                 buf.release();
             }
@@ -131,20 +175,23 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
             if (this.isMultichannelEnabled) {
                 if (Constants.DEBUG) System.out.println("Raknetify: [MultiChannellingDataCodec] Stopped multichannel");
                 this.isMultichannelEnabled = false;
-                super.write(ctx, msg, promise);
+                this.outboundBarrierEpoch = CustomPayloadOrderBarrier.nextEpoch(this.outboundBarrierEpoch);
+                this.nextCustomPayloadBarrierSequence = 0;
+                super.write(ctx, SynchronizationLayer.synchronizationRequest(this.outboundBarrierEpoch), promise);
+                return;
             }
-            promise.setSuccess();
+            promise.trySuccess();
             return; // discard sync request when multichannel is not active
         }
 
         if (msg instanceof ByteBuf && ((ByteBuf) msg).isReadable()) {
             ByteBuf buf = (ByteBuf) msg;
             try {
-                final FrameData frameData = encode0(ctx, buf);
-                if (frameData != null) {
-                    ctx.write(frameData, promise);
+                final EncodedFrame encoded = encode0(ctx, buf);
+                if (encoded != null) {
+                    writeEncoded(ctx, encoded.frameData, encoded.waitForPriorChannels, promise);
                 } else {
-                    promise.setSuccess();
+                    promise.trySuccess();
                 }
             } finally {
                 buf.release();
@@ -155,34 +202,75 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
         super.write(ctx, msg, promise);
     }
 
-    private FrameData encode0(ChannelHandlerContext ctx, ByteBuf buf) {
+    private EncodedFrame encode0(ChannelHandlerContext ctx, ByteBuf buf) {
         if (buf.isReadable()) {
             final int packetChannelOverride = getChannelOverride(buf, !isMultichannelEnabled);
             if (packetChannelOverride == Integer.MIN_VALUE) {
                 return null; // the void
             }
             final FrameData frameData = FrameData.create(ctx.alloc(), packetId, buf);
+            boolean waitForPriorChannels = false;
             if (isMultichannelEnabled) {
                 if (packetChannelOverride >= 0)
                     frameData.setOrderChannel(packetChannelOverride);
+                else if (packetChannelOverride == CustomPayloadOrderBarrier.CHANNEL_OVERRIDE) {
+                    frameData.setOrderChannel(CustomPayloadOrderBarrier.TARGET_CHANNEL);
+                    waitForPriorChannels = true;
+                }
                 else if (packetChannelOverride == -1)
                     frameData.setReliability(FramedPacket.Reliability.RELIABLE);
                 else if (packetChannelOverride == -2)
                     frameData.setReliability(FramedPacket.Reliability.UNRELIABLE);
             }
-            return frameData;
+            return new EncodedFrame(frameData, waitForPriorChannels);
         }
         return null;
     }
 
     private void flushPendingWrites(ChannelHandlerContext ctx) {
+        if (this.handlerUnavailable || !ctx.channel().isActive()) {
+            failPendingWrites(new IllegalStateException("Channel closed"));
+            return;
+        }
+
         this.queuePendingWrites = false;
         PendingWrite pendingWrite;
         while ((pendingWrite = this.pendingWrites.poll()) != null) {
             try {
-                super.write(ctx, pendingWrite.frameData, pendingWrite.promise);
+                writeEncoded(ctx, pendingWrite.frameData, pendingWrite.waitForPriorChannels, pendingWrite.promise);
             } catch (Throwable t) {
+                // writeEncoded takes ownership of frameData on both success and failure.
+                pendingWrite.promise.tryFailure(t);
                 ctx.fireExceptionCaught(t);
+            }
+        }
+    }
+
+    private void failPendingWrites(Throwable cause) {
+        this.queuePendingWrites = false;
+        this.isMultichannelEnabled = false;
+        PendingWrite pendingWrite;
+        while ((pendingWrite = this.pendingWrites.poll()) != null) {
+            pendingWrite.promise.tryFailure(cause);
+            ReferenceCountUtil.safeRelease(pendingWrite.frameData);
+        }
+    }
+
+    /** Takes ownership of {@code frameData}, including when the write fails. */
+    private void writeEncoded(ChannelHandlerContext ctx, FrameData frameData, boolean waitForPriorChannels, ChannelPromise promise) {
+        if (waitForPriorChannels) {
+            final int barrierId = CustomPayloadOrderBarrier.composeBarrierId(
+                    this.outboundBarrierEpoch, this.nextCustomPayloadBarrierSequence++);
+            CustomPayloadOrderBarrier.writeBarrier(ctx, frameData, promise, barrierId);
+        } else {
+            boolean handedOff = false;
+            try {
+                ctx.write(frameData, promise);
+                handedOff = true;
+            } finally {
+                if (!handedOff) {
+                    ReferenceCountUtil.safeRelease(frameData);
+                }
             }
         }
     }
@@ -271,11 +359,24 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
 
     private static final class PendingWrite {
         private final FrameData frameData;
+        private final boolean waitForPriorChannels;
         private final ChannelPromise promise;
 
-        private PendingWrite(FrameData frameData, ChannelPromise promise) {
+        private PendingWrite(FrameData frameData, boolean waitForPriorChannels,
+                ChannelPromise promise) {
             this.frameData = frameData;
+            this.waitForPriorChannels = waitForPriorChannels;
             this.promise = promise;
+        }
+    }
+
+    private static final class EncodedFrame {
+        private final FrameData frameData;
+        private final boolean waitForPriorChannels;
+
+        private EncodedFrame(FrameData frameData, boolean waitForPriorChannels) {
+            this.frameData = frameData;
+            this.waitForPriorChannels = waitForPriorChannels;
         }
     }
 

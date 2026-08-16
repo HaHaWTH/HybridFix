@@ -18,6 +18,7 @@ import network.ycc.raknet.pipeline.FlushTickHandler.MissedFlushes;
 import network.ycc.raknet.utils.Constants;
 import network.ycc.raknet.utils.UINT;
 
+import java.nio.channels.ClosedChannelException;
 import java.util.PriorityQueue;
 
 /**
@@ -56,7 +57,7 @@ public class ReliabilityHandler extends ChannelDuplexHandler {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        clearQueue(null);
+        clearQueue(new ClosedChannelException());
     }
 
     @Override

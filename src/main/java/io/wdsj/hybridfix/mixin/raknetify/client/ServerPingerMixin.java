@@ -6,13 +6,16 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.network.ServerPinger;
 import net.minecraft.network.NetworkManager;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Mixin(ServerPinger.class)
 public abstract class ServerPingerMixin {
@@ -43,7 +46,7 @@ public abstract class ServerPingerMixin {
         try {
             ThreadLocalUtil.setInitializingRaknet(true);
             ThreadLocalUtil.setInitializingRaknetLargeMTU(info.largeMTU());
-            return NetworkManager.createNetworkManagerAndConnect(address, port, nativeTransport);
+            return NetworkManager.createNetworkManagerAndConnect(raknetify$normalizeDestination(address), port, nativeTransport);
         } finally {
             ThreadLocalUtil.setInitializingRaknet(false);
             ThreadLocalUtil.setInitializingRaknetLargeMTU(false);
@@ -54,6 +57,18 @@ public abstract class ServerPingerMixin {
     private void raknetify$skipLegacyTcpPing(ServerData server, CallbackInfo ci) {
         if (PrefixUtil.getInfo(server.serverIP).useRakNet()) {
             ci.cancel();
+        }
+    }
+
+    @Unique
+    private static InetAddress raknetify$normalizeDestination(InetAddress address) {
+        if (!(address instanceof Inet6Address) || !address.isAnyLocalAddress()) {
+            return address;
+        }
+        try {
+            return InetAddress.getByName("::1");
+        } catch (UnknownHostException impossibleForIpv6Literal) {
+            throw new IllegalStateException("Unable to resolve the IPv6 loopback literal", impossibleForIpv6Literal);
         }
     }
 }

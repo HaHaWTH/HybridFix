@@ -318,7 +318,7 @@ public class MultiChannelingStreamingCompression extends ChannelDuplexHandler {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        if (msg == SynchronizationLayer.SYNC_REQUEST_OBJECT) {
+        if (SynchronizationLayer.isSynchronizationRequest(msg)) {
             super.write(ctx, msg, promise);
             doChannelStart(ctx);
             if (zstdStartsSent) {
