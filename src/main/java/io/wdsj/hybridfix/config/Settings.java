@@ -168,6 +168,36 @@ public class Settings {
     @Config.RequiresMcRestart
     public static StartUpMOTDSettings startUpMOTDSettings = new StartUpMOTDSettings();
 
+    @Config.Comment("(Client / Server) RakNet transport and Raknetify multi-channel networking settings.")
+    @Config.Name("Raknetify Settings")
+    @Config.RequiresMcRestart
+    public static RaknetifySettings raknetify = new RaknetifySettings();
+
+    public static class RaknetifySettings {
+        @Config.Comment("Enable the RakNet UDP endpoint and client support for raknet;/raknetl; addresses.")
+        @Config.RequiresMcRestart
+        public boolean enable = true;
+
+        @Config.Comment("UDP port override. -1 uses the normal Minecraft TCP port.")
+        @Config.RangeInt(min = -1, max = 65535)
+        @Config.RequiresMcRestart
+        public int portOverride = -1;
+
+        @Config.Comment("Negotiate zstd-jni compression for RakNet packets. Peers without support keep using streaming zlib.")
+        @Config.RequiresMcRestart
+        public boolean enableZstdCompression = true;
+
+        @Config.Comment("Zstd compression level used after both RakNet peers negotiate zstd.")
+        @Config.RangeInt(min = -5, max = 22)
+        @Config.RequiresMcRestart
+        public int zstdCompressionLevel = 6;
+
+        @Config.Comment("Minimum uncompressed RakNet packet payload size before trying zstd.")
+        @Config.RangeInt(min = 16, max = 1048576)
+        @Config.RequiresMcRestart
+        public int zstdCompressionThreshold = 256;
+    }
+
     public static class StartUpMOTDSettings {
         @Config.Comment("(Server) Whether to enable startup MOTD.")
         @Config.Name("Enable startup MOTD")

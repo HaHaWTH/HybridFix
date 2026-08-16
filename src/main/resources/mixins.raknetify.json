@@ -1,0 +1,32 @@
+{
+  "package": "io.wdsj.hybridfix.mixin.raknetify",
+  "required": true,
+  "refmap": "${mixin_refmap}",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8.7",
+  "compatibilityLevel": "JAVA_8",
+  "priority": 1010,
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "NetworkManagerMixin",
+    "NetworkSystemInitializerMixin",
+    "NetworkSystemMixin",
+    "NetHandlerLoginServerMixin",
+    "NetHandlerPlayServerMixin",
+    "PlayerListMixin"
+  ],
+  "client": [
+    "EntityPlayerMixin",
+    "accessor.WorldClientAccessor",
+    "GuiOverlayDebugMixin",
+    "GuiConnectingMixin",
+    "GuiConnectingThreadMixin",
+    "NetHandlerPlayClientMixin",
+    "NetworkManagerConnectMixin",
+    "NetworkManagerInitializerMixin",
+    "ServerPingerListenerMixin",
+    "ServerPingerMixin"
+  ]
+}
