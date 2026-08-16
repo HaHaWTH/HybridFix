@@ -176,7 +176,7 @@ public class Settings {
     public static class RaknetifySettings {
         @Config.Comment("Enable the RakNet UDP endpoint and client support for raknet;/raknetl; addresses.")
         @Config.RequiresMcRestart
-        public boolean enable = true;
+        public boolean enable = false;
 
         @Config.Comment("UDP port override. -1 uses the normal Minecraft TCP port.")
         @Config.RangeInt(min = -1, max = 65535)
