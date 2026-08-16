@@ -3,7 +3,7 @@
   "required": true,
   "refmap": "${mixin_refmap}",
   "target": "@env(DEFAULT)",
-  "minVersion": "0.8.7",
+  "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "priority": 1010,
   "injectors": {
