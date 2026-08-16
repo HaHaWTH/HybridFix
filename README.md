@@ -77,6 +77,7 @@ Provide a bunch of bugfixes, optimizations and utilities for Forge+Bukkit server
 - Extend Forge's error recovery system (`removeErroringEntities` and `removeErroringTileEntities`), notify server operators when errors occurred.
 - Guard player ticking process, kick player instead of directly crash.
 - Fix Forge bugs that affect server play experience.
+- [Raknetify](https://modrinth.com/plugin/raknetify) backport, optimize network latency with RakNet.
 - (Universal) Optimize entity AI for faster nearest target lookup.
 - (Universal) Optimize PlayerChunkMap with incremental update algorithm, significantly reducing CPU usage during movement.
 
