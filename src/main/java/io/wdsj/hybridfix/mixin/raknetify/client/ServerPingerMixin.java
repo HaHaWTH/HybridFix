@@ -1,8 +1,7 @@
-package io.wdsj.hybridfix.mixin.raknetify;
+package io.wdsj.hybridfix.mixin.raknetify.client;
 
 import com.ishland.raknetify.common.util.PrefixUtil;
 import com.ishland.raknetify.common.util.ThreadLocalUtil;
-import net.minecraft.client.multiplayer.ServerAddress;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.network.ServerPinger;
 import net.minecraft.network.NetworkManager;

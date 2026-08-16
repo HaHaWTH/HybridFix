@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.raknetify;
+package io.wdsj.hybridfix.mixin.raknetify.client;
 
 import com.ishland.raknetify.common.Constants;
 import com.ishland.raknetify.common.connection.RakNetConnectionUtil;
@@ -6,7 +6,6 @@ import com.ishland.raknetify.common.connection.RaknetifyEventLoops;
 import com.ishland.raknetify.common.util.ThreadLocalUtil;
 import io.netty.bootstrap.AbstractBootstrap;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.FixedRecvByteBufAllocator;

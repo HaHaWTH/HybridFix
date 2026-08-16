@@ -18,15 +18,15 @@
     "PlayerListMixin"
   ],
   "client": [
-    "EntityPlayerMixin",
-    "accessor.WorldClientAccessor",
-    "GuiOverlayDebugMixin",
-    "GuiConnectingMixin",
-    "GuiConnectingThreadMixin",
-    "NetHandlerPlayClientMixin",
-    "NetworkManagerConnectMixin",
-    "NetworkManagerInitializerMixin",
-    "ServerPingerListenerMixin",
-    "ServerPingerMixin"
+    "client.EntityPlayerMixin",
+    "client.accessor.WorldClientAccessor",
+    "client.GuiOverlayDebugMixin",
+    "client.GuiConnectingMixin",
+    "client.GuiConnectingThreadMixin",
+    "client.NetHandlerPlayClientMixin",
+    "client.NetworkManagerConnectMixin",
+    "client.NetworkManagerInitializerMixin",
+    "client.ServerPingerListenerMixin",
+    "client.ServerPingerMixin"
   ]
 }

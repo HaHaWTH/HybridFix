@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.raknetify.accessor;
+package io.wdsj.hybridfix.mixin.raknetify.client.accessor;
 
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;

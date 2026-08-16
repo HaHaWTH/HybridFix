@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.raknetify;
+package io.wdsj.hybridfix.mixin.raknetify.client;
 
 import io.wdsj.hybridfix.raknetify.RaknetifyDebugHud112;
 import net.minecraft.client.gui.GuiOverlayDebug;

@@ -1,7 +1,7 @@
-package io.wdsj.hybridfix.mixin.raknetify;
+package io.wdsj.hybridfix.mixin.raknetify.client;
 
 import com.mojang.authlib.GameProfile;
-import io.wdsj.hybridfix.mixin.raknetify.accessor.WorldClientAccessor;
+import io.wdsj.hybridfix.mixin.raknetify.client.accessor.WorldClientAccessor;
 import io.wdsj.hybridfix.raknetify.ClientFoodStats112;
 import io.wdsj.hybridfix.raknetify.RaknetifyConnectionUtil112;
 import net.minecraft.client.multiplayer.WorldClient;

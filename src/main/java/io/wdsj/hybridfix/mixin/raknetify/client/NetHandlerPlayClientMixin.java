@@ -1,4 +1,4 @@
-package io.wdsj.hybridfix.mixin.raknetify;
+package io.wdsj.hybridfix.mixin.raknetify.client;
 
 import com.ishland.raknetify.common.connection.RakNetSimpleMultiChannelCodec;
 import io.netty.channel.Channel;

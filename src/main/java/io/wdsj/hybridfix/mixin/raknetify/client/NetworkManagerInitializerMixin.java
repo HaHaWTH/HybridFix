@@ -1,9 +1,8 @@
-package io.wdsj.hybridfix.mixin.raknetify;
+package io.wdsj.hybridfix.mixin.raknetify.client;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.wdsj.hybridfix.raknetify.RaknetifyConnectionUtil112;
-import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
