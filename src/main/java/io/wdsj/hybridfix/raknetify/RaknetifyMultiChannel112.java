@@ -1,7 +1,6 @@
 package io.wdsj.hybridfix.raknetify;
 
 import io.wdsj.hybridfix.HybridFix;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
@@ -11,10 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Packet-class channel mapping for protocol 340.
- *
- * <p>Raknetify's bundled mapping table starts at protocol 755. This table is the
- * controlled semantic backport of the upstream packet-class mapping to 1.12.2.</p>
+ * Packet channel mapping for protocol 340, aka. 1.12.2
  */
 public final class RaknetifyMultiChannel112 {
     private static final int UNKNOWN = Integer.MAX_VALUE;

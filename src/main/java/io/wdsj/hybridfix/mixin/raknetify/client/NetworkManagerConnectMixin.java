@@ -41,7 +41,12 @@ public abstract class NetworkManagerConnectMixin {
 
     @Redirect(
             method = "createNetworkManagerAndConnect",
-            at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;channel(Ljava/lang/Class;)Lio/netty/bootstrap/AbstractBootstrap;", remap = false))
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lio/netty/bootstrap/Bootstrap;channel(Ljava/lang/Class;)Lio/netty/bootstrap/AbstractBootstrap;",
+                    remap = false
+            )
+    )
     private static AbstractBootstrap<?, ?> raknetify$selectChannel(
             Bootstrap bootstrap, Class<? extends SocketChannel> socketChannelClass) {
         EventLoopGroup parentGroup = raknetify$parentEventLoop.get();
