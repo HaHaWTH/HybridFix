@@ -15,6 +15,7 @@
     "NetworkSystemMixin",
     "NetHandlerLoginServerMixin",
     "NetHandlerPlayServerMixin",
+    "ForgeHooksMixin",
     "PlayerListMixin"
   ],
   "client": [

@@ -69,8 +69,7 @@ public abstract class NetworkManagerMixin {
     }
 
     @Inject(method = "exceptionCaught", at = @At("HEAD"))
-    private void raknetify$diagnoseException(
-            ChannelHandlerContext context, Throwable exception, CallbackInfo ci) {
+    private void raknetify$diagnoseException(ChannelHandlerContext context, Throwable exception, CallbackInfo ci) {
         if (exception instanceof ClosedChannelException || this.channel == null) {
             return;
         }
