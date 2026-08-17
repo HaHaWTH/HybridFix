@@ -39,6 +39,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import network.ycc.raknet.frame.FrameData;
 import network.ycc.raknet.packet.FramedPacket;
 
+import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -82,7 +83,7 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
     private boolean isMultichannelEnabled;
 
     private boolean queuePendingWrites = false;
-    private final Queue<PendingWrite> pendingWrites = new LinkedList<>();
+    private final Queue<PendingWrite> pendingWrites = new ArrayDeque<>();
     private int outboundBarrierEpoch;
     private int nextCustomPayloadBarrierSequence;
     // Proof that no channel 0-6 ordered game frame has been written since this
@@ -114,8 +115,7 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
             try {
                 encoded = encode0(ctx, buf);
                 if (encoded != null) {
-                    pendingWrites.add(new PendingWrite(encoded.frameData,
-                            encoded.waitForPriorChannels, promise));
+                    pendingWrites.add(new PendingWrite(encoded.frameData, encoded.waitForPriorChannels, promise));
                     queued = true;
                 } else {
                     promise.trySuccess();
