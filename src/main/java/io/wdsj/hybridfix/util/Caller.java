@@ -39,7 +39,7 @@ public class Caller {
     private static final Class<?> STACK_FRAME_CLASS = FluentReflect.fromClass("java.lang.StackWalker$StackFrame")
             .findType()
             .orElse(null);
-    private static final Method STACK_FRAME_GET_DECLARING_CLASS = FluentReflect.fromClass(STACK_FRAME_CLASS)
+    private static final Method STACK_FRAME_getDeclaringClass = FluentReflect.fromClass(STACK_FRAME_CLASS)
             .name("getDeclaringClass")
             .accessible(true)
             .findDeclaredMethod()
@@ -80,7 +80,7 @@ public class Caller {
                         return stream
                                 .map(frame -> {
                                     try {
-                                        return (Class<?>) STACK_FRAME_GET_DECLARING_CLASS.invoke(frame);
+                                        return (Class<?>) STACK_FRAME_getDeclaringClass.invoke(frame);
                                     } catch (Exception e) {
                                         SneakyThrow.sneaky(e);
                                         return null;

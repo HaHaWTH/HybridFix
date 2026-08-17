@@ -103,6 +103,10 @@ minecraft {
 
 repositories {
     maven {
+        name = 'PaperMC'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
         name = 'CleanroomMC Maven'
         url = 'https://maven.cleanroommc.com'
     }
@@ -147,6 +151,12 @@ repositories {
 }
 
 dependencies {
+    // netty-raknet RTT statistics
+    embed 'org.apache.commons:commons-math3:3.6.1'
+
+    // zstd-jni // FIXME: Do we really need to relocate this?
+    embed 'com.github.luben:zstd-jni:1.5.7-11'
+
     // CB things
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
     compileOnly files('libs/craftbukkit-mcp-mapped-1.12.2.jar')
@@ -435,7 +445,6 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.deprecation = false
     options.incremental = false
-    options.compilerArgs << "-Xlint:-sunapi"
     if (propertyBool('use_modern_java_syntax')) {
         if (it.name in ['compileMcLauncherJava', 'compilePatchedMcJava']) {
             return
@@ -485,6 +494,7 @@ tasks.named('shadowJar', ShadowJar).configure {
     configurations = [project.configurations.embed]
 
     relocate 'net.lenni0451.reflect', "${propertyString('root_package')}.${propertyString('mod_id')}.libs.reflect"
+    relocate 'org.apache.commons.math3', "${propertyString('root_package')}.${propertyString('mod_id')}.libs.commons_math3"
 
     mergeServiceFiles()
 
