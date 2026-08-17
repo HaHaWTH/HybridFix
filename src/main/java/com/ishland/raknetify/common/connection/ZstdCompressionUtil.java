@@ -1,6 +1,7 @@
 package com.ishland.raknetify.common.connection;
 
 import com.github.luben.zstd.Zstd;
+import io.wdsj.hybridfix.HybridFix;
 
 final class ZstdCompressionUtil {
 
@@ -17,10 +18,10 @@ final class ZstdCompressionUtil {
         try {
             return Zstd.compressBound(1L) > 0L;
         } catch (LinkageError e) {
-            System.err.println("Raknetify: zstd-jni native library is unavailable; using streaming zlib: " + e);
+            HybridFix.LOGGER.warn("Raknetify: zstd-jni native library is unavailable; using streaming zlib", e);
             return false;
         } catch (RuntimeException e) {
-            System.err.println("Raknetify: zstd-jni initialization failed; using streaming zlib: " + e);
+            HybridFix.LOGGER.warn("Raknetify: zstd-jni initialization failed; using streaming zlib", e);
             return false;
         }
     }
