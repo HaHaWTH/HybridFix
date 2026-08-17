@@ -27,6 +27,7 @@ package com.ishland.raknetify.common.connection;
 import com.ishland.raknetify.common.Constants;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
@@ -76,9 +77,15 @@ public final class CustomPayloadOrderBarrier extends ChannelInboundHandlerAdapte
         return (epoch + 1) & EPOCH_MASK;
     }
 
-    public static void writeBarrier(ChannelHandlerContext ctx, FrameData payload, ChannelPromise promise, int barrierId) {
+    /**
+     * Writes one marker to every ordered channel and returns a future which is
+     * completed after all marker writes complete. The returned future may be
+     * shared by multiple channel 7 payloads while no new ordered frame is
+     * written to channels 0-6.
+     */
+    public static ChannelFuture writeBarrierMarkers(ChannelHandlerContext ctx, int barrierId) {
         PromiseCombiner combiner = new PromiseCombiner();
-        boolean payloadTransferred = false;
+        ChannelPromise barrierPromise = ctx.newPromise();
         try {
             for (int channel = 0; channel < CHANNEL_COUNT; channel++) {
                 ByteBuf markerPayload = ctx.alloc().buffer(4, 4);
@@ -91,14 +98,37 @@ public final class CustomPayloadOrderBarrier extends ChannelInboundHandlerAdapte
                     marker.setOrderChannel(channel);
                     ChannelFuture markerFuture = ctx.write(marker);
                     marker = null;
+                    markerFuture.addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
                     combiner.add(markerFuture);
                 } finally {
                     markerPayload.release();
                     ReferenceCountUtil.safeRelease(marker);
                 }
             }
+            combiner.finish(barrierPromise);
+            return barrierPromise;
+        } catch (RuntimeException | Error t) {
+            barrierPromise.tryFailure(t);
+            // Some marker writes may already have reached the peer. A partial
+            // marker group cannot be repaired by a later barrier ID.
+            ctx.close();
+            throw t;
+        }
+    }
+
+    /**
+     * Writes a payload whose delivery depends on an existing marker group.
+     * This method takes ownership of {@code payload}, including when the write
+     * fails synchronously.
+     */
+    public static void writeAfterBarrier(ChannelHandlerContext ctx, FrameData payload,
+            ChannelPromise promise, ChannelFuture barrierFuture) {
+        PromiseCombiner combiner = new PromiseCombiner();
+        boolean payloadTransferred = false;
+        try {
             ChannelFuture payloadFuture = ctx.write(payload);
             payloadTransferred = true;
+            combiner.add(barrierFuture);
             combiner.add(payloadFuture);
             combiner.finish(promise);
         } catch (RuntimeException | Error t) {
@@ -109,6 +139,20 @@ public final class CustomPayloadOrderBarrier extends ChannelInboundHandlerAdapte
                 ReferenceCountUtil.safeRelease(payload);
             }
         }
+    }
+
+    @Deprecated
+    public static void writeBarrier(ChannelHandlerContext ctx, FrameData payload,
+            ChannelPromise promise, int barrierId) {
+        final ChannelFuture barrierFuture;
+        try {
+            barrierFuture = writeBarrierMarkers(ctx, barrierId);
+        } catch (RuntimeException | Error t) {
+            promise.tryFailure(t);
+            ReferenceCountUtil.safeRelease(payload);
+            throw t;
+        }
+        writeAfterBarrier(ctx, payload, promise, barrierFuture);
     }
 
     @Override

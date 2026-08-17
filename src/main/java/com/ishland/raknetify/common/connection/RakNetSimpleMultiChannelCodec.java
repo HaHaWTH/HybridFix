@@ -85,6 +85,10 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
     private final Queue<PendingWrite> pendingWrites = new LinkedList<>();
     private int outboundBarrierEpoch;
     private int nextCustomPayloadBarrierSequence;
+    // Proof that no channel 0-6 ordered game frame has been written since this
+    // marker group. Channel 7 keeps its own order; unordered frames were never
+    // covered by a barrier in the first place.
+    private ChannelFuture reusableCustomPayloadBarrier;
     private boolean handlerUnavailable;
 
     @Override
@@ -135,6 +139,7 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
                 System.out.println("Raknetify: [MultiChannellingDataCodec] Failed to start multichannel: not available");
                 return;
             }
+            invalidateReusableCustomPayloadBarrier();
             final ByteBuf buf = ctx.alloc().buffer(1).writeByte(0);
             try {
                 final FrameData frameData = FrameData.create(ctx.alloc(), Constants.RAKNET_PING_PACKET_ID, buf);
@@ -172,6 +177,7 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
             return;
         }
         if (msg == SynchronizationLayer.SYNC_REQUEST_OBJECT) {
+            invalidateReusableCustomPayloadBarrier();
             if (this.isMultichannelEnabled) {
                 if (Constants.DEBUG) System.out.println("Raknetify: [MultiChannellingDataCodec] Stopped multichannel");
                 this.isMultichannelEnabled = false;
@@ -199,6 +205,9 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
             return;
         }
 
+        if (msg instanceof FrameData && invalidatesReusableCustomPayloadBarrier((FrameData) msg)) {
+            invalidateReusableCustomPayloadBarrier();
+        }
         super.write(ctx, msg, promise);
     }
 
@@ -249,6 +258,7 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
     private void failPendingWrites(Throwable cause) {
         this.queuePendingWrites = false;
         this.isMultichannelEnabled = false;
+        invalidateReusableCustomPayloadBarrier();
         PendingWrite pendingWrite;
         while ((pendingWrite = this.pendingWrites.poll()) != null) {
             pendingWrite.promise.tryFailure(cause);
@@ -259,10 +269,19 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
     /** Takes ownership of {@code frameData}, including when the write fails. */
     private void writeEncoded(ChannelHandlerContext ctx, FrameData frameData, boolean waitForPriorChannels, ChannelPromise promise) {
         if (waitForPriorChannels) {
-            final int barrierId = CustomPayloadOrderBarrier.composeBarrierId(
-                    this.outboundBarrierEpoch, this.nextCustomPayloadBarrierSequence++);
-            CustomPayloadOrderBarrier.writeBarrier(ctx, frameData, promise, barrierId);
+            final ChannelFuture barrierFuture;
+            try {
+                barrierFuture = getOrCreateCustomPayloadBarrier(ctx);
+            } catch (RuntimeException | Error t) {
+                promise.tryFailure(t);
+                ReferenceCountUtil.safeRelease(frameData);
+                throw t;
+            }
+            CustomPayloadOrderBarrier.writeAfterBarrier(ctx, frameData, promise, barrierFuture);
         } else {
+            if (invalidatesReusableCustomPayloadBarrier(frameData)) {
+                invalidateReusableCustomPayloadBarrier();
+            }
             boolean handedOff = false;
             try {
                 ctx.write(frameData, promise);
@@ -273,6 +292,38 @@ public class RakNetSimpleMultiChannelCodec extends ChannelDuplexHandler {
                 }
             }
         }
+    }
+
+    private ChannelFuture getOrCreateCustomPayloadBarrier(ChannelHandlerContext ctx) {
+        ChannelFuture barrierFuture = this.reusableCustomPayloadBarrier;
+        if (barrierFuture != null) {
+            return barrierFuture;
+        }
+
+        final int barrierId = CustomPayloadOrderBarrier.composeBarrierId(this.outboundBarrierEpoch, this.nextCustomPayloadBarrierSequence++);
+        barrierFuture = CustomPayloadOrderBarrier.writeBarrierMarkers(ctx, barrierId);
+        this.reusableCustomPayloadBarrier = barrierFuture;
+        final ChannelFuture createdBarrier = barrierFuture;
+        barrierFuture.addListener(future -> {
+            if (!future.isSuccess()) {
+                if (this.reusableCustomPayloadBarrier == createdBarrier) {
+                    this.reusableCustomPayloadBarrier = null;
+                }
+                // A peer may already be waiting behind a subset of this marker
+                // group. Continuing with a new barrier cannot release that gate.
+                ctx.close();
+            }
+        });
+        return barrierFuture;
+    }
+
+    private static boolean invalidatesReusableCustomPayloadBarrier(FrameData frameData) {
+        return frameData.getReliability().isOrdered && frameData.getOrderChannel() >= 0
+                && frameData.getOrderChannel() < CustomPayloadOrderBarrier.TARGET_CHANNEL;
+    }
+
+    private void invalidateReusableCustomPayloadBarrier() {
+        this.reusableCustomPayloadBarrier = null;
     }
 
     protected boolean isMultichannelAvailable() {
