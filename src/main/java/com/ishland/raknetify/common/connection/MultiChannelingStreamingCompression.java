@@ -48,7 +48,7 @@ public class MultiChannelingStreamingCompression extends ChannelDuplexHandler {
     public static final long ZSTD_HELLO = 0x48465A5354440001L;
     public static final long ZSTD_ACK = 0x48465A5354440002L;
     public static final long ZSTD_CHANNEL_START = 0x48465A5354440003L;
-    private static final int MAX_ZSTD_DECOMPRESSED_SIZE = 16 * 1024 * 1024;
+    private static final int MAX_ZSTD_DECOMPRESSED_SIZE = 32 * 1024 * 1024;
     private final Inflater[] inflaters = new Inflater[8];
     private final Deflater[] deflaters = new Deflater[8];
 
